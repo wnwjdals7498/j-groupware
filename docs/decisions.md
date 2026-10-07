@@ -8,16 +8,26 @@ j-groupware는 기본 서비스다. 고객 서버에 항상 설치되고, 모든
 
 ## 1. 로그인과 회원
 
-### 결정 1. 웹 로그인과 세션
-- **결정:**
-  - BFF 구조다. 브라우저 → j-groupware 서버 → j-auth `POST /auth/login` 순서로 호출한다([S4](architecture.md#s4)).
-  - 서버는 access token 서명을 검증한 뒤 세션을 PostgreSQL(`jgw_groupware`)에 저장한다. 브라우저에는 httpOnly·Secure·SameSite=Strict 세션 쿠키만 준다. CSRF 방어를 둔다.
-  - 세션에는 roles와 access·refresh token을 둔다. 토큰은 브라우저로 보내거나 로그에 남기지 않는다.
-  - 세션 수명은 유휴 30분, 최대 8시간이고 설정으로 바꿀 수 있다(j-auth 결정 10과 같은 값).
-  - 하위 서비스로 토큰을 넘기기 전에 만료가 30초 안으로 남았으면 갱신하고, 갱신 응답의 roles로 세션 roles도 바꾼다. 갱신이 실패하면 세션을 끝내고 다시 로그인하게 한다. j-auth 장애(503)는 따로 보여 준다.
-  - 회원 권한을 바꾸면 대상 회원의 세션을 모두 삭제하고 `POST /auth/logout`을 호출한다. 그 세션의 WSS 중계도 끊는다.
-  - 알려진 한계: Keycloak 콘솔에서 직접 바꾼 권한은 다음 갱신(최대 5분) 때 반영된다.
-- **이유:** 토큰이 브라우저에 없어 XSS로 탈취되지 않고, 서버에서 세션을 강제로 끝낼 수 있다.
+### 결정 1. 웹 로그인과 세션 (OIDC BFF)
+- **결정 (사용자: 처음부터 OIDC):**
+  - **로그인:**
+    - j-groupware 서버가 BFF로 Keycloak Authorization Code + PKCE(S256) 흐름을 쓴다([S4](architecture.md#s4)).
+    - 접속 이름 `gw.<tenant>`에서 realm `tenant-<tenant>`를 정하고, `/auth/login`이 `state`·`nonce`·PKCE 검증값을 서버에 둔 채 Keycloak으로 보낸다.
+    - `/auth/callback`에서 code를 confidential client `j-groupware`(secret은 env)로 바꾸고, ID·access token을 검증한다.
+  - **세션:**
+    - PostgreSQL(`jgw_groupware`)에 roles, access·refresh token, Keycloak 세션 id(`sid`)를 둔다.
+    - 브라우저에는 httpOnly·Secure·SameSite=Lax 세션 쿠키만 준다. Keycloak에서 돌아오는 redirect에 쿠키가 실려야 해서 Lax다. 상태를 바꾸는 요청에는 CSRF 토큰을 요구한다.
+    - 토큰은 브라우저로 보내거나 로그에 남기지 않는다.
+    - 세션 수명은 유휴 30분, 최대 8시간이다(j-auth 결정 10과 같은 값).
+  - **갱신:**
+    - 하위 서비스로 넘기기 전에 만료가 30초 안으로 남았으면 Keycloak 토큰 엔드포인트로 갱신하고, 새 refresh token과 roles로 세션을 바꾼다.
+    - Revoke Refresh Token이 켜져 있으므로 같은 세션의 갱신은 세션 행 잠금(`SELECT … FOR UPDATE`)으로 한 번만 실행한다. 기다린 요청은 갱신된 토큰을 쓴다.
+    - 갱신이 거절되면 세션을 끝내고 다시 로그인하게 한다. Keycloak 장애는 따로 보여 준다.
+  - **로그아웃:**
+    - `/auth/logout`은 세션을 지우고 Keycloak RP-initiated logout으로 보낸다.
+    - `/auth/backchannel-logout`은 Keycloak이 보낸 logout token(서명·iss·aud·`sid`·events 검증)을 받아, 그 `sid`의 세션을 지우고 WSS 중계도 끊는다.
+  - 회원 권한을 바꾸면 j-auth가 Keycloak 세션을 끝내고(백채널 로그아웃이 옴), j-groupware도 대상 세션을 바로 지운다(결정 2).
+- **이유:** 비밀번호와 토큰이 브라우저·j-groupware 화면을 지나지 않고, 세션 무효화가 Keycloak 이벤트로 이어진다.
 
 ### 결정 2. 하위 회원 관리
 - **결정:**
@@ -26,6 +36,7 @@ j-groupware는 기본 서비스다. 고객 서버에 항상 설치되고, 모든
   - 쓰기를 체크하면 읽기가 체크된 채 잠긴다. j-auth 복합 role과 같은 규칙이다.
   - 새 회원의 비밀번호는 관리자가 정한 초기값을 영구 비밀번호로 쓴다. 비밀번호 변경은 이후 범위다.
   - 회원을 추가하면 조직도 "미배치"에 자동 등록한다(결정 12).
+  - 권한을 바꾸거나 회원을 삭제하면 j-auth가 그 회원의 Keycloak 세션을 끝낸다. j-groupware도 대상 회원의 세션과 WSS 중계를 바로 지운다.
 - **이유:** Keycloak 관리 열쇠는 j-auth에만 두고, 서비스 키로 이 호출을 j-groupware에만 허용한다.
 
 ### 결정 3. 권한 표와 서버 검사
@@ -37,16 +48,26 @@ j-groupware는 기본 서비스다. 고객 서버에 항상 설치되고, 모든
 
 ## 2. 운영 콘솔
 
-### 결정 4. 운영 콘솔과 가입 서비스 관리
+### 결정 4. 운영 콘솔, 고객 등록, 가입 서비스
 - **결정:**
-  - 같은 저장소에서 앱을 나눈다. 고객 서버용은 `apps/server`, `apps/web`이고, control plane용은 `apps/console-server`, `apps/console-web`이다. 공유 코드는 `packages/*`(ui, permissions)에 둔다.
-  - 고객·계약·가입 서비스 데이터는 control plane PostgreSQL의 콘솔 database에 둔다. 콘솔 고객의 tenant ID는 j-auth 매핑 표의 값과 같다.
-  - 운영사 계정(`customer:read`/`customer:write`)이 고객 목록·계약 상태를 보고 바꾼다.
+  - **앱 구성:** 같은 저장소에서 앱을 나눈다. 고객 서버용은 `apps/server`, `apps/web`이고, control plane용은 `apps/console-server`, `apps/console-web`이다. 공유 코드는 `packages/*`다.
+  - **로그인:** 콘솔은 운영사 realm의 `j-console` client로 Authorization Code + PKCE 로그인한다(결정 1과 같은 BFF 방식).
+  - **데이터:** 고객·계약·가입 서비스·고객 서버 상태는 control plane PostgreSQL의 콘솔 database에 둔다. 운영사 계정(`customer:read`/`customer:write`)이 보고 바꾼다.
+  - **고객 등록 (G17):**
+    1. 운영자가 tenant ID, 고객 관리자 username·초기 비밀번호를 입력한다.
+    2. 콘솔이 j-auth realm 생성 API(j-auth 결정 20)를 콘솔 서비스 키와 함께 호출한다.
+    3. 콘솔이 고객 서버 에이전트 키를 만든다. 해시만 저장한다.
+    4. 다음을 "고객 서버 부트스트랩 정보"로 운영자에게 1회만 보여 준다: `j-groupware` client secret, tenant 서비스 키, 에이전트 키, 콘솔 주소. 콘솔은 원문을 저장하지 않는다.
+    5. 고객 서버 생성과 부트스트랩 실행은 운영자가 수동으로 한다(S2).
   - **가입 서비스 (G17):**
-    - 콘솔에서 고객별 가입·해지를 기록하면 j-auth 가입 API(j-auth 결정 14)를 콘솔 서비스 키와 함께 호출한다.
-    - j-auth 호출이 실패하면 "반영 실패"로 표시하고 다시 시도할 수 있게 한다.
-    - 고객 서버 쪽 설치·해지(결정 8)는 최소 구현에서 운영자가 수동으로 실행한다.
-- **이유:** 배포 단위가 나뉘어 고객 서버에 콘솔 코드가 들어가지 않는다. 가입 정보의 원본이 콘솔 하나다([S2](architecture.md#s2)).
+    - 가입·해지를 기록하면 j-auth 가입 API(j-auth 결정 14)를 호출한다.
+    - 실패하면 "반영 실패"로 표시하고 다시 시도할 수 있다.
+    - 고객 서버 반영은 에이전트가 자동으로 한다(결정 8).
+  - **원하는 상태 API (G21):**
+    - 경로: `GET /console/api/agent/desired-state`, `POST /console/api/agent/status`
+    - 에이전트 키(Bearer)로 인증한다. control plane Nginx가 이 두 경로만 연다.
+    - 응답은 가입 서비스 목록이다. 에이전트가 보고한 설치 상태는 콘솔 화면에 보인다.
+- **이유:** 고객 등록부터 서비스 설치까지 사람이 하는 일은 고객 서버 생성과 부트스트랩 한 번뿐이다(사용자 결정).
 
 ## 3. 화면과 저장소
 
@@ -70,6 +91,8 @@ j-groupware는 기본 서비스다. 고객 서버에 항상 설치되고, 모든
   packages/ui          UI 기준 구현(결정 5)
   deploy/gateway       Nginx 기본 설정·gw 템플릿(결정 8)
   deploy/provision-service  서비스 설치·해지 스크립트(결정 8)
+  deploy/bootstrap     고객 서버 부트스트랩(결정 8)
+  deploy/agent         프로비저닝 에이전트(결정 8)
   tools/registry       로컬 npm 레지스트리(S10, X1)
   docs/  scripts/
   ```
@@ -90,7 +113,7 @@ j-groupware는 기본 서비스다. 고객 서버에 항상 설치되고, 모든
 
 ## 4. 고객 서버 구성
 
-### 결정 8. gateway와 서비스 설치·해지 스크립트
+### 결정 8. gateway, 부트스트랩, 서비스 설치·해지, 프로비저닝 에이전트
 - **결정:**
   - **gateway (G11):**
     - `deploy/gateway`가 Nginx 기본 설정과 `gw.conf.template`을 관리한다.
@@ -108,8 +131,16 @@ j-groupware는 기본 서비스다. 고객 서버에 항상 설치되고, 모든
     - `jgw_<서비스>` database와 전용 계정을 만들고 권한을 막는다([S2](architecture.md#s2)).
     - 서비스 env(`DATABASE_URL` 등, Git 제외)를 만들고 systemd로 기동한다.
     - 예외 경로를 렌더링하고 `nginx -t` 후 reload한다.
-    - 고객 서버를 처음 셋팅할 때는 j-groupware 서비스 키를 생성하고, j-auth에 넣을 해시를 출력한다.
+    - 서비스마다 알림 내부 키(`X-JGW-Internal-Key`, 결정 15)를 만들어 서비스 env에 넣고, 해시를 j-groupware에 등록한다.
     - j-web 설치에는 다음을 더한다: 사이트용 sshd 인스턴스(별도 포트, chroot SFTP), FTPS, 특권 helper(j-web 결정 13), 사이트 디렉터리 루트, 방화벽 규칙.
+  - **프로비저닝 에이전트 (G21, `deploy/agent`):**
+    - 고객 서버의 systemd timer(1분)가 콘솔 원하는 상태 API를 호출한다.
+    - 설치되지 않은 가입 서비스는 `provision-service <서비스>`, 가입이 끝난 서비스는 `--remove`를 실행한다. 결과는 콘솔에 보고한다.
+    - 서비스 실행 묶음은 부트스트랩 때 `/opt/jgw/bundles/`에 함께 둔다. 업그레이드 배포는 범위 밖이다.
+    - 같은 상태면 아무것도 하지 않는다(멱등). 한 번에 하나씩 실행한다(잠금 파일).
+  - **부트스트랩 (G18, `deploy/bootstrap`):**
+    - 운영자가 수동으로 만든 고객 서버에서 한 번 실행한다.
+    - 하는 일: Nginx·PostgreSQL·j-groupware 설치, 부트스트랩 정보를 env에 기록, 로컬 CA 신뢰 설정, 에이전트 timer 등록.
   - **해지 (G18, `--remove`, [S14](architecture.md#s14)):**
     - 순서: unit 중지 → `pg_dump` → DB 계정 `NOLOGIN` → 서비스 고유 정리 → 예외 경로 제거 → `nginx -t`·reload(실패 시 직전 설정 복구) → env 삭제
     - 서비스 고유 정리는 다음과 같다.
@@ -180,7 +211,37 @@ j-groupware는 기본 서비스다. 고객 서버에 항상 설치되고, 모든
   - 배포에 성공하면 j-groupware 서버가 같은 사용자 Bearer로 j-talk 허용 출처 API에 사이트 출처를 등록한다. `talk:write`가 없거나 j-talk 미가입이면 안내만 보여 준다.
 - **이유:** 서비스 사이 호출을 j-groupware → 서비스 한 방향으로 유지한다.
 
-## 6. 작업 구성
+## 6. 알림과 토큰 축소
+
+### 결정 15. 알림 센터
+- **결정 (사용자: 알림은 j-groupware에서 1개로 통합, [S17](architecture.md#s17)):**
+  - **수신:**
+    - `POST /internal/notifications`를 loopback 내부 포트에서만 받는다.
+    - 서비스별 내부 키(`X-JGW-Internal-Key`)의 해시를 확인한다. 서비스가 가입 상태이고, `type`이 그 서비스의 등록된 알림 종류여야 받는다.
+    - 같은 `dedupKey`는 한 번만 저장한다.
+  - **저장:** `jgw_groupware`의 `notifications`(tenant_id, service, type, 받는 사람, title, body, link, 생성 시각)와 회원별 읽음 표다. 30일 지난 알림은 지운다.
+  - **알림 종류 표:**
+    - `packages/permissions` 옆에 서비스별 알림 종류 표를 둔다(종류 → 아이콘·이름·문구 틀·필요 role).
+    - 받는 사람이 `role`이면 그 role을 가진 회원에게만 보인다. 회원 id나 `usernames`이면 그 회원에게만 보인다.
+    - 표에 없는 종류는 400이다.
+  - **화면:**
+    - 상단 알림 아이콘에 읽지 않은 수를 띄우고, 목록(서비스 아이콘 + 종류 이름 + 제목·내용 + 시각)과 클릭 시 `link` 이동·읽음 처리를 제공한다.
+    - 새 알림은 SSE(`/api/notifications/stream`)로 바로 보낸다. 세션이 끝나면 스트림도 닫는다.
+  - **첫 알림 종류:**
+    - j-approval: `approval.turn`(결재 차례), `approval.done`(승인·반려 결과)
+    - j-talk: `talk.new`(새 문의, `talk:read`), `talk.assigned`(배정)
+    - j-mail: `mail.new`(새 메일, 수신자 username)
+- **이유:** 저장·표시·실시간 전달을 한 번만 만든다. 서비스 → j-groupware 방향은 알림에만 허용한 예외다(S17).
+
+### 결정 16. 하위 서비스용 토큰 축소
+- **결정:**
+  - 하위 서비스를 호출할 때 Keycloak standard token exchange로 aud를 그 서비스 하나로 줄인 토큰을 받아 전달한다([S4](architecture.md#s4)).
+  - 받은 토큰은 세션·서비스별로 만료 전까지 캐시한다.
+  - j-auth 회원 관리 API에는 원래 토큰과 서비스 키를 쓴다.
+  - G23에서 만든다. 그 전에 만든 중계 코드는 토큰을 얻는 함수 하나만 바꾸면 되게 한다.
+- **이유:** 하위 서비스에서 토큰이 새어도 다른 서비스에는 쓸 수 없다.
+
+## 7. 작업 구성
 
 PMT 통합 project 분류 `j-groupware`. Work마다 완료 기준을 두고 Item은 `blocked_by`로 잇는다. 다른 서비스와 연결하는 Item은 서비스마다 별도 Work에 두어 W1 완료가 다른 저장소 일정에 묶이지 않게 한다.
 
@@ -190,7 +251,7 @@ PMT 통합 project 분류 `j-groupware`. Work마다 완료 기준을 두고 Item
 | --- | --- | --- |
 | G1 저장소 골격 | S11 골격, `.npmrc` 레지스트리 scope, Compose PostgreSQL(고객 서버 `jgw_groupware`·전용 계정, control plane 콘솔 DB. 로컬은 인스턴스 1개), node-pg-migrate, 로컬 HTTPS, 포트, Git 제외 env | j-auth I4, X1 |
 | G2 UI 기준 최소판 | ui-guidelines.md 토큰·레이아웃, packages/ui 기초 | G1 |
-| G3 로그인·세션 | 결정 1 전체, `@j-auth/contracts` 레지스트리 설치, `/api/me` | G1, G2 |
+| G3 로그인·세션 | 결정 1 전체(Authorization Code + PKCE, 콜백, 세션, 갱신 잠금, RP 로그아웃, 백채널 로그아웃), `@j-auth/contracts` 레지스트리 설치, `/api/me`, Playwright 로그인 | G1, G2 |
 | G4 권한 표·서버 검사 | 결정 3, 카탈로그 상수 기반 표, preHandler 403, 기본 거부 테스트, 메뉴 숨김 | G3 |
 | G5 게시판 | tenant_id 테이블, 목록·작성·조회 API와 화면, board 권한 검사 | G4 |
 | G6 하위 회원 관리 | 결정 2(서비스 키, grantable-roles, 쓰기→읽기 잠금, 추가·삭제), 변경 시 세션 삭제·logout | G4, j-auth I6 |
@@ -198,6 +259,7 @@ PMT 통합 project 분류 `j-groupware`. Work마다 완료 기준을 두고 Item
 | G8 완료 기준 테스트 | 결정 7 시나리오 통과 | G5, G6, G7 |
 | G9 UI 기준 완성 | 컴포넌트 절 문서화, packages/ui와 일치 | G5, G6, G7 |
 | G11 gateway | 결정 8 gateway·예외 경로·빈 위젯 응답·남용 방지, 렌더링·`nginx -t` 스크립트, 인증서 SAN·hosts, WebSocket 전달 | G1 |
+| G23 토큰 축소 | 결정 16, 서비스별 aud 1개 토큰 발급·캐시, 다른 서비스 aud 거절 확인 테스트 | G3 |
 | G10 Hyper-V VM 검증 | VM 2대, HTTPS, systemd·Compose, `gw.` 중계, VM 대상 G8 통과, 메모리·CPU 측정(S15) | G8, G9, G11, G18, j-auth I5 |
 
 **W2 "손님 관리 연결"** — 완료 기준: guest 권한을 받은 회원에게만 손님 메뉴가 보이고 손님을 등록할 수 있다. `guest:write` 회원이 API 키를 발급·회수할 수 있다.
@@ -213,12 +275,13 @@ PMT 통합 project 분류 `j-groupware`. Work마다 완료 기준을 두고 Item
 | G15 조직도 | 결정 12 조직도·미배치 자동 등록·기본 결재선 규칙, tenant 격리, Vitest | G4, G6 |
 | G16 결재 화면 | 결정 12 결재 화면, 공통 중계 규칙, Vitest + Playwright e2e | G15, j-approval A5·A6 |
 
-**W4 "서비스 가입"** — 완료 기준: 콘솔에서 서비스를 가입시키면 그 고객 관리자에게 메뉴와 부여 항목이 생기고, 해지하면 사라지며 고객 서버의 계정·Nginx 설정이 되돌려진다. 다른 서비스 DB 계정으로는 접속할 수 없다.
+**W4 "고객 등록·서비스 가입 자동화"** — 완료 기준: 콘솔에 고객을 등록하면 realm이 자동으로 생기고, 부트스트랩한 고객 서버에서 가입한 서비스가 자동 설치되어 메뉴·부여 항목이 생긴다. 해지하면 자동으로 사라지고 계정·Nginx 설정이 되돌려진다. 다른 서비스 DB 계정으로는 접속할 수 없다.
 
 | Item | 완료 기준 요약 | 선행 |
 | --- | --- | --- |
-| G17 콘솔 가입 서비스 | 결정 4 가입 서비스, 콘솔 서비스 키, 실패 표시·재시도, 실제 j-auth 대상 Vitest | G7, j-auth I7 |
-| G18 서비스 설치·해지 스크립트 | 결정 8 설치·해지·`--purge`, 서비스 키 생성, j-web 설치 항목, 해지 후 계정·Nginx 원상복구 확인, 다른 서비스 계정 접속 거부 테스트 | G1, G11 |
+| G17 콘솔 고객 등록·가입 서비스 | 결정 4 고객 등록(realm 생성 호출, 부트스트랩 정보 1회 표시)·가입 서비스, 콘솔 서비스 키, 실패 표시·재시도, 실제 j-auth 대상 Vitest | G7, j-auth I7·I8 |
+| G18 부트스트랩·설치·해지 스크립트 | 결정 8 부트스트랩·설치·해지·`--purge`, 알림 내부 키, j-web 설치 항목, 해지 후 계정·Nginx 원상복구 확인, 다른 서비스 계정 접속 거부 테스트 | G1, G11 |
+| G21 프로비저닝 에이전트 | 결정 4 원하는 상태 API, 결정 8 에이전트(timer, 멱등, 잠금, 상태 보고), 가입 → 자동 설치 → 해지 → 자동 제거 테스트 | G17, G18 |
 
 **W5 "메신저 화면 연결"** — 완료 기준: `messenger:use` 회원에게만 메신저 메뉴가 보이고, j-groupware 안에서 같은 고객 소속 하위 회원끼리 대화를 주고받는다.
 
@@ -244,6 +307,13 @@ PMT 통합 project 분류 `j-groupware`. Work마다 완료 기준을 두고 Item
 | --- | --- | --- |
 | G20 웹 관리 화면 | 결정 14, 공통 중계 규칙, 비밀번호 1회 표시 UI, Vitest 통합 + Playwright e2e | G4, G6, G19, j-web H7 |
 
+**W9 "알림"** — 완료 기준: 결재 차례·새 문의·새 메일이 j-groupware 알림 아이콘에 실시간으로 뜨고, 받을 권한이 있는 회원에게만 보인다.
+
+| Item | 완료 기준 요약 | 선행 |
+| --- | --- | --- |
+| G22 알림 센터 | 결정 15(내부 수신 API·키, 종류 표, 저장·보관, SSE, 화면), Vitest + Playwright | G4 |
+| A9 / T9 / E8 | 각 서비스의 알림 송신(j-approval·j-talk·j-mail 문서) | G22 |
+
 **j-messenger 연결 (분류 `j-messenger`)** — 완료 기준: j-groupware 메신저 메뉴에서 j-auth 계정으로 같은 고객 소속 하위 회원끼리 대화를 주고받는다. j-messenger AGENTS.md 제약을 지킨다: serverId 격리, 로그에 비밀값 없음, 새 의존성은 공식 호환성 메모, 자동 push·배포 금지, 포트 3001 금지.
 
 | Item | 완료 기준 요약 | 선행 |
@@ -254,16 +324,16 @@ PMT 통합 project 분류 `j-groupware`. Work마다 완료 기준을 두고 Item
 | M3 연결 통합 테스트 | 실제 j-auth 토큰(테스트가 회원 관리 API로 만든 회원 2명)으로 같은 tenant WSS 송수신, 권한 없는 회원 403, tenant 격리 | M1, M5, j-auth I6 |
 | M4 고객 서버 검증 | VM에서 `jgw_messenger`·내부 포트, j-groupware 메신저 메뉴 → 대화, VM 대상 M3 통과 | M3, G12, G10, G18 |
 
-backlog: 자동 프로비저닝(고객 서버 생성 → realm 생성 → 가입 서비스 설치), 손님 수 등급별 사양 측정, j-groupware 앱(Android WebView 셸)·데스크톱·iOS, 비밀번호 변경, 메신저 대화 상대 조직도 연동, OIDC 전환(S4).
+backlog: j-groupware 앱(Android WebView 셸)·데스크톱·iOS, 메신저 대화 상대 조직도 연동, 메신저 알림 송신. 범위 밖(사용자): 고객 서버 생성 자동화, 사양에 따른 자동화.
 
 ## 이전 번호 대응
 
 | 새 | 이전 | 비고 |
 | --- | --- | --- |
-| 1 | 1, 2 | 2의 토큰 전달 원칙은 S4 |
+| 1 | 1, 2 | OIDC BFF로 다시 씀. 토큰 전달 원칙은 S4 |
 | 2 | 3 | +서비스 키, 쓰기→읽기 |
 | 3 | 4 | |
-| 4 | 7, 20(콘솔 부분) | |
+| 4 | 7, 20(콘솔 부분) | +고객 등록·realm 자동 생성·원하는 상태 API |
 | 5 | 9 | |
 | 6 | 10 | |
 | 7 | 13 | |
@@ -274,6 +344,8 @@ backlog: 자동 프로비저닝(고객 서버 생성 → realm 생성 → 가입
 | 12 | 21 | |
 | 13 | 24, 23(설정 부분) | +위젯 비밀키 |
 | 14 | 25 | |
+| 15 | 새로 추가 | 알림 센터(S17) |
+| 16 | 새로 추가 | 토큰 축소 |
 | S3 | 5 | 권한 이름 표 |
 | S4 | 2(전달 원칙) | |
 | S8, S9 | 6-1, 6-2 | |
