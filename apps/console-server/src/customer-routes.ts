@@ -150,6 +150,7 @@ export function registerCustomerRoutes(
       agentEpoch: number;
       reportSequence: number;
       installed?: string[];
+      incomplete?: string[];
       outcome: string;
       phase?: string;
       error?: string;
@@ -173,6 +174,7 @@ export function registerCustomerRoutes(
             agentEpoch: positive,
             reportSequence: positive,
             installed: list,
+            incomplete: list,
             outcome: { type: "string", enum: ["synchronized", "failed"] },
             phase: {
               type: "string",

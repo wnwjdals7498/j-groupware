@@ -289,6 +289,7 @@ export class ConsoleCustomers {
       agentEpoch: number;
       reportSequence: number;
       installed?: string[];
+      incomplete?: string[];
       outcome: string;
       phase?: string;
       error?: string;
@@ -327,9 +328,21 @@ export class ConsoleCustomers {
           "Read current desired state before reporting.",
         );
       if (input.installed) serviceList(input.installed);
+      if (input.incomplete) serviceList(input.incomplete);
+      if (
+        input.incomplete?.some((service) => input.installed?.includes(service))
+      )
+        throw new ApiError(
+          400,
+          "invalid_report",
+          "Inventory sets must be disjoint.",
+        );
       if (
         input.outcome === "synchronized" &&
         (!input.installed ||
+          input.incomplete?.length ||
+          input.error ||
+          input.phase ||
           JSON.stringify(serviceList(input.installed)) !==
             JSON.stringify(serviceList(current.services)))
       )

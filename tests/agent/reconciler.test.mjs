@@ -68,6 +68,7 @@ function agent(overrides = {}) {
     inventory: async () => ({
       tenant,
       installed: await readJson("installed.json"),
+      incomplete: await readJson("incomplete.json"),
     }),
     provision: provisionCommand(binary, { timeout: 5000, grace: 100 }),
     report: (report) => json("report.json", report),
@@ -94,6 +95,7 @@ describe(
       binary = root + "/provision-service";
       await json("desired.json", { tenant, services: [] });
       await json("installed.json", []);
+      await json("incomplete.json", []);
       await json("control.json", {});
       // A test installer only changes files under its private root. No systemctl/DB/key/firewall calls.
       await writeFile(
@@ -119,9 +121,16 @@ if (control.waitForGate) {
   for (let i = 0; i < 200; i++) { try { await stat(root + '/gate'); break; } catch { await delay(20); } }
 }
 let installed = JSON.parse(await readFile(root + '/installed.json', 'utf8'));
+let incomplete = JSON.parse(await readFile(root + '/incomplete.json', 'utf8'));
+if (control.partialOnce === service) {
+  delete control.partialOnce; await writeFile(root + '/control.json', JSON.stringify(control));
+  await writeFile(root + '/incomplete.json', JSON.stringify([...new Set([...incomplete, service])]));
+  process.exit(3);
+}
 if (!control.noChange) {
   installed = argv[1] === '--remove' ? installed.filter((s) => s !== service) : [...new Set([...installed, service])];
   await writeFile(root + '/installed.json', JSON.stringify(installed));
+  await writeFile(root + '/incomplete.json', JSON.stringify(incomplete.filter((s) => s !== service)));
 }
 if (control.failOnce === service) {
   delete control.failOnce; await writeFile(root + '/control.json', JSON.stringify(control));
@@ -214,6 +223,57 @@ process.stdout.write(JSON.stringify(await instance.run()));
         "j-messenger",
         "j-talk",
       ]);
+    });
+    it("repairs a desired partial installation and removes an undesired partial allocation through actual CLI processes", async () => {
+      await json("desired.json", { tenant, services: ["j-talk"] });
+      await json("control.json", { partialOnce: "j-talk" });
+      const first = await run();
+      assert.equal(first.outcome, "failed");
+      assert.deepEqual(first.installed, []);
+      assert.deepEqual(first.incomplete, ["j-talk"]);
+      const repaired = await run();
+      assert.equal(repaired.outcome, "synchronized");
+      assert.deepEqual(repaired.installed, ["j-talk"]);
+      assert.deepEqual(repaired.incomplete, []);
+      await json("installed.json", []);
+      await json("incomplete.json", ["j-mail"]);
+      await json("desired.json", { tenant, services: [] });
+      const removed = await run();
+      assert.equal(removed.outcome, "synchronized");
+      assert.deepEqual(removed.actions, [
+        { kind: "remove", service: "j-mail", outcome: "applied" },
+      ]);
+      assert.deepEqual(removed.incomplete, []);
+    });
+    it("does not confirm removal while partial allocation remains and rejects contradictory inventory", async () => {
+      await json("incomplete.json", ["j-mail"]);
+      await json("control.json", { noChange: true });
+      assert.equal((await run()).error, "observation_failed");
+      assert.deepEqual(await readJson("incomplete.json"), ["j-mail"]);
+      assert.throws(
+        () =>
+          planActions(
+            tenant,
+            { tenant, services: [] },
+            {
+              tenant,
+              installed: ["j-talk"],
+              incomplete: ["j-talk"],
+            },
+          ),
+        { code: "invalid_state" },
+      );
+      const result = await run(
+        agent({
+          inventory: async () => ({
+            tenant,
+            installed: ["j-talk"],
+            incomplete: ["j-talk"],
+          }),
+        }),
+      );
+      assert.equal(result.error, "invalid_state");
+      assert.equal(result.installed, undefined);
     });
     it("reports a real failing installer with observed partial state, stops the batch and retries from fresh facts", async () => {
       await json("desired.json", {

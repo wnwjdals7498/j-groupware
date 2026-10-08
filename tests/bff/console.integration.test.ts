@@ -764,6 +764,7 @@ describe("actual isolated operator console Code/PKCE BFF", () => {
       reportSequence: current.reportSequence + 1,
       outcome: "failed",
       installed: ["j-talk"],
+      incomplete: ["j-web"],
       phase: "provision",
       error: "provision_failed",
     };
@@ -792,6 +793,14 @@ describe("actual isolated operator console Code/PKCE BFF", () => {
       ).status,
     ).toBe(400);
     expect(
+      (
+        await agentRequest(agentKey, "/console/api/agent/status", {
+          ...report,
+          incomplete: ["j-talk"],
+        })
+      ).status,
+    ).toBe(400);
+    expect(
       (await agentRequest(agentKey, "/console/api/agent/status", report))
         .status,
     ).toBe(200);
@@ -813,6 +822,7 @@ describe("actual isolated operator console Code/PKCE BFF", () => {
       reportSequence: report.reportSequence + 1,
       outcome: "synchronized",
       installed: ["j-talk", "j-web"],
+      incomplete: [],
     };
     expect(
       (await agentRequest(agentKey, "/console/api/agent/status", complete))

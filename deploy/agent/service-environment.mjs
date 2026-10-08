@@ -38,7 +38,7 @@ export class ServiceEnvironment {
     } catch (error) {
       if (error.code !== "ENOENT") throw error;
       value = generate();
-      this.validate(value);
+      this.validate(value, service);
       const text = this.render(service, value);
       if (
         typeof text !== "string" ||
@@ -50,14 +50,16 @@ export class ServiceEnvironment {
         throw new ProvisionError("unsafe_environment_content");
       await writeFile(file, text, { flag: "wx", mode: 0o600 });
     }
-    this.validate(value);
+    this.validate(value, service);
     return value;
   }
-  validate(value) {
+  validate(value, service) {
     if (
       !value ||
       !/^[A-Za-z0-9_-]{43}$/.test(value.databasePassword) ||
-      !/^[A-Za-z0-9_-]{43}$/.test(value.notificationKey)
+      !/^[A-Za-z0-9_-]{43}$/.test(value.notificationKey) ||
+      (service === "j-messenger" &&
+        !/^[A-Za-z0-9_-]{43}$/.test(value.cursorSigningKey))
     )
       throw new ProvisionError("invalid_environment_secrets");
   }

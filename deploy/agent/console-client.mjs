@@ -43,6 +43,13 @@ export class ConsoleAgentClient {
     Object.assign(this, { tenant, origin: url.origin, key, fetch });
   }
   async request(path, method, body, signal) {
+    if (!(
+      (path === "/console/api/agent/desired-state" &&
+        method === "GET" &&
+        body === undefined) ||
+      (path === "/console/api/agent/status" && method === "POST" && body)
+    ))
+      throw new AgentError("invalid_state");
     signal?.throwIfAborted();
     let response;
     try {
@@ -134,6 +141,7 @@ export class ConsoleAgentClient {
       reportSequence: this.current.sequence + 1,
       outcome: result.outcome,
       ...(result.installed ? { installed: selected(result.installed) } : {}),
+      ...(result.incomplete ? { incomplete: selected(result.incomplete) } : {}),
       ...(result.phase ? { phase: result.phase } : {}),
       ...(result.error ? { error: result.error } : {}),
     };

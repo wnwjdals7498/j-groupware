@@ -13,6 +13,7 @@ export class ConsoleAgentClient {
       tenant: string;
       outcome: string;
       installed?: string[];
+      incomplete?: string[];
       phase?: string;
       error?: string;
     },

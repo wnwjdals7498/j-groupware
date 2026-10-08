@@ -26,6 +26,8 @@ import {
   loadGatewayProfile,
   renderGateway,
 } from "../../deploy/gateway/gateway.mjs";
+import { ProductGateway } from "../../deploy/agent/product-gateway.mjs";
+import { ServiceStateFiles } from "../../deploy/agent/service-lifecycle.mjs";
 
 // Exact locally available official image. There is no skip or fallback to a mock nginx.
 const image =
@@ -445,6 +447,48 @@ describe(
       );
       assert.ok(results.filter((r) => r.status === 429).length >= 15);
       assert.equal((await request("/api/fixture")).status, 200);
+    });
+    it("binds installer subscription changes to actual Nginx workers and retains the prior route after a failed validation", async () => {
+      env = { ...env, JGW_EXT_RATE: "10000", JGW_EXT_BURST: "10000" };
+      const state = new ServiceStateFiles(root + "/installer-state", tenant);
+      await state.write("j-customer-auth-db", {
+        status: "active",
+        phase: "active",
+      });
+      const binding = new ProductGateway({
+        root,
+        profile: env,
+        state,
+        commands,
+        substitute,
+      });
+      await binding.set("j-talk", true);
+      await waitFor("/ext/talk/v1/visitor", (r) => r.status === 200);
+      assert.equal((await request("/ext/customer-auth/v1/guests")).status, 200);
+      await assert.rejects(
+        new ProductGateway({
+          root,
+          profile: env,
+          state,
+          commands: {
+            validate: async () => {
+              throw new Error("injected_installer_validation_failure");
+            },
+            reload: commands.reload,
+          },
+          substitute,
+        }).set("j-talk", false),
+        { code: "validation_failed_restored" },
+      );
+      await waitFor("/ext/talk/v1/visitor", (r) => r.status === 200);
+      await binding.set("j-talk", false);
+      await waitFor(
+        "/ext/talk/v1/widget.min.js",
+        (r) => r.status === 200 && r.body === "",
+      );
+      assert.equal((await request("/ext/talk/v1/visitor")).status, 404);
+      await binding.set("j-customer-auth-db", false);
+      env.JGW_GATEWAY_SERVICES = "";
     });
     it("counts real WSS connections and ignores forged forwarding IPs for connection 429", async () => {
       await apply({

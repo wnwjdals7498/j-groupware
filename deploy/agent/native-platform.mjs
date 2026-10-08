@@ -12,6 +12,11 @@ import { execute, externalPath } from "../gateway/gateway.mjs";
 import { ProvisionError, serviceDatabase } from "./service-database.mjs";
 const user = (service) =>
   service === "j-web" ? "jweb" : "jgw-" + service.slice(2);
+// Privileged fixed binaries must not inherit user-controlled loaders or hooks.
+const run = (command, args) =>
+  execute(command, args, {
+    env: { PATH: "/usr/sbin:/usr/bin:/sbin:/bin", LANG: "C.UTF-8" },
+  });
 async function protectedPath(target, kind) {
   for (let value = target; value !== "/"; value = path.dirname(value)) {
     const info = await lstat(value);
@@ -92,7 +97,7 @@ export class NativeSystemdPlatform {
     const name = user(service);
     let existing;
     try {
-      existing = (await execute("/usr/bin/getent", ["passwd", name]))
+      existing = (await run("/usr/bin/getent", ["passwd", name]))
         .trim()
         .split(":");
     } catch {}
@@ -104,7 +109,7 @@ export class NativeSystemdPlatform {
       )
         throw new ProvisionError("unmanaged_service_account");
     } else
-      await execute("/usr/sbin/useradd", [
+      await run("/usr/sbin/useradd", [
         "--system",
         "--user-group",
         "--no-create-home",
@@ -150,19 +155,15 @@ export class NativeSystemdPlatform {
         await rm(temporary, { force: true });
       }
     }
-    await execute("/usr/bin/systemctl", ["daemon-reload"]);
+    await run("/usr/bin/systemctl", ["daemon-reload"]);
   }
   async start(service) {
     await this.preflight(service);
     await this.preparedEnvironment(service);
-    await execute("/usr/bin/systemctl", [
-      "enable",
-      "--now",
-      this.unit(service),
-    ]);
+    await run("/usr/bin/systemctl", ["enable", "--now", this.unit(service)]);
   }
   async ready(service) {
-    await execute("/usr/bin/systemctl", [
+    await run("/usr/bin/systemctl", [
       "is-active",
       "--quiet",
       this.unit(service),
@@ -172,10 +173,6 @@ export class NativeSystemdPlatform {
   }
   async stop(service) {
     if (process.getuid() !== 0) throw new ProvisionError("root_required");
-    await execute("/usr/bin/systemctl", [
-      "disable",
-      "--now",
-      this.unit(service),
-    ]);
+    await run("/usr/bin/systemctl", ["disable", "--now", this.unit(service)]);
   }
 }

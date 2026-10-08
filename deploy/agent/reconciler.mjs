@@ -50,12 +50,15 @@ export function planActions(tenantId, desired, inventory) {
   )
     throw new AgentError("invalid_state");
   const wanted = serviceList(desired.services),
-    installed = serviceList(inventory.installed);
+    installed = serviceList(inventory.installed),
+    incomplete = serviceList(inventory.incomplete ?? []);
+  if (incomplete.some((service) => installed.includes(service)))
+    throw new AgentError("invalid_state");
   return [
     ...wanted
       .filter((s) => !installed.includes(s))
       .map((service) => ({ kind: "install", service })),
-    ...installed
+    ...serviceList([...installed, ...incomplete])
       .filter((s) => !wanted.includes(s))
       .map((service) => ({ kind: "remove", service })),
   ];
@@ -184,7 +187,7 @@ export class AgentReconciler {
         actions: [],
         reported: false,
       };
-    let observed, desiredServices;
+    let observed, incomplete, desiredServices;
     const actions = [];
     let phase = "desired",
       error;
@@ -196,8 +199,13 @@ export class AgentReconciler {
       );
       if (!current || current.tenant !== this.tenant)
         throw new AgentError("invalid_state");
-      observed = serviceList(current.installed);
-      return { tenant: this.tenant, installed: observed };
+      const complete = serviceList(current.installed),
+        partial = serviceList(current.incomplete ?? []);
+      if (partial.some((service) => complete.includes(service)))
+        throw new AgentError("invalid_state");
+      observed = complete;
+      incomplete = partial;
+      return { tenant: this.tenant, installed: observed, incomplete };
     };
     try {
       try {
@@ -227,6 +235,7 @@ export class AgentReconciler {
             failed = true;
           }
           observed = undefined;
+          incomplete = undefined;
           phase = "inventory";
           try {
             await readInventory();
@@ -246,7 +255,8 @@ export class AgentReconciler {
           const reflected =
             action.kind === "install"
               ? observed.includes(action.service)
-              : !observed.includes(action.service);
+              : !observed.includes(action.service) &&
+                !incomplete.includes(action.service);
           if (!reflected) {
             actions.push({ ...action, outcome: "unconfirmed" });
             throw new AgentError("observation_failed");
@@ -257,7 +267,7 @@ export class AgentReconciler {
           planActions(
             this.tenant,
             { tenant: this.tenant, services: desiredServices },
-            { tenant: this.tenant, installed: observed },
+            { tenant: this.tenant, installed: observed, incomplete },
           ).length
         )
           throw new AgentError("observation_failed");
@@ -282,6 +292,7 @@ export class AgentReconciler {
         actions,
         ...(desiredServices ? { desired: desiredServices } : {}),
         ...(observed ? { installed: observed } : {}),
+        ...(incomplete ? { incomplete } : {}),
         ...(error ? { error, phase } : {}),
       };
       // The reporter is an internal, cancellation-aware adapter, not a guessed HTTP API.

@@ -3,8 +3,13 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "engines": {"node": ">=22.18.0"},
-  "workspaces": ["apps/*", "packages/*"],
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "build": "npm run build --workspace=@j-groupware/contracts && npm run build --workspace=@j-groupware/permissions && npm run build --workspace=@j-groupware/bff-auth && npm run build --workspace=@j-groupware/server && npm run build --workspace=@j-groupware/console-server",
     "check": "npm run build && npm run typecheck && npm test && npm run lint && npm run format:check",
@@ -15,6 +20,7 @@
     "test:gateway": "node --test tests/gateway/gateway.integration.test.mjs",
     "test:agent": "node --test tests/agent/reconciler.test.mjs tests/agent/preparation.test.mjs",
     "test:agent:database": "node --test tests/agent/database.integration.test.mjs",
+    "test:agent:products": "node --test tests/agent/products.integration.test.mjs",
     "lint": "eslint apps packages tests/server tests/bff deploy/gateway tests/gateway deploy/agent tests/agent",
     "format:check": "prettier --check apps packages tests/server tests/bff deploy/gateway/*.mjs tests/gateway/*.mjs deploy/agent/*.mjs tests/agent/*.mjs *.config.ts eslint.config.mjs scripts/run-bff-integration.mjs scripts/prepare-bff-cloud-tests.mjs scripts/wire-bff-cloud-backchannel.mjs",
     "start": "node apps/server/dist/main.js",
