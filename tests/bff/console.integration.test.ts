@@ -1,14 +1,30 @@
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
-import { readFile, writeFile } from "node:fs/promises";
+import {
+  readFile,
+  writeFile,
+  mkdtemp,
+  mkdir,
+  rm,
+  lstat,
+} from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { createConnection } from "node:net";
 import { spawn } from "node:child_process";
 import { once } from "node:events";
 import { fileURLToPath } from "node:url";
 import { parseEnv } from "node:util";
 import { execFileSync } from "node:child_process";
 import { Pool } from "pg";
-import { randomBytes, randomUUID } from "node:crypto";
+import { randomBytes, randomUUID, createHash } from "node:crypto";
 import { AuthControlClient } from "../../apps/console-server/src/auth-control.js";
 import { ConsoleAgentClient } from "../../deploy/agent/console-client.mjs";
+import { BootstrapFiles } from "../../deploy/agent/bootstrap-files.mjs";
+import {
+  loadProvisionAgentControl,
+  createProvisionAgentRuntime,
+} from "../../deploy/agent/provision-agent.mjs";
+import { ProductEnvironment } from "../../deploy/agent/product-environment.mjs";
+import { ProductReadiness } from "../../deploy/agent/product-readiness.mjs";
 import { Agent, fetch as undiciFetch } from "undici";
 import { OidcClient, digest } from "@j-groupware/bff-auth";
 import {
@@ -34,6 +50,59 @@ describe("actual isolated operator console Code/PKCE BFF", () => {
   let agentKey = "",
     secondAgentKey = "",
     failProjection = false;
+  let agentRoot = "";
+  let consoleCertificate = "";
+  const agentSecrets = new Set<string>();
+  let secondBootstrap: {
+    agentKey: string;
+    serviceKey: string;
+    clientSecret: string;
+    consoleOrigin: string;
+  };
+  async function runAgent(file = agentRoot + "/agent.json") {
+    const child = spawn(
+      process.execPath,
+      [
+        "--import",
+        agentRoot + "/dns.mjs",
+        "deploy/agent/provision-agent.mjs",
+        "--config",
+        file,
+        "--once",
+      ],
+      {
+        cwd: fileURLToPath(new URL("../../", import.meta.url)),
+        env: {
+          PATH: process.env.PATH,
+          JGW_TEST_RUNTIME: "isolated-cloud",
+          JGW_TEST_BIND_IP: required("JGW_TEST_BIND_IP"),
+        },
+        shell: false,
+        stdio: ["ignore", "pipe", "pipe"],
+      },
+    );
+    let stdout = "",
+      stderr = "";
+    child.stdout.on("data", (value) => {
+      stdout += String(value);
+    });
+    child.stderr.on("data", (value) => {
+      stderr += String(value);
+    });
+    const timer = setTimeout(() => child.kill("SIGKILL"), 25000);
+    try {
+      const [code] = await once(child, "close");
+      // Check the issued credentials this CLI actually reads. Earlier console
+      // negative tests use the literal "invalid", also part of safe error codes.
+      for (const secret of agentSecrets) {
+        expect(stdout).not.toContain(secret);
+        expect(stderr).not.toContain(secret);
+      }
+      return { code, stdout, stderr };
+    } finally {
+      clearTimeout(timer);
+    }
+  }
   const write = async (
     b: Browser,
     path: string,
@@ -99,6 +168,7 @@ describe("actual isolated operator console Code/PKCE BFF", () => {
     await migrate(pool);
     const cert = await readFile(external.JGC_TLS_CERTIFICATE!),
       key = await readFile(external.JGC_TLS_KEY!);
+    consoleCertificate = external.JGC_TLS_CERTIFICATE!;
     r = await integrationRuntime({ serviceCa: cert.toString() });
     const rows = (await (
       await r.admin("/admin/realms/operator/clients?clientId=j-console")
@@ -216,6 +286,7 @@ describe("actual isolated operator console Code/PKCE BFF", () => {
     }
     await agent?.close();
     await r?.close();
+    if (agentRoot) await rm(agentRoot, { recursive: true, force: true });
   });
   it("stores operator tokens only in its dedicated database and issues a separate opaque secure cookie", async () => {
     const b = browser(),
@@ -581,7 +652,12 @@ describe("actual isolated operator console Code/PKCE BFF", () => {
       for (const value of [data.agentKey, data.serviceKey, data.clientSecret])
         r.secretValues.add(value);
       if (tenant === customer) agentKey = data.agentKey;
-      else secondAgentKey = data.agentKey;
+      else {
+        secondAgentKey = data.agentKey;
+        secondBootstrap = data;
+        for (const value of [data.agentKey, data.serviceKey, data.clientSecret])
+          agentSecrets.add(value);
+      }
       const row = (
         await pool.query("SELECT * FROM customers WHERE tenant_id=$1", [tenant])
       ).rows[0];
@@ -875,6 +951,313 @@ describe("actual isolated operator console Code/PKCE BFF", () => {
       }),
     ).rejects.toMatchObject({ code: "invalid_state" });
   });
+  it("runs the explicit one-shot agent with sealed real console credentials and rejects unsafe control and a busy lock", async () => {
+    agentRoot = await mkdtemp(tmpdir() + "/jgw-agent-entry-");
+    const archive = agentRoot + "/staging-only.tgz",
+      bytes = Buffer.from(
+        "fixture staging only; no runtime installation claimed",
+      );
+    await writeFile(archive, bytes, { mode: 0o600 });
+    await new BootstrapFiles(agentRoot + "/bootstrap").prepare({
+      tenant: secondCustomer,
+      agentKey: secondBootstrap.agentKey,
+      serviceKey: secondBootstrap.serviceKey,
+      clientSecret: secondBootstrap.clientSecret,
+      consoleOrigin: secondBootstrap.consoleOrigin,
+      authOrigin: required("KC_PUBLIC_URL"),
+      localCa: await readFile(consoleCertificate, "utf8"),
+      bundles: [
+        {
+          service: "j-groupware",
+          archive,
+          digest: createHash("sha256").update(bytes).digest("hex"),
+        },
+      ],
+    });
+    await writeFile(
+      agentRoot + "/profiles.json",
+      JSON.stringify({ databasePort: 55060, profiles: {} }) + "\n",
+      { mode: 0o600 },
+    );
+    const control = {
+      bootstrapRoot: agentRoot + "/bootstrap",
+      installer: agentRoot + "/fixture-installer.mjs",
+      lockRoot: agentRoot + "/lock",
+      productProfileFile: agentRoot + "/profiles.json",
+      stateRoot: agentRoot + "/state",
+    };
+    await writeFile(agentRoot + "/agent.json", JSON.stringify(control) + "\n", {
+      mode: 0o600,
+    });
+    await writeFile(
+      control.installer,
+      [
+        "#!" + process.execPath,
+        "import {writeFile} from 'node:fs/promises';",
+        "await writeFile(" +
+          JSON.stringify(agentRoot + "/unexpected-installer") +
+          ",'unexpected');process.exitCode=17;",
+        "",
+      ].join("\n"),
+      { mode: 0o700 },
+    );
+    // Only native DNS is adapted for the existing bridge-bound console. The
+    // CLI verifies HTTPS with its sealed CA and the actual console agent key.
+    await writeFile(
+      agentRoot + "/dns.mjs",
+      [
+        "import dns from 'node:dns';import {syncBuiltinESMExports} from 'node:module';",
+        "if(process.env.JGW_TEST_RUNTIME!=='isolated-cloud')throw new Error('Isolated DNS only');",
+        "const original=dns.lookup;dns.lookup=(host,options,callback)=>{",
+        "if(host==='console.jgw.test'){const ip=process.env.JGW_TEST_BIND_IP;",
+        "if(typeof options==='function')options(null,ip,4);else if(options?.all)callback(null,[{address:ip,family:4}]);else callback(null,ip,4);",
+        "}else original(host,options,callback);};syncBuiltinESMExports();",
+        "",
+      ].join("\n"),
+      { mode: 0o600 },
+    );
+    const loaded = await loadProvisionAgentControl(agentRoot + "/agent.json"),
+      runtime = createProvisionAgentRuntime({ ...loaded, fetch: consoleFetch });
+    await expect(
+      lstat(agentRoot + "/unexpected-installer"),
+    ).rejects.toMatchObject({ code: "ENOENT" });
+    expect(await runtime.runOnce()).toMatchObject({
+      tenant: secondCustomer,
+      outcome: "synchronized",
+      installed: [],
+      incomplete: [],
+      actions: [],
+      reported: true,
+    });
+    const before = (await (await agentRequest(secondAgentKey)).json()) as {
+      reportSequence: number;
+    };
+    const cli = await runAgent();
+    expect(cli.code, cli.stdout + cli.stderr).toBe(0);
+    expect(JSON.parse(cli.stdout)).toMatchObject({
+      tenant: secondCustomer,
+      outcome: "synchronized",
+      actions: [],
+      reported: true,
+    });
+    expect(
+      (
+        (await (await agentRequest(secondAgentKey)).json()) as {
+          reportSequence: number;
+        }
+      ).reportSequence,
+    ).toBe(before.reportSequence + 1);
+    await expect(
+      lstat(agentRoot + "/unexpected-installer"),
+    ).rejects.toMatchObject({ code: "ENOENT" });
+    await writeFile(
+      agentRoot + "/bad.json",
+      JSON.stringify({ ...control, agentKey: "request override" }) + "\n",
+      { mode: 0o600 },
+    );
+    const invalid = await runAgent(agentRoot + "/bad.json");
+    expect(invalid.code).toBe(1);
+    expect(invalid.stderr).toBe("invalid_agent_control\n");
+    await mkdir(control.lockRoot + "/.run.lock", { mode: 0o700 });
+    try {
+      const busy = await runAgent();
+      expect(busy.code).toBe(1);
+      expect(JSON.parse(busy.stdout)).toMatchObject({
+        outcome: "busy",
+        reported: false,
+      });
+      expect(
+        (
+          (await (await agentRequest(secondAgentKey)).json()) as {
+            reportSequence: number;
+          }
+        ).reportSequence,
+      ).toBe(before.reportSequence + 1);
+    } finally {
+      await rm(control.lockRoot + "/.run.lock", { recursive: true });
+    }
+  });
+  it("binds one-shot desired/provision/actual TLS inventory/report with a real Talk process and an explicit fixture installer", async () => {
+    const source = parseEnv(
+        await readFile(
+          "/workspace/.suite-runtime/j-talk/integration.env",
+          "utf8",
+        ),
+      ),
+      profile = {
+        port: 55079,
+        certificate: source.JT_TLS_CERTIFICATE!,
+        key: source.JT_TLS_KEY!,
+        ca: source.JT_TLS_CERTIFICATE!,
+      },
+      products = {
+        databasePort: Number(source.JT_DB_PORT),
+        profiles: { "j-talk": profile },
+      },
+      environment = new ProductEnvironment({
+        ...products,
+        tenant: secondCustomer,
+        keycloakOrigin: required("KC_PUBLIC_URL"),
+      }),
+      readiness = new ProductReadiness({ environment });
+    const occupied = await new Promise<boolean>((resolve) => {
+      const socket = createConnection({
+        host: "127.0.0.1",
+        port: profile.port,
+      });
+      const finish = (value: boolean) => {
+        socket.destroy();
+        resolve(value);
+      };
+      socket.once("connect", () => finish(true));
+      socket.once("error", () => finish(false));
+      socket.setTimeout(500, () => finish(false));
+    });
+    expect(occupied, "Existing fixture-port process must be preserved.").toBe(
+      false,
+    );
+    expect(await readiness.probe("j-talk")).toBe(false);
+    await writeFile(
+      agentRoot + "/profiles.json",
+      JSON.stringify(products) + "\n",
+      { mode: 0o600 },
+    );
+    const notificationKey = randomBytes(32).toString("base64url");
+    r.secretValues.add(notificationKey);
+    r.secretValues.add(source.JT_DB_PASSWORD!);
+    agentSecrets.add(notificationKey);
+    agentSecrets.add(source.JT_DB_PASSWORD!);
+    const child = spawn(process.execPath, ["apps/server/dist/main.js"], {
+      cwd: "/workspace/j-talk",
+      env: environment.variables("j-talk", {
+        databasePassword: source.JT_DB_PASSWORD!,
+        notificationKey,
+      }),
+      shell: false,
+      stdio: "ignore",
+    });
+    try {
+      let ready = false;
+      for (let i = 0; i < 100; i++) {
+        if (child.exitCode !== null)
+          throw new Error("Owned Talk fixture stopped before readiness.");
+        if (await readiness.probe("j-talk")) {
+          ready = true;
+          break;
+        }
+        await new Promise((resolve) => setTimeout(resolve, 50));
+      }
+      expect(ready).toBe(true);
+      const stateModule = fileURLToPath(
+        new URL("../../deploy/agent/service-lifecycle.mjs", import.meta.url),
+      );
+      // The fixture changes only its own private state and owned test process.
+      // Native OS installation and customer systemd acceptance are not claimed.
+      await writeFile(
+        agentRoot + "/fixture-installer.mjs",
+        [
+          "#!" + process.execPath,
+          "import {appendFile} from 'node:fs/promises';import {ServiceStateFiles} from " +
+            JSON.stringify(stateModule) +
+            ";",
+          "const args=process.argv.slice(2);if(args[0]!=='j-talk'||args.length>2||(args[1]&&args[1]!=='--remove'))process.exit(3);",
+          "await appendFile(" +
+            JSON.stringify(agentRoot + "/invocations") +
+            ",JSON.stringify(args)+'\\n',{mode:0o600});",
+          "if(args[1]){process.kill(" +
+            child.pid +
+            ",'SIGTERM');let stopped=false;",
+          "for(let i=0;i<200;i++){try{process.kill(" +
+            child.pid +
+            ",0);}catch(e){if(e.code==='ESRCH'){stopped=true;break;}throw e;}await new Promise(r=>setTimeout(r,25));}if(!stopped)process.exit(4);}",
+          "await new ServiceStateFiles(" +
+            JSON.stringify(agentRoot + "/state") +
+            "," +
+            JSON.stringify(secondCustomer) +
+            ").write('j-talk',{status:args[1]?'removed':'active',phase:'fixture'});",
+          "",
+        ].join("\n"),
+        { mode: 0o700 },
+      );
+      const operator = await login();
+      const desired = async (enabled: boolean) => {
+        const detail = (await (
+          await operator.request("/console/api/customers/" + secondCustomer)
+        ).json()) as { desiredRevision: number };
+        expect(
+          (
+            await write(
+              operator,
+              "/console/api/customers/" + secondCustomer + "/services/j-talk",
+              { revision: detail.desiredRevision, enabled },
+              "PUT",
+            )
+          ).status,
+        ).toBe(200);
+      };
+      await desired(true);
+      const installed = await runAgent();
+      expect(installed.code, installed.stdout + installed.stderr).toBe(0);
+      expect(JSON.parse(installed.stdout)).toMatchObject({
+        outcome: "synchronized",
+        installed: ["j-talk"],
+        incomplete: [],
+        actions: [{ kind: "install", service: "j-talk", outcome: "applied" }],
+        reported: true,
+      });
+      expect((await runAgent()).code).toBe(0);
+      expect(await readFile(agentRoot + "/invocations", "utf8")).toBe(
+        '["j-talk"]\n',
+      );
+      await writeFile(
+        agentRoot + "/profiles.json",
+        JSON.stringify({
+          ...products,
+          profiles: { "j-talk": { ...profile, ca: consoleCertificate } },
+        }) + "\n",
+        { mode: 0o600 },
+      );
+      const unready = await runAgent();
+      expect(unready.code).toBe(1);
+      expect(JSON.parse(unready.stdout)).toMatchObject({
+        outcome: "failed",
+        installed: [],
+        incomplete: ["j-talk"],
+        error: "observation_failed",
+        actions: [
+          { kind: "install", service: "j-talk", outcome: "unconfirmed" },
+        ],
+        reported: true,
+      });
+      await writeFile(
+        agentRoot + "/profiles.json",
+        JSON.stringify(products) + "\n",
+        { mode: 0o600 },
+      );
+      expect((await runAgent()).code).toBe(0);
+      await desired(false);
+      const removed = await runAgent();
+      expect(removed.code).toBe(0);
+      expect(JSON.parse(removed.stdout)).toMatchObject({
+        outcome: "synchronized",
+        installed: [],
+        incomplete: [],
+        actions: [{ kind: "remove", service: "j-talk", outcome: "applied" }],
+        reported: true,
+      });
+      expect(await readFile(agentRoot + "/invocations", "utf8")).toBe(
+        '["j-talk"]\n["j-talk"]\n["j-talk","--remove"]\n',
+      );
+      expect(await readiness.probe("j-talk")).toBe(false);
+      expect(child.exitCode).toBe(0);
+    } finally {
+      if (child.exitCode === null && child.signalCode === null) {
+        const closed = once(child, "exit");
+        child.kill("SIGTERM");
+        await closed;
+      }
+    }
+  }, 60000);
   it("rotates and revokes agent hashes immediately without returning keys from reads", async () => {
     const b = await login(),
       previous = agentKey;

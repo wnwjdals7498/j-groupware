@@ -4,6 +4,12 @@ These modules implement file preparation, installer ports, scoped console
 desired/status transport and product adapters. Customer systemd host activation
 and complete installation acceptance remain unexecuted.
 
+The [explicit one-shot provision agent](provision-agent.md) connects sealed
+bootstrap credentials, product profiles, tenant locking, fixed installer argv,
+actual TLS inventory and accepted console reporting. Its CLI is verified against
+real isolated console/PG/Talk processes with a private fixture installer.
+The native installer and operating system activation remain separate work.
+
 `BootstrapFiles` validates the tenant, exact HTTPS origins, currently valid CA,
 fixed service names and archive SHA256 before sealing credentials in external
 mode-600 files. It stages archives without extracting or executing them, refuses

@@ -275,6 +275,7 @@ export async function buildProductBundle({
         "product-cleanup",
         "product-readiness",
         "provision-command",
+        "provision-agent",
         "provision-error",
         "reconciler",
         "service-database",
