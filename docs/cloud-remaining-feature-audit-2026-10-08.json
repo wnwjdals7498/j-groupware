@@ -24,7 +24,9 @@
     "vm": 9,
     "service": 42,
     "contract": 20,
-    "policy": 11
+    "policy": 11,
+    "ready": 0,
+    "excluded": 0
   },
   "items": [
     {
@@ -2271,10 +2273,11 @@
         "j-auth/docs/decisions.md",
         "j-auth/docs/feature-specifications.md"
       ],
-      "implemented_in_this_batch": false,
+      "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "implementation": "implemented",
-      "verification": "actual_realm_rest_300_1800_28800_refresh_revoke_reuse0_jwt_ttl300_refresh_rotation_replay_reject_node22_node24; actual_bff_backchannel_wss_sse_end_full125_pass_node24; long_duration_idle_max_wait_not_run"
+      "verification": "actual_realm_rest_300_1800_28800_refresh_revoke_reuse0_jwt_ttl300_refresh_rotation_replay_reject_node22_node24; actual_bff_backchannel_wss_sse_end_full125_pass_node24; long_duration_idle_max_wait_not_run",
+      "baseline_implemented_in_this_batch": false
     },
     {
       "id": "AU-11",
@@ -2293,10 +2296,11 @@
         "j-auth/docs/decisions.md",
         "j-auth/docs/feature-specifications.md"
       ],
-      "implemented_in_this_batch": false,
+      "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "implementation": "implemented",
-      "verification": "actual_fresh_verdaccio_compose_publish_auth_contracts0.1_cold_consumer_dist_bytes_sha512_lock_integrity_duplicate_unpublish_deny_pass_node22_node24"
+      "verification": "actual_fresh_verdaccio_compose_publish_auth_contracts0.1_cold_consumer_dist_bytes_sha512_lock_integrity_duplicate_unpublish_deny_pass_node22_node24",
+      "baseline_implemented_in_this_batch": false
     },
     {
       "id": "AU-25",
@@ -2315,10 +2319,11 @@
         "j-auth/docs/decisions.md",
         "j-auth/docs/feature-specifications.md"
       ],
-      "implemented_in_this_batch": false,
+      "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "implementation": "implemented",
-      "verification": "actual_members_role_revoke_delete_keycloak_session_end_and_partial_failure503_pass_node22_node24; bff_all_transports_session_end_full125_pass_node24"
+      "verification": "actual_members_role_revoke_delete_keycloak_session_end_and_partial_failure503_pass_node22_node24; bff_all_transports_session_end_full125_pass_node24",
+      "baseline_implemented_in_this_batch": false
     },
     {
       "id": "AU-50",
@@ -2337,10 +2342,11 @@
         "j-auth/docs/decisions.md",
         "j-auth/docs/feature-specifications.md"
       ],
-      "implemented_in_this_batch": false,
+      "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "implementation": "implemented",
-      "verification": "actual_nginx_tls_path_allowlist_upstream_auth_and_rate_limit429_no_credentials_log_4_pass_node22_node24; production_hostname_browser_vm_not_run"
+      "verification": "actual_nginx_tls_path_allowlist_upstream_auth_and_rate_limit429_no_credentials_log_4_pass_node22_node24; production_hostname_browser_vm_not_run",
+      "baseline_implemented_in_this_batch": false
     },
     {
       "id": "GW-72",
@@ -2359,10 +2365,11 @@
         "j-groupware/docs/decisions.md",
         "j-groupware/docs/suite-feature-specifications.md"
       ],
-      "implemented_in_this_batch": false,
+      "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "implementation": "implemented",
-      "verification": "actual_product_compose_nonroot_loopback_fresh_registry_publish_consume_immutable_acl_pass_node22_node24; prior_acl_backup_pass"
+      "verification": "actual_product_compose_nonroot_loopback_fresh_registry_publish_consume_immutable_acl_pass_node22_node24; prior_acl_backup_pass",
+      "baseline_implemented_in_this_batch": false
     },
     {
       "id": "MS-08",
@@ -2381,10 +2388,11 @@
         "j-messenger/docs/pmt-docs/11-implementation-plan.md",
         "j-messenger/docs/suite-integration-specifications.md"
       ],
-      "implemented_in_this_batch": false,
+      "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "implementation": "implemented",
-      "verification": "actual_suite_server_contracts_build_archive_2_pass_node22_node24; cold_install130_packages_auth_verifier0.1_lock_integrity_match; installed_artifact_static_ui404_ready200_both_nodes; existing_full_check_and_actual_pg21_pass_node24; native_build_operating_install_vm_not_run"
+      "verification": "actual_suite_server_contracts_build_archive_2_pass_node22_node24; cold_install130_packages_auth_verifier0.1_lock_integrity_match; installed_artifact_static_ui404_ready200_both_nodes; existing_full_check_and_actual_pg21_pass_node24; native_build_operating_install_vm_not_run",
+      "baseline_implemented_in_this_batch": false
     },
     {
       "id": "GW-50",
@@ -2406,7 +2414,8 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "implementation": "implemented",
-      "verification": "actual_operator_code_pkce_nonce_state_separate_console_db_cookie_customer_denial_csrf_refresh_lock_real_backchannel_compiled_https_sigterm_8_pass_node22_node24; full_customer_bff133_pass_node24; formal_ui_gateway_vm_not_run"
+      "verification": "actual_operator_code_pkce_nonce_state_separate_console_db_cookie_customer_denial_csrf_refresh_lock_real_backchannel_compiled_https_sigterm_8_pass_node22_node24; full_customer_bff133_pass_node24; formal_ui_gateway_vm_not_run",
+      "baseline_implemented_in_this_batch": true
     },
     {
       "id": "TK-25",
@@ -2428,7 +2437,8 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "implementation": "implemented",
-      "verification": "actual_db_origin_crud_pagination_exact_origin_invalid_wildcard_path_alias_tenant_isolation_role_and_failure_pass_node22_node24"
+      "verification": "actual_db_origin_crud_pagination_exact_origin_invalid_wildcard_path_alias_tenant_isolation_role_and_failure_pass_node22_node24",
+      "baseline_implemented_in_this_batch": true
     },
     {
       "id": "TK-26",
@@ -2450,7 +2460,8 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "implementation": "implemented",
-      "verification": "actual_db_widget_key_one_time_response_current_previous24h_boundary_hmac_signature_constant_time_invalid_anonymous_foreign_tenant_atomic_concurrent_rotation_pass_node22_node24"
+      "verification": "actual_db_widget_key_one_time_response_current_previous24h_boundary_hmac_signature_constant_time_invalid_anonymous_foreign_tenant_atomic_concurrent_rotation_pass_node22_node24",
+      "baseline_implemented_in_this_batch": true
     },
     {
       "id": "WB-30",
@@ -2472,7 +2483,8 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "implementation": "implemented",
-      "verification": "actual_dedicated_jgw_web_nonsuperuser_tenant_tables_migration_checksum_conflict_rollback_cross_db_connection_denied_https_read_and_real_db_restart_pass_node22_node24"
+      "verification": "actual_dedicated_jgw_web_nonsuperuser_tenant_tables_migration_checksum_conflict_rollback_cross_db_connection_denied_https_read_and_real_db_restart_pass_node22_node24",
+      "baseline_implemented_in_this_batch": true
     }
   ],
   "checkpoints": [
