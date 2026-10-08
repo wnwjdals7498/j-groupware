@@ -1,6 +1,14 @@
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import { randomBytes, randomUUID } from "node:crypto";
-import { readFile } from "node:fs/promises";
+import {
+  readFile,
+  mkdtemp,
+  rm,
+  lstat,
+  symlink,
+  writeFile,
+} from "node:fs/promises";
+import { NotificationManifest } from "../../deploy/agent/notification-manifest.mjs";
 import { integrationRuntime, type Runtime } from "./runtime.js";
 import { NotificationStore } from "../../apps/server/src/db/notifications.js";
 import { createNotificationReceiver } from "../../apps/server/src/notification-receiver.js";
@@ -445,6 +453,99 @@ describe("isolated real j-auth subscription + PostgreSQL notification projection
         if (previous[index] === undefined) delete process.env[name];
         else process.env[name] = previous[index];
       });
+    }
+  });
+  it("projects a durable installer manifest against actual subscriptions, reuses hashes, retries an actual outage and removes receiver authorization", async () => {
+    const tenant = rt.fixtures[1]!.tenant,
+      root = await mkdtemp(
+        "/workspace/.suite-runtime/j-groupware/notification-manifest-",
+      );
+    try {
+      const projector = new NotificationProjector(rt.pool, tenant, source(1));
+      const producer = new NotificationManifest({ root, tenant, projector });
+      expect((await producer.register("j-mail", keys[1]!)).revision).toBe("1");
+      const before = await readFile(root + "/notification-keys.json", "utf8");
+      expect(before).not.toContain(keys[1]!);
+      expect((await lstat(root + "/notification-keys.json")).mode & 0o077).toBe(
+        0,
+      );
+      expect((await receive(1)).status).toBe(200);
+      expect((await producer.register("j-mail", keys[1]!)).revision).toBe("1");
+      expect(await readFile(root + "/notification-keys.json", "utf8")).toBe(
+        before,
+      );
+      await expect(
+        producer.register("j-mail", randomBytes(32).toString("base64url")),
+      ).rejects.toMatchObject({ code: "notification_key_conflict" });
+      expect((await rt.subscribe(1, "j-approval")).status).toBe(200);
+      const approvalKey = randomBytes(32).toString("base64url");
+      rt.secretValues.add(approvalKey);
+      const failed = new NotificationManifest({
+        root,
+        tenant,
+        projector: new NotificationProjector(rt.pool, tenant, (id, signal) =>
+          rt.subscriptionSnapshot(1, signal, (input, init) =>
+            rt.fetchLoopback(String(input).replace(":54231", ":54259"), init),
+          ),
+        ),
+      });
+      await expect(
+        failed.register("j-approval", approvalKey),
+      ).rejects.toMatchObject({ code: "notification_projection_failed" });
+      expect((await producer.read())!.revision).toBe("2");
+      expect((await receive(1)).status).toBe(403);
+      expect(
+        (await producer.register("j-approval", approvalKey)).revision,
+      ).toBe("2");
+      expect(
+        (await state(1)).rows.find((row) => row.service === "j-approval"),
+      ).toMatchObject({ active: true, key_hashes: [digest(approvalKey)] });
+      expect((await receive(1)).status).toBe(200);
+      expect((await producer.remove("j-mail")).revision).toBe("3");
+      expect((await receive(1)).status).toBe(401);
+      expect((await producer.remove("j-mail")).revision).toBe("3");
+      expect((await producer.refresh()).revision).toBe("3");
+      expect((await producer.read())!.keys["j-mail"]).toBeUndefined();
+      expect((await stores[1]!.list(identity)).items).toHaveLength(0);
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  });
+  it("refuses a symlinked or foreign-tenant installer manifest before changing PG registry state", async () => {
+    const tenant = rt.fixtures[1]!.tenant,
+      root = await mkdtemp(
+        "/workspace/.suite-runtime/j-groupware/notification-manifest-unsafe-",
+      );
+    const producer = new NotificationManifest({
+      root,
+      tenant,
+      projector: new NotificationProjector(rt.pool, tenant, source(1)),
+    });
+    const previous = (await state(1)).rows;
+    try {
+      const target = root + "/preserved";
+      await writeFile(target, "preserve", { mode: 0o600 });
+      await symlink(target, root + "/notification-keys.json");
+      await expect(producer.refresh()).rejects.toMatchObject({
+        code: "unsafe_notification_manifest",
+      });
+      expect(await readFile(target, "utf8")).toBe("preserve");
+      await rm(root + "/notification-keys.json");
+      await writeFile(
+        root + "/notification-keys.json",
+        JSON.stringify({
+          tenantId: rt.fixtures[0]!.tenant,
+          revision: "99",
+          keys: {},
+        }),
+        { mode: 0o600 },
+      );
+      await expect(producer.refresh()).rejects.toMatchObject({
+        code: "invalid_notification_manifest",
+      });
+      expect((await state(1)).rows).toEqual(previous);
+    } finally {
+      await rm(root, { recursive: true, force: true });
     }
   });
 });

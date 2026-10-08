@@ -150,7 +150,7 @@ test("private service env preserves generated credentials across retry and remai
       preflight: async () => {},
       install: async () => events.push("unit"),
       start: async () => {},
-      ready: async () => {},
+      ready: async () => events.push("ready"),
       stop: async () => events.push("stop"),
     },
     gateway: {
@@ -159,10 +159,15 @@ test("private service env preserves generated credentials across retry and remai
         events.push("gateway");
       },
     },
-    notifications: { register: async () => {} },
+    notifications: {
+      register: async () => events.push("notification"),
+      remove: async () => events.push("notification_remove"),
+    },
     cleanup: { run: async () => events.push("cleanup") },
   });
   await lifecycle.run("j-talk");
+  assert(events.indexOf("ready") < events.indexOf("notification"));
+  assert(events.indexOf("notification") < events.indexOf("gateway"));
   const file = root + "/environment/j-talk.env",
     bytes = await readFile(file);
   for (const key of Object.values(first))

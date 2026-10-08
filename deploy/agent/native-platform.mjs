@@ -91,6 +91,16 @@ export class NativeSystemdPlatform {
     if ((await lstat(environment)).mode & 0o077)
       throw new ProvisionError("unsafe_environment_file");
   }
+  async preparedUnit(service) {
+    const file = path.join(this.unitRoot, this.unit(service));
+    await protectedPath(file, "file");
+    if (
+      (await lstat(file)).size > 8192 ||
+      (await readFile(file, "utf8")) !==
+        renderServiceUnit(service, this.bundleRoot, this.environmentRoot)
+    )
+      throw new ProvisionError("unit_conflict");
+  }
   async install(service) {
     await this.preflight(service);
     await this.preparedEnvironment(service);
@@ -163,6 +173,7 @@ export class NativeSystemdPlatform {
     await run("/usr/bin/systemctl", ["enable", "--now", this.unit(service)]);
   }
   async ready(service) {
+    await this.preparedUnit(service);
     await run("/usr/bin/systemctl", [
       "is-active",
       "--quiet",
@@ -173,6 +184,7 @@ export class NativeSystemdPlatform {
   }
   async stop(service) {
     if (process.getuid() !== 0) throw new ProvisionError("root_required");
+    await this.preparedUnit(service);
     await run("/usr/bin/systemctl", ["disable", "--now", this.unit(service)]);
   }
 }

@@ -150,11 +150,6 @@ export class ServiceLifecycle {
         phase = "database";
         await record("installing");
         await this.database.ensure(service, secrets.databasePassword);
-        if (["j-approval", "j-talk", "j-mail"].includes(service)) {
-          phase = "notification";
-          await record("installing");
-          await this.notifications.register(service, secrets.notificationKey);
-        }
         phase = "unit";
         await record("installing");
         await this.platform.install(service);
@@ -162,6 +157,11 @@ export class ServiceLifecycle {
         await record("installing");
         await this.platform.start(service);
         await this.platform.ready(service);
+        if (["j-approval", "j-talk", "j-mail"].includes(service)) {
+          phase = "notification";
+          await record("installing");
+          await this.notifications.register(service, secrets.notificationKey);
+        }
         phase = "gateway";
         await record("installing");
         await this.gateway.set(service, true);
@@ -171,6 +171,11 @@ export class ServiceLifecycle {
       }
       if (state.status === "removed")
         return { tenant: this.tenant, service, status: "removed" };
+      if (
+        ["j-approval", "j-talk", "j-mail"].includes(service) &&
+        !this.notifications?.remove
+      )
+        throw new ProvisionError("notification_registration_unbound");
       state.action = "remove";
       phase = "stop";
       await record("removing");
@@ -189,6 +194,11 @@ export class ServiceLifecycle {
       phase = "cleanup";
       await record("removing");
       await this.cleanup.run(service);
+      if (["j-approval", "j-talk", "j-mail"].includes(service)) {
+        phase = "notification_remove";
+        await record("removing");
+        await this.notifications.remove(service);
+      }
       phase = "gateway";
       await record("removing");
       await this.gateway.set(service, false);

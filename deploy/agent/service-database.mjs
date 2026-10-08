@@ -4,6 +4,8 @@ import { execute } from "../gateway/gateway.mjs";
 import { externalPath } from "../gateway/gateway.mjs";
 import { lstat, rename, rm, writeFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
+import { ProvisionError } from "./provision-error.mjs";
+export { ProvisionError } from "./provision-error.mjs";
 const DATABASES = Object.freeze({
   "j-groupware": "jgw_groupware",
   "j-approval": "jgw_approval",
@@ -18,12 +20,6 @@ const services = new Set(
     (value) => value.serviceId,
   ),
 );
-export class ProvisionError extends Error {
-  constructor(code) {
-    super(code);
-    this.code = code;
-  }
-}
 export function serviceDatabase(service) {
   if (!services.has(service) || !DATABASES[service])
     throw new ProvisionError("invalid_service");

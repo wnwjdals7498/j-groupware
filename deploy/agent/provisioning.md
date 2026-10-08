@@ -19,13 +19,34 @@ role's sessions and preserves the database and backup. Reinstallation of removed
 data fails for review; automatic purging is not implemented.
 
 `ServiceLifecycle` durably records each stage, preserves generated env secrets
-across retries, requires notification registration for approval/talk/mail, and
+across retries, requires notification registration after actual readiness for approval/talk/mail, and
 publishes the gateway only after readiness. Removal stops the service, dumps
 once, disables the DB role, runs service cleanup, updates the gateway, then
 removes env. Failed stages retain env, backup and recovery state.
 
+`NotificationManifest` stores only per-service SHA256 hashes in a private file.
+It binds the existing NotificationProjector to durable installer generation,
+reuses unchanged keys/revisions across retry, removes source hashes on teardown
+and refreshes authoritative subscription leases. Existing key replacement is
+refused; an explicit key rotation workflow remains separate. Actual auth outage
+preserves manifest intent, disables projection and retries the same generation.
+The lifecycle registers after readiness and removes registration after cleanup.
+Production subscription-reader credentials and periodic worker activation are
+still unbound; importing the adapter does not activate a control-plane worker.
+
+`WebServiceCleanup` exposes only root-owned fixed `/usr/local/sbin/jweb-helper
+remove-all` with bounded JSON stdin/output and a minimal child environment.
+The actual isolated root fixture proves account/site route removal, private
+backup preservation of manual uploads, unchanged gateway and repeated cleanup.
+Its runtime image is Node22.18; both Node22/24 test orchestrators pass two tests.
+It refuses non-Web services, non-root execution and unsafe helper ownership.
+Other product cleanup adapters and Web OS/storage installation remain pending.
+
 `NativeSystemdPlatform` renders fixed entrypoints, dedicated nologin users and
 private env files. Root-owned bundle ancestry and metadata digest are checked.
+Readiness and stop also refuse a unit whose fixed content or ownership differs;
+an install failing before a managed unit/DB exists still requires phase-aware
+teardown work rather than treating an incomplete allocation as fully removed.
 Only j-web permits privilege elevation for its fixed sudo helper. Readiness is
 a required product adapter. These operating-system methods were not run on the
 cloud host and are not customer VM acceptance.
@@ -60,8 +81,8 @@ native commands use a fixed minimal environment, without inherited loader hooks.
 
 Executed Node 22.18/24.19 coverage: preparation/reconciliation 20 each, five
 product tests each (including real compiled Talk/Web with their isolated PGs),
-15 actual Nginx tests each, whole BFF regression 146 each and root check
-76. Customer VM, notification registration, product storage/cleanup and timer
+15 actual Nginx tests each, whole BFF regression 148 each and root check
+76. Customer VM, notification worker activation, remaining product storage/cleanup and timer
 activation remain separate unexecuted work. Product tests require the external
 isolated Talk/Web/auth env files and their built artifacts; they never skip a
 missing prerequisite or access port 3001.
