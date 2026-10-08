@@ -3,6 +3,7 @@ import { Pool } from "pg";
 import { createConsoleApp } from "./app.js";
 import { loadConsoleConfig } from "./config.js";
 import { migrate } from "./db/migrate.js";
+import { AuthControlClient } from "./auth-control.js";
 async function main() {
   const config = loadConsoleConfig(),
     pool = new Pool(config.database);
@@ -19,6 +20,14 @@ async function main() {
     const app = createConsoleApp({
       pool,
       config,
+      ...(config.authControl
+        ? {
+            authControl: new AuthControlClient(
+              config.authControl.origin,
+              config.authControl.serviceKey,
+            ),
+          }
+        : {}),
       https: { cert, key, minVersion: "TLSv1.2" },
       logger: {
         level: "info",

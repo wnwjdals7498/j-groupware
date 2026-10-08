@@ -17,11 +17,24 @@ import {
 } from "@j-groupware/bff-auth";
 import type { OidcConfig, SessionRow } from "@j-groupware/bff-auth";
 import { SESSION_POLICY } from "@j-groupware/contracts";
+import { ConsoleCustomers } from "./customers.js";
+import { registerCustomerRoutes } from "./customer-routes.js";
+import type { AuthControl } from "./auth-control.js";
 export const CONSOLE_COOKIES = {
   session: "__Host-jgw-console-session",
   flow: "__Host-jgw-console-login",
 } as const;
-const ROUTES: Record<string, "public" | "session"> = {
+const ROUTES: Record<string, "public" | "session" | "write" | "agent"> = {
+  "GET /console/api/customers": "session",
+  "GET /console/api/customers/:tenant": "session",
+  "POST /console/api/customers": "write",
+  "PUT /console/api/customers/:tenant/services/:service": "write",
+  "POST /console/api/customers/:tenant/reconcile": "write",
+  "POST /console/api/customers/:tenant/agent-key": "write",
+  "POST /console/api/customers/:tenant/bootstrap/reset": "write",
+  "DELETE /console/api/customers/:tenant/agent-key": "write",
+  "GET /console/api/agent/desired-state": "agent",
+  "POST /console/api/agent/status": "agent",
   "GET /": "public",
   "GET /health/live": "public",
   "GET /health/ready": "public",
@@ -37,6 +50,7 @@ export function createConsoleApp(options: {
   oidc?: OidcClient;
   https?: HttpsOptions;
   logger?: FastifyServerOptions["logger"];
+  authControl?: AuthControl;
 }) {
   if (options.config.tenant !== "operator")
     throw new Error("Console requires operator realm.");
@@ -70,7 +84,7 @@ export function createConsoleApp(options: {
   app.addHook("onRoute", (route) => {
     const access = ROUTES[`${route.method} ${route.url}`];
     if (!access) throw new Error("Console route access must be declared.");
-    if (access === "session")
+    if (access === "session" || access === "write")
       route.preHandler = async (request) => {
         const identity = await sessions.authenticate(
           cookieValue(request.headers.cookie, CONSOLE_COOKIES.session),
@@ -78,7 +92,9 @@ export function createConsoleApp(options: {
         identities.set(request, identity);
         if (!identity.roles.includes("customer:read"))
           throw new ApiError(403, "forbidden", "Operator role required.");
-        if (request.method === "POST")
+        if (access === "write" && !identity.roles.includes("customer:write"))
+          throw new ApiError(403, "forbidden", "Operator write role required.");
+        if (!["GET", "HEAD", "OPTIONS"].includes(request.method))
           checkCsrf(
             request.headers,
             options.config.origin,
@@ -93,7 +109,8 @@ export function createConsoleApp(options: {
       .header("X-Content-Type-Options", "nosniff");
     if (
       request.headers.host !== new URL(options.config.origin).host ||
-      request.headers.authorization ||
+      (request.headers.authorization &&
+        ROUTES[`${request.method} ${request.routeOptions.url}`] !== "agent") ||
       request.headers.upgrade
     )
       throw new ApiError(400, "invalid_input", "Invalid console request.");
@@ -262,6 +279,15 @@ export function createConsoleApp(options: {
       await sessions.backchannel(request.body.logout_token);
       return reply.code(200).send();
     },
+  );
+  registerCustomerRoutes(
+    app,
+    new ConsoleCustomers(
+      options.pool,
+      options.config.origin,
+      options.authControl,
+    ),
+    (r) => identities.get(r)!,
   );
   return app;
 }

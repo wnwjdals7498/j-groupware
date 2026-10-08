@@ -74,5 +74,13 @@ export function loadConsoleConfig(env: NodeJS.ProcessEnv = process.env) {
     database: loadConsoleDatabase(env),
     tlsCertificate: external(required(env, "JGC_TLS_CERTIFICATE")),
     tlsKey: external(required(env, "JGC_TLS_KEY")),
+    ...(env.JGC_AUTH_ORIGIN || env.JGC_CONSOLE_SERVICE_KEY
+      ? {
+          authControl: {
+            origin: required(env, "JGC_AUTH_ORIGIN"),
+            serviceKey: required(env, "JGC_CONSOLE_SERVICE_KEY"),
+          },
+        }
+      : {}),
   };
 }
