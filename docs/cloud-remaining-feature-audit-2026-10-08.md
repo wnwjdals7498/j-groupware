@@ -2,16 +2,16 @@
 
 기존 명세/결정과 실제 소스·실행 증거 대조. 각 기능의 첫 미완료 단계 기준이며 구현 완료·제품 인수 완료를 뜻하지 않는다. 기술 계약과 선행 서비스는 구현자가 계속할 수 있는 작업이며 사용자/외부 환경 차단으로 취급하지 않는다.
 
-현재 소스 기준: 구현 91, 부분 27, 미착수 54 / 총 172. 남은 81개. 전체 통합 인수: 미완료.
+현재 소스 기준: 구현 94, 부분 30, 미착수 48 / 총 172. 남은 78개. 전체 통합 인수: 미완료.
 
-service·contract는 구현자가 계속할 수 있는 선행 작업이다. 실제 외부 차단으로 취급하지 않으며, ready 0은 전체 구현 완료를 뜻하지 않는다.
+초기 ready 분류의 독립 소스 작업은 모두 처리했고 이번에는 service/contract 작업도 연결했다. ready=0은 기술 작업 소진을 뜻하지 않는다. customer-auth backend, 설치 entrypoint/storage/cleanup/알림 등록 등 안전한 독립 구현은 계속 가능하며 T2·E8·H7·정식 UI·실제 VM 인수는 별도 경계다.
 
 | 분류 | 남은 수 |
 |---|---:|
 | 구현 가능 | 0 |
-| 기술 계약 확정 선행 | 18 |
-| 서비스 구현 선행 | 29 |
-| UI 기준 선행 | 14 |
+| 기술 계약 확정 선행 | 15 |
+| 서비스 구현 선행 | 28 |
+| UI 기준 선행 | 15 |
 | 제품 정책 결정 필요 | 11 |
 | 외부 VM 인수 | 9 |
 | 현재 최소 범위 제외 | 0 |
@@ -32,20 +32,17 @@ service·contract는 구현자가 계속할 수 있는 선행 작업이다. 실�
 | GW-32 | j-groupware | 손님 관리 화면 | 서비스 구현 선행 | not_started | C1/C2/C3 backend 후 기존 BFF 인증 패턴으로 relay·화면을 연결한다. |
 | GW-33 | j-groupware | API 키 화면 | 서비스 구현 선행 | not_started | C5 backend·one-time secret 계약 후 BFF와 화면을 연결한다. |
 | GW-34 | j-groupware | 결재 화면 | UI 기준 선행 | partial | 기존 결재 계약으로 상신·승인·반려 화면을 구현한다. |
-| GW-35 | j-groupware | 상담 화면 | 서비스 구현 선행 | not_started | 독립적인 talk 회원 API부터 구현한 뒤 BFF·화면을 연결한다. |
-| GW-36 | j-groupware | 상담 설정 | 서비스 구현 선행 | not_started | 관리 API 계약으로 token 축소 relay를 연결하고 UI 기준 도착 후 화면을 구현한다. |
+| GW-35 | j-groupware | 상담 화면 | 서비스 구현 선행 | partial | customer-auth 손님 조회와 권한별 이름 조합을 연결하고 T2 정책 및 UI 기준 아래 실제 상담 전달을 구현한다. |
+| GW-36 | j-groupware | 상담 설정 | UI 기준 선행 | partial | 정식 UI 기준 아래 상담 설정 화면을 연결하고 확정된 visitor 서명 계약을 예제로 제공한다. |
 | GW-37 | j-groupware | 웹 관리 화면 | 서비스 구현 선행 | not_started | web DB·인증·helper·계약부터 구현한 뒤 BFF·화면을 연결한다. |
 | GW-38 | j-groupware | 배포 후 허용 출처 등록 | 서비스 구현 선행 | not_started | 각 backend 완성 후 성공/후속 origin 실패를 분리한 BFF 연결을 구현한다. |
 | GW-40 | j-groupware | 알림 수신 API | 서비스 구현 선행 | partial | 완성된 installer 인증·key provisioning 경계로 실제 가입 연결을 구현한다. |
 | GW-44 | j-groupware | 알림 화면 | UI 기준 선행 | partial | 정식 UI와 기존 알림 계약을 연결한다. |
-| GW-51 | j-groupware | 고객 목록·계약 상태 | 기술 계약 확정 선행 | not_started | G17 상태 계약을 고정하고 operator API·PG 테스트를 구현한다. |
-| GW-52 | j-groupware | 고객 등록 | 기술 계약 확정 선행 | not_started | 기존 key provisioning 경계를 유지해 등록 saga·실패 상태 계약을 정리한다. |
-| GW-53 | j-groupware | 가입 서비스 관리 | 기술 계약 확정 선행 | not_started | 콘솔 계약과 기존 서비스 catalog를 연결한다. |
-| GW-54 | j-groupware | 원하는 상태 API | 기술 계약 확정 선행 | not_started | 기존 최소 권한 API와 agent polling 계약을 확정하고 실제 연결한다. |
-| GW-63 | j-groupware | 부트스트랩 | 서비스 구현 선행 | partial | 콘솔 producer·실제 준비 bundle·bootstrap entrypoint를 구현하고 격리 어댑터를 검증한다. 고객 VM 활성화는 별도다. |
-| GW-64 | j-groupware | 서비스 설치 | 서비스 구현 선행 | partial | 구체적인 bundle metadata/packaging 및 서비스별 readiness/env/notification/gateway 어댑터를 연결한다. |
-| GW-65 | j-groupware | 서비스 해지 | 서비스 구현 선행 | partial | web remove-all·mail backup 및 실제 gateway rollback을 lifecycle에 연결하고 결합된 격리 경로를 검증한다. |
-| GW-66 | j-groupware | 프로비저닝 에이전트 | 서비스 구현 선행 | partial | 기존 reconciler에 desired API 인증과 완료 서비스 installer probe를 연결한다. |
+| GW-51 | j-groupware | 고객 목록·계약 상태 | 기술 계약 확정 선행 | partial | 업무 계약 상태값·전이 기준을 확인한 뒤 기존 고객 DTO/PG 저장과 연결한다. |
+| GW-63 | j-groupware | 부트스트랩 | 서비스 구현 선행 | partial | 기존 adapters를 CLI/agent entrypoint로 연결하고 base bootstrap·권한 설치·단계별 teardown·비Web cleanup 및 알림 worker source를 격리 검증한다. 고객 VM 활성화는 별도 인수한다. |
+| GW-64 | j-groupware | 서비스 설치 | 서비스 구현 선행 | partial | 기존 adapters를 CLI/agent entrypoint로 연결하고 base bootstrap·권한 설치·단계별 teardown·비Web cleanup 및 알림 worker source를 격리 검증한다. 고객 VM 활성화는 별도 인수한다. |
+| GW-65 | j-groupware | 서비스 해지 | 서비스 구현 선행 | partial | 기존 adapters를 CLI/agent entrypoint로 연결하고 base bootstrap·권한 설치·단계별 teardown·비Web cleanup 및 알림 worker source를 격리 검증한다. 고객 VM 활성화는 별도 인수한다. |
+| GW-66 | j-groupware | 프로비저닝 에이전트 | 서비스 구현 선행 | partial | 기존 adapters를 CLI/agent entrypoint로 연결하고 base bootstrap·권한 설치·단계별 teardown·비Web cleanup 및 알림 worker source를 격리 검증한다. 고객 VM 활성화는 별도 인수한다. |
 | GW-71 | j-groupware | UI 기준 | UI 기준 선행 | not_started | 추가 질의를 반복하지 않고 기존 응답을 기다린다. |
 | GW-73 | j-groupware | VM 검증·측정 | 외부 VM 인수 | not_started | 설치자 연결 후 지정 VM에서 통합 인수한다. |
 | MS-07 | j-messenger | UI 토큰 적용 | UI 기준 선행 | not_started | 확정된 groupware UI token을 통합 client 화면에 적용한다. |
@@ -119,12 +116,15 @@ FS-U07의 현 최소 범위를 유지: webhook 수신 전 누락 허용, 수신�
 
 ## 실제 검증 범위
 
-[연결 구현·검증 증거](cloud-connected-implementation-2026-10-08.md)를 참조한다. 웹 HTTP 11개와 호스팅 4개, agent 18개와 실제 PG 3개, 상담 14개는 Node22/24 각각 통과했고 BFF 133개는 Node24에서 통과했다. 고객 VM·실제 채팅/브라우저·전체 제품군 인수는 미완료다.
+[콘솔·상담 BFF·설치 제품 연결 증거](cloud-console-installer-verification-2026-10-08.md): 전체 BFF 148개, agent 준비/조정 20개·제품 5개·cold 번들 4개·Nginx 15개·실제 PG 3개·Web 해지 2개는 Node22/24 각각 통과했다. 전체 check의 76개·build/type/lint/format도 통과했다. 이전 Web HTTP11/hosting4·Talk14·agent PG3의 통과 기록은 유지한다. 고객 VM·실제 visitor 상담·브라우저·전체 제품군 인수는 미완료다.
 
 작업 브랜치의 마지막 소스 커밋:
 
 - web_source_commit: `13861dd835362992f6ba0ee8bd237e30db8ca0ba`
-- agent_source_commit: `f0183ac404a3e6bfefaffb2fd9e1e54289e4d756`
+- agent_source_commit: `2b960e2b33a045499b66c9b48b832e22c18793d3`
 - talk_source_commit: `a022105102ffe680cf040b4d57f6f46e1d54d804`
+- console_source_commit: `998a48abe1e66f2aefd88d28fa6adda07627107c`
+- talk_bff_source_commit: `bc949abd081477cac26e3c41a4e0311bd377c091`
+- bundle_source_commit: `a6816a1bd1051b35a4d81a3248897dd2aaa41b10`
 
 재생성: `python3 scripts/render-feature-audit.py`. JSON·진행표·baseline·분류·ready 집계가 서로 맞아야 생성한다.

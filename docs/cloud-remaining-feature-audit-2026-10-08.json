@@ -21,9 +21,9 @@
   },
   "summary": {
     "ready": 0,
-    "contract": 18,
-    "service": 29,
-    "ui": 14,
+    "contract": 15,
+    "service": 28,
+    "ui": 15,
     "policy": 11,
     "vm": 9,
     "excluded": 0
@@ -381,19 +381,19 @@
       "additional_dependencies": [
         "ui"
       ],
-      "reason": "상담 회원 API backend가 없고 정식 UI 기준도 필요하다.",
-      "next_step": "독립적인 talk 회원 API부터 구현한 뒤 BFF·화면을 연결한다.",
+      "reason": "Talk 회원 room/settings BFF relay는 실제 검증했다. 손님 이름 조합·실제 visitor/WSS 업무·정식 UI가 남았다.",
+      "next_step": "customer-auth 손님 조회와 권한별 이름 조합을 연결하고 T2 정책 및 UI 기준 아래 실제 상담 전달을 구현한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
         "j-groupware/docs/suite-feature-specifications.md"
       ],
-      "implemented_in_this_batch": false,
+      "implemented_in_this_batch": true,
       "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
-      "implementation": "not_started",
-      "verification": "not_run"
+      "current_implementation": "partial",
+      "current_verification": "actual_Node22_18_Node24_19_talk_BFF_5_each_exit0_skip0; single_audience_exchange_role_CSRF_tenant_room_assignment_reply_close_and_bounded_projection_pass; member_room_storage_seed_only; guest_name_composition_live_visitor_WSS_and_formal_UI_not_run",
+      "implementation": "partial",
+      "verification": "actual_Node22_18_Node24_19_talk_BFF_5_each_exit0_skip0; single_audience_exchange_role_CSRF_tenant_room_assignment_reply_close_and_bounded_projection_pass; member_room_storage_seed_only; guest_name_composition_live_visitor_WSS_and_formal_UI_not_run"
     },
     {
       "id": "GW-36",
@@ -401,25 +401,25 @@
       "service": "j-groupware",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "service",
-      "classification_label": "서비스 구현 선행",
-      "external_or_user_gate": false,
+      "classification": "ui",
+      "classification_label": "UI 기준 선행",
+      "external_or_user_gate": true,
       "additional_dependencies": [
         "ui"
       ],
-      "reason": "talk Origin·widget 키 backend는 실제 검증했다. 그룹웨어 설정 BFF relay와 정식 UI가 없다.",
-      "next_step": "관리 API 계약으로 token 축소 relay를 연결하고 UI 기준 도착 후 화면을 구현한다.",
+      "reason": "출처/page/widget key BFF relay는 실제 검증했다. 정식 화면·서명 예제와 visitor 정책의 연계가 남았다.",
+      "next_step": "정식 UI 기준 아래 상담 설정 화면을 연결하고 확정된 visitor 서명 계약을 예제로 제공한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
         "j-groupware/docs/suite-feature-specifications.md"
       ],
-      "implemented_in_this_batch": false,
+      "implemented_in_this_batch": true,
       "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
-      "implementation": "not_started",
-      "verification": "not_run"
+      "current_implementation": "partial",
+      "current_verification": "actual_Node22_18_Node24_19_talk_BFF_5_each_exit0_skip0; origins_page_widget_key_once_and_rotation_pass; bounded_JSON_secret_field_projection_unit2_pass; signature_example_visitor_policy_and_formal_UI_not_run",
+      "implementation": "partial",
+      "verification": "actual_Node22_18_Node24_19_talk_BFF_5_each_exit0_skip0; origins_page_widget_key_once_and_rotation_pass; bounded_JSON_secret_field_projection_unit2_pass; signature_example_visitor_policy_and_formal_UI_not_run"
     },
     {
       "id": "GW-37",
@@ -529,95 +529,19 @@
       "classification_label": "기술 계약 확정 선행",
       "external_or_user_gate": false,
       "additional_dependencies": [],
-      "reason": "고객 목록·계약 상태 요구는 확정됐고 구체 상태 enum·전이·DTO가 기술 계약으로 남았다.",
-      "next_step": "G17 상태 계약을 고정하고 operator API·PG 테스트를 구현한다.",
+      "reason": "고객 목록·상세 및 권한별 안전 projection은 실제 검증했다. 업무 계약 상태 enum·전이·변경 API는 아직 없다.",
+      "next_step": "업무 계약 상태값·전이 기준을 확인한 뒤 기존 고객 DTO/PG 저장과 연결한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
         "j-groupware/docs/suite-feature-specifications.md"
       ],
-      "implemented_in_this_batch": false,
+      "implemented_in_this_batch": true,
       "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
-      "implementation": "not_started",
-      "verification": "not_run"
-    },
-    {
-      "id": "GW-52",
-      "name": "고객 등록",
-      "service": "j-groupware",
-      "baseline_implementation": "not_started",
-      "baseline_verification": "not_run",
-      "classification": "contract",
-      "classification_label": "기술 계약 확정 선행",
-      "external_or_user_gate": false,
-      "additional_dependencies": [
-        "policy_for_new_key_replacement_only"
-      ],
-      "reason": "j-auth 고객/realm 생성 API는 있으나 콘솔의 실패 복구·installer 키 교체 연결 계약이 남았다.",
-      "next_step": "기존 key provisioning 경계를 유지해 등록 saga·실패 상태 계약을 정리한다.",
-      "sources": [
-        "j-groupware/docs/implementation-progress.json",
-        "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
-      ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
-      "implementation": "not_started",
-      "verification": "not_run"
-    },
-    {
-      "id": "GW-53",
-      "name": "가입 서비스 관리",
-      "service": "j-groupware",
-      "baseline_implementation": "not_started",
-      "baseline_verification": "not_run",
-      "classification": "contract",
-      "classification_label": "기술 계약 확정 선행",
-      "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "서비스 가입/해제 API는 구현됐고 콘솔 DTO·desired/actual 표시 연결이 남았다.",
-      "next_step": "콘솔 계약과 기존 서비스 catalog를 연결한다.",
-      "sources": [
-        "j-groupware/docs/implementation-progress.json",
-        "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
-      ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
-      "implementation": "not_started",
-      "verification": "not_run"
-    },
-    {
-      "id": "GW-54",
-      "name": "원하는 상태 API",
-      "service": "j-groupware",
-      "baseline_implementation": "not_started",
-      "baseline_verification": "not_run",
-      "classification": "contract",
-      "classification_label": "기술 계약 확정 선행",
-      "external_or_user_gate": false,
-      "additional_dependencies": [
-        "policy_for_new_key_replacement_only"
-      ],
-      "reason": "desired 상태 API·agent 인증/키 교체·revision 계약을 G17/G21에서 연결해야 한다.",
-      "next_step": "기존 최소 권한 API와 agent polling 계약을 확정하고 실제 연결한다.",
-      "sources": [
-        "j-groupware/docs/implementation-progress.json",
-        "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
-      ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
-      "implementation": "not_started",
-      "verification": "not_run"
+      "current_implementation": "partial",
+      "current_verification": "actual_Node22_18_Node24_19_console_16_each_exit0_skip0; customer_list_detail_safe_projection_customer_read_cached_session_role_fixture_pass; business_contract_state_enum_mutation_and_formal_UI_not_implemented",
+      "implementation": "partial",
+      "verification": "actual_Node22_18_Node24_19_console_16_each_exit0_skip0; customer_list_detail_safe_projection_customer_read_cached_session_role_fixture_pass; business_contract_state_enum_mutation_and_formal_UI_not_implemented"
     },
     {
       "id": "GW-63",
@@ -632,8 +556,8 @@
         "GW-52",
         "GW-54"
       ],
-      "reason": "archive digest staging·일회 비밀 env/CA 준비를 구현했다. 콘솔 bootstrap/key producer, bundle 전개·기본 설치·신뢰·timer 연결은 남았다.",
-      "next_step": "콘솔 producer·실제 준비 bundle·bootstrap entrypoint를 구현하고 격리 어댑터를 검증한다. 고객 VM 활성화는 별도다.",
+      "reason": "콘솔·env·실제 TLS/Nginx·부분 조정·cold bundle·알림 hash manifest와 Web root cleanup을 검증했다. base bootstrap/안전 unpack·제품 storage/비Web cleanup·생성 전 실패 teardown·실제 source 자격/주기 worker·CLI/timer와 고객 VM 인수는 남았다.",
+      "next_step": "기존 adapters를 CLI/agent entrypoint로 연결하고 base bootstrap·권한 설치·단계별 teardown·비Web cleanup 및 알림 worker source를 격리 검증한다. 고객 VM 활성화는 별도 인수한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
@@ -641,10 +565,10 @@
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
+      "current_implementation": "partial",
+      "current_verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run",
       "implementation": "partial",
-      "verification": "actual_node22_18_node24_19_preparation_and_reconcile_18_each_exit0_skip0; actual_PG18_service_DB_pg_dump_restore_NOLOGIN_and_other_DB_preservation_3_each_exit0_skip0; systemd_syntax_only; console_producers_service_bundles_product_env_readiness_notification_gateway_cleanup_bindings_host_install_CA_trust_timer_and_VM_acceptance_not_run"
+      "verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run"
     },
     {
       "id": "GW-64",
@@ -661,8 +585,8 @@
         "WB-20",
         "TK-40"
       ],
-      "reason": "실제 격리 DB/role과 durable env lifecycle을 구현했다. native unit은 미활성이고 제품 bundle/env/readiness·알림 키 연결이 남았다.",
-      "next_step": "구체적인 bundle metadata/packaging 및 서비스별 readiness/env/notification/gateway 어댑터를 연결한다.",
+      "reason": "콘솔·env·실제 TLS/Nginx·부분 조정·cold bundle·알림 hash manifest와 Web root cleanup을 검증했다. base bootstrap/안전 unpack·제품 storage/비Web cleanup·생성 전 실패 teardown·실제 source 자격/주기 worker·CLI/timer와 고객 VM 인수는 남았다.",
+      "next_step": "기존 adapters를 CLI/agent entrypoint로 연결하고 base bootstrap·권한 설치·단계별 teardown·비Web cleanup 및 알림 worker source를 격리 검증한다. 고객 VM 활성화는 별도 인수한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
@@ -670,10 +594,10 @@
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
+      "current_implementation": "partial",
+      "current_verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run",
       "implementation": "partial",
-      "verification": "actual_node22_18_node24_19_preparation_and_reconcile_18_each_exit0_skip0; actual_PG18_service_DB_pg_dump_restore_NOLOGIN_and_other_DB_preservation_3_each_exit0_skip0; systemd_syntax_only; console_producers_service_bundles_product_env_readiness_notification_gateway_cleanup_bindings_host_install_CA_trust_timer_and_VM_acceptance_not_run"
+      "verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run"
     },
     {
       "id": "GW-65",
@@ -688,8 +612,8 @@
         "GW-64",
         "WB-25"
       ],
-      "reason": "실제 dump/restore/NOLOGIN과 실패 복구 순서를 구현했다. 서비스 고유 cleanup과 lifecycle의 실제 gateway rollback 연결은 남았다.",
-      "next_step": "web remove-all·mail backup 및 실제 gateway rollback을 lifecycle에 연결하고 결합된 격리 경로를 검증한다.",
+      "reason": "콘솔·env·실제 TLS/Nginx·부분 조정·cold bundle·알림 hash manifest와 Web root cleanup을 검증했다. base bootstrap/안전 unpack·제품 storage/비Web cleanup·생성 전 실패 teardown·실제 source 자격/주기 worker·CLI/timer와 고객 VM 인수는 남았다.",
+      "next_step": "기존 adapters를 CLI/agent entrypoint로 연결하고 base bootstrap·권한 설치·단계별 teardown·비Web cleanup 및 알림 worker source를 격리 검증한다. 고객 VM 활성화는 별도 인수한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
@@ -697,10 +621,10 @@
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
+      "current_implementation": "partial",
+      "current_verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run",
       "implementation": "partial",
-      "verification": "actual_node22_18_node24_19_preparation_and_reconcile_18_each_exit0_skip0; actual_PG18_service_DB_pg_dump_restore_NOLOGIN_and_other_DB_preservation_3_each_exit0_skip0; systemd_syntax_only; console_producers_service_bundles_product_env_readiness_notification_gateway_cleanup_bindings_host_install_CA_trust_timer_and_VM_acceptance_not_run"
+      "verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run"
     },
     {
       "id": "GW-66",
@@ -712,8 +636,8 @@
       "classification_label": "서비스 구현 선행",
       "external_or_user_gate": false,
       "additional_dependencies": [],
-      "reason": "내부 reconciler의 process/file/lock/retry는 검증됐고 console wire·실제 installer/probe adapter는 없다.",
-      "next_step": "기존 reconciler에 desired API 인증과 완료 서비스 installer probe를 연결한다.",
+      "reason": "콘솔·env·실제 TLS/Nginx·부분 조정·cold bundle·알림 hash manifest와 Web root cleanup을 검증했다. base bootstrap/안전 unpack·제품 storage/비Web cleanup·생성 전 실패 teardown·실제 source 자격/주기 worker·CLI/timer와 고객 VM 인수는 남았다.",
+      "next_step": "기존 adapters를 CLI/agent entrypoint로 연결하고 base bootstrap·권한 설치·단계별 teardown·비Web cleanup 및 알림 worker source를 격리 검증한다. 고객 VM 활성화는 별도 인수한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
@@ -722,9 +646,9 @@
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "cloud_internal_reconciler_actual_fixture_files_and_processes_node22_node24_14_each_pass; cross_process_lock_idempotence_observation_failure_retry_cancellation_descendant_stop_pass; actual_bff_regression_114_pass; console_wire_auth_installer_probe_real_os_wiring_and_timer_activation_not_run",
+      "current_verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run",
       "implementation": "partial",
-      "verification": "cloud_internal_reconciler_actual_fixture_files_and_processes_node22_node24_14_each_pass; cross_process_lock_idempotence_observation_failure_retry_cancellation_descendant_stop_pass; actual_bff_regression_114_pass; console_wire_auth_installer_probe_real_os_wiring_and_timer_activation_not_run"
+      "verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run"
     },
     {
       "id": "GW-71",
@@ -1350,8 +1274,8 @@
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
+      "current_implementation": "partial",
+      "current_verification": "actual_Vite8_3_4_library_single_embedded_CSS_widget_min_js_1199_bytes_gzip_default733_bytes; actual_https_fixed_v1_cache300_sha256_ETag_304_each_node22_node24_in_14_pass_exit0_skip0; built_script_no_DOM_when_visitor_transport_unavailable; actual_browser_chat_UI_visitor_producer_WSS_not_run",
       "implementation": "partial",
       "verification": "actual_Vite8_3_4_library_single_embedded_CSS_widget_min_js_1199_bytes_gzip_default733_bytes; actual_https_fixed_v1_cache300_sha256_ETag_304_each_node22_node24_in_14_pass_exit0_skip0; built_script_no_DOM_when_visitor_transport_unavailable; actual_browser_chat_UI_visitor_producer_WSS_not_run"
     },
@@ -1376,8 +1300,8 @@
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
+      "current_implementation": "partial",
+      "current_verification": "actual_Vite8_3_4_library_single_embedded_CSS_widget_min_js_1199_bytes_gzip_default733_bytes; actual_https_fixed_v1_cache300_sha256_ETag_304_each_node22_node24_in_14_pass_exit0_skip0; built_script_no_DOM_when_visitor_transport_unavailable; actual_browser_chat_UI_visitor_producer_WSS_not_run",
       "implementation": "partial",
       "verification": "actual_Vite8_3_4_library_single_embedded_CSS_widget_min_js_1199_bytes_gzip_default733_bytes; actual_https_fixed_v1_cache300_sha256_ETag_304_each_node22_node24_in_14_pass_exit0_skip0; built_script_no_DOM_when_visitor_transport_unavailable; actual_browser_chat_UI_visitor_producer_WSS_not_run"
     },
@@ -1622,8 +1546,8 @@
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
+      "current_implementation": "partial",
+      "current_verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
       "implementation": "partial",
       "verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run"
     },
@@ -1646,8 +1570,8 @@
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
+      "current_implementation": "partial",
+      "current_verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
       "implementation": "partial",
       "verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run"
     },
@@ -1670,8 +1594,8 @@
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
+      "current_implementation": "partial",
+      "current_verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
       "implementation": "partial",
       "verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run"
     },
@@ -1694,8 +1618,8 @@
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
+      "current_implementation": "partial",
+      "current_verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
       "implementation": "partial",
       "verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run"
     },
@@ -1718,8 +1642,8 @@
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
+      "current_implementation": "partial",
+      "current_verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
       "implementation": "partial",
       "verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run"
     },
@@ -2041,20 +1965,23 @@
   ],
   "next_independent_batches": [
     "CA-30→CA-31→CA-04/01/02/03→CA-10/11/12/20: 손님 DB·contracts·member API·hashed API key",
-    "TK-40→TK-41 관리/회원 부분→TK-27/13/25/26→TK-20/21/22/23: visitor 미정 정책과 분리한 상담 backend",
+    "GW-63/64/65/66: 제품 storage/비Web cleanup·생성 전 실패 teardown·알림 source/worker·기본 bootstrap/OS entrypoint·safe extraction과 timer wiring; 실제 VM 활성화는 별도",
+    "GW-35: 손님 이름 권한별 조합; visitor/WSS 전달은 T2 정책 경계와 분리",
     "AU-50: 결정 19의 실제 Nginx 인증 control-plane allowlist",
-    "GW-63/64/65/66: 완성된 서비스 installer plan·probe·agent 연결; 실제 VM 적용은 별도",
-    "MS-08/GW-72: suite 배포 profile과 실제 cloud registry Compose 경로"
+    "기존 정식 UI 기준 도착 후 콘솔·상담·서비스 화면과 browser 인수"
   ],
   "current_progress": {
-    "implemented": 91,
-    "partial": 27,
-    "not_started": 54,
+    "implemented": 94,
+    "partial": 30,
+    "not_started": 48,
     "total": 172,
-    "remaining": 81,
+    "remaining": 78,
     "web_source_commit": "13861dd835362992f6ba0ee8bd237e30db8ca0ba",
     "talk_source_commit": "a022105102ffe680cf040b4d57f6f46e1d54d804",
-    "agent_source_commit": "f0183ac404a3e6bfefaffb2fd9e1e54289e4d756"
+    "agent_source_commit": "2b960e2b33a045499b66c9b48b832e22c18793d3",
+    "console_source_commit": "998a48abe1e66f2aefd88d28fa6adda07627107c",
+    "talk_bff_source_commit": "bc949abd081477cac26e3c41a4e0311bd377c091",
+    "bundle_source_commit": "a6816a1bd1051b35a4d81a3248897dd2aaa41b10"
   },
   "completed_since_baseline": [
     {
@@ -2656,6 +2583,82 @@
       "current_verification": "actual_server_local_contracts_dedicated_jgw_talk_nonsuperuser_migration_tenant_checksum_cross_db_denied_and_https_pass_node22_node24; widget_workspace_full_visitor_room_contract_registry_publish_not_implemented",
       "implementation": "implemented",
       "verification": "actual_server_widget_local_contracts_dedicated_jgw_talk_nonsuperuser_tenant_FK_migrations_checksum_42501_cross_DB_https_14_each_node22_node24_exit0_skip0; full_visitor_WSS_contract_registry_TK41_and_full_acceptance_not_run"
+    },
+    {
+      "id": "GW-52",
+      "name": "고객 등록",
+      "service": "j-groupware",
+      "baseline_implementation": "not_started",
+      "baseline_verification": "not_run",
+      "classification": "contract",
+      "classification_label": "기술 계약 확정 선행",
+      "external_or_user_gate": false,
+      "additional_dependencies": [
+        "policy_for_new_key_replacement_only"
+      ],
+      "reason": "j-auth 고객/realm 생성 API는 있으나 콘솔의 실패 복구·installer 키 교체 연결 계약이 남았다.",
+      "next_step": "기존 key provisioning 경계를 유지해 등록 saga·실패 상태 계약을 정리한다.",
+      "sources": [
+        "j-groupware/docs/implementation-progress.json",
+        "j-groupware/docs/decisions.md",
+        "j-groupware/docs/suite-feature-specifications.md"
+      ],
+      "implemented_in_this_batch": true,
+      "acceptance_complete": false,
+      "current_implementation": "implemented",
+      "current_verification": "actual_Node22_18_Node24_19_console_16_each_exit0_skip0; real_j_auth_realm_create_one_time_bootstrap_hash_only_agent_key_duplicate_conflict_CSRF_secret_loss_durable_state_and_explicit_reset_pass; customer_VM_bootstrap_and_formal_UI_acceptance_not_run",
+      "implementation": "implemented",
+      "verification": "actual_Node22_18_Node24_19_console_16_each_exit0_skip0; real_j_auth_realm_create_one_time_bootstrap_hash_only_agent_key_duplicate_conflict_CSRF_secret_loss_durable_state_and_explicit_reset_pass; customer_VM_bootstrap_and_formal_UI_acceptance_not_run"
+    },
+    {
+      "id": "GW-53",
+      "name": "가입 서비스 관리",
+      "service": "j-groupware",
+      "baseline_implementation": "not_started",
+      "baseline_verification": "not_run",
+      "classification": "contract",
+      "classification_label": "기술 계약 확정 선행",
+      "external_or_user_gate": false,
+      "additional_dependencies": [],
+      "reason": "서비스 가입/해제 API는 구현됐고 콘솔 DTO·desired/actual 표시 연결이 남았다.",
+      "next_step": "콘솔 계약과 기존 서비스 catalog를 연결한다.",
+      "sources": [
+        "j-groupware/docs/implementation-progress.json",
+        "j-groupware/docs/decisions.md",
+        "j-groupware/docs/suite-feature-specifications.md"
+      ],
+      "implemented_in_this_batch": true,
+      "acceptance_complete": false,
+      "current_implementation": "implemented",
+      "current_verification": "actual_Node22_18_Node24_19_console_16_each_exit0_skip0; actual_j_auth_subscription_projection_desired_revision_conflict_auth_failure_durable_intent_compare_reconcile_pass; desired_auth_and_reported_installation_distinct; formal_UI_and_actual_OS_install_acceptance_not_run",
+      "implementation": "implemented",
+      "verification": "actual_Node22_18_Node24_19_console_16_each_exit0_skip0; actual_j_auth_subscription_projection_desired_revision_conflict_auth_failure_durable_intent_compare_reconcile_pass; desired_auth_and_reported_installation_distinct; formal_UI_and_actual_OS_install_acceptance_not_run"
+    },
+    {
+      "id": "GW-54",
+      "name": "원하는 상태 API",
+      "service": "j-groupware",
+      "baseline_implementation": "not_started",
+      "baseline_verification": "not_run",
+      "classification": "contract",
+      "classification_label": "기술 계약 확정 선행",
+      "external_or_user_gate": false,
+      "additional_dependencies": [
+        "policy_for_new_key_replacement_only"
+      ],
+      "reason": "desired 상태 API·agent 인증/키 교체·revision 계약을 G17/G21에서 연결해야 한다.",
+      "next_step": "기존 최소 권한 API와 agent polling 계약을 확정하고 실제 연결한다.",
+      "sources": [
+        "j-groupware/docs/implementation-progress.json",
+        "j-groupware/docs/decisions.md",
+        "j-groupware/docs/suite-feature-specifications.md"
+      ],
+      "implemented_in_this_batch": true,
+      "acceptance_complete": false,
+      "current_implementation": "implemented",
+      "current_verification": "actual_Node22_18_Node24_19_console_16_each_exit0_skip0; hashed_Bearer_key_tenant_scoped_desired_status_epoch_revision_sequence_replay_rotation_revocation_contradictory_and_false_sync_report_rejection_pass; actual_ConsoleAgentClient_pass; automatic_timer_OS_acceptance_not_run",
+      "implementation": "implemented",
+      "verification": "actual_Node22_18_Node24_19_console_16_each_exit0_skip0; hashed_Bearer_key_tenant_scoped_desired_status_epoch_revision_sequence_replay_rotation_revocation_contradictory_and_false_sync_report_rejection_pass; actual_ConsoleAgentClient_pass; automatic_timer_OS_acceptance_not_run"
     }
   ],
   "checkpoints": [
@@ -2702,5 +2705,6 @@
     ],
     "reclassification_does_not_mean_complete": true
   },
-  "continueable_work_note": "service·contract는 구현자가 계속할 수 있는 선행 작업이다. 실제 외부 차단으로 취급하지 않으며, ready 0은 전체 구현 완료를 뜻하지 않는다."
+  "continueable_work_note": "초기 ready 분류의 독립 소스 작업은 모두 처리했고 이번에는 service/contract 작업도 연결했다. ready=0은 기술 작업 소진을 뜻하지 않는다. customer-auth backend, 설치 entrypoint/storage/cleanup/알림 등록 등 안전한 독립 구현은 계속 가능하며 T2·E8·H7·정식 UI·실제 VM 인수는 별도 경계다.",
+  "verification_summary": "[콘솔·상담 BFF·설치 제품 연결 증거](cloud-console-installer-verification-2026-10-08.md): 전체 BFF 148개, agent 준비/조정 20개·제품 5개·cold 번들 4개·Nginx 15개·실제 PG 3개·Web 해지 2개는 Node22/24 각각 통과했다. 전체 check의 76개·build/type/lint/format도 통과했다. 이전 Web HTTP11/hosting4·Talk14·agent PG3의 통과 기록은 유지한다. 고객 VM·실제 visitor 상담·브라우저·전체 제품군 인수는 미완료다."
 }

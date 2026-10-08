@@ -38,10 +38,10 @@ lines += ['', '## E8 메일 envelope와 수신 전 누락', '']
 for value in audit['E8'].values():
     lines += [value['recommended'] + '. ' + value['tradeoff'], '', '대안: ' + value['alternative'], '']
 lines += ['## 실제 검증 범위', '',
-          '[연결 구현·검증 증거](cloud-connected-implementation-2026-10-08.md)를 참조한다. 웹 HTTP 11개와 호스팅 4개, agent 18개와 실제 PG 3개, 상담 14개는 Node22/24 각각 통과했고 BFF 133개는 Node24에서 통과했다. 고객 VM·실제 채팅/브라우저·전체 제품군 인수는 미완료다.', '',
+          audit['verification_summary'], '',
           '작업 브랜치의 마지막 소스 커밋:', '']
 lines += ['- ' + key + ': `' + audit['current_progress'][key] + '`'
-          for key in ['web_source_commit', 'agent_source_commit', 'talk_source_commit']]
+          for key in ['web_source_commit', 'agent_source_commit', 'talk_source_commit', 'console_source_commit', 'talk_bff_source_commit', 'bundle_source_commit']]
 lines += ['', '재생성: `python3 scripts/render-feature-audit.py`. JSON·진행표·baseline·분류·ready 집계가 서로 맞아야 생성한다.', '']
 (repo / 'docs/cloud-remaining-feature-audit-2026-10-08.md').write_text('\n'.join(lines))
 print(json.dumps({'features': len(features), 'remaining': len(remaining), 'summary': dict(counts)}, ensure_ascii=False))

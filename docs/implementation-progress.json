@@ -6,14 +6,14 @@
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 91,
-    "partial": 27,
-    "not_started": 54
+    "implemented": 94,
+    "partial": 30,
+    "not_started": 48
   },
   "blocked_runtime": [
-    "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
-    "Product BFF relays, visitor/WSS delivery, console bootstrap/agent producers and G18 installer product wiring remain implementer work; existing formal UI and actual external VM acceptance are separate gates",
-    "Hyper-V/VM/customer-server and external Nginx deployment/installation acceptance not executed in this cloud test runtime",
+    "Canonical j-groupware/docs/ui-guidelines.md is absent; formal UI and Playwright acceptance pending",
+    "Remaining technical work includes customer-auth DB/member/API-key backend, visitor/WSS delivery under T2 policy, base bootstrap and installer entrypoint, notification registration, service storage/cleanup, safe extraction/privilege setup and timer wiring; these are not environment-wide blockers",
+    "Actual customer VM/20GB data disk/systemd/firewall/OS CA trust and external deployment acceptance not executed in the cloud fixture runtime",
     "Mail E8 needs FS-U07 pre-webhook loss criteria and full SMTP envelope recipient preservation contract; no outbox/ingress recovery policy invented"
   ],
   "features": [
@@ -874,9 +874,14 @@
       "items": [
         "G19"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_Node22_18_Node24_19_talk_BFF_5_each_exit0_skip0; single_audience_exchange_role_CSRF_tenant_room_assignment_reply_close_and_bounded_projection_pass; member_room_storage_seed_only; guest_name_composition_live_visitor_WSS_and_formal_UI_not_run",
+      "code": [
+        "j-groupware/apps/server/src/talk-routes.ts",
+        "j-groupware/packages/permissions/src/index.ts",
+        "j-groupware/tests/bff/talk.integration.test.ts",
+        "j-groupware/tests/server/talk-routes.test.ts"
+      ]
     },
     {
       "id": "GW-36",
@@ -885,9 +890,14 @@
       "items": [
         "G19"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_Node22_18_Node24_19_talk_BFF_5_each_exit0_skip0; origins_page_widget_key_once_and_rotation_pass; bounded_JSON_secret_field_projection_unit2_pass; signature_example_visitor_policy_and_formal_UI_not_run",
+      "code": [
+        "j-groupware/apps/server/src/talk-routes.ts",
+        "j-groupware/packages/permissions/src/index.ts",
+        "j-groupware/tests/bff/talk.integration.test.ts",
+        "j-groupware/tests/server/talk-routes.test.ts"
+      ]
     },
     {
       "id": "GW-37",
@@ -1024,9 +1034,15 @@
       "items": [
         "G7"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_Node22_18_Node24_19_console_16_each_exit0_skip0; customer_list_detail_safe_projection_customer_read_cached_session_role_fixture_pass; business_contract_state_enum_mutation_and_formal_UI_not_implemented",
+      "code": [
+        "j-groupware/apps/console-server/src/auth-control.ts",
+        "j-groupware/apps/console-server/src/customers.ts",
+        "j-groupware/apps/console-server/src/customer-routes.ts",
+        "j-groupware/deploy/console-migrations/002-customer-agent-state.sql",
+        "j-groupware/tests/bff/console.integration.test.ts"
+      ]
     },
     {
       "id": "GW-52",
@@ -1035,9 +1051,15 @@
       "items": [
         "G17"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_Node22_18_Node24_19_console_16_each_exit0_skip0; real_j_auth_realm_create_one_time_bootstrap_hash_only_agent_key_duplicate_conflict_CSRF_secret_loss_durable_state_and_explicit_reset_pass; customer_VM_bootstrap_and_formal_UI_acceptance_not_run",
+      "code": [
+        "j-groupware/apps/console-server/src/auth-control.ts",
+        "j-groupware/apps/console-server/src/customers.ts",
+        "j-groupware/apps/console-server/src/customer-routes.ts",
+        "j-groupware/deploy/console-migrations/002-customer-agent-state.sql",
+        "j-groupware/tests/bff/console.integration.test.ts"
+      ]
     },
     {
       "id": "GW-53",
@@ -1046,9 +1068,15 @@
       "items": [
         "G17"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_Node22_18_Node24_19_console_16_each_exit0_skip0; actual_j_auth_subscription_projection_desired_revision_conflict_auth_failure_durable_intent_compare_reconcile_pass; desired_auth_and_reported_installation_distinct; formal_UI_and_actual_OS_install_acceptance_not_run",
+      "code": [
+        "j-groupware/apps/console-server/src/auth-control.ts",
+        "j-groupware/apps/console-server/src/customers.ts",
+        "j-groupware/apps/console-server/src/customer-routes.ts",
+        "j-groupware/deploy/console-migrations/002-customer-agent-state.sql",
+        "j-groupware/tests/bff/console.integration.test.ts"
+      ]
     },
     {
       "id": "GW-54",
@@ -1057,9 +1085,16 @@
       "items": [
         "G21"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_Node22_18_Node24_19_console_16_each_exit0_skip0; hashed_Bearer_key_tenant_scoped_desired_status_epoch_revision_sequence_replay_rotation_revocation_contradictory_and_false_sync_report_rejection_pass; actual_ConsoleAgentClient_pass; automatic_timer_OS_acceptance_not_run",
+      "code": [
+        "j-groupware/apps/console-server/src/auth-control.ts",
+        "j-groupware/apps/console-server/src/customers.ts",
+        "j-groupware/apps/console-server/src/customer-routes.ts",
+        "j-groupware/deploy/console-migrations/002-customer-agent-state.sql",
+        "j-groupware/tests/bff/console.integration.test.ts",
+        "j-groupware/deploy/agent/console-client.mjs"
+      ]
     },
     {
       "id": "GW-60",
@@ -1120,7 +1155,7 @@
         "G18"
       ],
       "implementation": "partial",
-      "verification": "actual_node22_18_node24_19_preparation_and_reconcile_18_each_exit0_skip0; actual_PG18_service_DB_pg_dump_restore_NOLOGIN_and_other_DB_preservation_3_each_exit0_skip0; systemd_syntax_only; console_producers_service_bundles_product_env_readiness_notification_gateway_cleanup_bindings_host_install_CA_trust_timer_and_VM_acceptance_not_run",
+      "verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run",
       "code": [
         "j-groupware/deploy/agent/bootstrap-files.mjs",
         "j-groupware/deploy/agent/service-database.mjs",
@@ -1129,7 +1164,20 @@
         "j-groupware/deploy/agent/native-platform.mjs",
         "j-groupware/tests/agent/preparation.test.mjs",
         "j-groupware/tests/agent/database.integration.test.mjs",
-        "j-groupware/deploy/agent/provisioning.md"
+        "j-groupware/deploy/agent/provisioning.md",
+        "j-groupware/deploy/agent/console-client.mjs",
+        "j-groupware/deploy/agent/product-environment.mjs",
+        "j-groupware/deploy/agent/product-readiness.mjs",
+        "j-groupware/deploy/agent/product-gateway.mjs",
+        "j-groupware/deploy/agent/build-product-bundle.mjs",
+        "j-groupware/tests/agent/products.integration.test.mjs",
+        "j-groupware/tests/agent/bundles.integration.test.mjs",
+        "j-groupware/tests/gateway/gateway.integration.test.mjs",
+        "j-groupware/deploy/agent/notification-manifest.mjs",
+        "j-groupware/deploy/agent/web-cleanup.mjs",
+        "j-groupware/deploy/agent/provision-error.mjs",
+        "j-groupware/tests/agent/web-cleanup.integration.test.mjs",
+        "j-groupware/tests/bff/projection.integration.test.ts"
       ]
     },
     {
@@ -1140,7 +1188,7 @@
         "G18"
       ],
       "implementation": "partial",
-      "verification": "actual_node22_18_node24_19_preparation_and_reconcile_18_each_exit0_skip0; actual_PG18_service_DB_pg_dump_restore_NOLOGIN_and_other_DB_preservation_3_each_exit0_skip0; systemd_syntax_only; console_producers_service_bundles_product_env_readiness_notification_gateway_cleanup_bindings_host_install_CA_trust_timer_and_VM_acceptance_not_run",
+      "verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run",
       "code": [
         "j-groupware/deploy/agent/bootstrap-files.mjs",
         "j-groupware/deploy/agent/service-database.mjs",
@@ -1149,7 +1197,20 @@
         "j-groupware/deploy/agent/native-platform.mjs",
         "j-groupware/tests/agent/preparation.test.mjs",
         "j-groupware/tests/agent/database.integration.test.mjs",
-        "j-groupware/deploy/agent/provisioning.md"
+        "j-groupware/deploy/agent/provisioning.md",
+        "j-groupware/deploy/agent/console-client.mjs",
+        "j-groupware/deploy/agent/product-environment.mjs",
+        "j-groupware/deploy/agent/product-readiness.mjs",
+        "j-groupware/deploy/agent/product-gateway.mjs",
+        "j-groupware/deploy/agent/build-product-bundle.mjs",
+        "j-groupware/tests/agent/products.integration.test.mjs",
+        "j-groupware/tests/agent/bundles.integration.test.mjs",
+        "j-groupware/tests/gateway/gateway.integration.test.mjs",
+        "j-groupware/deploy/agent/notification-manifest.mjs",
+        "j-groupware/deploy/agent/web-cleanup.mjs",
+        "j-groupware/deploy/agent/provision-error.mjs",
+        "j-groupware/tests/agent/web-cleanup.integration.test.mjs",
+        "j-groupware/tests/bff/projection.integration.test.ts"
       ]
     },
     {
@@ -1160,7 +1221,7 @@
         "G18"
       ],
       "implementation": "partial",
-      "verification": "actual_node22_18_node24_19_preparation_and_reconcile_18_each_exit0_skip0; actual_PG18_service_DB_pg_dump_restore_NOLOGIN_and_other_DB_preservation_3_each_exit0_skip0; systemd_syntax_only; console_producers_service_bundles_product_env_readiness_notification_gateway_cleanup_bindings_host_install_CA_trust_timer_and_VM_acceptance_not_run",
+      "verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run",
       "code": [
         "j-groupware/deploy/agent/bootstrap-files.mjs",
         "j-groupware/deploy/agent/service-database.mjs",
@@ -1169,7 +1230,20 @@
         "j-groupware/deploy/agent/native-platform.mjs",
         "j-groupware/tests/agent/preparation.test.mjs",
         "j-groupware/tests/agent/database.integration.test.mjs",
-        "j-groupware/deploy/agent/provisioning.md"
+        "j-groupware/deploy/agent/provisioning.md",
+        "j-groupware/deploy/agent/console-client.mjs",
+        "j-groupware/deploy/agent/product-environment.mjs",
+        "j-groupware/deploy/agent/product-readiness.mjs",
+        "j-groupware/deploy/agent/product-gateway.mjs",
+        "j-groupware/deploy/agent/build-product-bundle.mjs",
+        "j-groupware/tests/agent/products.integration.test.mjs",
+        "j-groupware/tests/agent/bundles.integration.test.mjs",
+        "j-groupware/tests/gateway/gateway.integration.test.mjs",
+        "j-groupware/deploy/agent/notification-manifest.mjs",
+        "j-groupware/deploy/agent/web-cleanup.mjs",
+        "j-groupware/deploy/agent/provision-error.mjs",
+        "j-groupware/tests/agent/web-cleanup.integration.test.mjs",
+        "j-groupware/tests/bff/projection.integration.test.ts"
       ]
     },
     {
@@ -1180,12 +1254,25 @@
         "G21"
       ],
       "implementation": "partial",
-      "verification": "cloud_internal_reconciler_actual_fixture_files_and_processes_node22_node24_14_each_pass; cross_process_lock_idempotence_observation_failure_retry_cancellation_descendant_stop_pass; actual_bff_regression_114_pass; console_wire_auth_installer_probe_real_os_wiring_and_timer_activation_not_run",
+      "verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run",
       "code": [
         "j-groupware/deploy/agent/reconciler.mjs",
         "j-groupware/deploy/agent/provision-command.mjs",
         "j-groupware/deploy/agent/jgw-provision-agent.timer.example",
-        "j-groupware/tests/agent/reconciler.test.mjs"
+        "j-groupware/tests/agent/reconciler.test.mjs",
+        "j-groupware/deploy/agent/console-client.mjs",
+        "j-groupware/deploy/agent/product-environment.mjs",
+        "j-groupware/deploy/agent/product-readiness.mjs",
+        "j-groupware/deploy/agent/product-gateway.mjs",
+        "j-groupware/deploy/agent/build-product-bundle.mjs",
+        "j-groupware/tests/agent/products.integration.test.mjs",
+        "j-groupware/tests/agent/bundles.integration.test.mjs",
+        "j-groupware/tests/gateway/gateway.integration.test.mjs",
+        "j-groupware/deploy/agent/notification-manifest.mjs",
+        "j-groupware/deploy/agent/web-cleanup.mjs",
+        "j-groupware/deploy/agent/provision-error.mjs",
+        "j-groupware/tests/agent/web-cleanup.integration.test.mjs",
+        "j-groupware/tests/bff/projection.integration.test.ts"
       ]
     },
     {
