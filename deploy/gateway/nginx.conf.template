@@ -1,0 +1,36 @@
+worker_processes 1;
+pid ${GW_ROOT}/nginx.pid;
+error_log ${GW_ROOT}/error.log crit;
+events { worker_connections 1024; }
+http {
+    default_type application/octet-stream;
+    server_tokens off;
+    log_format safe '$request_id $status $request_time $body_bytes_sent';
+    access_log ${GW_ROOT}/access.log safe;
+    client_body_temp_path ${GW_ROOT}/client-temp;
+    proxy_temp_path ${GW_ROOT}/proxy-temp;
+    fastcgi_temp_path ${GW_ROOT}/fastcgi-temp;
+    uwsgi_temp_path ${GW_ROOT}/uwsgi-temp;
+    scgi_temp_path ${GW_ROOT}/scgi-temp;
+    client_max_body_size 1m;
+    keepalive_timeout 30s;
+    map $http_upgrade $connection_upgrade {
+        default upgrade;
+        '' close;
+    }
+    server {
+        listen ${GW_BIND}:${GW_HTTP_PORT} default_server;
+        server_name _;
+        return 404;
+    }
+    server {
+        listen ${GW_BIND}:${GW_HTTPS_PORT} ssl default_server;
+        server_name _;
+        ssl_certificate ${GW_CERT};
+        ssl_certificate_key ${GW_KEY};
+        include ${GW_ROOT}/snippets/tls.conf;
+        return 404;
+    }
+    include ${GW_ROOT}/jgw.d/*.conf;
+    include ${GW_ROOT}/jweb.d/*.conf;
+}

@@ -6,9 +6,9 @@
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 56,
+    "implemented": 59,
     "partial": 15,
-    "not_started": 101
+    "not_started": 98
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
@@ -1030,9 +1030,15 @@
       "items": [
         "G11"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "cloud_actual_nginx_1.30.5_node22_and_node24_13_each_pass; nginx_config_https_wss_subscription_empty_widget_ip_rate_and_connection_429_rollback_lock_cli_real_master_reload_bind_failure_activation_probe_pass; protocol_upstreams_are_fixtures; actual_bff_regression_114_pass; customer_vm_operational_deployment_not_run",
+      "code": [
+        "j-groupware/deploy/gateway/gateway.mjs",
+        "j-groupware/deploy/gateway/cli.mjs",
+        "j-groupware/deploy/gateway/nginx.conf.template",
+        "j-groupware/deploy/gateway/gw.conf.template",
+        "j-groupware/tests/gateway/gateway.integration.test.mjs"
+      ]
     },
     {
       "id": "GW-61",
@@ -1041,9 +1047,15 @@
       "items": [
         "G11"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "cloud_actual_nginx_1.30.5_node22_and_node24_13_each_pass; nginx_config_https_wss_subscription_empty_widget_ip_rate_and_connection_429_rollback_lock_cli_real_master_reload_bind_failure_activation_probe_pass; protocol_upstreams_are_fixtures; actual_bff_regression_114_pass; customer_vm_operational_deployment_not_run",
+      "code": [
+        "j-groupware/deploy/gateway/gateway.mjs",
+        "j-groupware/deploy/gateway/cli.mjs",
+        "j-groupware/deploy/gateway/nginx.conf.template",
+        "j-groupware/deploy/gateway/gw.conf.template",
+        "j-groupware/tests/gateway/gateway.integration.test.mjs"
+      ]
     },
     {
       "id": "GW-62",
@@ -1052,9 +1064,15 @@
       "items": [
         "G11"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "cloud_actual_nginx_1.30.5_node22_and_node24_13_each_pass; nginx_config_https_wss_subscription_empty_widget_ip_rate_and_connection_429_rollback_lock_cli_real_master_reload_bind_failure_activation_probe_pass; protocol_upstreams_are_fixtures; actual_bff_regression_114_pass; customer_vm_operational_deployment_not_run",
+      "code": [
+        "j-groupware/deploy/gateway/gateway.mjs",
+        "j-groupware/deploy/gateway/cli.mjs",
+        "j-groupware/deploy/gateway/nginx.conf.template",
+        "j-groupware/deploy/gateway/gw.conf.template",
+        "j-groupware/tests/gateway/gateway.integration.test.mjs"
+      ]
     },
     {
       "id": "GW-63",
@@ -2347,7 +2365,7 @@
       "code": []
     }
   ],
-  "verification_environment": "isolated cloud /workspace; real Keycloak/j-auth and dedicated j-groupware/j-approval/j-messenger PostgreSQL; messenger legacy SQLite preserved and tested; production subscription/key projection not activated; company laptop restriction unchanged",
+  "verification_environment": "isolated cloud /workspace; real Keycloak/j-auth and dedicated j-groupware/j-approval/j-messenger PostgreSQL; messenger legacy SQLite preserved and tested; production subscription/key projection not activated; company laptop restriction unchanged; isolated official nginx gateway protocol fixtures tested on Node22/24 without host installation",
   "verification_evidence": [
     "j-auth/docs/cloud-verification-2026-10-08.md",
     "j-auth/docs/cloud-provisioning-verification-2026-10-08.md",
@@ -2369,14 +2387,15 @@
     "j-messenger/docs/cloud-bff-client-verification-2026-10-08.md",
     "j-groupware/docs/cloud-notification-projection-verification-2026-10-08.md",
     "j-messenger/docs/cloud-client-registry-verification-2026-10-08.md",
-    "j-groupware/docs/cloud-client-registry-verification-2026-10-08.md"
+    "j-groupware/docs/cloud-client-registry-verification-2026-10-08.md",
+    "j-groupware/docs/cloud-gateway-verification-2026-10-08.md"
   ],
   "pending_implementation": [
     "Remaining mail/talk/customer/web BFF business API relays using the verified G23 helper and actual downstream services",
     "G6/G15 formal member/organization/repair UI and Playwright; G16 formal approval UI and Playwright (actual BFF business API and snapshot already verified)",
     "G2/G9 canonical UI guidelines/sidebar/board UI; I2 formal theme/Playwright/brute-force acceptance",
     "Messenger formal UI/app product-path freezing/file BFF and talk business WSS; actual messenger PG/BFF HTTP/client transport/WSS and approval notification delivery independently verified",
-    "I5/G11 external Nginx, G18/G21 customer bootstrap/agent/VM acceptance and operator console",
+    "I5 auth external Nginx and G11 customer VM deployment acceptance (isolated customer gateway code/protocol verified), G18/G21 customer bootstrap/agent/VM acceptance and operator console",
     "G22 formal notification UI/Playwright, G18/G21 production installer/agent subscription/key projection wiring and customer VM acceptance"
   ]
 }
