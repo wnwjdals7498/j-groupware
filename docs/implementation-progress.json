@@ -6,9 +6,9 @@
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 76,
-    "partial": 20,
-    "not_started": 76
+    "implemented": 88,
+    "partial": 18,
+    "not_started": 66
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
@@ -2281,9 +2281,20 @@
       "items": [
         "H6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "code": [
+        "j-web/apps/server/src/hosting.ts",
+        "j-web/apps/server/src/hosting-helper.ts",
+        "j-web/apps/server/src/app.ts",
+        "j-web/apps/server/src/disk.ts",
+        "j-web/deploy/jweb-helper.mjs",
+        "j-web/deploy/hosting/compose.test.yaml",
+        "j-web/deploy/hosting/jweb.sudoers",
+        "j-web/tests/hosting/hosting.test.mjs",
+        "j-web/tests/integration/hosting.integration.test.ts",
+        "j-web/docs/cloud-hosting-implementation-2026-10-08.md"
+      ]
     },
     {
       "id": "WB-04",
@@ -2292,9 +2303,20 @@
       "items": [
         "H6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "code": [
+        "j-web/apps/server/src/hosting.ts",
+        "j-web/apps/server/src/hosting-helper.ts",
+        "j-web/apps/server/src/app.ts",
+        "j-web/apps/server/src/disk.ts",
+        "j-web/deploy/jweb-helper.mjs",
+        "j-web/deploy/hosting/compose.test.yaml",
+        "j-web/deploy/hosting/jweb.sudoers",
+        "j-web/tests/hosting/hosting.test.mjs",
+        "j-web/tests/integration/hosting.integration.test.ts",
+        "j-web/docs/cloud-hosting-implementation-2026-10-08.md"
+      ]
     },
     {
       "id": "WB-05",
@@ -2303,9 +2325,20 @@
       "items": [
         "H6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "code": [
+        "j-web/apps/server/src/hosting.ts",
+        "j-web/apps/server/src/hosting-helper.ts",
+        "j-web/apps/server/src/app.ts",
+        "j-web/apps/server/src/disk.ts",
+        "j-web/deploy/jweb-helper.mjs",
+        "j-web/deploy/hosting/compose.test.yaml",
+        "j-web/deploy/hosting/jweb.sudoers",
+        "j-web/tests/hosting/hosting.test.mjs",
+        "j-web/tests/integration/hosting.integration.test.ts",
+        "j-web/docs/cloud-hosting-implementation-2026-10-08.md"
+      ]
     },
     {
       "id": "WB-06",
@@ -2314,9 +2347,20 @@
       "items": [
         "H6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "code": [
+        "j-web/apps/server/src/hosting.ts",
+        "j-web/apps/server/src/hosting-helper.ts",
+        "j-web/apps/server/src/app.ts",
+        "j-web/apps/server/src/disk.ts",
+        "j-web/deploy/jweb-helper.mjs",
+        "j-web/deploy/hosting/compose.test.yaml",
+        "j-web/deploy/hosting/jweb.sudoers",
+        "j-web/tests/hosting/hosting.test.mjs",
+        "j-web/tests/integration/hosting.integration.test.ts",
+        "j-web/docs/cloud-hosting-implementation-2026-10-08.md"
+      ]
     },
     {
       "id": "WB-07",
@@ -2325,12 +2369,21 @@
       "items": [
         "H4"
       ],
-      "implementation": "partial",
-      "verification": "actual_jweb_single_aud_tenant_member_sid_cookie_refusal_read_write_composite_read_and_no_role_403_foreign_id404_jwks_db503_pass_node22_node24; actual_web_write_lifecycle_gate_not_implemented",
+      "implementation": "implemented",
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
       "code": [
         "j-web/apps/server/src/auth.ts",
         "j-web/apps/server/src/app.ts",
-        "j-web/tests/integration/membership.integration.test.ts"
+        "j-web/tests/integration/membership.integration.test.ts",
+        "j-web/apps/server/src/hosting.ts",
+        "j-web/apps/server/src/hosting-helper.ts",
+        "j-web/apps/server/src/disk.ts",
+        "j-web/deploy/jweb-helper.mjs",
+        "j-web/deploy/hosting/compose.test.yaml",
+        "j-web/deploy/hosting/jweb.sudoers",
+        "j-web/tests/hosting/hosting.test.mjs",
+        "j-web/tests/integration/hosting.integration.test.ts",
+        "j-web/docs/cloud-hosting-implementation-2026-10-08.md"
       ]
     },
     {
@@ -2384,9 +2437,20 @@
       "items": [
         "H6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "code": [
+        "j-web/apps/server/src/hosting.ts",
+        "j-web/apps/server/src/hosting-helper.ts",
+        "j-web/apps/server/src/app.ts",
+        "j-web/apps/server/src/disk.ts",
+        "j-web/deploy/jweb-helper.mjs",
+        "j-web/deploy/hosting/compose.test.yaml",
+        "j-web/deploy/hosting/jweb.sudoers",
+        "j-web/tests/hosting/hosting.test.mjs",
+        "j-web/tests/integration/hosting.integration.test.ts",
+        "j-web/docs/cloud-hosting-implementation-2026-10-08.md"
+      ]
     },
     {
       "id": "WB-21",
@@ -2395,9 +2459,20 @@
       "items": [
         "H6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "code": [
+        "j-web/apps/server/src/hosting.ts",
+        "j-web/apps/server/src/hosting-helper.ts",
+        "j-web/apps/server/src/app.ts",
+        "j-web/apps/server/src/disk.ts",
+        "j-web/deploy/jweb-helper.mjs",
+        "j-web/deploy/hosting/compose.test.yaml",
+        "j-web/deploy/hosting/jweb.sudoers",
+        "j-web/tests/hosting/hosting.test.mjs",
+        "j-web/tests/integration/hosting.integration.test.ts",
+        "j-web/docs/cloud-hosting-implementation-2026-10-08.md"
+      ]
     },
     {
       "id": "WB-22",
@@ -2406,9 +2481,20 @@
       "items": [
         "H6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "code": [
+        "j-web/apps/server/src/hosting.ts",
+        "j-web/apps/server/src/hosting-helper.ts",
+        "j-web/apps/server/src/app.ts",
+        "j-web/apps/server/src/disk.ts",
+        "j-web/deploy/jweb-helper.mjs",
+        "j-web/deploy/hosting/compose.test.yaml",
+        "j-web/deploy/hosting/jweb.sudoers",
+        "j-web/tests/hosting/hosting.test.mjs",
+        "j-web/tests/integration/hosting.integration.test.ts",
+        "j-web/docs/cloud-hosting-implementation-2026-10-08.md"
+      ]
     },
     {
       "id": "WB-23",
@@ -2418,9 +2504,20 @@
         "H5",
         "H6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "code": [
+        "j-web/apps/server/src/hosting.ts",
+        "j-web/apps/server/src/hosting-helper.ts",
+        "j-web/apps/server/src/app.ts",
+        "j-web/apps/server/src/disk.ts",
+        "j-web/deploy/jweb-helper.mjs",
+        "j-web/deploy/hosting/compose.test.yaml",
+        "j-web/deploy/hosting/jweb.sudoers",
+        "j-web/tests/hosting/hosting.test.mjs",
+        "j-web/tests/integration/hosting.integration.test.ts",
+        "j-web/docs/cloud-hosting-implementation-2026-10-08.md"
+      ]
     },
     {
       "id": "WB-24",
@@ -2429,14 +2526,23 @@
       "items": [
         "H6"
       ],
-      "implementation": "partial",
-      "verification": "fixed_root_real_mountinfo_device_symlink_statfs_guard; actual_cloud_missing_mount_fail_closed_pass_node22_node24; positive_mount_parser_unit_only; site_du_helper_write_gate_and_actual_separate20gb_disk_not_implemented_or_not_run",
+      "implementation": "implemented",
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
       "code": [
         "j-web/apps/server/src/disk.ts",
         "j-web/apps/server/src/disk-cli.ts",
         "j-web/tests/server/disk.test.ts",
         "j-web/tests/integration/membership.integration.test.ts",
-        "j-web/docs/cloud-foundation-verification-2026-10-08.md"
+        "j-web/docs/cloud-foundation-verification-2026-10-08.md",
+        "j-web/apps/server/src/hosting.ts",
+        "j-web/apps/server/src/hosting-helper.ts",
+        "j-web/apps/server/src/app.ts",
+        "j-web/deploy/jweb-helper.mjs",
+        "j-web/deploy/hosting/compose.test.yaml",
+        "j-web/deploy/hosting/jweb.sudoers",
+        "j-web/tests/hosting/hosting.test.mjs",
+        "j-web/tests/integration/hosting.integration.test.ts",
+        "j-web/docs/cloud-hosting-implementation-2026-10-08.md"
       ]
     },
     {
@@ -2446,9 +2552,20 @@
       "items": [
         "H6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "code": [
+        "j-web/apps/server/src/hosting.ts",
+        "j-web/apps/server/src/hosting-helper.ts",
+        "j-web/apps/server/src/app.ts",
+        "j-web/apps/server/src/disk.ts",
+        "j-web/deploy/jweb-helper.mjs",
+        "j-web/deploy/hosting/compose.test.yaml",
+        "j-web/deploy/hosting/jweb.sudoers",
+        "j-web/tests/hosting/hosting.test.mjs",
+        "j-web/tests/integration/hosting.integration.test.ts",
+        "j-web/docs/cloud-hosting-implementation-2026-10-08.md"
+      ]
     },
     {
       "id": "WB-30",
@@ -2485,9 +2602,20 @@
       "items": [
         "H5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "code": [
+        "j-web/apps/server/src/hosting.ts",
+        "j-web/apps/server/src/hosting-helper.ts",
+        "j-web/apps/server/src/app.ts",
+        "j-web/apps/server/src/disk.ts",
+        "j-web/deploy/jweb-helper.mjs",
+        "j-web/deploy/hosting/compose.test.yaml",
+        "j-web/deploy/hosting/jweb.sudoers",
+        "j-web/tests/hosting/hosting.test.mjs",
+        "j-web/tests/integration/hosting.integration.test.ts",
+        "j-web/docs/cloud-hosting-implementation-2026-10-08.md"
+      ]
     },
     {
       "id": "WB-33",
