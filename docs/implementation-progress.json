@@ -14,7 +14,6 @@
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
     "Messenger formal client UI/file BFF, talk/guest/web product relays, formal mail UI, production installer/agent wiring and operator/installer console remain unimplemented",
     "Hyper-V/VM/customer-server and external Nginx deployment/installation acceptance not executed in this cloud test runtime",
-    "Imported sample-a scoped mail:read assignment returned Keycloak403/j-auth503; existing sample permissions preserved. Canonical newly provisioned tenant/member/subscription OIDC tests passed; imported-sample permission evaluation remains unresolved",
     "Mail E8 needs FS-U07 pre-webhook loss criteria and full SMTP envelope recipient preservation contract; no outbox/ingress recovery policy invented"
   ],
   "features": [
@@ -41,12 +40,14 @@
         "I2"
       ],
       "implementation": "partial",
-      "verification": "cloud_import_and_owned_realm_generation_pass; canonical_bootstrap_user_and_claims_pass; login_theme_and_browser_acceptance_pending",
+      "verification": "cloud_import_and_owned_realm_generation_pass; canonical_bootstrap_user_and_claims_pass; login_theme_and_browser_acceptance_pending; actual_legacy_import_canonical_role_owner_lookup_member_201_wrong_alias_403_reduced_mail_role_pass_node22_node24; existing_fgap_catalog_hash_unchanged; corrected_new_import_scope_pass",
       "code": [
         "j-auth/scripts/realm/templates.mjs",
         "j-auth/apps/server/src/keycloak/realm-model.ts",
         "j-auth/apps/server/src/keycloak/provisioning.ts",
-        "j-auth/tests/integration/provisioning.test.ts"
+        "j-auth/tests/integration/provisioning.test.ts",
+        "j-auth/tests/integration/imported-mail-roles.test.ts",
+        "j-auth/docs/cloud-imported-role-compatibility-2026-10-08.md"
       ]
     },
     {
@@ -133,14 +134,16 @@
         "I2"
       ],
       "implementation": "implemented",
-      "verification": "cloud_fgap_user_crud_role_allowlist_and_subscription_permission_sync_pass; realm_provisioner_two_role_boundary_and_foreign_realm_denial_pass",
+      "verification": "cloud_fgap_user_crud_role_allowlist_and_subscription_permission_sync_pass; realm_provisioner_two_role_boundary_and_foreign_realm_denial_pass; actual_legacy_import_canonical_role_owner_lookup_member_201_wrong_alias_403_reduced_mail_role_pass_node22_node24; existing_fgap_catalog_hash_unchanged; corrected_new_import_scope_pass",
       "code": [
         "j-auth/apps/server/src/keycloak/admin-permissions.ts",
         "j-auth/tests/integration/admin-permissions.test.ts",
         "j-auth/apps/server/src/keycloak/realm-model.ts",
         "j-auth/apps/server/src/keycloak/subscriptions.ts",
         "j-auth/tests/integration/subscriptions.test.ts",
-        "j-auth/tests/integration/provisioning.test.ts"
+        "j-auth/tests/integration/provisioning.test.ts",
+        "j-auth/tests/integration/imported-mail-roles.test.ts",
+        "j-auth/docs/cloud-imported-role-compatibility-2026-10-08.md"
       ]
     },
     {
@@ -281,11 +284,13 @@
         "I6"
       ],
       "implementation": "implemented",
-      "verification": "cloud_member_creation_password_ready_duplicate_409_and_prevalidated_roles_pass",
+      "verification": "cloud_member_creation_password_ready_duplicate_409_and_prevalidated_roles_pass; actual_legacy_import_canonical_role_owner_lookup_member_201_wrong_alias_403_reduced_mail_role_pass_node22_node24; existing_fgap_catalog_hash_unchanged; corrected_new_import_scope_pass",
       "code": [
         "j-auth/apps/server/src/app.ts",
         "j-auth/apps/server/src/keycloak/members.ts",
-        "j-auth/tests/integration/members.test.ts"
+        "j-auth/tests/integration/members.test.ts",
+        "j-auth/tests/integration/imported-mail-roles.test.ts",
+        "j-auth/docs/cloud-imported-role-compatibility-2026-10-08.md"
       ]
     },
     {
@@ -311,11 +316,13 @@
         "I6"
       ],
       "implementation": "implemented",
-      "verification": "cloud_grant_revoke_direct_composite_roles_and_forbidden_state_unchanged_pass",
+      "verification": "cloud_grant_revoke_direct_composite_roles_and_forbidden_state_unchanged_pass; actual_legacy_import_canonical_role_owner_lookup_member_201_wrong_alias_403_reduced_mail_role_pass_node22_node24; existing_fgap_catalog_hash_unchanged; corrected_new_import_scope_pass",
       "code": [
         "j-auth/apps/server/src/app.ts",
         "j-auth/apps/server/src/keycloak/members.ts",
-        "j-auth/tests/integration/members.test.ts"
+        "j-auth/tests/integration/members.test.ts",
+        "j-auth/tests/integration/imported-mail-roles.test.ts",
+        "j-auth/docs/cloud-imported-role-compatibility-2026-10-08.md"
       ]
     },
     {
@@ -1447,11 +1454,13 @@
         "E3"
       ],
       "implementation": "implemented",
-      "verification": "actual_oidc_pkce_exchange_single_j_mail_aud_issuer_tenant_azp_role_401_403_pass; actual_mailpit_stop_and_fresh_verifier_closed_jwks_connection_503_pass",
+      "verification": "actual_oidc_pkce_exchange_single_j_mail_aud_issuer_tenant_azp_role_401_403_pass; actual_mailpit_stop_and_fresh_verifier_closed_jwks_connection_503_pass; actual_legacy_import_canonical_role_owner_lookup_member_201_wrong_alias_403_reduced_mail_role_pass_node22_node24; existing_fgap_catalog_hash_unchanged; corrected_new_import_scope_pass",
       "code": [
         "j-mail/apps/server/src/app.ts",
         "j-mail/tests/integration/runtime.ts",
-        "j-mail/tests/integration/inbox.integration.test.ts"
+        "j-mail/tests/integration/inbox.integration.test.ts",
+        "j-auth/tests/integration/imported-mail-roles.test.ts",
+        "j-auth/docs/cloud-imported-role-compatibility-2026-10-08.md"
       ]
     },
     {

@@ -29,7 +29,7 @@ j-mail은 Mailpit 표시 To가 아니라 SMTP가 넣은 첫 Received로 tenant�
 
 - `docs/ui-guidelines.md` 부재: 정식 메일 화면·sandbox·G14 Playwright와 다른 제품 UI는 후속이다.
 - ML-20/E8: FS-U07 webhook 수신 전 누락/복구 허용 한계와 전체 SMTP envelope 수신자 보존 계약이 미정이다. 첫 Received는 첫 수신자만 있고 표시 Bcc로 모든 수신자를 보장할 수 없다. 임의 outbox/ingress/recovery 정책을 추가하지 않았다.
-- imported sample-a: scoped member credential의 실제 mail:read 매핑403→j-auth503. existing DB/KC role/permission target은 일치 확인했으나 sample permission 평가 원인은 미해결이다. 샘플 권한을 확장하지 않았고 canonical 신규 tenant는 정상 생성·부여·축소 인증을 검증했다.
+- imported sample-a의 당시403→503은 [후속 역할 소유자 호환 수정](cloud-imported-role-compatibility-2026-10-08.md)에서 해결했다. 기존 권한/catalog hash는 같으며 잘못된 alias는 계속403이다. 기존 alias/scope drift는 보존했고, 실제 정상 축소 JWT와 신규 import를 구별해 검증했다.
 - ML-03/30/32: 외부 SMTP egress 방화벽·systemd·고객 VM 설치/해지·volume/DB 백업과 outbox는 아직 전체 인수가 아니다.
 - 콘솔 desired/status/agent key 계약, 실제 설치기/probe·production key projection, 상담 guest/session 정책은 이전 미정 상태를 유지한다. 생산 자격·운영 설치·상시 접근·외부 이메일/SMS/제3자 송신을 하지 않았다.
 
