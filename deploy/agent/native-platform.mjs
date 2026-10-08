@@ -10,6 +10,11 @@ import { createHash, randomUUID } from "node:crypto";
 import path from "node:path";
 import { execute, externalPath } from "../gateway/gateway.mjs";
 import { ProvisionError, serviceDatabase } from "./service-database.mjs";
+import {
+  NativeTlsCredentials,
+  credentialNames,
+  serviceCredentialVariables,
+} from "./tls-credentials.mjs";
 const user = (service) =>
   service === "j-web" ? "jweb" : "jgw-" + service.slice(2);
 // Privileged fixed binaries must not inherit user-controlled loaders or hooks.
@@ -38,7 +43,16 @@ export function renderServiceUnit(service, bundleRoot, environmentRoot) {
   serviceDatabase(service);
   externalPath(bundleRoot);
   externalPath(environmentRoot);
-  return `[Unit]\nDescription=J Groupware ${service}\nAfter=network.target postgresql.service\n\n[Service]\nType=simple\nUser=${user(service)}\nGroup=${user(service)}\nWorkingDirectory=${bundleRoot}/${service}\nEnvironmentFile=${environmentRoot}/${service}.env\nExecStart=/usr/bin/node ${bundleRoot}/${service}/apps/server/dist/main.js\nRestart=on-failure\nRestartSec=5\nTimeoutStopSec=30\nKillMode=control-group\nUMask=0077\nPrivateTmp=true\nNoNewPrivileges=${service === "j-web" ? "false" : "true"}\n\n[Install]\nWantedBy=multi-user.target\n`;
+  return `[Unit]\nDescription=J Groupware ${service}\nAfter=network.target postgresql.service\n\n[Service]\nType=simple\nUser=${user(service)}\nGroup=${user(service)}\nWorkingDirectory=${bundleRoot}/${service}\nEnvironmentFile=${environmentRoot}/${service}.env\n${serviceCredentialVariables(
+    service,
+  )
+    .map(
+      (_variable, index) =>
+        `LoadCredential=${credentialNames[index]}:${environmentRoot}/${service}.credentials/${credentialNames[index]}\n`,
+    )
+    .join(
+      "",
+    )}ExecStart=/usr/bin/env -u NODE_EXTRA_CA_CERTS -- /usr/bin/node ${bundleRoot}/j-groupware/deploy/agent/launch-service.mjs ${service} ${bundleRoot}\nRestart=on-failure\nRestartSec=5\nTimeoutStopSec=30\nKillMode=control-group\nUMask=0077\nPrivateTmp=true\nNoNewPrivileges=${service === "j-web" ? "false" : "true"}\n\n[Install]\nWantedBy=multi-user.target\n`;
 }
 export class NativeSystemdPlatform {
   constructor({
@@ -68,6 +82,17 @@ export class NativeSystemdPlatform {
     const root = path.join(this.bundleRoot, service),
       entry = path.join(root, "apps/server/dist/main.js");
     await protectedPath(entry, "file");
+    await protectedPath(
+      path.join(this.bundleRoot, "j-groupware/deploy/agent/launch-service.mjs"),
+      "file",
+    );
+    await protectedPath(
+      path.join(
+        this.bundleRoot,
+        "j-groupware/deploy/agent/tls-credentials.mjs",
+      ),
+      "file",
+    );
     const metadataFile = path.join(root, "jgw-bundle.json");
     await protectedPath(metadataFile, "file");
     if ((await lstat(metadataFile)).size > 8192)
@@ -125,6 +150,9 @@ export class NativeSystemdPlatform {
   async install(service) {
     await this.preflight(service);
     await this.preparedEnvironment(service);
+    await new NativeTlsCredentials({
+      environmentRoot: this.environmentRoot,
+    }).prepare(service);
     const name = user(service);
     let existing;
     try {
@@ -135,6 +163,8 @@ export class NativeSystemdPlatform {
     if (existing) {
       if (
         existing[0] !== name ||
+        !/^[1-9][0-9]*$/.test(existing[2]) ||
+        !/^[1-9][0-9]*$/.test(existing[3]) ||
         existing[5] !== "/var/lib/" + name ||
         existing[6] !== "/usr/sbin/nologin"
       )
@@ -191,6 +221,10 @@ export class NativeSystemdPlatform {
   async start(service) {
     await this.preflight(service);
     await this.preparedEnvironment(service);
+    await new NativeTlsCredentials({
+      environmentRoot: this.environmentRoot,
+    }).require(service);
+    await this.preparedUnit(service);
     await run("/usr/bin/systemctl", ["enable", "--now", this.unit(service)]);
   }
   async ready(service) {

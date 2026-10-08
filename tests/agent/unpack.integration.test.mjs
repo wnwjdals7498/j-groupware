@@ -93,7 +93,7 @@ test("installs base and Talk from fresh runtime archives, npm ci and local works
       await execute(process.execPath, [
         "--input-type=module",
         "-e",
-        `await import(${JSON.stringify(target + "/deploy/agent/bundle-install.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/base-environment.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/notification-worker.mjs")});`,
+        `await import(${JSON.stringify(target + "/deploy/agent/bundle-install.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/base-environment.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/notification-worker.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/tls-credentials.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/launch-service.mjs")});`,
       ]);
     assert(
       (await readdir(target + "/deploy/migrations")).some((name) =>

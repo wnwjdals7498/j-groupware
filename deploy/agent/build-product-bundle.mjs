@@ -265,6 +265,8 @@ export async function buildProductBundle({
         "console-client",
         "control-files",
         "native-platform",
+        "tls-credentials",
+        "launch-service",
         "notification-manifest",
         "notification-worker",
         "private-files",

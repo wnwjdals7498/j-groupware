@@ -10,7 +10,7 @@ export class ProductCleanup {
   }
   async run(service) {
     serviceDatabase(service);
-    if (["j-approval", "j-talk"].includes(service))
+    if (["j-approval", "j-talk", "j-customer-auth-db"].includes(service))
       return { service, storage: "postgres", data: "retained" };
     const adapter = {
       "j-web": this.web,

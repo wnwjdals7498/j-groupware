@@ -22,6 +22,7 @@ import {
   renderServiceUnit,
   parseUnitObservation,
 } from "../../deploy/agent/native-platform.mjs";
+import { ProductCleanup } from "../../deploy/agent/product-cleanup.mjs";
 import { execute } from "../../deploy/gateway/gateway.mjs";
 let root, input;
 const secret = () => randomBytes(32).toString("base64url");
@@ -201,7 +202,15 @@ test("native units carry fixed entrypoints, separate users and web helper privil
   const bundleRoot = root + "/bundles",
     environmentRoot = root + "/environment";
   await mkdir(bundleRoot + "/j-talk", { recursive: true });
+  assert.deepEqual(await new ProductCleanup().run("j-customer-auth-db"), {
+    service: "j-customer-auth-db",
+    storage: "postgres",
+    data: "retained",
+  });
   const unit = renderServiceUnit("j-talk", bundleRoot, environmentRoot);
+  assert(unit.includes("LoadCredential=tls-key:"));
+  assert(unit.includes("LoadCredential=ca-certificate:"));
+  assert(unit.includes("/usr/bin/env -u NODE_EXTRA_CA_CERTS -- /usr/bin/node"));
   assert(unit.includes("User=jgw-talk"));
   assert(unit.includes("NoNewPrivileges=true"));
   assert(
@@ -214,10 +223,7 @@ test("native units carry fixed entrypoints, separate users and web helper privil
   // test process's existing binary; the production renderer remains fixed.
   await writeFile(
     file,
-    unit.replace(
-      "ExecStart=/usr/bin/node ",
-      "ExecStart=" + process.execPath + " ",
-    ),
+    unit.replace("/usr/bin/node ", process.execPath + " "),
     { mode: 0o600 },
   );
   await execute("/usr/bin/systemd-analyze", ["verify", file]);

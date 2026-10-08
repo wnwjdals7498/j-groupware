@@ -8,12 +8,15 @@ export class PostgresServiceDatabase {
     dumpEnv?: Record<string, string>;
   });
   prepareBase(): Promise<void>;
-  ensure(service: string, password: string): Promise<void>;
+  ensure(
+    service: string,
+    password: string,
+  ): Promise<{ database: string; user: string }>;
   inspect(
     service: string,
   ): Promise<{ role: boolean; database: boolean; login: boolean }>;
   disable(
     service: string,
-    options?: { databaseAbsent?: boolean },
-  ): Promise<void>;
+    options?: { expectDatabaseAbsent?: boolean },
+  ): Promise<{ database: string | false; role: boolean; login: false }>;
 }
