@@ -16,6 +16,7 @@ async function main() {
     const app = createApp({
       pool,
       config,
+      serviceEndpoints: config.serviceEndpoints,
       https: { cert, key, minVersion: "TLSv1.2" },
       logger: {
         level: "info",

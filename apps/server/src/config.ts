@@ -2,6 +2,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { PoolConfig } from "pg";
 import { assertCustomerTenantId } from "@j-auth/contracts";
+import { SERVICE_CATALOG } from "@j-auth/contracts";
+import type { TenantServiceId } from "@j-auth/contracts";
+import { serviceOrigin } from "./services.js";
+import type { ServiceEndpoints } from "./services.js";
 
 export interface ServerConfig {
   readonly tenant: string;
@@ -12,6 +16,7 @@ export interface ServerConfig {
   readonly tlsCertificate: string;
   readonly tlsKey: string;
   readonly database: PoolConfig;
+  readonly serviceEndpoints: ServiceEndpoints;
 }
 const repository = fileURLToPath(new URL("../../../", import.meta.url));
 const required = (env: NodeJS.ProcessEnv, name: string): string => {
@@ -79,6 +84,20 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
   if (publicOrigin.hostname !== `gw.${tenant}.jgw.test`)
     throw new Error("Public origin must match registered tenant.");
   const keycloakOrigin = origin(required(env, "KC_PUBLIC_URL"));
+  const serviceEndpoints: ServiceEndpoints = {};
+  for (const service of SERVICE_CATALOG.filter(
+    (entry) => entry.tenantService && entry.serviceId !== "j-groupware",
+  )) {
+    const value =
+      env[
+        "JGW_SERVICE_" +
+          service.serviceId.slice(2).replaceAll("-", "_").toUpperCase() +
+          "_URL"
+      ];
+    if (value)
+      serviceEndpoints[service.serviceId as TenantServiceId] =
+        serviceOrigin(value);
+  }
   return {
     tenant,
     origin: publicOrigin.origin,
@@ -88,5 +107,6 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
     tlsCertificate: externalFile(required(env, "JGW_TLS_CERTIFICATE")),
     tlsKey: externalFile(required(env, "JGW_TLS_KEY")),
     database: loadDatabaseConfig(env),
+    serviceEndpoints,
   };
 }

@@ -243,6 +243,107 @@ export class OidcClient {
     );
     return { tokens, identity: await this.validate(tokens, nonce, previous) };
   }
+  async serviceToken(
+    subjectToken: string,
+    audience: string,
+    signal?: AbortSignal,
+  ): Promise<string> {
+    const abort = signal
+      ? AbortSignal.any([signal, AbortSignal.timeout(10000)])
+      : AbortSignal.timeout(10000);
+    let response: Response;
+    try {
+      response = await this.fetch(this.endpoint + "/token", {
+        method: "POST",
+        redirect: "error",
+        signal: abort,
+        body: new URLSearchParams({
+          client_id: CLIENT_IDS.groupware,
+          client_secret: this.config.clientSecret,
+          grant_type: "urn:ietf:params:oauth:grant-type:token-exchange",
+          subject_token: subjectToken,
+          subject_token_type: "urn:ietf:params:oauth:token-type:access_token",
+          requested_token_type: "urn:ietf:params:oauth:token-type:access_token",
+          audience,
+        }),
+      });
+    } catch {
+      signal?.throwIfAborted();
+      throw unavailable();
+    }
+    let body: {
+      access_token?: unknown;
+      token_type?: unknown;
+      issued_token_type?: unknown;
+      error?: unknown;
+    };
+    try {
+      body = (await response.json()) as typeof body;
+    } catch {
+      signal?.throwIfAborted();
+      throw unavailable();
+    }
+    if (!response.ok) {
+      if (
+        [400, 403].includes(response.status) &&
+        ["invalid_target", "access_denied"].includes(String(body?.error))
+      )
+        throw new ApiError(403, "forbidden", "Service token denied.");
+      throw unavailable();
+    }
+    if (
+      !body ||
+      typeof body.access_token !== "string" ||
+      !body.access_token ||
+      body.access_token.length > 16384 ||
+      body.token_type !== "Bearer" ||
+      body.issued_token_type !== "urn:ietf:params:oauth:token-type:access_token"
+    )
+      throw unavailable();
+    signal?.throwIfAborted();
+    return body.access_token;
+  }
+  async validateServiceToken(
+    token: string,
+    audience: string,
+    session: { subject: string; sid: string; roles: readonly string[] },
+    allowedRoles: readonly string[],
+  ): Promise<Date> {
+    try {
+      const identity = await this.access.verify(token, {
+        tenantId: this.config.tenant,
+        audience,
+      });
+      const claims = identity.claims;
+      const audiences =
+        typeof claims.aud === "string" ? [claims.aud] : claims.aud;
+      const resources = claims.resource_access as
+        Record<string, { roles?: unknown }> | undefined;
+      const assigned = resources?.[audience]?.roles;
+      if (
+        !Array.isArray(audiences) ||
+        audiences.length !== 1 ||
+        audiences[0] !== audience ||
+        identity.subject !== session.subject ||
+        claims.sid !== session.sid ||
+        typeof claims.exp !== "number" ||
+        claims.exp * 1000 <= Date.now() + 30000 ||
+        !Array.isArray(assigned) ||
+        !assigned.length ||
+        assigned.some(
+          (role) =>
+            typeof role !== "string" ||
+            !allowedRoles.includes(role) ||
+            !session.roles.includes(role),
+        ) ||
+        Object.keys(resources ?? {}).some((client) => client !== audience)
+      )
+        throw unavailable();
+      return new Date(claims.exp * 1000);
+    } catch {
+      throw unavailable();
+    }
+  }
   async validateLogout(
     token: string,
   ): Promise<JWTPayload & { sid: string; jti: string }> {

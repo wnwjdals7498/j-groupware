@@ -11,6 +11,7 @@ import { loadConfig } from "../../apps/server/src/config.js";
 import { visibleMenus, ROUTES } from "@j-groupware/permissions";
 import { createApp } from "../../apps/server/src/app.js";
 import type { Pool } from "pg";
+import { serviceOrigin } from "../../apps/server/src/services.js";
 
 describe("BFF cryptographic and request boundaries", () => {
   let key: Awaited<ReturnType<typeof generateKeyPair>>;
@@ -54,6 +55,62 @@ describe("BFF cryptographic and request boundaries", () => {
   });
   const oidc = () =>
     new OidcClient(config, { keyResolver: async () => key.publicKey });
+  const serviceClaims = () => ({
+    ...claims(),
+    aud: "j-mail",
+    typ: "Bearer",
+    resource_access: { "j-mail": { roles: ["mail:read"] } },
+  });
+  const serviceSession = {
+    subject: "member-1",
+    sid: "sid-1",
+    roles: ["mail:read"],
+  };
+  it("validates a signed single-audience service token against its original session", async () => {
+    expect(
+      await oidc().validateServiceToken(
+        await sign(serviceClaims()),
+        "j-mail",
+        serviceSession,
+        ["mail:read"],
+      ),
+    ).toBeInstanceOf(Date);
+  });
+  it.each([
+    { aud: ["j-mail", "j-messenger"] },
+    { sub: "other" },
+    { sid: "other" },
+    { tenant: "sample-b" },
+    { exp: Math.floor(Date.now() / 1000) + 10 },
+    {
+      resource_access: {
+        "j-mail": { roles: ["mail:read"] },
+        "j-messenger": { roles: ["messenger:use"] },
+      },
+    },
+    { resource_access: { "j-mail": { roles: ["not-granted"] } } },
+  ])("rejects signed service token widening/drift %j", async (claims) => {
+    await expect(
+      oidc().validateServiceToken(
+        await sign({ ...serviceClaims(), ...claims }),
+        "j-mail",
+        serviceSession,
+        ["mail:read"],
+      ),
+    ).rejects.toMatchObject({ status: 503 });
+  });
+  it.each([
+    "https://attacker.test:54240",
+    "http://localhost:54240",
+    "http://127.0.0.1:3001",
+    "http://127.0.0.1",
+    "http://user:password@127.0.0.1:54240",
+    "http://127.0.0.1:54240/path",
+    "http://127.0.0.1:54240/?query=yes",
+    "http://127.0.0.1:54240/#fragment",
+  ])("rejects a non-canonical loopback endpoint %s", (value) =>
+    expect(() => serviceOrigin(value)).toThrow(),
+  );
   it("accepts signed ID/access claims and exposes only catalog roles", async () => {
     const identity = await oidc().validate(await tokens(), nonce);
     expect(identity.subject).toBe("member-1");

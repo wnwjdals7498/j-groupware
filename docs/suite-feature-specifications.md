@@ -10,6 +10,8 @@
 
 후속 고객 BFF 작업에서 HTTPS·PG 세션·Code/PKCE·refresh·RP/backchannel logout·권한 표·게시판 API를 구현했다. [BFF 검증 기록](cloud-bff-verification-2026-10-08.md)의 단위 32개·실제 통합 16개·registry 1개와 j-auth 회귀 61개가 통과했다. 정식 UI·Playwright·WSS/SSE·VM과 종단 인수는 완료하지 않았다.
 
+G23 공통 token exchange·PG cache·내부 호출 함수를 추가했다. [G23 실제 검증](cloud-token-exchange-verification-2026-10-08.md)의 전체 BFF 통합 23개를 제품별 업무 종단 인수와 구별한다.
+
 공통 결정의 원본은 [architecture.md](architecture.md), 서비스별 결정의 원본은 각 저장소의 `decisions.md`다. 기존 결정을 바꾸는 내용은 확정된 요구사항으로 추가하지 않는다. 아래 명세의 세부 처리·인수 시험은 기존 결정을 구체화한 구현 기준이며, 미정 표의 항목은 담당 Item에서 확인한 뒤 contracts에 고정한다.
 
 | 서비스 | 기존 기능 목록 | 상세 명세 | 기능 수 | 담당 Item |

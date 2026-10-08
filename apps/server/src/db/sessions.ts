@@ -1,4 +1,4 @@
-import type { Pool } from "pg";
+import type { Pool, PoolClient } from "pg";
 import { SESSION_POLICY } from "@j-groupware/contracts";
 import { digest, randomToken } from "../security.js";
 import { ApiError, unauthenticated } from "../errors.js";
@@ -105,12 +105,21 @@ export class SessionStore {
     this.onEnd(ended);
     return session;
   }
-  async authenticate(session: string | undefined): Promise<SessionRow> {
+  authenticate(session: string | undefined): Promise<SessionRow> {
+    return this.useSession(session, async (row) => row);
+  }
+  async useSession<T>(
+    session: string | undefined,
+    run: (row: SessionRow, client: PoolClient) => Promise<T>,
+    signal?: AbortSignal,
+  ): Promise<T> {
+    signal?.throwIfAborted();
     if (!session) throw unauthenticated();
     const client = await this.pool.connect();
     let invalid = false,
       ended = false;
     let row: SessionRow | undefined;
+    let result: T | undefined;
     try {
       await client.query("BEGIN");
       row = (
@@ -157,7 +166,7 @@ export class SessionStore {
             [this.tenant, row.session_hash],
           );
           ended = true;
-        } else
+        } else {
           await client.query(
             "UPDATE sessions SET access_token=$3,refresh_token=$4,roles=$5,username=$6,access_expires_at=$7,last_seen_at=clock_timestamp() WHERE tenant_id=$1 AND session_hash=$2",
             [
@@ -170,6 +179,19 @@ export class SessionStore {
               row.access_expires_at,
             ],
           );
+          // A valid rotated refresh token must survive downstream failure/cancellation.
+          // Only the caller's cache changes roll back; the refreshed session stays committed.
+          await client.query("SAVEPOINT session_ready");
+          try {
+            signal?.throwIfAborted();
+            result = await run(row, client);
+            signal?.throwIfAborted();
+          } catch (error) {
+            await client.query("ROLLBACK TO SAVEPOINT session_ready");
+            await client.query("COMMIT");
+            throw error;
+          }
+        }
       }
       await client.query("COMMIT");
     } catch (error) {
@@ -180,7 +202,7 @@ export class SessionStore {
     }
     if (ended && row) this.onEnd([row.session_hash]);
     if (invalid || !row) throw unauthenticated();
-    return row;
+    return result as T;
   }
   async end(session: string): Promise<void> {
     const removed = await this.pool.query<{ session_hash: string }>(

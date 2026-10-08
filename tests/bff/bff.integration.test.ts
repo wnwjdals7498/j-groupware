@@ -6,6 +6,9 @@ import type { Runtime } from "./runtime.js";
 import { SESSION_POLICY } from "@j-groupware/contracts";
 import { digest } from "../../apps/server/src/security.js";
 import { migrate } from "../../apps/server/src/db/migrate.js";
+import { createTokenVerifier } from "@j-auth/token-verifier";
+import { ServiceClient } from "../../apps/server/src/services.js";
+import { createServer } from "node:http";
 
 describe("actual HTTPS BFF + j-auth + Keycloak + dedicated PostgreSQL", () => {
   let runtime: Runtime;
@@ -605,6 +608,354 @@ describe("actual HTTPS BFF + j-auth + Keycloak + dedicated PostgreSQL", () => {
     expect(((await refresh.json()) as { error: string }).error).toBe(
       "invalid_grant",
     );
+  });
+  it("exchanges real tokens to one audience and shares a PG cache across concurrent server callers", async () => {
+    expect((await runtime.subscribe(0, "j-mail")).status).toBe(200);
+    expect((await runtime.subscribe(0, "j-messenger")).status).toBe(200);
+    const a = await login(),
+      fixture = runtime.fixtures[0]!,
+      session = a.cookies.get(a.origin)!.get(SESSION_POLICY.cookie)!;
+    expect((await a.me()).roles).toContain("mail:read");
+    const before = runtime.serviceTokenCount;
+    const tokens = await Promise.all(
+      Array.from({ length: 8 }, () =>
+        fixture.app.serviceTokens.get(session, "j-mail"),
+      ),
+    );
+    expect(new Set(tokens).size).toBe(1);
+    expect(runtime.serviceTokenCount - before).toBe(1);
+    const token = tokens[0]!;
+    runtime.secretValues.add(token);
+    const verifier = createTokenVerifier({
+      publicUrl: fixture.config.keycloakOrigin,
+      fetch: runtime.fetch,
+    });
+    const identity = await verifier.verify(token, {
+      tenantId: fixture.tenant,
+      audience: "j-mail",
+    });
+    expect(identity.claims.aud).toBe("j-mail");
+    expect(identity.roles).toContain("mail:read");
+    await expect(
+      verifier.verify(token, {
+        tenantId: fixture.tenant,
+        audience: "j-messenger",
+      }),
+    ).rejects.toMatchObject({ kind: "invalid" });
+    const cache = (
+      await runtime.pool.query(
+        "SELECT * FROM service_tokens WHERE tenant_id=$1 AND session_hash=$2",
+        [fixture.tenant, hash(a)],
+      )
+    ).rows;
+    expect(cache).toHaveLength(1);
+    expect(cache[0].service_id).toBe("j-mail");
+    const other = await login();
+    await fixture.app.serviceTokens.get(
+      other.cookies.get(other.origin)!.get(SESSION_POLICY.cookie)!,
+      "j-mail",
+    );
+    expect(runtime.serviceTokenCount - before).toBe(2);
+  });
+  it("denies cross-tenant cookies, unsubscribed roles, unknown services and corrupt cached signatures", async () => {
+    const a = await login(),
+      fixture = runtime.fixtures[0]!,
+      session = a.cookies.get(a.origin)!.get(SESSION_POLICY.cookie)!;
+    const b = await login(1),
+      bSession = b.cookies.get(b.origin)!.get(SESSION_POLICY.cookie)!;
+    await expect(
+      runtime.fixtures[1]!.app.serviceTokens.get(session, "j-mail"),
+    ).rejects.toMatchObject({ status: 401 });
+    await expect(
+      runtime.fixtures[1]!.app.serviceTokens.get(bSession, "j-mail"),
+    ).rejects.toMatchObject({ status: 403 });
+    await expect(
+      fixture.app.serviceTokens.get(session, "j-groupware"),
+    ).rejects.toMatchObject({ status: 400 });
+    const token = await fixture.app.serviceTokens.get(session, "j-mail");
+    runtime.secretValues.add(token);
+    const parts = token.split(".");
+    parts[2] = (parts[2]![0] === "A" ? "B" : "A") + parts[2]!.slice(1);
+    await runtime.pool.query(
+      "UPDATE service_tokens SET access_token=$3 WHERE tenant_id=$1 AND session_hash=$2",
+      [fixture.tenant, hash(a), parts.join(".")],
+    );
+    await expect(
+      fixture.app.serviceTokens.get(session, "j-mail"),
+    ).rejects.toMatchObject({ status: 503 });
+    expect((await a.request("/api/me")).status).toBe(200);
+    await runtime.pool.query(
+      "UPDATE service_tokens SET access_token=$3 WHERE tenant_id=$1 AND session_hash=$2",
+      [fixture.tenant, hash(a), token],
+    );
+  });
+  it("replaces cache after actual refresh and cache expiry; transport failure preserves safe retry", async () => {
+    const a = await login(),
+      fixture = runtime.fixtures[0]!,
+      session = a.cookies.get(a.origin)!.get(SESSION_POLICY.cookie)!;
+    await fixture.app.serviceTokens.get(session, "j-mail");
+    const previous = (
+      await runtime.pool.query(
+        "SELECT source_hash FROM service_tokens WHERE tenant_id=$1 AND session_hash=$2",
+        [fixture.tenant, hash(a)],
+      )
+    ).rows[0].source_hash;
+    await runtime.pool.query(
+      "UPDATE sessions SET access_expires_at=now()+interval '10 seconds' WHERE tenant_id=$1 AND session_hash=$2",
+      [fixture.tenant, hash(a)],
+    );
+    const refreshed = runtime.refreshCount;
+    await fixture.app.serviceTokens.get(session, "j-mail");
+    expect(runtime.refreshCount - refreshed).toBe(1);
+    const current = (
+      await runtime.pool.query(
+        "SELECT source_hash FROM service_tokens WHERE tenant_id=$1 AND session_hash=$2",
+        [fixture.tenant, hash(a)],
+      )
+    ).rows[0].source_hash;
+    expect(current).not.toBe(previous);
+    await runtime.pool.query(
+      "UPDATE service_tokens SET expires_at=now() WHERE tenant_id=$1 AND session_hash=$2",
+      [fixture.tenant, hash(a)],
+    );
+    const before = runtime.serviceTokenCount;
+    runtime.failServiceToken = true;
+    try {
+      await expect(
+        fixture.app.serviceTokens.get(session, "j-mail"),
+      ).rejects.toMatchObject({ status: 503 });
+    } finally {
+      runtime.failServiceToken = false;
+    }
+    expect((await a.request("/api/me")).status).toBe(200);
+    await fixture.app.serviceTokens.get(session, "j-mail");
+    expect(runtime.serviceTokenCount - before).toBe(2);
+  });
+  it("keeps a real rotated refresh token when the subsequent service exchange fails", async () => {
+    const a = await login(),
+      fixture = runtime.fixtures[0]!,
+      session = a.cookies.get(a.origin)!.get(SESSION_POLICY.cookie)!;
+    const old = (
+      await runtime.pool.query(
+        "SELECT refresh_token FROM sessions WHERE tenant_id=$1 AND session_hash=$2",
+        [fixture.tenant, digest(session)],
+      )
+    ).rows[0].refresh_token as string;
+    runtime.secretValues.add(old);
+    await runtime.pool.query(
+      "UPDATE sessions SET access_expires_at=now() WHERE tenant_id=$1 AND session_hash=$2",
+      [fixture.tenant, digest(session)],
+    );
+    const before = runtime.refreshCount;
+    runtime.failServiceToken = true;
+    try {
+      await expect(
+        fixture.app.serviceTokens.get(session, "j-mail"),
+      ).rejects.toMatchObject({ status: 503 });
+    } finally {
+      runtime.failServiceToken = false;
+    }
+    const fresh = (
+      await runtime.pool.query(
+        "SELECT refresh_token FROM sessions WHERE tenant_id=$1 AND session_hash=$2",
+        [fixture.tenant, digest(session)],
+      )
+    ).rows[0].refresh_token as string;
+    runtime.secretValues.add(fresh);
+    expect(fresh).not.toBe(old);
+    await fixture.app.serviceTokens.get(session, "j-mail");
+    expect(runtime.refreshCount - before).toBe(1);
+    expect((await a.request("/api/me")).status).toBe(200);
+  });
+  it("cancels after a real exchange response without persisting or returning the token", async () => {
+    const a = await login(),
+      fixture = runtime.fixtures[0]!,
+      session = a.cookies.get(a.origin)!.get(SESSION_POLICY.cookie)!;
+    const aborted = new AbortController();
+    aborted.abort();
+    const before = runtime.serviceTokenCount;
+    await expect(
+      fixture.app.serviceTokens.get(session, "j-mail", aborted.signal),
+    ).rejects.toMatchObject({ name: "AbortError" });
+    expect(runtime.serviceTokenCount).toBe(before);
+    const signal = new AbortController(),
+      gate = runtime.holdNextServiceToken();
+    const result = fixture.app.serviceTokens
+      .get(session, "j-mail", signal.signal)
+      .then(
+        () => null,
+        (error) => error as Error,
+      );
+    try {
+      await gate.arrival;
+      signal.abort();
+    } finally {
+      gate.release();
+    }
+    expect(await result).toMatchObject({ name: "AbortError" });
+    expect(
+      (
+        await runtime.pool.query(
+          "SELECT 1 FROM service_tokens WHERE tenant_id=$1 AND session_hash=$2",
+          [fixture.tenant, digest(session)],
+        )
+      ).rowCount,
+    ).toBe(0);
+    expect((await a.request("/api/me")).status).toBe(200);
+  });
+  it("sends only the narrowed bearer to a real loopback HTTP receiver and blocks endpoint redirects", async () => {
+    const a = await login(),
+      fixture = runtime.fixtures[0]!,
+      session = a.cookies.get(a.origin)!.get(SESSION_POLICY.cookie)!;
+    const verifier = createTokenVerifier({
+      publicUrl: fixture.config.keycloakOrigin,
+      fetch: runtime.fetch,
+    });
+    let received = 0,
+      headers: Record<string, string | string[] | undefined> = {};
+    const receiver = createServer((request, response) => {
+      if (request.url === "/redirect") {
+        response.writeHead(302, { Location: "http://127.0.0.1:3001/steal" });
+        response.end();
+        return;
+      }
+      headers = request.headers;
+      received++;
+      void verifier
+        .verify(request.headers.authorization?.slice(7) ?? "", {
+          tenantId: fixture.tenant,
+          audience: "j-mail",
+        })
+        .then(
+          (identity) => {
+            response.writeHead(200, { "Content-Type": "application/json" });
+            response.end(
+              JSON.stringify({
+                tenant: identity.tenantId,
+                roles: identity.roles,
+              }),
+            );
+          },
+          () => {
+            response.writeHead(401);
+            response.end();
+          },
+        );
+    });
+    await new Promise<void>((resolve) =>
+      receiver.listen(0, "127.0.0.1", resolve),
+    );
+    const address = receiver.address();
+    if (!address || typeof address === "string")
+      throw new Error("Fixture address failed");
+    const client = new ServiceClient(
+      fixture.app.serviceTokens,
+      { "j-mail": `http://127.0.0.1:${address.port}` },
+      runtime.fetch,
+    );
+    try {
+      const result = await client.request(session, "j-mail", "/mail");
+      expect(result.status).toBe(200);
+      const content = (await result.json()) as {
+        tenant: string;
+        roles: string[];
+      };
+      expect(content.tenant).toBe(fixture.tenant);
+      expect(content.roles).toContain("mail:read");
+      expect(content.roles).not.toContain("messenger:use");
+      expect(headers.cookie).toBeUndefined();
+      expect(headers["x-jgw-service-key"]).toBeUndefined();
+      await expect(
+        client.request(session, "j-mail", "//attacker.test/"),
+      ).rejects.toMatchObject({ status: 400 });
+      await expect(
+        client.request(session, "j-mail", "/redirect"),
+      ).rejects.toMatchObject({ status: 503 });
+      expect(received).toBe(1);
+    } finally {
+      receiver.closeAllConnections();
+      await new Promise<void>((resolve, reject) =>
+        receiver.close((error) => (error ? reject(error) : resolve())),
+      );
+    }
+  });
+  it("deletes cached tokens on actual local logout and member-role backchannel, including repeat calls", async () => {
+    const a = await login(),
+      fixture = runtime.fixtures[0]!,
+      session = a.cookies.get(a.origin)!.get(SESSION_POLICY.cookie)!;
+    await fixture.app.serviceTokens.get(session, "j-mail");
+    const me = await a.me();
+    const logout = await a.request("/auth/logout", {
+      method: "POST",
+      headers: { Origin: a.origin, "x-csrf-token": me.csrfToken },
+    });
+    expect(logout.status).toBe(303);
+    expect(
+      (
+        await runtime.pool.query(
+          "SELECT 1 FROM service_tokens WHERE tenant_id=$1 AND session_hash=$2",
+          [fixture.tenant, digest(session)],
+        )
+      ).rowCount,
+    ).toBe(0);
+    await expect(
+      fixture.app.serviceTokens.get(session, "j-mail"),
+    ).rejects.toMatchObject({ status: 401 });
+    const password = randomBytes(24).toString("base64url");
+    runtime.secretValues.add(password);
+    const created = await runtime.members(0, "", {
+      username: "cached-member",
+      password,
+      roles: ["mail:read"],
+    });
+    expect(created.status).toBe(201);
+    const member = (await created.json()) as { id: string };
+    const fresh = browser();
+    await fresh.login(password, "cached-member");
+    const freshSession = fresh.cookies
+      .get(fresh.origin)!
+      .get(SESSION_POLICY.cookie)!;
+    await fixture.app.serviceTokens.get(freshSession, "j-mail");
+    expect(
+      (
+        await runtime.members(
+          0,
+          `/${member.id}/roles/mail:read`,
+          undefined,
+          "DELETE",
+        )
+      ).status,
+    ).toBe(200);
+    await wait(
+      async () =>
+        !(
+          await runtime.pool.query(
+            "SELECT 1 FROM sessions WHERE tenant_id=$1 AND session_hash=$2",
+            [fixture.tenant, hash(fresh)],
+          )
+        ).rowCount,
+    );
+    expect(
+      (
+        await runtime.pool.query(
+          "SELECT 1 FROM service_tokens WHERE tenant_id=$1 AND session_hash=$2",
+          [fixture.tenant, hash(fresh)],
+        )
+      ).rowCount,
+    ).toBe(0);
+    await expect(
+      fixture.app.serviceTokens.get(freshSession, "j-mail"),
+    ).rejects.toMatchObject({ status: 401 });
+    expect(
+      (
+        await runtime.members(
+          0,
+          `/${member.id}/roles/mail:read`,
+          undefined,
+          "DELETE",
+        )
+      ).status,
+    ).toBe(200);
   });
   it("restarts the compiled loopback HTTPS process without losing sessions or logging secrets", async () => {
     const first = await runtime.startCompiled();

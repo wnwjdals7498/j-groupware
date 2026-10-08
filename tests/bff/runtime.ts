@@ -196,7 +196,11 @@ export async function integrationRuntime() {
     const logoutTokens: string[] = [];
     const incoming: { method: string | undefined; status: number }[] = [];
     let refreshCount = 0,
-      failRefresh = false;
+      failRefresh = false,
+      serviceTokenCount = 0,
+      failServiceToken = false;
+    let serviceTokenGate:
+      { arrived: () => void; ready: Promise<void> } | undefined;
     const owned: string[] = [];
     try {
       for (const [index, key] of [
@@ -280,6 +284,18 @@ export async function integrationRuntime() {
           if (
             String(input).endsWith("/token") &&
             init?.body instanceof URLSearchParams &&
+            init.body.get("grant_type") ===
+              "urn:ietf:params:oauth:grant-type:token-exchange"
+          ) {
+            serviceTokenCount++;
+            if (failServiceToken)
+              throw new Error(
+                "Injected transport failure before token exchange",
+              );
+          }
+          if (
+            String(input).endsWith("/token") &&
+            init?.body instanceof URLSearchParams &&
             init.body.get("grant_type") === "refresh_token"
           ) {
             refreshCount++;
@@ -288,7 +304,19 @@ export async function integrationRuntime() {
                 "Injected transport failure before refresh request",
               );
           }
-          return await fetch(input, init);
+          const response = await fetch(input, init);
+          if (
+            init?.body instanceof URLSearchParams &&
+            init.body.get("grant_type") ===
+              "urn:ietf:params:oauth:grant-type:token-exchange" &&
+            serviceTokenGate
+          ) {
+            const gate = serviceTokenGate;
+            serviceTokenGate = undefined;
+            gate.arrived();
+            await gate.ready;
+          }
+          return response;
         };
         const oidc = new OidcClient(config, { fetch: transport });
         const [cert, keyMaterial] = await Promise.all([
@@ -409,6 +437,36 @@ export async function integrationRuntime() {
       members,
       get refreshCount() {
         return refreshCount;
+      },
+      get serviceTokenCount() {
+        return serviceTokenCount;
+      },
+      set failServiceToken(value: boolean) {
+        failServiceToken = value;
+      },
+      holdNextServiceToken: () => {
+        let arrived!: () => void, release!: () => void;
+        const arrival = new Promise<void>((resolve) => {
+          arrived = resolve;
+        });
+        const ready = new Promise<void>((resolve) => {
+          release = resolve;
+        });
+        serviceTokenGate = { arrived, ready };
+        return { arrival, release };
+      },
+      subscribe: async (index: number, service: string, method = "PUT") => {
+        const fixture = fixtures[index]!;
+        return await fetch(
+          `https://jauth.jgw.test:54231/auth/tenants/${fixture.tenant}/services/${service}`,
+          {
+            method,
+            headers: {
+              Authorization: "Bearer " + operator,
+              "X-JGW-Service-Key": required("JAUTH_CONSOLE_SERVICE_KEY"),
+            },
+          },
+        );
       },
       set failRefresh(value: boolean) {
         failRefresh = value;

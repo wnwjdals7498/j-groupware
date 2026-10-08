@@ -17,6 +17,9 @@ import type { SessionRow } from "./db/sessions.js";
 import { BoardStore } from "./db/board.js";
 import { ApiError, unavailable } from "./errors.js";
 import { cookieValue, cookie, checkCsrf } from "./security.js";
+import { ServiceTokens } from "./service-tokens.js";
+import { ServiceClient } from "./services.js";
+import type { ServiceEndpoints } from "./services.js";
 
 export function createApp(options: {
   pool: Pool;
@@ -28,6 +31,8 @@ export function createApp(options: {
   https?: HttpsOptions;
   logger?: FastifyServerOptions["logger"];
   onSessionEnd?: (hashes: readonly string[]) => void;
+  serviceEndpoints?: ServiceEndpoints;
+  serviceFetch?: typeof globalThis.fetch;
 }) {
   const app = Fastify({
     exposeHeadRoutes: false,
@@ -329,5 +334,13 @@ export function createApp(options: {
           await board.create(identities.get(request)!.subject, request.body),
         ),
   );
-  return app;
+  const serviceTokens = new ServiceTokens(sessions, oidc);
+  return Object.assign(app, {
+    serviceTokens,
+    services: new ServiceClient(
+      serviceTokens,
+      options.serviceEndpoints ?? {},
+      options.serviceFetch,
+    ),
+  });
 }

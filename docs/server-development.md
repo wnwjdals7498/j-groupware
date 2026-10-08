@@ -53,3 +53,7 @@ npm run test:integration
 env·TLS·PG volume·JSON 결과는 `/workspace/.suite-runtime`에 둔다. 테스트는 새 `bff-a-*`, `bff-b-*` realm을 실제 j-auth API로 만들고 자신의 fixture만 정리한다. 실제 Keycloak의 backchannel을 받는 테스트 서버만 private Docker bridge에 bind한다. compiled 운영 엔트리의 loopback HTTPS·재시작 후 세션 유지도 따로 시험한다. Node 테스트 DNS와 Keycloak 컨테이너의 exact fixture host 매핑, 해당 두 host와 gateway의 NO_PROXY, readonly private CA truststore를 사용한다. OS hosts·CA 저장소 변경과 TLS 검증 해제는 없다. wiring은 격리 Keycloak 컨테이너만 재생성하고 데이터를 유지한다.
 
 실행 결과와 미실행 인수 범위는 [클라우드 BFF 검증 기록](cloud-bff-verification-2026-10-08.md)을 따른다.
+
+## 하위 서비스 token exchange (G23)
+
+서버 controller는 `app.services.request(sessionCookie, serviceId, path, options)`를 사용한다. `JGW_SERVICE_MAIL_URL` 등 catalog 이름을 대문자/밑줄로 바꾼 env로 명시적인 loopback origin을 설정한다. 현재 제품별 controller는 아직 없으며 이 함수의 token을 브라우저에 보내지 않는다. 고정 목적지·단일 audience·PG cache·refresh/취소 계약과 실제 검증 범위는 [G23 기록](cloud-token-exchange-verification-2026-10-08.md)을 따른다.

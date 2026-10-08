@@ -6,13 +6,13 @@
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 28,
+    "implemented": 29,
     "partial": 10,
-    "not_started": 134
+    "not_started": 133
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
-    "WSS/SSE relay and actual connection closure, downstream BFF token exchange/cache/proxy, operator console and other service integration are not implemented",
+    "WSS/SSE relay and actual connection closure, product-specific downstream business API relays, operator console and other service integration are not implemented",
     "Hyper-V/VM/customer-server and external Nginx deployment/installation acceptance not executed in this cloud test runtime"
   ],
   "features": [
@@ -569,9 +569,17 @@
       "items": [
         "G23"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_keycloak_single_audience_exchange_pg_session_cache_concurrency_refresh_failure_and_cancel_pass; loopback_receiver_real_jwks_verification_pass; product_service_business_routes_and_wss_not_run",
+      "code": [
+        "j-groupware/apps/server/src/service-tokens.ts",
+        "j-groupware/apps/server/src/services.ts",
+        "j-groupware/apps/server/src/oidc.ts",
+        "j-groupware/apps/server/src/db/sessions.ts",
+        "j-groupware/deploy/migrations/002-service-token-cache.sql",
+        "j-groupware/tests/bff/bff.integration.test.ts",
+        "j-groupware/tests/server/security.test.ts"
+      ]
     },
     {
       "id": "GW-10",
@@ -2110,10 +2118,11 @@
   "verification_evidence": [
     "j-auth/docs/cloud-verification-2026-10-08.md",
     "j-auth/docs/cloud-provisioning-verification-2026-10-08.md",
-    "j-groupware/docs/cloud-bff-verification-2026-10-08.md"
+    "j-groupware/docs/cloud-bff-verification-2026-10-08.md",
+    "j-groupware/docs/cloud-token-exchange-verification-2026-10-08.md"
   ],
   "pending_implementation": [
-    "G23 service-specific BFF token exchange/cache and downstream relay",
+    "Product-specific BFF business API relays using the verified G23 helper and actual downstream services",
     "G6 member management BFF/UI and organization integration",
     "G2/G9 canonical UI guidelines/sidebar/board UI; I2 formal theme/Playwright/brute-force acceptance",
     "Actual WSS/SSE connection closure and other service end-to-end scenarios",
