@@ -44,7 +44,7 @@ describe("messenger BFF response boundary (isolated transport)", () => {
         displayName: "회원",
         enabledFeatures: {
           receipts: true,
-          files: false,
+          files: true,
           retention: false,
           notifications: false,
           nativeSessions: false,

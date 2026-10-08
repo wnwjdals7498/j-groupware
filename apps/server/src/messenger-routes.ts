@@ -5,6 +5,7 @@ import type { SessionRow } from "./db/sessions.js";
 import type { ServiceClient } from "./services.js";
 import { ApiError, unavailable } from "./errors.js";
 import { cookie, cookieValue } from "./security.js";
+import { registerMessengerFileRoutes } from "./messenger-files.js";
 
 const base = "/api/messenger/api/v1";
 const empty = { type: "object", additionalProperties: false };
@@ -284,6 +285,7 @@ export function registerMessengerRoutes(
         request.raw.off("aborted", aborted);
       }
     };
+    await registerMessengerFileRoutes(scope, services, decode);
     const inputId = (value: string) => {
       if (BigInt(value) > 9223372036854775807n)
         throw new ApiError(400, "bad_request", "식별자가 올바르지 않습니다.");
@@ -305,7 +307,8 @@ export function registerMessengerRoutes(
               features = object(row.enabledFeatures);
             if (
               row.serverId !== identity(request).tenant_id ||
-              typeof features.receipts !== "boolean"
+              typeof features.receipts !== "boolean" ||
+              typeof features.files !== "boolean"
             )
               throw unavailable();
             return {
@@ -314,7 +317,7 @@ export function registerMessengerRoutes(
                 serverId: row.serverId,
                 displayName: text(row.displayName, 128),
                 enabledFeatures: {
-                  files: false,
+                  files: features.files,
                   receipts: features.receipts,
                   retention: false,
                   notifications: false,
@@ -453,7 +456,12 @@ export function registerMessengerRoutes(
             properties: {
               clientMessageId: uuidSchema,
               text: { type: "string", minLength: 1 },
-              fileIds: { type: "array", maxItems: 0 },
+              fileIds: {
+                type: "array",
+                maxItems: 10,
+                uniqueItems: true,
+                items: uuidSchema,
+              },
             },
           },
         },

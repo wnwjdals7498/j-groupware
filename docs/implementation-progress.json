@@ -12,7 +12,7 @@
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
-    "Messenger formal client UI/file BFF, talk/guest/web product relays, formal mail UI, production installer/agent wiring and operator/installer console remain unimplemented",
+    "Messenger formal client UI, talk/guest/web product relays, formal mail UI, production installer/agent wiring and operator/installer console remain unimplemented",
     "Hyper-V/VM/customer-server and external Nginx deployment/installation acceptance not executed in this cloud test runtime",
     "Mail E8 needs FS-U07 pre-webhook loss criteria and full SMTP envelope recipient preservation contract; no outbox/ingress recovery policy invented"
   ],
@@ -104,12 +104,14 @@
         "I2"
       ],
       "implementation": "partial",
-      "verification": "actual_groupware_bff_refresh_rotation_rp_confirmation_and_backchannel_session_end_pass; wss_sse_not_implemented",
+      "verification": "actual_groupware_bff_refresh_rotation_rp_confirmation_and_backchannel_session_end_pass; actual_groupware_WSS_SSE_session_end_pass; formal_UI_and_VM_acceptance_pending",
       "code": [
         "j-auth/packages/contracts/src/index.ts",
         "j-auth/scripts/realm/templates.mjs",
         "j-auth/tests/integration/authentication.test.ts",
-        "j-groupware/tests/bff/bff.integration.test.ts"
+        "j-groupware/tests/bff/bff.integration.test.ts",
+        "j-groupware/docs/cloud-realtime-verification-2026-10-08.md",
+        "j-groupware/tests/bff/messenger.integration.test.ts"
       ]
     },
     {
@@ -187,7 +189,7 @@
         "I3"
       ],
       "implementation": "partial",
-      "verification": "unit_build_pass; actual_contract_registry_publish_not_run",
+      "verification": "unit_build_pass; actual_contract_registry_publish_evidence_reconciliation_pending",
       "code": [
         "j-auth/packages/contracts/src/index.ts",
         "j-auth/packages/contracts/package.json"
@@ -348,13 +350,15 @@
         "I6"
       ],
       "implementation": "partial",
-      "verification": "actual_jauth_grant_revoke_delete_and_bff_target_session_cache_end_pass; local_pending_callback_guard_pass; wss_sse_not_implemented",
+      "verification": "actual_jauth_grant_revoke_delete_and_bff_target_session_cache_end_pass; local_pending_callback_guard_pass; actual_groupware_WSS_SSE_session_end_pass; formal_UI_and_VM_acceptance_pending",
       "code": [
         "j-auth/apps/server/src/keycloak/members.ts",
         "j-auth/tests/integration/members.test.ts",
         "j-groupware/tests/bff/bff.integration.test.ts",
         "j-groupware/apps/server/src/members.ts",
-        "j-groupware/apps/server/src/db/sessions.ts"
+        "j-groupware/apps/server/src/db/sessions.ts",
+        "j-groupware/docs/cloud-realtime-verification-2026-10-08.md",
+        "j-groupware/tests/bff/messenger.integration.test.ts"
       ]
     },
     {
@@ -783,7 +787,7 @@
         "G12"
       ],
       "implementation": "partial",
-      "verification": "actual_Keycloak_PG_BFF_HTTP9_public_client_cookie_CSRF_dedup_conflict_tenant404_WSS_receipts_cursor_outage_logout_role_revocation_pass; registry_exact_install_pass; formal_UI_file_BFF_VM_pending",
+      "verification": "actual_Keycloak_PG_BFF_HTTP_WSS_receipts_sync_logout_role_revocation_registry_client_pass; multipart_5MB_attachment_bind_dedup_conflict_tenant_CSRF_download_independent_5day_14day_retention_pass_Node22_Node24; actual_full_BFF125_and_gateway14_each_Node22_Node24_pass; formal_UI_Playwright_VM_pending",
       "code": [
         "j-groupware/apps/server/src/realtime-sessions.ts",
         "j-groupware/apps/server/src/realtime-routes.ts",
@@ -795,7 +799,10 @@
         "j-groupware/docs/cloud-messenger-postgres-verification-2026-10-08.md",
         "j-groupware/apps/server/src/messenger-routes.ts",
         "j-groupware/tests/server/messenger.test.ts",
-        "j-groupware/docs/cloud-messenger-bff-verification-2026-10-08.md"
+        "j-groupware/docs/cloud-messenger-bff-verification-2026-10-08.md",
+        "j-groupware/apps/server/src/messenger-files.ts",
+        "j-groupware/tests/server/messenger-files.test.ts",
+        "j-groupware/docs/cloud-messenger-files-verification-2026-10-08.md"
       ]
     },
     {
@@ -1176,7 +1183,7 @@
         "X1"
       ],
       "implementation": "partial",
-      "verification": "node_integration_pass; compose_runtime_blocked",
+      "verification": "node_integration_pass; immutable_messenger_registry_install_Node22_Node24_pass; isolated_compose_not_run_current_cloud_docker_available",
       "code": [
         "j-groupware/tools/registry/compose.yaml",
         "j-groupware/tools/registry/config.yaml",
@@ -1203,7 +1210,7 @@
         "M5"
       ],
       "implementation": "implemented",
-      "verification": "actual_PostgreSQL_15_pass_Node22_SQLite_import_source_hash_attachment_cursor_sequence_atomic_rollback_multi_instance_HTTP_retry_backup_restore_pass; actual_Keycloak_PG_HTTP_WSS_11_and_full_BFF_100_pass; customer_cutover_load_VM_pending",
+      "verification": "actual_PostgreSQL_15_pass_Node22_SQLite_import_source_hash_attachment_cursor_sequence_atomic_rollback_multi_instance_HTTP_retry_backup_restore_pass; actual_Keycloak_PG_HTTP_WSS_11_and_full_BFF_100_pass; customer_cutover_load_VM_pending; file_aware_offline_actual_PG21_each_Node22_Node24_owner_shard_download_current_5_14_policy_all_local_sessions_epoch_hash_namespace_ref_rollback_pass; operational_stop_restart_lock_VM_not_run",
       "code": [
         "j-messenger/apps/server/src/platform/storage/index.ts",
         "j-messenger/apps/server/src/platform/storage/postgres.ts",
@@ -1215,7 +1222,11 @@
         "j-messenger/deploy/postgres-init.sh",
         "j-messenger/apps/server/integration/postgres.integration.ts",
         "j-messenger/docs/cloud-postgres-verification-2026-10-08.md",
-        "j-groupware/tests/bff/messenger.integration.test.ts"
+        "j-groupware/tests/bff/messenger.integration.test.ts",
+        "j-messenger/apps/server/src/platform/operations/postgres-offline.ts",
+        "j-messenger/apps/server/src/bootstrap/postgres-recovery.ts",
+        "j-messenger/apps/server/integration/postgres-recovery.integration.ts",
+        "j-messenger/docs/cloud-postgres-recovery-verification-2026-10-08.md"
       ]
     },
     {
@@ -1312,13 +1323,15 @@
         "M2"
       ],
       "implementation": "implemented",
-      "verification": "public_client_HTTP_WSS_BFF_addresses_cookie_fresh_CSRF_no_bearer_unit17_and_actual_Keycloak_PG_BFF14_pass; actual_registry_install_pass; UI_and_VM_acceptance_pending",
+      "verification": "public_registry_client_HTTP_WSS_BFF_cookie_fresh_CSRF_no_bearer_pass; multipart_attachment_upload_download_5MB_tenant_dedup_retention_actual_Keycloak_PG_BFF17_pass_Node22_Node24; formal_UI_VM_pending",
       "code": [
         "j-messenger/packages/client-core/src/index.ts",
         "j-messenger/packages/client-core/test/client.test.ts",
         "j-messenger/docs/cloud-bff-client-verification-2026-10-08.md",
         "j-groupware/apps/server/src/messenger-routes.ts",
-        "j-groupware/tests/bff/messenger.integration.test.ts"
+        "j-groupware/tests/bff/messenger.integration.test.ts",
+        "j-groupware/apps/server/src/messenger-files.ts",
+        "j-groupware/docs/cloud-messenger-files-verification-2026-10-08.md"
       ]
     },
     {
@@ -2447,14 +2460,18 @@
     "j-messenger/docs/cloud-client-registry-verification-2026-10-08.md",
     "j-groupware/docs/cloud-client-registry-verification-2026-10-08.md",
     "j-groupware/docs/cloud-gateway-verification-2026-10-08.md",
-    "j-groupware/docs/cloud-agent-verification-2026-10-08.md"
+    "j-groupware/docs/cloud-agent-verification-2026-10-08.md",
+    "j-groupware/docs/cloud-messenger-files-verification-2026-10-08.md",
+    "j-groupware/docs/cloud-remaining-feature-audit-2026-10-08.json",
+    "j-messenger/docs/cloud-postgres-recovery-verification-2026-10-08.md"
   ],
   "pending_implementation": [
     "Remaining mail/talk/customer/web BFF business API relays using the verified G23 helper and actual downstream services",
     "G6/G15 formal member/organization/repair UI and Playwright; G16 formal approval UI and Playwright (actual BFF business API and snapshot already verified)",
     "G2/G9 canonical UI guidelines/sidebar/board UI; I2 formal theme/Playwright/brute-force acceptance",
-    "Messenger formal UI/app product-path freezing/file BFF and talk business WSS; actual messenger PG/BFF HTTP/client transport/WSS and approval notification delivery independently verified",
+    "Messenger formal UI/app product-path freezing and talk business WSS; actual messenger PG/BFF HTTP/client transport/WSS and approval notification delivery independently verified",
     "I5 auth external Nginx and G11 customer VM deployment acceptance (isolated customer gateway code/protocol verified), G18 actual customer bootstrap/install/remove and G21 console-auth/probe bindings, timer activation/VM acceptance (independent reconciler verified) and operator console",
-    "G22 formal notification UI/Playwright, G18/G21 production installer/agent subscription/key projection wiring and customer VM acceptance"
+    "G22 formal notification UI/Playwright, G18/G21 production installer/agent subscription/key projection wiring and customer VM acceptance",
+    "Per-feature remaining audit: docs/cloud-remaining-feature-audit-2026-10-08.json; technical contracts and service predecessors remain implementable; E8/visitor ownership/template manual-file replacement choices and existing UI guideline answer remain gates"
   ]
 }

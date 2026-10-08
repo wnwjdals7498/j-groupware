@@ -33,3 +33,7 @@ reload 명령이 exit0을 반환해도 master가 새 포트 bind에 실패할 �
 GW-T16의 실제 프로토콜/격리 gateway 범위와 실제 고객 VM 배포·서비스 설치·전체 업무·브라우저 인수를 구별한다. GW-63/64/65, GW-54와 GW-66의 콘솔 원본 계약·운영 키·실제 설치기 연결은 아직 완료되지 않았다. G11을 VM 인수 전체 완료로 표시하거나 SU-T09를 통과로 표시하지 않는다. 정식 UI 가이드 문서도 여전히 없다.
 
 공식 기준: [Nginx limit_req](https://nginx.org/en/docs/http/ngx_http_limit_req_module.html), [limit_conn](https://nginx.org/en/docs/http/ngx_http_limit_conn_module.html), [WebSocket 중계](https://nginx.org/en/docs/http/websocket.html), [설정 검사·reload](https://nginx.org/en/docs/beginners_guide.html). 기본 제한 응답이 503이므로 본 구현은 두 지시자에 429를 명시한다. WebSocket hop-by-hop 헤더는 직접 넘기며 실패한 reload가 성공으로 보고되지 않도록 반영 결과를 검사한다.
+
+## 2026-10-08 첨부 크기 후속
+
+[첨부 BFF 후속](cloud-messenger-files-verification-2026-10-08.md)에서 정확한 메신저 업로드 경로의 wire 상한만5,065,536 bytes로 확장했다. 다른 API의1MiB 제한은 유지하며 실제 Nginx 정상 첨부 전달·초과413·다른 API413을 추가해 Node22·24 각각14/14를 검증했다. 기존13개 프로토콜 검증과 운영 VM 미완료 경계는 유지한다.

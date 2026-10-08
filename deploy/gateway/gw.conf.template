@@ -42,6 +42,11 @@ ${GW_EXT_ROUTES}
         root ${GW_ROOT}/denied;
         try_files /__no_public_content__ =404;
     }
+    location ~ "^/api/messenger/api/v1/conversations/[1-9][0-9]{0,18}/files$" {
+        client_max_body_size 5065536;
+        proxy_request_buffering off;
+        proxy_pass https://127.0.0.1:${GW_BFF_PORT};
+    }
     location / {
         proxy_pass https://127.0.0.1:${GW_BFF_PORT};
     }

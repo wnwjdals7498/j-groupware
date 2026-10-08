@@ -124,7 +124,10 @@ const apply = async (overrides = {}) => {
   env = { ...env, ...overrides };
   return result;
 };
-function request(route, { host = hostname, headers = {}, http = false } = {}) {
+function request(
+  route,
+  { host = hostname, headers = {}, http = false, body } = {},
+) {
   return new Promise((resolve, reject) => {
     const req = (http ? httpRequest : httpsRequest)(
       {
@@ -135,9 +138,11 @@ function request(route, { host = hostname, headers = {}, http = false } = {}) {
         servername: host,
         ca,
         path: route,
+        method: body === undefined ? "GET" : "POST",
         headers: {
           Host: `${host}:${http ? env.JGW_GATEWAY_HTTP_PORT : env.JGW_GATEWAY_HTTPS_PORT}`,
           ...headers,
+          ...(body === undefined ? {} : { "Content-Length": body.length }),
         },
         timeout: 3000,
         rejectUnauthorized: true,
@@ -156,7 +161,7 @@ function request(route, { host = hostname, headers = {}, http = false } = {}) {
     );
     req.on("error", reject);
     req.on("timeout", () => req.destroy(new Error("gateway_request_timeout")));
-    req.end();
+    req.end(body);
   });
 }
 async function waitFor(route, expected, options) {
@@ -224,9 +229,21 @@ describe(
       const tls = { cert: ca, key: await readFile(root + "/tls/key.pem") };
       const makeServer = async (name, https = false) => {
         const handler = (req, res) => {
-          requests[name].push({ path: req.url, headers: req.headers });
-          res.setHeader("Content-Type", "application/json");
-          res.end(JSON.stringify({ service: name, path: req.url }));
+          const observed = { path: req.url, headers: req.headers, bytes: 0 };
+          requests[name].push(observed);
+          req.on("data", (chunk) => {
+            observed.bytes += chunk.length;
+          });
+          req.on("end", () => {
+            res.setHeader("Content-Type", "application/json");
+            res.end(
+              JSON.stringify({
+                service: name,
+                path: req.url,
+                ...(req.method === "POST" ? { bytes: observed.bytes } : {}),
+              }),
+            );
+          });
         };
         const server = https
           ? createHttpsServer(tls, handler)
@@ -355,6 +372,26 @@ describe(
       ])
         assert.equal((await request(route)).status, 404);
       assert.equal(requests.bff.length, count);
+    });
+    it("admits bounded messenger uploads and preserves lower limits on other BFF routes", async () => {
+      const allowed = await request(
+        "/api/messenger/api/v1/conversations/1/files",
+        {
+          body: Buffer.alloc(5000100, 0x61),
+          headers: { "Content-Type": "multipart/form-data; boundary=fixture" },
+        },
+      );
+      assert.equal(allowed.status, 200);
+      assert.equal(JSON.parse(allowed.body).bytes, 5000100);
+      const oversized = await request(
+        "/api/messenger/api/v1/conversations/1/files",
+        { body: Buffer.alloc(5065537, 0x61) },
+      );
+      assert.equal(oversized.status, 413);
+      const unrelated = await request("/api/board", {
+        body: Buffer.alloc(1048577, 0x61),
+      });
+      assert.equal(unrelated.status, 413);
     });
     it("routes only subscribed ext namespaces, preserves URI, and never exposes service management at root", async () => {
       const customer = await request("/ext/customer-auth/v1/guests?limit=2"),

@@ -2,6 +2,7 @@ import type { TenantServiceId } from "@j-auth/contracts";
 import type { ServiceTokens } from "./service-tokens.js";
 import { downstreamService } from "./service-tokens.js";
 import { ApiError, unavailable } from "./errors.js";
+import { Readable } from "node:stream";
 
 export type ServiceEndpoints = Partial<Record<TenantServiceId, string>>;
 export function serviceOrigin(value: string): string {
@@ -42,6 +43,7 @@ export class ServiceClient {
     options: {
       method?: "GET" | "POST" | "PUT" | "DELETE";
       body?: unknown;
+      multipart?: { stream: Readable; boundary: string; bytes: number };
       signal?: AbortSignal;
     } = {},
   ): Promise<Response> {
@@ -59,12 +61,20 @@ export class ServiceClient {
     if (url.origin !== origin || url.username || url.password)
       throw new ApiError(400, "invalid_input", "Invalid service path.");
     options.signal?.throwIfAborted();
+    if (
+      options.multipart &&
+      (options.body !== undefined ||
+        !/^[A-Za-z0-9-]{1,70}$/.test(options.multipart.boundary) ||
+        !Number.isSafeInteger(options.multipart.bytes) ||
+        options.multipart.bytes < 1)
+    )
+      throw new ApiError(400, "invalid_input", "Invalid multipart request.");
     const token = await this.tokens.get(session, service, options.signal);
     const signal = options.signal
       ? AbortSignal.any([options.signal, AbortSignal.timeout(10000)])
       : AbortSignal.timeout(10000);
     try {
-      return await this.fetch(url, {
+      const init: RequestInit & { duplex?: "half" } = {
         method: options.method ?? "GET",
         redirect: "error",
         signal,
@@ -73,11 +83,27 @@ export class ServiceClient {
           ...(options.body === undefined
             ? {}
             : { "Content-Type": "application/json" }),
+          ...(options.multipart
+            ? {
+                "Content-Type":
+                  "multipart/form-data; boundary=" + options.multipart.boundary,
+                "Content-Length": String(options.multipart.bytes),
+              }
+            : {}),
         },
         ...(options.body === undefined
           ? {}
           : { body: JSON.stringify(options.body) }),
-      });
+        ...(options.multipart
+          ? {
+              body: Readable.toWeb(
+                options.multipart.stream,
+              ) as ReadableStream<Uint8Array>,
+              duplex: "half",
+            }
+          : {}),
+      };
+      return await this.fetch(url, init);
     } catch {
       options.signal?.throwIfAborted();
       throw unavailable();

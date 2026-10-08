@@ -77,6 +77,10 @@ describe("actual messenger j-auth HTTP/WSS + BFF relay with selected storage", (
         PUBLIC_ORIGIN: origins[index]!,
         AUTH_MODE: "j-auth",
         FEATURE_RECEIPTS: "true",
+        FEATURE_FILES: "true",
+        FILE_QUOTA_BYTES: "50000000",
+        FILE_ROOT: root + "/files-" + index,
+        TEMP_ROOT: root + "/tmp-" + index,
         JAUTH_TENANT: rt.fixtures[index]!.tenant,
         KC_PUBLIC_URL: rt.fixtures[index]!.config.keycloakOrigin,
         DB_PATH: root + "/messenger.sqlite",
@@ -494,7 +498,7 @@ describe("actual messenger j-auth HTTP/WSS + BFF relay with selected storage", (
     expect(body.data.id).toBe(me[0]!.id);
     expect(body.data.enabledFeatures).toMatchObject({
       receipts: true,
-      files: false,
+      files: true,
       nativeSessions: false,
     });
     for (const path of [
@@ -638,7 +642,7 @@ describe("actual messenger j-auth HTTP/WSS + BFF relay with selected storage", (
             fileIds: [randomUUID()],
           })
         ).status,
-      ).toBe(400);
+      ).toBe(404);
       expect(
         (await client.listMessages(conv.id)).data.map((row) => row.id),
       ).toContain(value.data.id);
@@ -673,6 +677,216 @@ describe("actual messenger j-auth HTTP/WSS + BFF relay with selected storage", (
     } finally {
       client.dispose();
     }
+  });
+  it("streams registry client uploads and downloads through cookie BFF with attachment dedup and tenant isolation", async () => {
+    const browser = browsers[0]!;
+    const csrf = (await browser.me()).csrfToken;
+    const client = createGroupwareMessengerClient({
+      origin: browser.origin,
+      csrfToken: () => csrf,
+      fetch: (input, init) =>
+        browser.request(String(input), {
+          ...init,
+          headers: Object.fromEntries(
+            new Headers({
+              ...Object.fromEntries(new Headers(init?.headers)),
+              Origin: browser.origin,
+            }),
+          ),
+        }),
+    });
+    try {
+      const original = Buffer.from(
+        "첨부 byte 일치\n<script>텍스트 다운로드</script>",
+        "utf8",
+      );
+      rt.secretValues.add(original.toString("utf8"));
+      rt.secretValues.add("회귀.txt");
+      const file = await client.uploadFile(
+        conversationId,
+        new Blob([original]),
+        "회귀.txt",
+      );
+      expect(file).toMatchObject({
+        filename: "회귀.txt",
+        sizeBytes: original.length,
+        status: "ready",
+      });
+      const prefix = "/api/messenger/api/v1";
+      expect(
+        (await browser.request(`${prefix}/files/${file.id}/content`)).status,
+      ).toBe(404);
+      const input = {
+        clientMessageId: randomUUID(),
+        text: "첨부 연결",
+        fileIds: [file.id],
+      };
+      const sent = await browser.change(
+        `${prefix}/conversations/${conversationId}/messages`,
+        input,
+      );
+      expect(sent.status).toBe(201);
+      expect(
+        ((await sent.json()) as { data: { fileIds: string[] } }).data.fileIds,
+      ).toEqual([file.id]);
+      expect(
+        (
+          await browser.change(
+            `${prefix}/conversations/${conversationId}/messages`,
+            input,
+          )
+        ).status,
+      ).toBe(200);
+      expect(
+        (
+          await browser.change(
+            `${prefix}/conversations/${conversationId}/messages`,
+            { ...input, text: "변경" },
+          )
+        ).status,
+      ).toBe(409);
+      expect(
+        Buffer.from(
+          await (await client.downloadFile(file.id)).arrayBuffer(),
+        ).equals(original),
+      ).toBe(true);
+      const shared = await second.request(`${prefix}/files/${file.id}/content`);
+      expect(shared.status).toBe(200);
+      expect(shared.headers.get("content-type")).toBe(
+        "application/octet-stream",
+      );
+      expect(shared.headers.get("content-disposition")).toContain(
+        "attachment;",
+      );
+      expect(shared.headers.get("x-content-type-options")).toBe("nosniff");
+      expect(shared.headers.get("cache-control")).toBe("no-store");
+      expect(shared.headers.get("set-cookie")).toBeNull();
+      expect(Buffer.from(await shared.arrayBuffer()).equals(original)).toBe(
+        true,
+      );
+      expect(
+        (await browsers[1]!.request(`${prefix}/files/${file.id}/content`))
+          .status,
+      ).toBe(404);
+      expect(
+        (await noRole.request(`${prefix}/files/${file.id}/content`)).status,
+      ).toBe(403);
+      expect(
+        (
+          await browser.request(
+            `${prefix}/files/${file.id}/content?url=https://outside.test`,
+          )
+        ).status,
+      ).toBe(400);
+    } finally {
+      client.dispose();
+    }
+  });
+  it("accepts exactly five million attachment bytes and rejects oversized or extra multipart parts before downstream writes", async () => {
+    const browser = browsers[0]!;
+    const csrf = (await browser.me()).csrfToken;
+    const upload = async (bytes: number, extras = false, authorized = true) => {
+      const form = new FormData();
+      form.append(
+        "file",
+        new Blob([Buffer.alloc(bytes, 0x61)]),
+        "boundary.txt",
+      );
+      if (extras) form.append("tenant", "other");
+      return browser.request(
+        `/api/messenger/api/v1/conversations/${conversationId}/files`,
+        {
+          method: "POST",
+          body: form,
+          headers: {
+            Origin: browser.origin,
+            ...(authorized ? { "x-csrf-token": csrf } : {}),
+          },
+        },
+      );
+    };
+    const count = async () =>
+      (await apps[0]!.db.prepare("SELECT count(*) AS n FROM files").get()) as {
+        n: bigint;
+      };
+    const before = await count();
+    expect((await upload(5000000)).status).toBe(201);
+    const valid = await count();
+    expect(valid.n).toBe(before.n + 1n);
+    expect((await upload(5000001)).status).toBe(413);
+    expect((await upload(10, true)).status).toBe(413);
+    expect((await upload(10, false, false)).status).toBe(403);
+    expect(await count()).toEqual(valid);
+  });
+  it("preserves fourteen-day attachment access after five-day body expiry and rejects it after independent file expiry", async () => {
+    const browser = browsers[0]!;
+    const prefix = "/api/messenger/api/v1";
+    const form = new FormData();
+    rt.secretValues.add("독립 보존 fixture");
+    rt.secretValues.add("retention.txt");
+    form.append("file", new Blob(["독립 보존 fixture"]), "retention.txt");
+    const uploaded = await browser.request(
+      `${prefix}/conversations/${conversationId}/files`,
+      {
+        method: "POST",
+        body: form,
+        headers: {
+          Origin: browser.origin,
+          "x-csrf-token": (await browser.me()).csrfToken,
+        },
+      },
+    );
+    expect(uploaded.status).toBe(201);
+    const file = ((await uploaded.json()) as { data: { id: string } }).data;
+    const sent = await browser.change(
+      `${prefix}/conversations/${conversationId}/messages`,
+      { clientMessageId: randomUUID(), text: "만료 본문", fileIds: [file.id] },
+    );
+    expect(sent.status).toBe(201);
+    const message = ((await sent.json()) as { data: { id: string } }).data;
+    await apps[0]!.db
+      .prepare("UPDATE messages SET created_at=? WHERE id=?")
+      .run(
+        new Date(Date.now() - 6 * 86400000).toISOString(),
+        BigInt(message.id),
+      );
+    const system = {
+      serverId: rt.fixtures[0]!.tenant,
+      requestId: randomUUID(),
+    };
+    await apps[0]!.retention.runSystemBatch(system, 100);
+    const page = await browser.request(
+      `${prefix}/conversations/${conversationId}/messages`,
+    );
+    expect(page.status).toBe(200);
+    expect(
+      (
+        (await page.json()) as {
+          data: {
+            id: string;
+            text: string | null;
+            contentExpired: boolean;
+            fileIds: string[];
+          }[];
+        }
+      ).data.find((m) => m.id === message.id),
+    ).toMatchObject({ text: null, contentExpired: true, fileIds: [file.id] });
+    const retained = await second.request(`${prefix}/files/${file.id}/content`);
+    expect(retained.status).toBe(200);
+    await retained.arrayBuffer();
+    await apps[0]!.db
+      .prepare("UPDATE files SET created_at=?,expires_at=? WHERE id=?")
+      .run(
+        new Date(Date.now() - 15 * 86400000).toISOString(),
+        new Date(Date.now() - 86400000).toISOString(),
+        file.id,
+      );
+    await apps[0]!.retention.applyCurrentPolicy(system);
+    await apps[0]!.retention.runSystemBatch(system, 100);
+    await apps[0]!.runner.runBatch(100);
+    expect(
+      (await second.request(`${prefix}/files/${file.id}/content`)).status,
+    ).toBe(404);
   });
   it("returns a bounded native unavailable envelope for an actual downstream outage without ending the BFF session", async () => {
     await apps[0]!.close();

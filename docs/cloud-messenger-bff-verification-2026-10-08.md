@@ -14,3 +14,7 @@
 전체 회귀 첫 실행에서 compiled BFF 로그인4건이503이었다. 시험의 env 파일명 변환이 `integration.env`에만 맞아 PG 입력 env를 덮어쓴 원인이었다. 입력 파일을 보존하고 새 tenant별 compiled env를 만들며 child process에 정확한 설정을 넘기도록 수정한 뒤103개를 다시 실행했다. 최초 실패를 통과로 처리하지 않았다.
 
 정식 UI/Playwright·공통 패키지 registry 설치·파일 BFF·고객 VM/외부 gateway·부하는 미검증이다. `GW-30`은 화면이 없어 partial이고 MS-06은 transport 코드 구현으로 구분한다. Windows PMT 경로/도구 부재는 해당 기록만 차단한다. `whole_suite_verified=false`를 유지한다. 회사 노트북·운영 구독/키·PR/main/배포는 변경하지 않았다.
+
+## 2026-10-08 첨부 후속
+
+위 9경로/파일 false/파일 BFF 미완료 기록은 최초 실행 범위다. [첨부 BFF 후속](cloud-messenger-files-verification-2026-10-08.md)에서 업로드·다운로드2개 경로와 파일 capability를 추가하고 실제 메신저17개(Node22·24)·전체 BFF125개·Gateway14개(Node22·24)를 검증했다. 정식 UI와 고객 VM 인수는 여전히 미완료다.

@@ -6,7 +6,11 @@ import { request as httpsRequest } from "node:https";
 import { randomBytes } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { Pool } from "pg";
-import { Agent, fetch as undiciFetch } from "undici";
+import {
+  Agent,
+  FormData as UndiciFormData,
+  fetch as undiciFetch,
+} from "undici";
 import type { MeResponse } from "@j-groupware/contracts";
 import { SESSION_POLICY } from "@j-groupware/contracts";
 import { loadDatabaseConfig } from "../../apps/server/src/config.js";
@@ -63,11 +67,23 @@ export async function integrationRuntime(
   ) as [Agent, Agent];
   const fetchWith =
     (agent: Agent): typeof globalThis.fetch =>
-    async (input, init) =>
-      (await undiciFetch(String(input), {
+    async (input, init) => {
+      // Node's built-in FormData and this pinned undici have different brands.
+      // Normalize only the transport adapter; still send real multipart bytes.
+      let multipart: UndiciFormData | undefined;
+      if (init?.body instanceof globalThis.FormData) {
+        multipart = new UndiciFormData();
+        for (const [name, value] of init.body.entries()) {
+          if (typeof value === "string") multipart.append(name, value);
+          else multipart.append(name, value, value.name);
+        }
+      }
+      return (await undiciFetch(String(input), {
         ...init,
+        ...(multipart ? { body: multipart } : {}),
         dispatcher: agent,
       } as Parameters<typeof undiciFetch>[1])) as unknown as Response;
+    };
   const fetch = fetchWith(agents[0]),
     fetchLoopback = fetchWith(agents[1]);
   const pool = new Pool(loadDatabaseConfig());
