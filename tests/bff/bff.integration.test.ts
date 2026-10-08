@@ -993,7 +993,7 @@ describe("actual HTTPS BFF + j-auth + Keycloak + dedicated PostgreSQL", () => {
     expect(
       (
         await runtime.pool.query(
-          "SELECT username FROM unassigned_members WHERE tenant_id=$1 AND member_id=$2",
+          "SELECT username FROM organization_members WHERE tenant_id=$1 AND member_id=$2",
           [fixture.tenant, created.id],
         )
       ).rows[0].username,
@@ -1294,7 +1294,7 @@ describe("actual HTTPS BFF + j-auth + Keycloak + dedicated PostgreSQL", () => {
     expect(
       (
         await runtime.pool.query(
-          "SELECT 1 FROM unassigned_members WHERE tenant_id=$1 AND member_id=$2",
+          "SELECT 1 FROM organization_members WHERE tenant_id=$1 AND member_id=$2",
           [runtime.fixtures[0]!.tenant, created.id],
         )
       ).rowCount,
@@ -1334,7 +1334,7 @@ describe("actual HTTPS BFF + j-auth + Keycloak + dedicated PostgreSQL", () => {
       async () =>
         (
           await runtime.pool.query(
-            "SELECT 1 FROM unassigned_members WHERE tenant_id=$1 AND username=$2",
+            "SELECT 1 FROM organization_members WHERE tenant_id=$1 AND username=$2",
             [runtime.fixtures[0]!.tenant, body.username],
           )
         ).rowCount === 1,
@@ -1353,7 +1353,7 @@ describe("actual HTTPS BFF + j-auth + Keycloak + dedicated PostgreSQL", () => {
       password = randomBytes(24).toString("base64url");
     runtime.secretValues.add(password);
     await runtime.pool.query(
-      "CREATE FUNCTION fixture_reject_unassigned() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'injected local write failure'; END $$; CREATE TRIGGER fixture_reject_unassigned BEFORE INSERT ON unassigned_members FOR EACH ROW WHEN (NEW.username = 'partial-member') EXECUTE FUNCTION fixture_reject_unassigned()",
+      "CREATE FUNCTION fixture_reject_unassigned() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'injected local write failure'; END $$; CREATE TRIGGER fixture_reject_unassigned BEFORE INSERT ON organization_members FOR EACH ROW WHEN (NEW.username = 'partial-member') EXECUTE FUNCTION fixture_reject_unassigned()",
     );
     const body = { username: "partial-member", password, roles: [] };
     try {
@@ -1372,14 +1372,14 @@ describe("actual HTTPS BFF + j-auth + Keycloak + dedicated PostgreSQL", () => {
       expect(
         (
           await runtime.pool.query(
-            "SELECT 1 FROM unassigned_members WHERE tenant_id=$1 AND username=$2",
+            "SELECT 1 FROM organization_members WHERE tenant_id=$1 AND username=$2",
             [runtime.fixtures[0]!.tenant, body.username],
           )
         ).rowCount,
       ).toBe(0);
     } finally {
       await runtime.pool.query(
-        "DROP TRIGGER fixture_reject_unassigned ON unassigned_members; DROP FUNCTION fixture_reject_unassigned()",
+        "DROP TRIGGER fixture_reject_unassigned ON organization_members; DROP FUNCTION fixture_reject_unassigned()",
       );
     }
   });
@@ -1395,7 +1395,7 @@ describe("actual HTTPS BFF + j-auth + Keycloak + dedicated PostgreSQL", () => {
       })
     ).json()) as { id: string };
     await runtime.pool.query(
-      "CREATE FUNCTION fixture_reject_local_delete() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'injected local delete failure'; END $$; CREATE TRIGGER fixture_reject_local_delete BEFORE DELETE ON unassigned_members FOR EACH ROW WHEN (OLD.username = 'delete-partial') EXECUTE FUNCTION fixture_reject_local_delete()",
+      "CREATE FUNCTION fixture_reject_local_delete() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'injected local delete failure'; END $$; CREATE TRIGGER fixture_reject_local_delete BEFORE DELETE ON organization_members FOR EACH ROW WHEN (OLD.username = 'delete-partial') EXECUTE FUNCTION fixture_reject_local_delete()",
     );
     try {
       const result = await admin.change(
@@ -1409,14 +1409,14 @@ describe("actual HTTPS BFF + j-auth + Keycloak + dedicated PostgreSQL", () => {
       );
     } finally {
       await runtime.pool.query(
-        "DROP TRIGGER fixture_reject_local_delete ON unassigned_members; DROP FUNCTION fixture_reject_local_delete()",
+        "DROP TRIGGER fixture_reject_local_delete ON organization_members; DROP FUNCTION fixture_reject_local_delete()",
       );
     }
     const fixture = runtime.fixtures[0]!;
     expect(
       (
         await runtime.pool.query(
-          "SELECT 1 FROM unassigned_members WHERE tenant_id=$1 AND member_id=$2",
+          "SELECT 1 FROM organization_members WHERE tenant_id=$1 AND member_id=$2",
           [fixture.tenant, member.id],
         )
       ).rowCount,
@@ -1428,7 +1428,7 @@ describe("actual HTTPS BFF + j-auth + Keycloak + dedicated PostgreSQL", () => {
     expect(
       (
         await runtime.pool.query(
-          "SELECT 1 FROM unassigned_members WHERE tenant_id=$1 AND member_id=$2",
+          "SELECT 1 FROM organization_members WHERE tenant_id=$1 AND member_id=$2",
           [fixture.tenant, member.id],
         )
       ).rowCount,

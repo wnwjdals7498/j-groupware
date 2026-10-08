@@ -6,9 +6,9 @@
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 29,
+    "implemented": 31,
     "partial": 14,
-    "not_started": 129
+    "not_started": 127
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
@@ -262,11 +262,13 @@
         "I6"
       ],
       "implementation": "implemented",
-      "verification": "cloud_member_list_effective_roles_cursor_and_service_account_exclusion_pass",
+      "verification": "cloud_member_list_effective_roles_cursor_and_service_account_exclusion_pass; actual_org_manage_read_only_profile_member_operations_still_denied_foreign_id_service_key_guards_pass",
       "code": [
         "j-auth/apps/server/src/app.ts",
         "j-auth/apps/server/src/keycloak/members.ts",
-        "j-auth/tests/integration/members.test.ts"
+        "j-auth/tests/integration/members.test.ts",
+        "j-auth/apps/server/src/security/authorize.ts",
+        "j-auth/docs/cloud-organization-member-read-2026-10-08.md"
       ]
     },
     {
@@ -636,13 +638,16 @@
         "G6"
       ],
       "implementation": "partial",
-      "verification": "actual_bff_member_list_create_delete_original_bearer_tenant_service_key_csrf_foreign_target_duplicate_concurrent_creation_pass; confirmed_delete_local_failure_retry_recovery_pass; member_ui_playwright_pending",
+      "verification": "actual_bff_member_list_create_delete_original_bearer_tenant_service_key_csrf_foreign_target_duplicate_concurrent_creation_pass; confirmed_delete_local_failure_retry_recovery_pass; confirmed_create_local_failure_registration_repair_pass; member_ui_playwright_pending",
       "code": [
         "j-groupware/apps/server/src/members.ts",
         "j-groupware/apps/server/src/member-routes.ts",
         "j-groupware/packages/permissions/src/index.ts",
         "j-groupware/packages/contracts/src/index.ts",
-        "j-groupware/tests/bff/bff.integration.test.ts"
+        "j-groupware/tests/bff/bff.integration.test.ts",
+        "j-groupware/apps/server/src/db/organization.ts",
+        "j-groupware/apps/server/src/organization-routes.ts",
+        "j-groupware/tests/bff/organization.integration.test.ts"
       ]
     },
     {
@@ -701,9 +706,16 @@
       "items": [
         "G15"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_org_crud_tree_cycles_depth_count_limits_composite_fk_tenant_csrf_revision_concurrency_failure_rollback_pass; org_ui_playwright_pending",
+      "code": [
+        "j-groupware/apps/server/src/db/organization.ts",
+        "j-groupware/apps/server/src/organization-routes.ts",
+        "j-groupware/deploy/migrations/004-organization.sql",
+        "j-groupware/packages/contracts/src/index.ts",
+        "j-groupware/packages/permissions/src/index.ts",
+        "j-groupware/tests/bff/organization.integration.test.ts"
+      ]
     },
     {
       "id": "GW-22",
@@ -712,12 +724,16 @@
       "items": [
         "G15"
       ],
-      "implementation": "partial",
-      "verification": "actual_new_bff_member_unassigned_registration_and_partial_write_failure_report_pass; department_tree_existing_member_manual_registration_and_repair_api_not_implemented",
+      "implementation": "implemented",
+      "verification": "actual_auto_unassigned_manual_registration_partial_create_repair_concurrent_idempotence_assignment_preservation_disabled_sync_delete_late_profile_race_pass; ui_pending_under_GW21_GW13",
       "code": [
         "j-groupware/apps/server/src/members.ts",
-        "j-groupware/deploy/migrations/003-member-workflows.sql",
-        "j-groupware/tests/bff/bff.integration.test.ts"
+        "j-groupware/apps/server/src/db/organization.ts",
+        "j-groupware/apps/server/src/organization-routes.ts",
+        "j-groupware/deploy/migrations/004-organization.sql",
+        "j-groupware/packages/contracts/src/index.ts",
+        "j-groupware/packages/permissions/src/index.ts",
+        "j-groupware/tests/bff/organization.integration.test.ts"
       ]
     },
     {
@@ -727,9 +743,16 @@
       "items": [
         "G15"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_default_department_ancestor_order_author_exclusion_unassigned_empty_local_candidates_custom_stage_validation_tenant_disabled_boundaries_pass; actual_japproval_submission_multistage_business_acceptance_and_ui_pending_under_GW34",
+      "code": [
+        "j-groupware/apps/server/src/db/organization.ts",
+        "j-groupware/apps/server/src/organization-routes.ts",
+        "j-groupware/deploy/migrations/004-organization.sql",
+        "j-groupware/packages/contracts/src/index.ts",
+        "j-groupware/packages/permissions/src/index.ts",
+        "j-groupware/tests/bff/organization.integration.test.ts"
+      ]
     },
     {
       "id": "GW-30",
@@ -2142,11 +2165,13 @@
     "j-auth/docs/cloud-provisioning-verification-2026-10-08.md",
     "j-groupware/docs/cloud-bff-verification-2026-10-08.md",
     "j-groupware/docs/cloud-token-exchange-verification-2026-10-08.md",
-    "j-groupware/docs/cloud-member-bff-verification-2026-10-08.md"
+    "j-groupware/docs/cloud-member-bff-verification-2026-10-08.md",
+    "j-auth/docs/cloud-organization-member-read-2026-10-08.md",
+    "j-groupware/docs/cloud-organization-verification-2026-10-08.md"
   ],
   "pending_implementation": [
     "Product-specific BFF business API relays using the verified G23 helper and actual downstream services",
-    "G6 formal member UI/Playwright and G15 department tree/existing-member/manual organisation registration/partial-create repair API",
+    "G6/G15 formal member/organization/repair UI and Playwright; G16 actual approval submission, snapshot and multistage business API",
     "G2/G9 canonical UI guidelines/sidebar/board UI; I2 formal theme/Playwright/brute-force acceptance",
     "Actual WSS/SSE connection closure and other service end-to-end scenarios",
     "I5/G11 external Nginx, G18/G21 customer bootstrap/agent/VM acceptance and operator console"

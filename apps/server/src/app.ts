@@ -23,6 +23,8 @@ import type { ServiceEndpoints } from "./services.js";
 import { Members } from "./members.js";
 import type { MemberAuth } from "./members.js";
 import { registerMemberRoutes } from "./member-routes.js";
+import { OrganizationStore } from "./db/organization.js";
+import { registerOrganizationRoutes } from "./organization-routes.js";
 
 export function createApp(options: {
   pool: Pool;
@@ -339,14 +341,17 @@ export function createApp(options: {
           await board.create(identities.get(request)!.subject, request.body),
         ),
   );
-  registerMemberRoutes(
+  const members = new Members(
+    options.pool,
+    options.config.tenant,
+    sessions,
+    options.memberAuth,
+  );
+  registerMemberRoutes(app, members, (request) => identities.get(request)!);
+  registerOrganizationRoutes(
     app,
-    new Members(
-      options.pool,
-      options.config.tenant,
-      sessions,
-      options.memberAuth,
-    ),
+    new OrganizationStore(options.pool, options.config.tenant),
+    members,
     (request) => identities.get(request)!,
   );
   const serviceTokens = new ServiceTokens(sessions, oidc);

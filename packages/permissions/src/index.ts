@@ -32,6 +32,43 @@ export const ROUTES = {
     role: "member:manage",
   },
   "DELETE /api/members/:id": { kind: "session", role: "member:manage" },
+  "POST /api/members/:id/organization": {
+    kind: "session",
+    role: "member:manage",
+  },
+  "GET /api/organization": { kind: "session", role: "org:manage" },
+  "PUT /api/organization/members/:id": { kind: "session", role: "org:manage" },
+  "PATCH /api/organization/members/:id": {
+    kind: "session",
+    role: "org:manage",
+  },
+  "POST /api/organization/departments": { kind: "session", role: "org:manage" },
+  "PATCH /api/organization/departments/:id": {
+    kind: "session",
+    role: "org:manage",
+  },
+  "DELETE /api/organization/departments/:id": {
+    kind: "session",
+    role: "org:manage",
+  },
+  "POST /api/organization/positions": { kind: "session", role: "org:manage" },
+  "PATCH /api/organization/positions/:id": {
+    kind: "session",
+    role: "org:manage",
+  },
+  "DELETE /api/organization/positions/:id": {
+    kind: "session",
+    role: "org:manage",
+  },
+  "GET /api/organization/candidates": { kind: "session", role: "approval:use" },
+  "GET /api/organization/approval-line": {
+    kind: "session",
+    role: "approval:use",
+  },
+  "POST /api/organization/approval-line/validate": {
+    kind: "session",
+    role: "approval:use",
+  },
 } as const satisfies Record<string, Access>;
 
 export const MENUS = [

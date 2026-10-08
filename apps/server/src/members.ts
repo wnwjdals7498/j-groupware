@@ -10,10 +10,14 @@ import type {
   MemberListResponse,
   CustomerGrantableRoleName,
 } from "@j-auth/contracts";
-import type { GroupwareGrantableRoles } from "@j-groupware/contracts";
+import type {
+  GroupwareGrantableRoles,
+  OrganizationMemberProfile,
+} from "@j-groupware/contracts";
 import type { Pool } from "pg";
 import type { SessionStore, SessionRow } from "./db/sessions.js";
 import { ApiError, unavailable } from "./errors.js";
+import { OrganizationStore } from "./db/organization.js";
 
 export interface MemberAuth {
   readonly origin: string;
@@ -73,6 +77,7 @@ function member(value: unknown): MemberResponse {
 export class Members {
   private readonly origin?: string;
   private readonly fetch: typeof globalThis.fetch;
+  private readonly organization: OrganizationStore;
   constructor(
     private readonly pool: Pool,
     private readonly tenant: string,
@@ -80,6 +85,7 @@ export class Members {
     private readonly auth?: MemberAuth,
   ) {
     this.fetch = auth?.fetch ?? globalThis.fetch;
+    this.organization = new OrganizationStore(pool, tenant);
     if (auth) {
       this.origin = memberAuthOrigin(auth.origin);
       if (!auth.serviceKey || auth.serviceKey.startsWith("__PLACEHOLDER_"))
@@ -92,11 +98,15 @@ export class Members {
     method: string,
     body?: unknown,
     signal?: AbortSignal,
+    profileRead = false,
   ): Promise<unknown> {
     if (!this.origin || !this.auth) throw unavailable();
     if (
       identity.tenant_id !== this.tenant ||
-      !identity.roles.includes("member:manage")
+      !(
+        identity.roles.includes("member:manage") ||
+        (profileRead && identity.roles.includes("org:manage"))
+      )
     )
       throw new ApiError(403, "forbidden", "Permission denied.");
     signal?.throwIfAborted();
@@ -221,14 +231,12 @@ export class Members {
     identity: SessionRow,
     input: CreateMemberRequest,
   ): Promise<MemberResponse> {
+    const observedAt = await this.organization.observe();
     const created = member(
       await this.call(identity, AUTH_API_PATHS.members, "POST", input),
     );
     try {
-      await this.pool.query(
-        "INSERT INTO unassigned_members(tenant_id,member_id,username) VALUES($1,$2,$3) ON CONFLICT DO NOTHING",
-        [this.tenant, created.id, created.username],
-      );
+      await this.organization.register(created, observedAt);
     } catch {
       throw new ApiError(
         503,
@@ -237,6 +245,30 @@ export class Members {
       );
     }
     return created;
+  }
+  async register(identity: SessionRow, id: string) {
+    const observedAt = await this.organization.observe();
+    const response = (await this.call(
+      identity,
+      AUTH_API_PATHS.member(id),
+      "GET",
+      undefined,
+      undefined,
+      true,
+    )) as Partial<OrganizationMemberProfile> | null;
+    if (
+      !response ||
+      response.id !== id ||
+      typeof response.username !== "string" ||
+      !response.username ||
+      response.username.length > 255 ||
+      typeof response.enabled !== "boolean"
+    )
+      throw unavailable();
+    return this.organization.register(
+      { id, username: response.username, enabled: response.enabled },
+      observedAt,
+    );
   }
   async role(
     identity: SessionRow,
@@ -283,25 +315,19 @@ export class Members {
         await this.sessions.endMember(id);
       if (error instanceof ApiError && error.status === 404) {
         const known = await this.pool.query(
-          "SELECT 1 FROM unassigned_members WHERE tenant_id=$1 AND member_id=$2 UNION SELECT 1 FROM sessions WHERE tenant_id=$1 AND subject=$2 LIMIT 1",
+          "SELECT 1 FROM organization_members WHERE tenant_id=$1 AND member_id=$2 UNION SELECT 1 FROM sessions WHERE tenant_id=$1 AND subject=$2 LIMIT 1",
           [this.tenant, id],
         );
         if (known.rowCount) {
           await this.sessions.endMember(id);
-          await this.pool.query(
-            "DELETE FROM unassigned_members WHERE tenant_id=$1 AND member_id=$2",
-            [this.tenant, id],
-          );
+          await this.organization.removeMember(id);
         }
       }
       throw error;
     }
     try {
       await this.sessions.endMember(id);
-      await this.pool.query(
-        "DELETE FROM unassigned_members WHERE tenant_id=$1 AND member_id=$2",
-        [this.tenant, id],
-      );
+      await this.organization.removeMember(id);
     } catch {
       throw new ApiError(
         503,

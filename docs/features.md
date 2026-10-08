@@ -1,6 +1,6 @@
 # j-groupware 기능 목록
 
-j-groupware가 제공해야 하는 기능 목록이다. 근거는 [`decisions.md`](decisions.md)의 결정 번호와 [`architecture.md`](architecture.md)의 S 번호이고, 담당 Item은 PMT 통합 project `j-groupware-suite`의 분류 `j-groupware`다. 현재 코드·실행 범위는 [구현 추적표](implementation-progress.json)와 [클라우드 BFF 검증 기록](cloud-bff-verification-2026-10-08.md)을 따른다. 목록 자체는 인수 완료를 뜻하지 않는다.
+j-groupware가 제공해야 하는 기능 목록이다. 근거는 [`decisions.md`](decisions.md)의 결정 번호와 [`architecture.md`](architecture.md)의 S 번호이고, 담당 Item은 PMT 통합 project `j-groupware-suite`의 분류 `j-groupware`다. 현재 코드·실행 범위는 [구현 추적표](implementation-progress.json)와 [클라우드 BFF 검증 기록](cloud-bff-verification-2026-10-08.md)을 따른다. 목록 자체는 인수 완료를 뜻하지 않는다. G15 서버·등록 복구·기본 결재선의 구현과 실행 범위는 [조직도 검증 기록](cloud-organization-verification-2026-10-08.md)을 따른다.
 
 j-groupware는 기본 서비스로, 고객 서버의 웹 화면 전체와 하위 서비스 중계, control plane의 운영 콘솔, 고객 서버 운영 스크립트를 맡는다.
 

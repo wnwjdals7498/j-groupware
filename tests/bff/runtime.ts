@@ -209,6 +209,8 @@ export async function integrationRuntime() {
     const owned: string[] = [];
     let memberResponseGate:
       { arrived: () => void; ready: Promise<void> } | undefined;
+    let profileResponseGate:
+      { arrived: () => void; ready: Promise<void> } | undefined;
     let loginResponseGate:
       { arrived: () => void; ready: Promise<void> } | undefined;
     const memberCalls: {
@@ -368,6 +370,17 @@ export async function integrationRuntime() {
             gate.arrived();
             await gate.ready;
           }
+          if (
+            init?.method === "GET" &&
+            response.status === 200 &&
+            new URL(String(input)).pathname.startsWith("/auth/members/") &&
+            profileResponseGate
+          ) {
+            const gate = profileResponseGate;
+            profileResponseGate = undefined;
+            gate.arrived();
+            await gate.ready;
+          }
           return response;
         };
         const memberAuth = {
@@ -474,6 +487,17 @@ export async function integrationRuntime() {
           release = resolve;
         });
         memberResponseGate = { arrived, ready };
+        return { arrival, release };
+      },
+      holdNextProfileResponse: () => {
+        let arrived!: () => void, release!: () => void;
+        const arrival = new Promise<void>((resolve) => {
+          arrived = resolve;
+        });
+        const ready = new Promise<void>((resolve) => {
+          release = resolve;
+        });
+        profileResponseGate = { arrived, ready };
         return { arrival, release };
       },
       holdNextLoginResponse: () => {
@@ -618,12 +642,19 @@ export async function integrationRuntime() {
           await authPool.query("DELETE FROM tenants WHERE tenant_id=$1", [
             tenant,
           ]);
+          await pool.query(
+            "UPDATE organization_departments SET head_member_id=NULL WHERE tenant_id=$1",
+            [tenant],
+          );
           for (const table of [
             "sessions",
             "login_flows",
             "logout_events",
             "board_posts",
-            "unassigned_members",
+            "organization_members",
+            "organization_departments",
+            "organization_positions",
+            "organization_state",
             "member_session_ends",
           ])
             await pool.query(`DELETE FROM ${table} WHERE tenant_id=$1`, [

@@ -44,3 +44,55 @@ export interface GroupwareGrantableRoles {
     readonly implies: readonly string[];
   }[];
 }
+
+export interface OrganizationMemberProfile {
+  readonly id: string;
+  readonly username: string;
+  readonly enabled: boolean;
+}
+export interface OrganizationMember extends OrganizationMemberProfile {
+  readonly departmentId: string | null;
+  readonly positionId: string | null;
+}
+export interface OrganizationDepartment {
+  readonly id: string;
+  readonly name: string;
+  readonly parentId: string | null;
+  readonly headMemberId: string | null;
+}
+export interface OrganizationPosition {
+  readonly id: string;
+  readonly name: string;
+}
+export interface OrganizationMemberPage {
+  readonly revision: number;
+  readonly items: readonly OrganizationMember[];
+  readonly nextCursor: string | null;
+}
+export interface OrganizationSnapshot {
+  readonly revision: number;
+  readonly departments: readonly OrganizationDepartment[];
+  readonly positions: readonly OrganizationPosition[];
+  readonly members: OrganizationMemberPage;
+}
+export interface CreateOrganizationDepartment {
+  readonly revision: number;
+  readonly name: string;
+  readonly parentId: string | null;
+}
+export interface EditOrganizationDepartment extends CreateOrganizationDepartment {
+  readonly headMemberId: string | null;
+}
+export interface EditOrganizationPosition {
+  readonly revision: number;
+  readonly name: string;
+}
+export interface EditOrganizationPlacement {
+  readonly revision: number;
+  readonly departmentId: string | null;
+  readonly positionId: string | null;
+}
+export interface OrganizationApprovalLine {
+  readonly revision: number;
+  readonly memberIds: readonly string[];
+}

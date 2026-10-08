@@ -1,6 +1,6 @@
 # 고객 BFF 개발·실행
 
-G1 → G3 → G4 → G5/G6 서버와 G23 공통 호출 함수를 구현했다. `apps/server`는 고객 하나의 BFF이며, 운영 콘솔·제품별 업무 중계·정식 웹 화면은 후속 범위다. Node 22.18 이상, PostgreSQL 18.6, 기존 j-auth의 Keycloak 26.8.0을 사용한다. 고정 패키지 버전과 무결성은 `package-lock.json`이 기준이다.
+G1 → G3 → G4 → G5/G6/G15 서버와 G23 공통 호출 함수를 구현했다. `apps/server`는 고객 하나의 BFF이며, 운영 콘솔·제품별 업무 중계·정식 웹 화면은 후속 범위다. Node 22.18 이상, PostgreSQL 18.6, 기존 j-auth의 Keycloak 26.8.0을 사용한다. 고정 패키지 버전과 무결성은 `package-lock.json`이 기준이다.
 
 ## 설치와 실행
 
@@ -60,4 +60,10 @@ env·TLS·PG volume·JSON 결과는 `/workspace/.suite-runtime`에 둔다. 테�
 
 ## 회원 관리 BFF (G6 서버)
 
-외부 env에 `JAUTH_PUBLIC_URL`과 해당 tenant `JGW_SERVICE_KEY`를 추가한다. 후속 [회원 API·검증 기록](cloud-member-bff-verification-2026-10-08.md)의 경로를 사용한다. 모든 경로에 `member:manage`, 변경에 Origin/CSRF가 필요하다. 초기 비밀번호는 관리자 지정 영구 값이며 응답·로그·미배치 저장에는 넣지 않는다. 취소·응답 유실 뒤 실제 목록을 확인하고, 부분 완료를 자동 재생성 성공으로 표시하지 않는다. 조직도 상세와 정식 회원 화면은 후속 범위다.
+외부 env에 `JAUTH_PUBLIC_URL`과 해당 tenant `JGW_SERVICE_KEY`를 추가한다. 후속 [회원 API·검증 기록](cloud-member-bff-verification-2026-10-08.md)의 경로를 사용한다. 모든 경로에 `member:manage`, 변경에 Origin/CSRF가 필요하다. 초기 비밀번호는 관리자 지정 영구 값이며 응답·로그·미배치 저장에는 넣지 않는다. 취소·응답 유실 뒤 실제 목록을 확인하고, 부분 완료를 자동 재생성 성공으로 표시하지 않는다. 부분 생성의 조직도 등록 복구 API도 연결했다. 정식 회원 화면은 후속 범위다.
+
+## 조직도·회원 등록 복구·결재선 (G15 서버)
+
+[API·저장·동시성 계약과 실제 검증](cloud-organization-verification-2026-10-08.md)을 따른다. `004-organization.sql`은 기존 미배치 데이터를 보존하고 부서·직책·소속을 전용 DB에 둔다. 조직도 편집은 `org:manage`, 후보·결재선은 `approval:use`, 회원 생성 부분 실패의 등록 복구는 `member:manage`다. j-auth `1a8c09e933ab6de6fc953592ddda8cd9015620b9`의 tenant 단건 읽기 API가 선행이다. 설치된 `@j-auth/contracts@0.1.0`의 기존 member 경로와 기본 응답 필드를 재사용하며 새 의존성·패키지 게시가 필요하지 않다.
+
+부서·직책·소속 변경에는 조회 응답의 `revision`을 보낸다. 409이면 다시 읽고 수정 의도를 확인한다. 반복 등록은 기존 배치를 보존하고, 삭제 중 늦은 조회 결과는 재등록하지 않는다. 결재 후보 검증은 로컬 등록 계정만 사용한다. 정식 조직도/복구 화면과 실제 j-approval 상신은 후속 범위다.
