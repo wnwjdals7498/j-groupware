@@ -23,6 +23,7 @@
     "test:agent:products": "node --test tests/agent/products.integration.test.mjs",
     "test:agent:bundles": "node --test tests/agent/bundles.integration.test.mjs",
     "test:agent:unpack": "node --test tests/agent/unpack.integration.test.mjs",
+    "test:agent:tls": "node --test tests/agent/tls-credentials.integration.test.mjs",
     "test:agent:web-cleanup": "node --test tests/agent/web-cleanup.integration.test.mjs",
     "lint": "eslint apps packages tests/server tests/bff deploy/gateway tests/gateway deploy/agent tests/agent",
     "format:check": "prettier --check apps packages tests/server tests/bff deploy/gateway/*.mjs tests/gateway/*.mjs deploy/agent/*.mjs tests/agent/*.mjs *.config.ts eslint.config.mjs scripts/run-bff-integration.mjs scripts/prepare-bff-cloud-tests.mjs scripts/wire-bff-cloud-backchannel.mjs",

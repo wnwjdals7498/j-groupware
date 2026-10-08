@@ -67,32 +67,20 @@ before(async () => {
     "import {copyFile,chmod} from 'node:fs/promises';await copyFile('/test-node/node','/usr/local/bin/node');await chmod('/usr/local/bin/node',0o555);",
   ]);
 
-  await execute("docker", [
-    "exec",
-    name,
-    "/usr/sbin/useradd",
-    "--system",
-    "--user-group",
-    "--no-create-home",
-    "--home-dir",
-    "/var/lib/jgw-talk",
-    "--shell",
-    "/usr/sbin/nologin",
-    "jgw-talk",
-  ]);
-  await execute("docker", [
-    "exec",
-    name,
-    "/usr/sbin/useradd",
-    "--system",
-    "--user-group",
-    "--no-create-home",
-    "--home-dir",
-    "/var/lib/jgw-mail",
-    "--shell",
-    "/usr/sbin/nologin",
-    "jgw-mail",
-  ]);
+  for (const service of ["talk", "mail", "customer-auth-db"])
+    await execute("docker", [
+      "exec",
+      name,
+      "/usr/sbin/useradd",
+      "--system",
+      "--user-group",
+      "--no-create-home",
+      "--home-dir",
+      "/var/lib/jgw-" + service,
+      "--shell",
+      "/usr/sbin/nologin",
+      "jgw-" + service,
+    ]);
   await run(`import {mkdir,writeFile,chmod,cp} from 'node:fs/promises';import {execFileSync} from 'node:child_process';
     await mkdir('/opt/jgw/test-agent/deploy/agent',{recursive:true});await mkdir('/opt/jgw/test-agent/deploy/gateway',{recursive:true});await mkdir('/opt/jgw/test-agent/node_modules/@j-auth',{recursive:true});
     for(const file of ['tls-credentials.mjs','launch-service.mjs','control-files.mjs','provision-error.mjs'])await cp('/code/deploy/agent/'+file,'/opt/jgw/test-agent/deploy/agent/'+file);
@@ -121,7 +109,9 @@ test("root stages only validated TLS/public CA material, preserves idempotency a
     await symlink('/etc/jgw/private/tls.crt','/etc/jgw/private/link.crt');const env=await readFile('/etc/jgw/services/j-talk.env','utf8');await writeFile('/etc/jgw/services/j-talk.env',env.replaceAll('/etc/jgw/private/tls.crt','/etc/jgw/private/link.crt'));await assert.rejects(value.prepare('j-talk'));await writeFile('/etc/jgw/services/j-talk.env',env);
     const cert=await readFile('/etc/jgw/private/tls.crt','utf8');await writeFile('/etc/jgw/private/tls.crt',cert+key);await assert.rejects(value.prepare('j-talk'),{code:'invalid_tls_credentials'});await writeFile('/etc/jgw/private/tls.crt',cert);
     await writeFile('/etc/jgw/services/j-talk.env',env.replace('JT_TLS_CERTIFICATE=/etc/jgw/private/tls.crt','JT_TLS_CERTIFICATE=/etc/jgw/private/ca.crt').replace('JT_TLS_KEY=/etc/jgw/private/tls.key','JT_TLS_KEY=/etc/jgw/private/ca.key'));await assert.rejects(value.prepare('j-talk'),{code:'invalid_tls_credentials'});await writeFile('/etc/jgw/services/j-talk.env',env);
-    await writeFile('/etc/jgw/services/j-customer-auth-db.env','JCADB_TLS_CERTIFICATE=/etc/jgw/private/tls.crt\\nJCADB_TLS_KEY=/etc/jgw/private/tls.key\\nJCADB_CA_CERTIFICATE=/etc/jgw/private/ca.crt\\nJCADB_GUEST_SIGNING_KEY=/etc/jgw/private/ca.key\\n',{mode:0o600});await assert.rejects(value.prepare('j-customer-auth-db'),{code:'invalid_tls_credentials'});
+    const customerEnv='JCADB_TLS_CERTIFICATE=/etc/jgw/private/tls.crt\\nJCADB_TLS_KEY=/etc/jgw/private/tls.key\\nJCADB_CA_CERTIFICATE=/etc/jgw/private/ca.crt\\nJCADB_GUEST_SIGNING_KEY=/etc/jgw/private/ca.key\\n';await writeFile('/etc/jgw/services/j-customer-auth-db.env',customerEnv,{mode:0o600});await assert.rejects(value.prepare('j-customer-auth-db'),{code:'invalid_tls_credentials'});
+    await writeFile('/etc/jgw/services/j-customer-auth-db.env',customerEnv.replace('/etc/jgw/private/ca.key','/etc/jgw/private/tls.key'));await assert.rejects(value.prepare('j-customer-auth-db'),{code:'invalid_tls_credentials'});
+    const {generateKeyPairSync}=await import('node:crypto');const {privateKey}=generateKeyPairSync('rsa',{modulusLength:2048,privateKeyEncoding:{type:'pkcs8',format:'pem'},publicKeyEncoding:{type:'spki',format:'pem'}});await writeFile('/etc/jgw/private/guest.key',privateKey,{mode:0o600});await writeFile('/etc/jgw/services/j-customer-auth-db.env',customerEnv.replace('/etc/jgw/private/ca.key','/etc/jgw/private/guest.key'));assert.equal((await value.prepare('j-customer-auth-db')).changed,true);await value.require('j-customer-auth-db');assert.equal((await value.prepare('j-customer-auth-db')).changed,false);assert.equal(await readFile('/etc/jgw/services/j-customer-auth-db.credentials/guest-signing-key','utf8'),privateKey);
     await assert.rejects(value.prepare('__proto__'),{code:'invalid_service'});
     console.log(JSON.stringify({idempotent:true,tamperedRejected:true,worldReadableKeyRejected:true,foreignPreserved:true,symlinkRejected:true,privateCAAppendRejected:true}));`),
   );
@@ -129,9 +119,9 @@ test("root stages only validated TLS/public CA material, preserves idempotency a
 });
 test("distinct service users can read only their own runtime credentials while root sources remain private", async () => {
   await run(`import {mkdir,copyFile,chown,chmod} from 'node:fs/promises';import {execFileSync} from 'node:child_process';
-    const uid=Number(execFileSync('/usr/bin/id',['-u','jgw-talk'],{encoding:'utf8'}).trim()),gid=Number(execFileSync('/usr/bin/id',['-g','jgw-talk'],{encoding:'utf8'}).trim());
-    await mkdir('/run/credentials/jgw-talk.service',{mode:0o700});await chown('/run/credentials/jgw-talk.service',uid,gid);
-    for(const file of ['tls-certificate','tls-key','ca-certificate']){await copyFile('/etc/jgw/services/j-talk.credentials/'+file,'/run/credentials/jgw-talk.service/'+file);await chown('/run/credentials/jgw-talk.service/'+file,uid,gid);await chmod('/run/credentials/jgw-talk.service/'+file,0o400);}`);
+    for(const service of ['talk','customer-auth-db']){const uid=Number(execFileSync('/usr/bin/id',['-u','jgw-'+service],{encoding:'utf8'}).trim()),gid=Number(execFileSync('/usr/bin/id',['-g','jgw-'+service],{encoding:'utf8'}).trim()),directory='/run/credentials/jgw-'+service+'.service';
+    await mkdir(directory,{mode:0o700});await chown(directory,uid,gid);
+    for(const file of ['tls-certificate','tls-key','ca-certificate',...(service==='customer-auth-db'?['guest-signing-key']:[])]){await copyFile('/etc/jgw/services/j-'+service+'.credentials/'+file,directory+'/'+file);await chown(directory+'/'+file,uid,gid);await chmod(directory+'/'+file,0o400);}}`);
   assert.equal(
     await run(
       `import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import {credentialEnvironment} from '/opt/jgw/test-agent/deploy/agent/launch-service.mjs';await assert.rejects(readFile('/etc/jgw/private/tls.key'));const env=await credentialEnvironment('j-talk',{CREDENTIALS_DIRECTORY:'/run/credentials/jgw-talk.service',NODE_OPTIONS:'--invalid-loader',LD_PRELOAD:'/invalid'});assert.equal(env.JT_TLS_KEY,'/run/credentials/jgw-talk.service/tls-key');assert.equal(env.NODE_EXTRA_CA_CERTS,'/run/credentials/jgw-talk.service/ca-certificate');assert.equal(env.NODE_OPTIONS,undefined);assert.equal(env.LD_PRELOAD,undefined);await assert.rejects(credentialEnvironment('j-mail',{CREDENTIALS_DIRECTORY:'/run/credentials/jgw-talk.service'}));console.log('isolated');`,
@@ -141,10 +131,17 @@ test("distinct service users can read only their own runtime credentials while r
   );
   assert.equal(
     await run(
-      `import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';await assert.rejects(readFile('/run/credentials/jgw-talk.service/tls-key'));await assert.rejects(readFile('/etc/jgw/private/tls.key'));console.log('denied');`,
+      `import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';await assert.rejects(readFile('/run/credentials/jgw-talk.service/tls-key'));await assert.rejects(readFile('/run/credentials/jgw-customer-auth-db.service/guest-signing-key'));await assert.rejects(readFile('/etc/jgw/private/tls.key'));console.log('denied');`,
       "jgw-mail",
     ),
     "denied\n",
+  );
+  assert.equal(
+    await run(
+      `import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import {createPrivateKey,createPublicKey,sign,verify} from 'node:crypto';import {credentialEnvironment} from '/opt/jgw/test-agent/deploy/agent/launch-service.mjs';const env=await credentialEnvironment('j-customer-auth-db',{CREDENTIALS_DIRECTORY:'/run/credentials/jgw-customer-auth-db.service'});assert.equal(env.JCADB_CA_CERTIFICATE,env.NODE_EXTRA_CA_CERTS);assert.equal(env.JCADB_GUEST_SIGNING_KEY,'/run/credentials/jgw-customer-auth-db.service/guest-signing-key');const key=createPrivateKey(await readFile(env.JCADB_GUEST_SIGNING_KEY));const payload=Buffer.from('isolated guest credential');assert(verify('sha256',payload,createPublicKey(key),sign('sha256',payload,key)));await assert.rejects(readFile('/run/credentials/jgw-talk.service/tls-key'));await assert.rejects(readFile('/etc/jgw/private/ca.key'));console.log('guest-isolated');`,
+      "jgw-customer-auth-db",
+    ),
+    "guest-isolated\n",
   );
 });
 test("launcher replaces the process and makes a fresh Node trust the credential CA over real HTTPS", async () => {
