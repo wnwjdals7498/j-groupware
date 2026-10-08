@@ -26,6 +26,14 @@ G6 서버 API·원래 Bearer/서비스 키·대상 세션 종료·미배치 저�
 
 서비스 화면은 권한 표로 노출하고 BFF가 내부 API·WSS를 중계한다. 상담 손님 이름처럼 필요한 데이터 조합은 BFF에서 수행하며 서비스 DB를 복사하지 않는다. 사이트 배포 성공 뒤 상담 출처 등록 실패는 별도 안내로 표시한다.
 
+GW-35의 현재 room 목록/상세 중계는 `guestId`를 보존한다. `guest:read`가
+있는 회원에 한해 기존 customer-auth UUID 조회로 `guestName`을 추가하며,
+권한이 없으면 이름 필드·조회·customer-auth 토큰 교환이 없다. 익명이나
+삭제/다른 tenant 손님은 이름 null이고, 조회 장애·무효 UUID는 503이다.
+목록은 UUID를 중복 제거하고 동시 조회 4개·전체 10초를 제한한다. 실제
+Talk/customer-auth/PG 연결은 storage fixture로 검증했고 방문자 발급·WSS·
+T2 정책·정식 화면 인수는 별도 미완료다.
+
 ## 기능별 계약
 
 | 기능 ID | PMT Item | 입력·정상 동작·출력 | 권한·실패 경계 | 인수 시험 |

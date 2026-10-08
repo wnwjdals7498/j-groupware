@@ -1,4 +1,4 @@
-# Inactive template only; the console/installer entrypoint is not yet bound.
+# Inactive template only; the explicit one-shot CLI exists, but native host service activation is pending.
 [Unit]
 Description=Reconcile j-groupware desired subscriptions every minute
 

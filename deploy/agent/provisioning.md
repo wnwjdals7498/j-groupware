@@ -152,7 +152,8 @@ BaseEnvironment decodes sealed bootstrap files and emits exact BFF variables;
 it excludes the console agent key. Actual cold BFF tests run as the existing
 isolated cloud user. Dedicated-account CA/TLS source and isolated container
 permissions are now verified; actual systemd credential delivery and the
-complete bootstrap/installer entrypoint remain pending.
+complete native bootstrap/installer activation remain pending. The explicit
+one-shot agent entrypoint is implemented separately as described above.
 
 The [customer relay/bundle report](../../docs/cloud-customer-relay-bundle-verification-2026-10-08.md)
 adds exact registry contracts consumption, actual customer guest/key BFF relay,

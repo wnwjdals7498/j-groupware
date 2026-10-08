@@ -4,6 +4,9 @@
 Talk, Mail, Web, customer-auth의 일곱 내부 서버와 로컬 패키지를 포장한다.
 등록되지 않은 서비스는 거부한다. 기본 BFF에는 contracts,
 permissions, bff-auth와 설치/gateway 모듈을 함께 넣는다.
+기존 봉인 자격을 사용하는 [명시적 one-shot agent](provision-agent.md)도
+기본 번들에 포함하며 fresh 설치 후 inert import를 확인한다. native OS
+설치기나 timer 활성화를 수행한 것으로 취급하지 않는다.
 
 입력은 해당 제품 이름의 실제 체크아웃, 외부 출력 `.tar.gz`, 외부 mode-600
 registry npmrc, npm cache와 npm-cli.js 경로다. 빌드·배포·서비스 활성화·registry

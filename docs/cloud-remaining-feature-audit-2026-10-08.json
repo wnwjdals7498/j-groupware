@@ -375,10 +375,11 @@
       "classification_label": "서비스 구현 선행",
       "external_or_user_gate": false,
       "additional_dependencies": [
-        "ui"
+        "ui",
+        "policy"
       ],
-      "reason": "Talk 회원 room/settings BFF relay는 실제 검증했다. 손님 이름 조합·실제 visitor/WSS 업무·정식 UI가 남았다.",
-      "next_step": "customer-auth 손님 조회와 권한별 이름 조합을 연결하고 T2 정책 및 UI 기준 아래 실제 상담 전달을 구현한다.",
+      "reason": "회원 room/settings와 권한별 손님 이름 조합을 실제 서비스로 검증했다. fixture 문의방이며 실제 visitor/WSS 업무와 정식 UI가 남았다.",
+      "next_step": "T2 답변 뒤 실제 visitor/WSS 상담 전달을 연결하고 정식 UI 기준 아래 상담 화면을 구현한다. guest:read 조건의 UUID 이름 조합과 무권한 무조회는 검증 완료다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
@@ -387,9 +388,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_talk_BFF_5_each_exit0_skip0; single_audience_exchange_role_CSRF_tenant_room_assignment_reply_close_and_bounded_projection_pass; member_room_storage_seed_only; guest_name_composition_live_visitor_WSS_and_formal_UI_not_run",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; customer19_each_includes_actual_Talk_customer_auth_PG_role_dependent_guest_names_single_aud_Bearer_deduplicated_page_lookups_anonymous_deleted_foreign_guest_null_no_guest_read_no_CA_call_no_CA_service_token_invalid_UUID_no_lookup_actual_CA_outage503_identifier_only_Talk_still_available_pass; unit77_each_includes_lookup_concurrency4_failure_cancellation_all_settled_pass; member_room_storage_seed_only_live_visitor_issuer_WSS_T2_and_formal_UI_Playwright_VM_not_run",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_talk_BFF_5_each_exit0_skip0; single_audience_exchange_role_CSRF_tenant_room_assignment_reply_close_and_bounded_projection_pass; member_room_storage_seed_only; guest_name_composition_live_visitor_WSS_and_formal_UI_not_run"
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; customer19_each_includes_actual_Talk_customer_auth_PG_role_dependent_guest_names_single_aud_Bearer_deduplicated_page_lookups_anonymous_deleted_foreign_guest_null_no_guest_read_no_CA_call_no_CA_service_token_invalid_UUID_no_lookup_actual_CA_outage503_identifier_only_Talk_still_available_pass; unit77_each_includes_lookup_concurrency4_failure_cancellation_all_settled_pass; member_room_storage_seed_only_live_visitor_issuer_WSS_T2_and_formal_UI_Playwright_VM_not_run"
     },
     {
       "id": "GW-36",
@@ -478,7 +479,7 @@
       "external_or_user_gate": false,
       "additional_dependencies": [],
       "reason": "기본 BFF 봉인 설정·안전 unpack/cold 기동, 생성 실패 단계별 PG 해지, Approval/Talk 데이터 보존 cleanup, 짧은 수명 외부 자격/실제 알림 worker CLI를 검증했다. 전용 서비스 계정 CA/TLS·제품 storage/Messenger/Mailpit/customer cleanup·전체 bootstrap/installer entrypoint·운영 자격 갱신/토폴로지·timer와 고객 VM 인수는 남았다.",
-      "next_step": "전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage cleanup 및 production notification 자격 갱신/토폴로지; 실제 systemd credential/VM/timer는 별도 인수. 고객 인증 bundle/profile/gateway는 검증 완료.",
+      "next_step": "완전한 native bootstrap/installer 조합·Messenger/Mailpit storage preparation/cleanup·production notification 자격 갱신/토폴로지를 연결한다. 봉인 one-shot agent는 실제 콘솔/PG/Talk/TLS와 fixture 설치기로 검증했고, 실제 systemd PID1/VM/timer는 별도 인수다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
@@ -487,9 +488,9 @@
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_notification_registry_projection13_and_worker6_each_Node22_Node24_with_real_auth_PG_private_receiver_pass; external_short_lived_credentials_one_shot_CLI_expiry_inactive_same_generation_recovery_pass; full_BFF167_each_exit0_skip0; production_credential_renewal_topology_worker_timer_and_all_source_product_acceptance_pending; previous_initial_receiver_start_failure_cause_unresolved; customer_auth_seventh_cold_bundle_profile_persisted_cursor_secret_actual_readiness_and_real_Nginx_pass; full_installer_agent_entrypoint_Messenger_Mailpit_storage_and_actual_systemd_VM_timer_pending",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; actual_projection_and_worker_one_shot_expiry_inactive_same_generation_recovery_pass; explicit_provision_agent18_each_fixture_installer_real_console_PG_Talk_TLS_report_pass; production_notification_credentials_renewal_topology_worker_timer_all_source_product_acceptance_pending; previous_initial_receiver_start_failure_cause_unresolved",
       "implementation": "partial",
-      "verification": "actual_notification_registry_projection13_and_worker6_each_Node22_Node24_with_real_auth_PG_private_receiver_pass; external_short_lived_credentials_one_shot_CLI_expiry_inactive_same_generation_recovery_pass; full_BFF167_each_exit0_skip0; production_credential_renewal_topology_worker_timer_and_all_source_product_acceptance_pending; previous_initial_receiver_start_failure_cause_unresolved; customer_auth_seventh_cold_bundle_profile_persisted_cursor_secret_actual_readiness_and_real_Nginx_pass; full_installer_agent_entrypoint_Messenger_Mailpit_storage_and_actual_systemd_VM_timer_pending"
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; actual_projection_and_worker_one_shot_expiry_inactive_same_generation_recovery_pass; explicit_provision_agent18_each_fixture_installer_real_console_PG_Talk_TLS_report_pass; production_notification_credentials_renewal_topology_worker_timer_all_source_product_acceptance_pending; previous_initial_receiver_start_failure_cause_unresolved"
     },
     {
       "id": "GW-44",
@@ -553,7 +554,7 @@
         "GW-54"
       ],
       "reason": "기본 BFF 봉인 설정·안전 unpack/cold 기동, 생성 실패 단계별 PG 해지, Approval/Talk 데이터 보존 cleanup, 짧은 수명 외부 자격/실제 알림 worker CLI를 검증했다. 전용 서비스 계정 CA/TLS·제품 storage/Messenger/Mailpit/customer cleanup·전체 bootstrap/installer entrypoint·운영 자격 갱신/토폴로지·timer와 고객 VM 인수는 남았다.",
-      "next_step": "전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage cleanup 및 production notification 자격 갱신/토폴로지; 실제 systemd credential/VM/timer는 별도 인수. 고객 인증 bundle/profile/gateway는 검증 완료.",
+      "next_step": "완전한 native bootstrap/installer 조합·Messenger/Mailpit storage preparation/cleanup·production notification 자격 갱신/토폴로지를 연결한다. 봉인 one-shot agent는 실제 콘솔/PG/Talk/TLS와 fixture 설치기로 검증했고, 실제 systemd PID1/VM/timer는 별도 인수다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
@@ -562,9 +563,9 @@
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending; customer_auth_seventh_cold_bundle_profile_persisted_cursor_secret_actual_readiness_and_real_Nginx_pass; full_installer_agent_entrypoint_Messenger_Mailpit_storage_and_actual_systemd_VM_timer_pending",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending; customer_auth_seventh_cold_bundle_profile_persisted_cursor_secret_actual_readiness_and_real_Nginx_pass; full_installer_agent_entrypoint_Messenger_Mailpit_storage_and_actual_systemd_VM_timer_pending"
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending"
     },
     {
       "id": "GW-64",
@@ -582,7 +583,7 @@
         "TK-40"
       ],
       "reason": "기본 BFF 봉인 설정·안전 unpack/cold 기동, 생성 실패 단계별 PG 해지, Approval/Talk 데이터 보존 cleanup, 짧은 수명 외부 자격/실제 알림 worker CLI를 검증했다. 전용 서비스 계정 CA/TLS·제품 storage/Messenger/Mailpit/customer cleanup·전체 bootstrap/installer entrypoint·운영 자격 갱신/토폴로지·timer와 고객 VM 인수는 남았다.",
-      "next_step": "전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage cleanup 및 production notification 자격 갱신/토폴로지; 실제 systemd credential/VM/timer는 별도 인수. 고객 인증 bundle/profile/gateway는 검증 완료.",
+      "next_step": "완전한 native bootstrap/installer 조합·Messenger/Mailpit storage preparation/cleanup·production notification 자격 갱신/토폴로지를 연결한다. 봉인 one-shot agent는 실제 콘솔/PG/Talk/TLS와 fixture 설치기로 검증했고, 실제 systemd PID1/VM/timer는 별도 인수다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
@@ -591,9 +592,9 @@
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending; customer_auth_seventh_cold_bundle_profile_persisted_cursor_secret_actual_readiness_and_real_Nginx_pass; full_installer_agent_entrypoint_Messenger_Mailpit_storage_and_actual_systemd_VM_timer_pending",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending; customer_auth_seventh_cold_bundle_profile_persisted_cursor_secret_actual_readiness_and_real_Nginx_pass; full_installer_agent_entrypoint_Messenger_Mailpit_storage_and_actual_systemd_VM_timer_pending"
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending"
     },
     {
       "id": "GW-65",
@@ -609,7 +610,7 @@
         "WB-25"
       ],
       "reason": "기본 BFF 봉인 설정·안전 unpack/cold 기동, 생성 실패 단계별 PG 해지, Approval/Talk 데이터 보존 cleanup, 짧은 수명 외부 자격/실제 알림 worker CLI를 검증했다. 전용 서비스 계정 CA/TLS·제품 storage/Messenger/Mailpit/customer cleanup·전체 bootstrap/installer entrypoint·운영 자격 갱신/토폴로지·timer와 고객 VM 인수는 남았다.",
-      "next_step": "전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage cleanup 및 production notification 자격 갱신/토폴로지; 실제 systemd credential/VM/timer는 별도 인수. 고객 인증 bundle/profile/gateway는 검증 완료.",
+      "next_step": "완전한 native bootstrap/installer 조합·Messenger/Mailpit storage preparation/cleanup·production notification 자격 갱신/토폴로지를 연결한다. 봉인 one-shot agent는 실제 콘솔/PG/Talk/TLS와 fixture 설치기로 검증했고, 실제 systemd PID1/VM/timer는 별도 인수다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
@@ -618,9 +619,9 @@
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending"
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending"
     },
     {
       "id": "GW-66",
@@ -633,7 +634,7 @@
       "external_or_user_gate": false,
       "additional_dependencies": [],
       "reason": "기본 BFF 봉인 설정·안전 unpack/cold 기동, 생성 실패 단계별 PG 해지, Approval/Talk 데이터 보존 cleanup, 짧은 수명 외부 자격/실제 알림 worker CLI를 검증했다. 전용 서비스 계정 CA/TLS·제품 storage/Messenger/Mailpit/customer cleanup·전체 bootstrap/installer entrypoint·운영 자격 갱신/토폴로지·timer와 고객 VM 인수는 남았다.",
-      "next_step": "전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage cleanup 및 production notification 자격 갱신/토폴로지; 실제 systemd credential/VM/timer는 별도 인수. 고객 인증 bundle/profile/gateway는 검증 완료.",
+      "next_step": "완전한 native bootstrap/installer 조합·Messenger/Mailpit storage preparation/cleanup·production notification 자격 갱신/토폴로지를 연결한다. 봉인 one-shot agent는 실제 콘솔/PG/Talk/TLS와 fixture 설치기로 검증했고, 실제 systemd PID1/VM/timer는 별도 인수다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
@@ -642,9 +643,9 @@
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending; customer_auth_seventh_cold_bundle_profile_persisted_cursor_secret_actual_readiness_and_real_Nginx_pass; full_installer_agent_entrypoint_Messenger_Mailpit_storage_and_actual_systemd_VM_timer_pending",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending; customer_auth_seventh_cold_bundle_profile_persisted_cursor_secret_actual_readiness_and_real_Nginx_pass; full_installer_agent_entrypoint_Messenger_Mailpit_storage_and_actual_systemd_VM_timer_pending"
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending"
     },
     {
       "id": "GW-71",
@@ -1598,10 +1599,10 @@
     "실제 외부 인수 실행 시 격리 VM 대상과 권한"
   ],
   "next_independent_batches": [
-    "GW-63/64/65/66: 전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage preparation/cleanup; 실제 root/account/CA/TLS 시험은 격리 컨테이너만, 실제 systemd/VM/timer 인수는 별도",
-    "GW-35: 확정된 guest 조회 계약을 사용한 권한별 손님 이름 조합; visitor/WSS는 미정 T2 정책을 먼저 채택하지 않음",
-    "production notification 자격 갱신/토폴로지와 운영 allowlist 연결",
-    "기존 정식 UI 질의 응답 후 콘솔·손님/키·상담·서비스 화면과 browser 인수"
+    "GW-63/64/65/66: 완전한 native bootstrap/installer 조합·Messenger/Mailpit storage preparation/cleanup; root/account/CA/TLS OS 시험은 격리 컨테이너만, 실제 systemd/VM/timer 인수는 별도",
+    "production notification 자격 갱신/토폴로지와 운영 allowlist 연결; 운영 자격 발급/갱신 및 timer 활성화 없이 소스·격리 검증만",
+    "TK-21/TK-30: 확정된 tenant 회원 배정 대상 검증·발생별 occurrence ID와 outbox 알림 연결; visitor/WSS는 T2 답변 뒤",
+    "기존 T2·E8·H7·정식 UI 질의 응답 뒤 해당 정책과 browser 인수; GW-35 권한별 손님 이름 조합은 완료"
   ],
   "current_progress": {
     "implemented": 109,
@@ -1610,11 +1611,11 @@
     "total": 172,
     "remaining": 63,
     "web_source_commit": "13861dd835362992f6ba0ee8bd237e30db8ca0ba",
-    "talk_source_commit": "a022105102ffe680cf040b4d57f6f46e1d54d804",
-    "agent_source_commit": "b15b53bb32942eee832413729940af02c1950edf",
+    "talk_source_commit": "41f84030119d8deaa7eff94079f95da1a4a7d23b",
+    "agent_source_commit": "a1e875006117aa7feffd2dea72d07d5d7535db55",
     "console_source_commit": "998a48abe1e66f2aefd88d28fa6adda07627107c",
-    "talk_bff_source_commit": "bc949abd081477cac26e3c41a4e0311bd377c091",
-    "bundle_source_commit": "b15b53bb32942eee832413729940af02c1950edf",
+    "talk_bff_source_commit": "8525b5804fe6aa5ffff3d438612a1b0353c3af1d",
+    "bundle_source_commit": "a1e875006117aa7feffd2dea72d07d5d7535db55",
     "bootstrap_source_commit": "aa2a2f13e88fa1e6959ccb08c276434a8e7c831f",
     "teardown_source_commit": "e00000f9f2d0b8f2f7ec1ecaac5c12dce41deaa5",
     "notification_worker_source_commit": "ea24dd34636bcfebbf89ec26d87c79831a577ece",
@@ -2754,6 +2755,6 @@
     ],
     "reclassification_does_not_mean_complete": true
   },
-  "continueable_work_note": "ready=0은 기술 작업 소진을 뜻하지 않는다. 고객 인증 backend·immutable contracts 소비·G13 BFF/compiled 중계·일곱 번째 cold bundle/profile/readiness·실제 gateway를 연결했다. 전체 installer/agent entrypoint·Messenger/Mailpit storage cleanup·권한별 손님 이름과 production notification 자격 갱신/토폴로지 등 독립 작업은 계속 가능하다. T2·E8·H7·정식 UI·실제 VM 인수는 별도 경계다.",
-  "verification_summary": "[고객 인증 연결 증거](cloud-customer-relay-bundle-verification-2026-10-08.md): Node22/24 전체 BFF174 각각 pass(신규 고객 인증16 포함), 중간 연결15 각각 pass, agent20 각각 exit0·skip0, 고객 인증 check7/통합9 각각 pass, Node24 root check76와 최종 type/lint/format 통과. Node24 전체 회귀는 환경 starting→ready 재연결로 이전 tool session의 exit 조회가 사라졌으나 최종13 files/174 passed 로그는 보존했다. 이전 TLS3·unpack19·PG6·product5·Nginx15·Web cleanup2 증거는 별도 과거 기록이다. 원인 미확정 이전 receiver startup 실패와 이번 fixture/umask/DNS/keepalive 실패 로그를 보존했다. 정식 UI·실제 systemd PID1·VM·전체 인수는 미완료다. 여섯 선택 제품 cold archive/lock/npm ci/config import와 Talk/Web 실제 부팅의 4개 검사도 두 Node 각각 exit0·skip0이며 고객 인증 실제 cold 전체 부팅은 BFF 고객 인증16에 포함돼 있다."
+  "continueable_work_note": "ready=0은 기술 작업 소진을 뜻하지 않는다. 고객 인증 연결에 이어 기존 봉인 자격을 사용하는 명시적 one-shot agent와 권한별 상담 손님 이름 조합을 검증했다. 완전한 native bootstrap/installer 조합·Messenger/Mailpit storage preparation/cleanup·production notification 자격 갱신/토폴로지는 독립 구현이 남아 있다. T2·E8·H7·정식 UI·실제 systemd PID1/VM/timer 인수는 별도 경계다.",
+  "verification_summary": "[one-shot agent·손님 이름 연결 증거](cloud-agent-guest-names-verification-2026-10-08.md): Node22/24 전체 BFF179 각각 13files/exit0/skip0이고 실제 종료 파일을 보존했다. 집중 console18·customer19는 이 전체 회귀에 포함하며 중복 합산하지 않는다. agent core20·cold unpack19(provision-agent fresh install/inert import 포함)·groupware check77(build/type/lint/format)·Talk check1도 각각 exit0이다. 에이전트의 실제 콘솔/PG/Talk/TLS/report와 fixture 설치기를 구분한다. 손님 이름의 role 조건·dedup·무권한 무조회/무토큰·다른 tenant/deleted null·실제 CA 장애503 및 unit bounded4/cancellation을 확인했다. 실패했던 잘못된 콘솔 CA와 안전 오류 코드/negative 문자열 false positive의 exit1 로그를 보존했다. 이전 receiver startup 실패 원인은 미확정이며 최신 통과로 해결됐다고 주장하지 않는다. 이전 TLS3·PG6·product5·optional bundle4·Nginx15·Web cleanup2는 별도 과거 증거다. 운영 자격·timer·외부 송신·실제 systemd PID1/VM·정식 UI·전체 인수는 미실행이다."
 }

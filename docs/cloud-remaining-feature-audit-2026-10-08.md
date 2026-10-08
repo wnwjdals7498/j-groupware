@@ -4,7 +4,7 @@
 
 현재 소스 기준: 구현 109, 부분 32, 미착수 31 / 총 172. 남은 63개. 전체 통합 인수: 미완료.
 
-ready=0은 기술 작업 소진을 뜻하지 않는다. 고객 인증 backend·immutable contracts 소비·G13 BFF/compiled 중계·일곱 번째 cold bundle/profile/readiness·실제 gateway를 연결했다. 전체 installer/agent entrypoint·Messenger/Mailpit storage cleanup·권한별 손님 이름과 production notification 자격 갱신/토폴로지 등 독립 작업은 계속 가능하다. T2·E8·H7·정식 UI·실제 VM 인수는 별도 경계다.
+ready=0은 기술 작업 소진을 뜻하지 않는다. 고객 인증 연결에 이어 기존 봉인 자격을 사용하는 명시적 one-shot agent와 권한별 상담 손님 이름 조합을 검증했다. 완전한 native bootstrap/installer 조합·Messenger/Mailpit storage preparation/cleanup·production notification 자격 갱신/토폴로지는 독립 구현이 남아 있다. T2·E8·H7·정식 UI·실제 systemd PID1/VM/timer 인수는 별도 경계다.
 
 | 분류 | 남은 수 |
 |---|---:|
@@ -32,17 +32,17 @@ ready=0은 기술 작업 소진을 뜻하지 않는다. 고객 인증 backend·i
 | GW-32 | j-groupware | 손님 관리 화면 | UI 기준 선행 | partial | 기존 UI 질의 응답 후 손님/키 화면과 Playwright 인수를 구현한다. |
 | GW-33 | j-groupware | API 키 화면 | UI 기준 선행 | partial | 기존 UI 질의 응답 후 손님/키 화면과 Playwright 인수를 구현한다. |
 | GW-34 | j-groupware | 결재 화면 | UI 기준 선행 | partial | 기존 결재 계약으로 상신·승인·반려 화면을 구현한다. |
-| GW-35 | j-groupware | 상담 화면 | 서비스 구현 선행 | partial | customer-auth 손님 조회와 권한별 이름 조합을 연결하고 T2 정책 및 UI 기준 아래 실제 상담 전달을 구현한다. |
+| GW-35 | j-groupware | 상담 화면 | 서비스 구현 선행 | partial | T2 답변 뒤 실제 visitor/WSS 상담 전달을 연결하고 정식 UI 기준 아래 상담 화면을 구현한다. guest:read 조건의 UUID 이름 조합과 무권한 무조회는 검증 완료다. |
 | GW-36 | j-groupware | 상담 설정 | UI 기준 선행 | partial | 정식 UI 기준 아래 상담 설정 화면을 연결하고 확정된 visitor 서명 계약을 예제로 제공한다. |
 | GW-37 | j-groupware | 웹 관리 화면 | 서비스 구현 선행 | not_started | web DB·인증·helper·계약부터 구현한 뒤 BFF·화면을 연결한다. |
 | GW-38 | j-groupware | 배포 후 허용 출처 등록 | 서비스 구현 선행 | not_started | 각 backend 완성 후 성공/후속 origin 실패를 분리한 BFF 연결을 구현한다. |
-| GW-40 | j-groupware | 알림 수신 API | 서비스 구현 선행 | partial | 전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage cleanup 및 production notification 자격 갱신/토폴로지; 실제 systemd credential/VM/timer는 별도 인수. 고객 인증 bundle/profile/gateway는 검증 완료. |
+| GW-40 | j-groupware | 알림 수신 API | 서비스 구현 선행 | partial | 완전한 native bootstrap/installer 조합·Messenger/Mailpit storage preparation/cleanup·production notification 자격 갱신/토폴로지를 연결한다. 봉인 one-shot agent는 실제 콘솔/PG/Talk/TLS와 fixture 설치기로 검증했고, 실제 systemd PID1/VM/timer는 별도 인수다. |
 | GW-44 | j-groupware | 알림 화면 | UI 기준 선행 | partial | 정식 UI와 기존 알림 계약을 연결한다. |
 | GW-51 | j-groupware | 고객 목록·계약 상태 | 기술 계약 확정 선행 | partial | 업무 계약 상태값·전이 기준을 확인한 뒤 기존 고객 DTO/PG 저장과 연결한다. |
-| GW-63 | j-groupware | 부트스트랩 | 서비스 구현 선행 | partial | 전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage cleanup 및 production notification 자격 갱신/토폴로지; 실제 systemd credential/VM/timer는 별도 인수. 고객 인증 bundle/profile/gateway는 검증 완료. |
-| GW-64 | j-groupware | 서비스 설치 | 서비스 구현 선행 | partial | 전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage cleanup 및 production notification 자격 갱신/토폴로지; 실제 systemd credential/VM/timer는 별도 인수. 고객 인증 bundle/profile/gateway는 검증 완료. |
-| GW-65 | j-groupware | 서비스 해지 | 서비스 구현 선행 | partial | 전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage cleanup 및 production notification 자격 갱신/토폴로지; 실제 systemd credential/VM/timer는 별도 인수. 고객 인증 bundle/profile/gateway는 검증 완료. |
-| GW-66 | j-groupware | 프로비저닝 에이전트 | 서비스 구현 선행 | partial | 전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage cleanup 및 production notification 자격 갱신/토폴로지; 실제 systemd credential/VM/timer는 별도 인수. 고객 인증 bundle/profile/gateway는 검증 완료. |
+| GW-63 | j-groupware | 부트스트랩 | 서비스 구현 선행 | partial | 완전한 native bootstrap/installer 조합·Messenger/Mailpit storage preparation/cleanup·production notification 자격 갱신/토폴로지를 연결한다. 봉인 one-shot agent는 실제 콘솔/PG/Talk/TLS와 fixture 설치기로 검증했고, 실제 systemd PID1/VM/timer는 별도 인수다. |
+| GW-64 | j-groupware | 서비스 설치 | 서비스 구현 선행 | partial | 완전한 native bootstrap/installer 조합·Messenger/Mailpit storage preparation/cleanup·production notification 자격 갱신/토폴로지를 연결한다. 봉인 one-shot agent는 실제 콘솔/PG/Talk/TLS와 fixture 설치기로 검증했고, 실제 systemd PID1/VM/timer는 별도 인수다. |
+| GW-65 | j-groupware | 서비스 해지 | 서비스 구현 선행 | partial | 완전한 native bootstrap/installer 조합·Messenger/Mailpit storage preparation/cleanup·production notification 자격 갱신/토폴로지를 연결한다. 봉인 one-shot agent는 실제 콘솔/PG/Talk/TLS와 fixture 설치기로 검증했고, 실제 systemd PID1/VM/timer는 별도 인수다. |
+| GW-66 | j-groupware | 프로비저닝 에이전트 | 서비스 구현 선행 | partial | 완전한 native bootstrap/installer 조합·Messenger/Mailpit storage preparation/cleanup·production notification 자격 갱신/토폴로지를 연결한다. 봉인 one-shot agent는 실제 콘솔/PG/Talk/TLS와 fixture 설치기로 검증했고, 실제 systemd PID1/VM/timer는 별도 인수다. |
 | GW-71 | j-groupware | UI 기준 | UI 기준 선행 | not_started | 추가 질의를 반복하지 않고 기존 응답을 기다린다. |
 | GW-73 | j-groupware | VM 검증·측정 | 외부 VM 인수 | not_started | 설치자 연결 후 지정 VM에서 통합 인수한다. |
 | MS-07 | j-messenger | UI 토큰 적용 | UI 기준 선행 | not_started | 확정된 groupware UI token을 통합 client 화면에 적용한다. |
@@ -101,16 +101,16 @@ FS-U07의 현 최소 범위를 유지: webhook 수신 전 누락 허용, 수신�
 
 ## 실제 검증 범위
 
-[고객 인증 연결 증거](cloud-customer-relay-bundle-verification-2026-10-08.md): Node22/24 전체 BFF174 각각 pass(신규 고객 인증16 포함), 중간 연결15 각각 pass, agent20 각각 exit0·skip0, 고객 인증 check7/통합9 각각 pass, Node24 root check76와 최종 type/lint/format 통과. Node24 전체 회귀는 환경 starting→ready 재연결로 이전 tool session의 exit 조회가 사라졌으나 최종13 files/174 passed 로그는 보존했다. 이전 TLS3·unpack19·PG6·product5·Nginx15·Web cleanup2 증거는 별도 과거 기록이다. 원인 미확정 이전 receiver startup 실패와 이번 fixture/umask/DNS/keepalive 실패 로그를 보존했다. 정식 UI·실제 systemd PID1·VM·전체 인수는 미완료다. 여섯 선택 제품 cold archive/lock/npm ci/config import와 Talk/Web 실제 부팅의 4개 검사도 두 Node 각각 exit0·skip0이며 고객 인증 실제 cold 전체 부팅은 BFF 고객 인증16에 포함돼 있다.
+[one-shot agent·손님 이름 연결 증거](cloud-agent-guest-names-verification-2026-10-08.md): Node22/24 전체 BFF179 각각 13files/exit0/skip0이고 실제 종료 파일을 보존했다. 집중 console18·customer19는 이 전체 회귀에 포함하며 중복 합산하지 않는다. agent core20·cold unpack19(provision-agent fresh install/inert import 포함)·groupware check77(build/type/lint/format)·Talk check1도 각각 exit0이다. 에이전트의 실제 콘솔/PG/Talk/TLS/report와 fixture 설치기를 구분한다. 손님 이름의 role 조건·dedup·무권한 무조회/무토큰·다른 tenant/deleted null·실제 CA 장애503 및 unit bounded4/cancellation을 확인했다. 실패했던 잘못된 콘솔 CA와 안전 오류 코드/negative 문자열 false positive의 exit1 로그를 보존했다. 이전 receiver startup 실패 원인은 미확정이며 최신 통과로 해결됐다고 주장하지 않는다. 이전 TLS3·PG6·product5·optional bundle4·Nginx15·Web cleanup2는 별도 과거 증거다. 운영 자격·timer·외부 송신·실제 systemd PID1/VM·정식 UI·전체 인수는 미실행이다.
 
 작업 브랜치의 마지막 소스 커밋:
 
 - web_source_commit: `13861dd835362992f6ba0ee8bd237e30db8ca0ba`
-- agent_source_commit: `b15b53bb32942eee832413729940af02c1950edf`
-- talk_source_commit: `a022105102ffe680cf040b4d57f6f46e1d54d804`
+- agent_source_commit: `a1e875006117aa7feffd2dea72d07d5d7535db55`
+- talk_source_commit: `41f84030119d8deaa7eff94079f95da1a4a7d23b`
 - console_source_commit: `998a48abe1e66f2aefd88d28fa6adda07627107c`
-- talk_bff_source_commit: `bc949abd081477cac26e3c41a4e0311bd377c091`
-- bundle_source_commit: `b15b53bb32942eee832413729940af02c1950edf`
+- talk_bff_source_commit: `8525b5804fe6aa5ffff3d438612a1b0353c3af1d`
+- bundle_source_commit: `a1e875006117aa7feffd2dea72d07d5d7535db55`
 - bootstrap_source_commit: `aa2a2f13e88fa1e6959ccb08c276434a8e7c831f`
 - teardown_source_commit: `e00000f9f2d0b8f2f7ec1ecaac5c12dce41deaa5`
 - notification_worker_source_commit: `ea24dd34636bcfebbf89ec26d87c79831a577ece`

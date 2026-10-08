@@ -1,6 +1,6 @@
 # GW-66 독립 조정 엔진
 
-결정 8의 상태 비교·직렬 실행·멱등·잠금·보고, 실제 콘솔 producer/agent 키·revision transport와 제품 env/TLS probe/Nginx adapter를 구현했다. **부분 구현이다.** 실제 OS 설치기를 실행하는 entrypoint·제품 storage/cleanup·알림 등록과 고객 systemd service 활성화는 남아 있다. `jgw-provision-agent.timer.example`은 1분 비활성 템플릿이며 호스트에 복사하거나 enable하지 않았다. [제품 연결](provisioning.md)과 [실행 번들](bundles.md)을 따른다.
+결정 8의 상태 비교·직렬 실행·멱등·잠금·보고, 실제 콘솔 producer/agent 키·revision transport와 제품 env/TLS probe/Nginx adapter를 구현했다. [명시적 one-shot entrypoint](provision-agent.md)는 기존 봉인 자격·제품 profile·잠금·고정 설치기 argv·실제 관찰·accepted report를 연결한다. **부분 구현이다.** 완전한 native installer·제품 storage/cleanup·운영 알림 자격 갱신과 고객 systemd service 활성화는 남아 있다. `jgw-provision-agent.timer.example`은 1분 비활성 템플릿이며 호스트에 복사하거나 enable하지 않았다. [제품 연결](provisioning.md)과 [실행 번들](bundles.md)을 따른다.
 
 ## 내부 어댑터
 
