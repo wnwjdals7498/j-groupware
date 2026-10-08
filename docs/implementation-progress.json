@@ -6,9 +6,9 @@
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 34,
-    "partial": 13,
-    "not_started": 125
+    "implemented": 46,
+    "partial": 14,
+    "not_started": 112
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
@@ -1526,9 +1526,14 @@
       "items": [
         "A5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "cloud_actual_j_auth_keycloak_https_postgres_21_pass; unit_17_pass; bff_ui_vm_acceptance_not_run",
+      "code": [
+        "j-approval/apps/server/src/app.ts",
+        "j-approval/apps/server/src/db/documents.ts",
+        "j-approval/tests/integration/approval.integration.test.ts",
+        "j-approval/docs/cloud-approval-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "AP-02",
@@ -1537,9 +1542,14 @@
       "items": [
         "A6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "cloud_immutable_snapshot_line_validation_pass; actual_bff_org_change_workflow_not_run",
+      "code": [
+        "j-approval/apps/server/src/app.ts",
+        "j-approval/apps/server/src/db/documents.ts",
+        "j-approval/tests/integration/approval.integration.test.ts",
+        "j-approval/docs/cloud-approval-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "AP-03",
@@ -1548,9 +1558,14 @@
       "items": [
         "A5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "cloud_actual_j_auth_keycloak_https_postgres_21_pass; unit_17_pass; bff_ui_vm_acceptance_not_run",
+      "code": [
+        "j-approval/apps/server/src/app.ts",
+        "j-approval/apps/server/src/db/documents.ts",
+        "j-approval/tests/integration/approval.integration.test.ts",
+        "j-approval/docs/cloud-approval-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "AP-04",
@@ -1559,9 +1574,14 @@
       "items": [
         "A5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "cloud_actual_j_auth_keycloak_https_postgres_21_pass; unit_17_pass; bff_ui_vm_acceptance_not_run",
+      "code": [
+        "j-approval/apps/server/src/app.ts",
+        "j-approval/apps/server/src/db/documents.ts",
+        "j-approval/tests/integration/approval.integration.test.ts",
+        "j-approval/docs/cloud-approval-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "AP-05",
@@ -1570,9 +1590,14 @@
       "items": [
         "A5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "cloud_actual_j_auth_keycloak_https_postgres_21_pass; unit_17_pass; bff_ui_vm_acceptance_not_run",
+      "code": [
+        "j-approval/apps/server/src/app.ts",
+        "j-approval/apps/server/src/db/documents.ts",
+        "j-approval/tests/integration/approval.integration.test.ts",
+        "j-approval/docs/cloud-approval-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "AP-06",
@@ -1582,9 +1607,14 @@
         "A5",
         "A6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "cloud_actual_j_auth_keycloak_https_postgres_21_pass; unit_17_pass; bff_ui_vm_acceptance_not_run",
+      "code": [
+        "j-approval/apps/server/src/app.ts",
+        "j-approval/apps/server/src/db/documents.ts",
+        "j-approval/tests/integration/approval.integration.test.ts",
+        "j-approval/docs/cloud-approval-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "AP-07",
@@ -1593,9 +1623,14 @@
       "items": [
         "A5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "cloud_actual_j_auth_keycloak_https_postgres_21_pass; unit_17_pass; bff_ui_vm_acceptance_not_run",
+      "code": [
+        "j-approval/apps/server/src/app.ts",
+        "j-approval/apps/server/src/db/documents.ts",
+        "j-approval/tests/integration/approval.integration.test.ts",
+        "j-approval/docs/cloud-approval-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "AP-08",
@@ -1604,9 +1639,14 @@
       "items": [
         "A5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "cloud_actual_j_auth_keycloak_https_postgres_21_pass; unit_17_pass; bff_ui_vm_acceptance_not_run",
+      "code": [
+        "j-approval/apps/server/src/app.ts",
+        "j-approval/apps/server/src/db/documents.ts",
+        "j-approval/tests/integration/approval.integration.test.ts",
+        "j-approval/docs/cloud-approval-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "AP-09",
@@ -1615,9 +1655,14 @@
       "items": [
         "A5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "cloud_actual_j_auth_keycloak_https_postgres_21_pass; unit_17_pass; bff_ui_vm_acceptance_not_run",
+      "code": [
+        "j-approval/apps/server/src/app.ts",
+        "j-approval/apps/server/src/db/documents.ts",
+        "j-approval/tests/integration/approval.integration.test.ts",
+        "j-approval/docs/cloud-approval-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "AP-10",
@@ -1626,9 +1671,14 @@
       "items": [
         "A4"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "cloud_actual_j_auth_keycloak_https_postgres_21_pass; unit_17_pass; bff_ui_vm_acceptance_not_run",
+      "code": [
+        "j-approval/apps/server/src/app.ts",
+        "j-approval/apps/server/src/db/documents.ts",
+        "j-approval/tests/integration/approval.integration.test.ts",
+        "j-approval/docs/cloud-approval-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "AP-20",
@@ -1637,9 +1687,13 @@
       "items": [
         "A9"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "cloud_transactional_outbox_turn_done_dedup_and_actual_failure_rollback_pass; sender_retry_and_actual_G22_receipt_not_implemented_or_run",
+      "code": [
+        "j-approval/apps/server/src/db/documents.ts",
+        "j-approval/deploy/migrations/001-approval.sql",
+        "j-approval/tests/integration/approval.integration.test.ts"
+      ]
     },
     {
       "id": "AP-30",
@@ -1648,9 +1702,14 @@
       "items": [
         "A1"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "cloud_actual_j_auth_keycloak_https_postgres_21_pass; unit_17_pass; bff_ui_vm_acceptance_not_run",
+      "code": [
+        "j-approval/deploy/migrations/001-approval.sql",
+        "j-approval/deploy/postgres-init.sh",
+        "j-approval/apps/server/src/db/migrate.ts",
+        "j-approval/tests/integration/approval.integration.test.ts"
+      ]
     },
     {
       "id": "AP-31",
@@ -1659,9 +1718,13 @@
       "items": [
         "A2"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "cloud_loopback_registry_contracts_0.1.0_publish_exact_install_integrity_1_pass; full_bff_ui_vm_not_run",
+      "code": [
+        "j-approval/packages/contracts/src/index.ts",
+        "j-approval/docs/feature-specifications.md",
+        "j-approval/tests/registry/contracts.test.mjs"
+      ]
     },
     {
       "id": "AP-32",
