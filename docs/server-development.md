@@ -1,6 +1,6 @@
 # 고객 BFF 개발·실행
 
-G1 → G3 → G4 → G5/G6/G15 서버와 G23 공통 호출 함수를 구현했다. `apps/server`는 고객 하나의 BFF이며 결재·메신저 업무 HTTP와 알림 수신/SSE도 연결했다. 운영 콘솔·메일/상담 업무 중계·정식 웹 화면은 후속 범위다. Node 22.18 이상, PostgreSQL 18.6, 기존 j-auth의 Keycloak 26.8.0을 사용한다. 고정 패키지 버전과 무결성은 `package-lock.json`이 기준이다.
+G1 → G3 → G4 → G5/G6/G15 서버와 G23 공통 호출 함수를 구현했다. `apps/server`는 고객 하나의 BFF이며 결재·메신저 업무 HTTP와 알림 수신/SSE도 연결했다. 메일 목록/상세 BFF도 연결했다. 운영 콘솔·상담 업무 중계·정식 웹 화면은 후속 범위다. Node 22.18 이상, PostgreSQL 18.6, 기존 j-auth의 Keycloak 26.8.0을 사용한다. 고정 패키지 버전과 무결성은 `package-lock.json`이 기준이다.
 
 ## 설치와 실행
 
@@ -75,3 +75,9 @@ env·TLS·PG volume·JSON 결과는 `/workspace/.suite-runtime`에 둔다. 테�
 ## 알림 registry 투영의 명시적 모드
 
 [투영 소유권·manifest·source 유효 시간과 격리 검증](cloud-notification-projection-verification-2026-10-08.md)을 따른다. 기본 static 설정을 유지한다. 명시적으로 projection 모드를 쓰려면 private listener와 사전에 초기화한 tenant registry가 필요하고 static key env를 생략한다. 외부 installer/control-plane 소유자가 source reader와 worker를 실행하며 operator 자격·원문 notification key를 BFF에 넣지 않는다. 현재 운영 source·설치기·에이전트 배치는 구현/검증하지 않았다.
+
+## 공유 받은편지함 BFF (G14 서버)
+
+[메일 API·실제 연결·한계](cloud-mail-bff-verification-2026-10-08.md)를 따른다. `@j-mail/contracts@0.1.0`을 loopback registry의 exact version으로 설치하고 외부 env의 `JGW_SERVICE_MAIL_URL`을 명시적인 loopback HTTPS mail origin으로 설정한다. `GET /api/mail/messages?offset=0&limit=20`, `GET /api/mail/messages/:id`는 세션과 `mail:read`를 검사하고 기존 G23 경로로 j-mail 단일 aud 토큰을 서버 사이에서만 전달한다. tenant/source URL 추가 필드는400이며 native Mailpit API/send 경로는 제공하지 않는다.
+
+같은 tenant 공유 편지함이고 total/page는 j-mail의 SMTP 수신 근거 검사 후 계산된다. DTO와 response bound를 다시 검사하며 본문 HTML은 JSON 문자열이다. 정식 메일 화면/iframe sandbox/Playwright와 E8 알림은 아직 없다. 외부 env/키/인증서를 Git에 넣지 않으며 운영 설치·외부 메일 송신은 실행하지 않았다.

@@ -13,6 +13,8 @@ export const ROUTES = {
   "GET /auth/callback": { kind: "oidc" },
   "POST /auth/logout": { kind: "session" },
   "POST /auth/backchannel-logout": { kind: "backchannel" },
+  "GET /api/mail/messages": { kind: "session", role: "mail:read" },
+  "GET /api/mail/messages/:id": { kind: "session", role: "mail:read" },
   "GET /api/me": { kind: "session" },
   "GET /api/board/posts": { kind: "session", role: "board:read" },
   "GET /api/board/posts/:id": { kind: "session", role: "board:read" },

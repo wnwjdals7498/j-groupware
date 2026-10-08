@@ -13,6 +13,7 @@
     "@j-auth/token-verifier": "0.1.0",
     "@j-groupware/contracts": "0.1.0",
     "@j-groupware/permissions": "0.1.0",
+    "@j-mail/contracts": "0.1.0",
     "fastify": "5.12.5",
     "jose": "6.2.12",
     "pg": "8.23.1",

@@ -6,14 +6,16 @@
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 61,
-    "partial": 18,
-    "not_started": 93
+    "implemented": 66,
+    "partial": 19,
+    "not_started": 87
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
-    "Messenger formal client UI/file BFF, product-specific mail/talk relays, production installer/agent wiring of subscription/key projection and operator/installer console remain unimplemented",
-    "Hyper-V/VM/customer-server and external Nginx deployment/installation acceptance not executed in this cloud test runtime"
+    "Messenger formal client UI/file BFF, talk/guest/web product relays, formal mail UI, production installer/agent wiring and operator/installer console remain unimplemented",
+    "Hyper-V/VM/customer-server and external Nginx deployment/installation acceptance not executed in this cloud test runtime",
+    "Imported sample-a scoped mail:read assignment returned Keycloak403/j-auth503; existing sample permissions preserved. Canonical newly provisioned tenant/member/subscription OIDC tests passed; imported-sample permission evaluation remains unresolved",
+    "Mail E8 needs FS-U07 pre-webhook loss criteria and full SMTP envelope recipient preservation contract; no outbox/ingress recovery policy invented"
   ],
   "features": [
     {
@@ -796,9 +798,14 @@
       "items": [
         "G14"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_cookie_bff_compiled_mail_network_none_smtp_keycloak_pg_8_pass_node22_node24; source_tenant_injection_denied; role_revocation_session_end_pass; formal_ui_sandbox_playwright_pending",
+      "code": [
+        "j-groupware/apps/server/src/mail-routes.ts",
+        "j-groupware/packages/permissions/src/index.ts",
+        "j-groupware/tests/server/mail-routes.test.ts",
+        "j-groupware/tests/bff/mail.integration.test.ts"
+      ]
     },
     {
       "id": "GW-32",
@@ -1393,9 +1400,13 @@
       "items": [
         "E3"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_two_tenant_mixed_smtp_filter_before_count_page_pass_node22_node24; actual_bff_pass; browser_acceptance_pending",
+      "code": [
+        "j-mail/apps/server/src/mailpit.ts",
+        "j-mail/apps/server/src/app.ts",
+        "j-mail/tests/integration/inbox.integration.test.ts"
+      ]
     },
     {
       "id": "ML-11",
@@ -1404,9 +1415,13 @@
       "items": [
         "E3"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_headers_text_html_json_pass; foreign_id_404_without_native_read_change_pass; browser_sandbox_not_run",
+      "code": [
+        "j-mail/apps/server/src/mailpit.ts",
+        "j-mail/apps/server/src/app.ts",
+        "j-mail/tests/integration/inbox.integration.test.ts"
+      ]
     },
     {
       "id": "ML-12",
@@ -1415,9 +1430,14 @@
       "items": [
         "E3"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "smtp_inserted_first_received_scope_for_pinned_single_tenant_capture_pass; forged_to_and_mixed_tenant_count_page_detail_isolation_pass",
+      "code": [
+        "j-mail/apps/server/src/mailpit.ts",
+        "j-mail/deploy/mailpit-profile.mjs",
+        "j-mail/tests/server/mailpit.test.ts",
+        "j-mail/tests/integration/inbox.integration.test.ts"
+      ]
     },
     {
       "id": "ML-13",
@@ -1426,9 +1446,13 @@
       "items": [
         "E3"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_oidc_pkce_exchange_single_j_mail_aud_issuer_tenant_azp_role_401_403_pass; actual_mailpit_stop_and_fresh_verifier_closed_jwks_connection_503_pass",
+      "code": [
+        "j-mail/apps/server/src/app.ts",
+        "j-mail/tests/integration/runtime.ts",
+        "j-mail/tests/integration/inbox.integration.test.ts"
+      ]
     },
     {
       "id": "ML-20",
@@ -1463,9 +1487,13 @@
       "items": [
         "E3"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "immutable_j_mail_contracts_0_1_0_private_loopback_registry_publish_pack_integrity_exact_consumer_pass; actual_j_groupware_bff_consumer_pass",
+      "code": [
+        "j-mail/packages/contracts/src/index.ts",
+        "j-mail/tests/registry/contracts.test.mjs",
+        "j-groupware/apps/server/src/mail-routes.ts"
+      ]
     },
     {
       "id": "ML-32",

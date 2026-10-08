@@ -9,6 +9,8 @@ const ca = [
 ].map((file) => readFileSync(file, "utf8"));
 if (process.env.JGW_TEST_APPROVAL_CA)
   ca.push(readFileSync(process.env.JGW_TEST_APPROVAL_CA, "utf8"));
+if (process.env.JGW_TEST_MAIL_CA)
+  ca.push(readFileSync(process.env.JGW_TEST_MAIL_CA, "utf8"));
 setGlobalDispatcher(
   new Agent({
     connect: {

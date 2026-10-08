@@ -20,7 +20,7 @@
 
 실제 tenant에 mail/messenger를 j-auth 가입 API로 추가하고 실제 로그인 token을 교환했다. 8개 동시 호출 1회 교환·세션별 분리, 다른 audience/tenant 거절, 미가입 역할·unknown service 거절, cache 서명 변조 차단, 실제 refresh 후 cache 교체, cache 만료·통신 장애 재시도, refresh 성공 뒤 교환 실패의 refresh 보존, 실제 교환 응답 뒤 취소 시 token 미반환·cache 미저장, 실제 logout·회원 role 변경 backchannel의 cache 삭제와 반복을 확인했다.
 
-loopback HTTP 수신 fixture가 축소 token을 실제 JWKS로 검증하여 응답했고 cookie/서비스 키 미전달·외부 path/redirect 거절을 확인했다. 이 수신기는 transport 경계를 확인하는 테스트 서버이며 실제 j-mail/j-messenger 제품 서버가 아니다. 각 제품의 업무 API·화면·WSS 종단 인수는 여전히 미실행이다.
+loopback HTTP 수신 fixture가 축소 token을 실제 JWKS로 검증하여 응답했고 cookie/서비스 키 미전달·외부 path/redirect 거절을 확인했다. 이 수신기는 transport 경계를 확인하는 테스트 서버이며 실제 j-mail/j-messenger 제품 서버가 아니다. 당시 제품 업무 API·화면·WSS 종단 인수는 미실행이었다. 후속 결재·메신저 기록과 [실제 메일 BFF 연결](cloud-mail-bff-verification-2026-10-08.md)에서 실행한 범위를 확인한다. 정식 화면/전체 고객 VM 인수와 구별한다.
 
 첫 실행 22개 중 세 가지 실패를 그대로 남겨 진단했다. 응답 본문을 읽는 도중 취소가 503으로 바뀌던 코드를 수정했다. realm 신원 역할까지 제거된다고 보던 기대값을 수정했다. 가입 해지가 즉시 logout을 보낸다고 가정했던 시험은 실제 계약상 logout을 보내는 회원 role 변경 시험으로 바꿨다. 가입 API의 client 제거가 이미 발행된 JWT를 즉시 폐기한다고 주장하지 않는다. 최종 23개 재검사는 refresh 후 실패 경계도 추가해 통과했다.
 
