@@ -60,11 +60,17 @@ native commands use a fixed minimal environment, without inherited loader hooks.
 
 Executed Node 22.18/24.19 coverage: preparation/reconciliation 20 each, five
 product tests each (including real compiled Talk/Web with their isolated PGs),
-15 actual Nginx tests each, whole BFF regression 146 on Node24 and root check
+15 actual Nginx tests each, whole BFF regression 146 each and root check
 76. Customer VM, notification registration, product storage/cleanup and timer
 activation remain separate unexecuted work. Product tests require the external
 isolated Talk/Web/auth env files and their built artifacts; they never skip a
 missing prerequisite or access port 3001.
+
+The [internal bundle producer](bundles.md) now supplies the fixed metadata,
+compiled server/contracts, migrations and product assets required by native
+preflight. Five products pass cold dependency installation; actual extracted
+Talk/Web boot and widget bytes are tested. This does not install bundles,
+helper privileges, units, OS trust or a timer on the cloud/customer host.
 
 Run `JGW_AGENT_TEST_RUNTIME=isolated-cloud npm run test:agent` and
 `npm run test:agent:database`. The database test needs Docker, unused loopback
