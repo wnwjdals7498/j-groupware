@@ -6,6 +6,8 @@
 
 실제 소스·검증 범위와 미구현 항목은 [구현 추적표](implementation-progress.json)에 기록한다. 단위·정적 검사와 실제 서비스 인수 시험을 구별하며, 회사 노트북에서는 시스템 설치·Docker 기동을 하지 않는다.
 
+2026-10-08 클라우드에서 j-auth 서버·tenant DB·토큰/서비스 키 검증·회원 API를 구현하고 실제 Keycloak·PostgreSQL 통합 검사를 수행했다. [실행 결과와 미실행 범위](../../j-auth/docs/cloud-verification-2026-10-08.md)를 근거로 추적표를 갱신했다. 전체 브라우저·BFF·VM 인수는 아직 완료하지 않았다.
+
 공통 결정의 원본은 [architecture.md](architecture.md), 서비스별 결정의 원본은 각 저장소의 `decisions.md`다. 기존 결정을 바꾸는 내용은 확정된 요구사항으로 추가하지 않는다. 아래 명세의 세부 처리·인수 시험은 기존 결정을 구체화한 구현 기준이며, 미정 표의 항목은 담당 Item에서 확인한 뒤 contracts에 고정한다.
 
 | 서비스 | 기존 기능 목록 | 상세 명세 | 기능 수 | 담당 Item |

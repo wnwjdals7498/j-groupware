@@ -87,7 +87,7 @@ def main():
         if set(expected) != set(actual):
             errors.append(f"{repo}: missing={sorted(set(expected)-set(actual))}, extra={sorted(set(actual)-set(expected))}")
         text = spec.read_text(encoding="utf-8")
-        if "인수 시험 전" not in text:
+        if not any(status in text for status in ("인수 시험 전", "전체 인수 시험 미완료")):
             errors.append(f"{repo}: implementation/test status is not declared")
         defined_tests = {cells[0] for _, cells in table_rows(text)
                          if cells and re.fullmatch(prefix + r"-T\d+", cells[0])}

@@ -1,20 +1,19 @@
 {
   "updated_date": "2026-10-08",
   "scope": "suite integration features only; existing messenger feature set is separate",
-  "status_basis": "source implementation and last bounded Node checks; this is not service-level acceptance completion",
+  "status_basis": "source implementation and bounded cloud checks; verification describes executed coverage, not service-level acceptance completion",
   "system_installation": "forbidden on company laptop",
-  "docker_apply_executed": false,
+  "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "not_started": 160,
-    "partial": 11,
-    "implemented": 1
+    "implemented": 15,
+    "partial": 6,
+    "not_started": 151
   },
   "blocked_runtime": [
-    "Docker Compose execution",
-    "Keycloak OIDC/token/FGAP and realm import",
-    "PostgreSQL isolation/migrations integration",
-    "Hyper-V/VM service verification"
+    "Browser OIDC/PKCE and BFF backchannel/WSS: j-groupware BFF apps/server is not implemented",
+    "Login theme: canonical j-groupware/docs/ui-guidelines.md is absent",
+    "Hyper-V/VM/customer-server and external Nginx verification not executed in this cloud test runtime"
   ],
   "features": [
     {
@@ -24,11 +23,12 @@
       "items": [
         "I1"
       ],
-      "implementation": "partial",
-      "verification": "static_only; keycloak_postgres_runtime_blocked",
+      "implementation": "implemented",
+      "verification": "cloud_keycloak_postgres_https_start_pass; loopback_bind_confirmed; external_vm_access_not_run",
       "code": [
         "j-auth/deploy/compose.yaml",
-        "j-auth/deploy/postgres/init-control-plane-databases.sh"
+        "j-auth/deploy/postgres/init-control-plane-databases.sh",
+        "j-auth/scripts/prepare-cloud-test-runtime.mjs"
       ]
     },
     {
@@ -39,7 +39,7 @@
         "I2"
       ],
       "implementation": "partial",
-      "verification": "unit_static_only; actual_import_blocked",
+      "verification": "cloud_four_realm_import_and_claims_pass; login_theme_and_browser_acceptance_pending",
       "code": [
         "j-auth/scripts/realm/templates.mjs"
       ]
@@ -51,10 +51,11 @@
       "items": [
         "I2"
       ],
-      "implementation": "partial",
-      "verification": "unit_static_only; actual_import_blocked",
+      "implementation": "implemented",
+      "verification": "cloud_operator_import_claims_and_authorization_boundary_pass",
       "code": [
-        "j-auth/scripts/realm/templates.mjs"
+        "j-auth/scripts/realm/templates.mjs",
+        "j-auth/tests/integration/authentication.test.ts"
       ]
     },
     {
@@ -64,10 +65,12 @@
       "items": [
         "I2"
       ],
-      "implementation": "partial",
-      "verification": "unit_static_only; account_import_blocked",
+      "implementation": "implemented",
+      "verification": "cloud_four_realm_import_and_six_accounts_token_issuance_pass",
       "code": [
-        "j-auth/scripts/realm/templates.mjs"
+        "j-auth/scripts/realm/templates.mjs",
+        "j-auth/tests/integration/authentication.test.ts",
+        "j-auth/tests/integration/members.test.ts"
       ]
     },
     {
@@ -79,7 +82,7 @@
         "I4"
       ],
       "implementation": "partial",
-      "verification": "configuration_only; actual_oidc_login_blocked",
+      "verification": "pkce_redirect_bruteforce_configuration_checked; browser_login_callback_theme_not_run",
       "code": [
         "j-auth/scripts/realm/templates.mjs"
       ]
@@ -92,10 +95,11 @@
         "I2"
       ],
       "implementation": "partial",
-      "verification": "configuration_only; refresh_logout_runtime_blocked",
+      "verification": "cloud_refresh_rotation_replay_and_keycloak_session_end_pass; rp_logout_bff_wss_not_run",
       "code": [
         "j-auth/packages/contracts/src/index.ts",
-        "j-auth/scripts/realm/templates.mjs"
+        "j-auth/scripts/realm/templates.mjs",
+        "j-auth/tests/integration/authentication.test.ts"
       ]
     },
     {
@@ -105,10 +109,11 @@
       "items": [
         "I2"
       ],
-      "implementation": "partial",
-      "verification": "configuration_only; token_exchange_runtime_blocked",
+      "implementation": "implemented",
+      "verification": "cloud_exchange_to_single_subscribed_audience_pass; unsubscribed_audience_denied",
       "code": [
-        "j-auth/scripts/realm/templates.mjs"
+        "j-auth/scripts/realm/templates.mjs",
+        "j-auth/tests/integration/authentication.test.ts"
       ]
     },
     {
@@ -118,10 +123,11 @@
       "items": [
         "I2"
       ],
-      "implementation": "partial",
-      "verification": "bootstrap_plan_only; fgap_runtime_blocked",
+      "implementation": "implemented",
+      "verification": "cloud_fgap_v2_user_crud_logout_and_role_allowlist_pass; secret_and_admin_role_denied; provisioner_followup",
       "code": [
-        "j-auth/scripts/realm/templates.mjs"
+        "j-auth/apps/server/src/keycloak/admin-permissions.ts",
+        "j-auth/tests/integration/admin-permissions.test.ts"
       ]
     },
     {
@@ -142,12 +148,16 @@
       "items": [
         "I3"
       ],
-      "implementation": "partial",
-      "verification": "workspace_and_database_config_only; tenant_tables_not_implemented",
+      "implementation": "implemented",
+      "verification": "cloud_db_isolation_concurrent_idempotent_migration_and_postgres_server_restart_pass",
       "code": [
-        "j-auth/package.json",
-        "j-auth/tsconfig.base.json",
-        "j-auth/deploy/postgres/init-control-plane-databases.sh"
+        "j-auth/apps/server/src/main.ts",
+        "j-auth/apps/server/src/config.ts",
+        "j-auth/apps/server/src/db/migrate.ts",
+        "j-auth/apps/server/src/db/tenants.ts",
+        "j-auth/deploy/migrations/001-tenant-control-plane.sql",
+        "j-auth/tests/integration/database.test.ts",
+        "j-auth/tests/integration/main-process.test.ts"
       ]
     },
     {
@@ -185,9 +195,13 @@
       "items": [
         "I3"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "rsa_unit_and_real_claim_audience_jwks_cache_kid_rotation_pass; outage_boundaries_checked",
+      "code": [
+        "j-auth/packages/token-verifier/src/index.ts",
+        "j-auth/tests/server/security.test.ts",
+        "j-auth/tests/integration/authentication.test.ts"
+      ]
     },
     {
       "id": "AU-14",
@@ -196,9 +210,15 @@
       "items": [
         "I3"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "constant_time_digest_unit_and_cloud_tenant_console_key_boundary_pass; db_expiring_dual_hash_pass; rotation_api_pending",
+      "code": [
+        "j-auth/apps/server/src/security/service-key.ts",
+        "j-auth/apps/server/src/security/authorize.ts",
+        "j-auth/apps/server/src/db/tenants.ts",
+        "j-auth/tests/integration/database.test.ts",
+        "j-auth/tests/integration/authentication.test.ts"
+      ]
     },
     {
       "id": "AU-15",
@@ -207,9 +227,14 @@
       "items": [
         "I3"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "cloud_master_secret_memory_read_pass; owned_realm_create_realm_only_credential_pass; db_and_process_logs_no_plaintext",
+      "code": [
+        "j-auth/apps/server/src/keycloak/client.ts",
+        "j-auth/tests/integration/realm-creator.test.ts",
+        "j-auth/tests/integration/authentication.test.ts",
+        "j-auth/tests/integration/main-process.test.ts"
+      ]
     },
     {
       "id": "AU-20",
@@ -218,9 +243,13 @@
       "items": [
         "I6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "cloud_member_list_effective_roles_cursor_and_service_account_exclusion_pass",
+      "code": [
+        "j-auth/apps/server/src/app.ts",
+        "j-auth/apps/server/src/keycloak/members.ts",
+        "j-auth/tests/integration/members.test.ts"
+      ]
     },
     {
       "id": "AU-21",
@@ -229,9 +258,13 @@
       "items": [
         "I6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "cloud_member_creation_password_ready_duplicate_409_and_prevalidated_roles_pass",
+      "code": [
+        "j-auth/apps/server/src/app.ts",
+        "j-auth/apps/server/src/keycloak/members.ts",
+        "j-auth/tests/integration/members.test.ts"
+      ]
     },
     {
       "id": "AU-22",
@@ -240,9 +273,13 @@
       "items": [
         "I6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "cloud_member_delete_and_self_admin_foreign_service_account_guards_pass",
+      "code": [
+        "j-auth/apps/server/src/app.ts",
+        "j-auth/apps/server/src/keycloak/members.ts",
+        "j-auth/tests/integration/members.test.ts"
+      ]
     },
     {
       "id": "AU-23",
@@ -251,9 +288,13 @@
       "items": [
         "I6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "cloud_grant_revoke_direct_composite_roles_and_forbidden_state_unchanged_pass",
+      "code": [
+        "j-auth/apps/server/src/app.ts",
+        "j-auth/apps/server/src/keycloak/members.ts",
+        "j-auth/tests/integration/members.test.ts"
+      ]
     },
     {
       "id": "AU-24",
@@ -262,9 +303,13 @@
       "items": [
         "I6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "cloud_catalog_subscription_intersection_pass; identity_management_and_unsubscribed_roles_excluded",
+      "code": [
+        "j-auth/apps/server/src/app.ts",
+        "j-auth/apps/server/src/keycloak/members.ts",
+        "j-auth/tests/integration/authentication.test.ts"
+      ]
     },
     {
       "id": "AU-25",
@@ -273,9 +318,12 @@
       "items": [
         "I6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "cloud_keycloak_session_end_after_role_change_delete_pass; bff_backchannel_and_wss_not_run",
+      "code": [
+        "j-auth/apps/server/src/keycloak/members.ts",
+        "j-auth/tests/integration/members.test.ts"
+      ]
     },
     {
       "id": "AU-30",
@@ -1948,5 +1996,15 @@
       "verification": "not_run",
       "code": []
     }
+  ],
+  "verification_environment": "isolated cloud /workspace; j-auth-cloud-test; company laptop restriction unchanged",
+  "verification_evidence": [
+    "j-auth/docs/cloud-verification-2026-10-08.md"
+  ],
+  "pending_implementation": [
+    "I7 subscription management APIs",
+    "I8 tenant provisioning and public secret rotation APIs",
+    "I4 browser/BFF integration",
+    "I5 Nginx deployment and VM acceptance"
   ]
 }
