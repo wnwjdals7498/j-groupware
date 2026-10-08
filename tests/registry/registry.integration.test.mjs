@@ -262,8 +262,12 @@ test('local Verdaccio login, publish, immutable install, policy checks, and back
     const patchVersion = (Date.now() % 100000000) * 1000 + (randomBytes(2).readUInt16BE(0) % 1000);
     const version = '0.1.' + String(patchVersion);
     const packageName = '@j-auth/contracts';
-    const packageDirectory = path.join(temporaryRoot, 'package');
+    const workspaceDirectory = path.join(temporaryRoot, 'workspace');
+    const packageDirectory = path.join(workspaceDirectory, 'package');
     await mkdir(packageDirectory, { recursive: true });
+    await writeFile(path.join(workspaceDirectory, 'package.json'), JSON.stringify({
+      name: 'registry-workspace-fixture', private: true, workspaces: ['package'],
+    }) + '\n', { flag: 'wx' });
     await writeFile(path.join(packageDirectory, 'package.json'), JSON.stringify({
       name: packageName,
       version,
@@ -406,12 +410,13 @@ test('local Verdaccio login, publish, immutable install, policy checks, and back
 
     const externalScopeConfig = path.join(isolatedHome, 'external-scope.npmrc');
     await writeFile(externalScopeConfig, '@j-auth:registry=https://registry.npmjs.org/\n', { flag: 'wx' });
-    const scopeRegistryQuery = await runNpm(npmCli, ['config', 'get', '@j-auth:registry'], {
+    const scopeRegistryQuery = await runNpm(npmCli, ['config', 'get', '@j-auth:registry', '--workspaces=false'], {
       cwd: packageDirectory,
       env: loginEnvironment,
       npmrc: externalScopeConfig,
       registry: registryUrl,
     });
+    assert.equal(scopeRegistryQuery.code, 0, 'npm config must succeed for the selected workspace package.');
     assert.equal(scopeRegistryQuery.stdout.trim(), 'https://registry.npmjs.org/', 'npm must report the scope-specific external registry even when a global --registry is also supplied.');
     const rejectedScopeEndpoint = await runNode([publishScript, '--package', packageDirectory, '--registry', registryUrl, '--npmrc', externalScopeConfig], {
       cwd: checkoutRoot,

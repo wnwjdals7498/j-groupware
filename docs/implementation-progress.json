@@ -6,14 +6,14 @@
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 20,
-    "partial": 6,
-    "not_started": 146
+    "implemented": 28,
+    "partial": 10,
+    "not_started": 134
   },
   "blocked_runtime": [
-    "j-groupware browser/BFF callback, RP logout/backchannel/WSS: BFF apps/server is not implemented; isolated HTTP Code/PKCE login passed",
-    "Login theme: canonical j-groupware/docs/ui-guidelines.md is absent",
-    "Hyper-V/VM/customer-server and external Nginx verification not executed in this cloud test runtime"
+    "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
+    "WSS/SSE relay and actual connection closure, downstream BFF token exchange/cache/proxy, operator console and other service integration are not implemented",
+    "Hyper-V/VM/customer-server and external Nginx deployment/installation acceptance not executed in this cloud test runtime"
   ],
   "features": [
     {
@@ -85,11 +85,12 @@
         "I4"
       ],
       "implementation": "partial",
-      "verification": "actual_http_authorization_code_pkce_login_and_claims_pass; missing_pkce_and_wrong_redirect_denied; theme_playwright_bff_bruteforce_not_run",
+      "verification": "actual_groupware_bff_code_pkce_state_nonce_cookie_pass; theme_playwright_bruteforce_not_run",
       "code": [
         "j-auth/scripts/realm/templates.mjs",
         "j-auth/tests/integration/oidc-code.ts",
-        "j-auth/tests/integration/provisioning.test.ts"
+        "j-auth/tests/integration/provisioning.test.ts",
+        "j-groupware/tests/bff/bff.integration.test.ts"
       ]
     },
     {
@@ -100,11 +101,12 @@
         "I2"
       ],
       "implementation": "partial",
-      "verification": "cloud_refresh_rotation_replay_and_keycloak_session_end_pass; rp_logout_bff_wss_not_run",
+      "verification": "actual_groupware_bff_refresh_rotation_rp_confirmation_and_backchannel_session_end_pass; wss_sse_not_implemented",
       "code": [
         "j-auth/packages/contracts/src/index.ts",
         "j-auth/scripts/realm/templates.mjs",
-        "j-auth/tests/integration/authentication.test.ts"
+        "j-auth/tests/integration/authentication.test.ts",
+        "j-groupware/tests/bff/bff.integration.test.ts"
       ]
     },
     {
@@ -335,10 +337,11 @@
         "I6"
       ],
       "implementation": "partial",
-      "verification": "cloud_keycloak_session_end_after_role_change_delete_pass; bff_backchannel_and_wss_not_run",
+      "verification": "actual_jauth_grant_revoke_keycloak_backchannel_target_bff_session_delete_pass; wss_sse_not_implemented",
       "code": [
         "j-auth/apps/server/src/keycloak/members.ts",
-        "j-auth/tests/integration/members.test.ts"
+        "j-auth/tests/integration/members.test.ts",
+        "j-groupware/tests/bff/bff.integration.test.ts"
       ]
     },
     {
@@ -453,9 +456,14 @@
       "items": [
         "G3"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_keycloak_code_pkce_login_pass; hostile_host_state_browser_tenant_rejected",
+      "code": [
+        "j-groupware/apps/server/src/app.ts",
+        "j-groupware/apps/server/src/oidc.ts",
+        "j-groupware/apps/server/src/db/sessions.ts",
+        "j-groupware/tests/bff/bff.integration.test.ts"
+      ]
     },
     {
       "id": "GW-02",
@@ -464,9 +472,15 @@
       "items": [
         "G3"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_callback_id_access_nonce_pkce_pass; concurrent_callback_single_session_and_replay_denial_pass",
+      "code": [
+        "j-groupware/apps/server/src/app.ts",
+        "j-groupware/apps/server/src/oidc.ts",
+        "j-groupware/apps/server/src/db/sessions.ts",
+        "j-groupware/tests/server/security.test.ts",
+        "j-groupware/tests/bff/bff.integration.test.ts"
+      ]
     },
     {
       "id": "GW-03",
@@ -475,9 +489,15 @@
       "items": [
         "G3"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_pg_session_cookie_csrf_idle_max_expiry_restart_pass; tokens_not_in_browser_or_logs",
+      "code": [
+        "j-groupware/deploy/migrations/001-bff-sessions-board.sql",
+        "j-groupware/apps/server/src/db/sessions.ts",
+        "j-groupware/apps/server/src/security.ts",
+        "j-groupware/packages/contracts/src/index.ts",
+        "j-groupware/tests/bff/bff.integration.test.ts"
+      ]
     },
     {
       "id": "GW-04",
@@ -486,9 +506,13 @@
       "items": [
         "G3"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_eight_concurrent_requests_single_refresh_rotation_pass; invalid_grant_deletes_session; injected_pre_request_outage_503_retry_pass",
+      "code": [
+        "j-groupware/apps/server/src/db/sessions.ts",
+        "j-groupware/apps/server/src/oidc.ts",
+        "j-groupware/tests/bff/bff.integration.test.ts"
+      ]
     },
     {
       "id": "GW-05",
@@ -497,9 +521,14 @@
       "items": [
         "G3"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_local_csrf_logout_and_keycloak_rp_confirmation_refresh_rejection_pass; session_end_hook_pass; wss_sse_not_implemented",
+      "code": [
+        "j-groupware/apps/server/src/app.ts",
+        "j-groupware/apps/server/src/db/sessions.ts",
+        "j-groupware/apps/server/src/oidc.ts",
+        "j-groupware/tests/bff/bff.integration.test.ts"
+      ]
     },
     {
       "id": "GW-06",
@@ -508,9 +537,14 @@
       "items": [
         "G3"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_keycloak_backchannel_target_session_delete_pass; signed_replay_other_tenant_bad_signature_pass; wss_sse_not_implemented",
+      "code": [
+        "j-groupware/apps/server/src/oidc.ts",
+        "j-groupware/apps/server/src/db/sessions.ts",
+        "j-groupware/apps/server/src/app.ts",
+        "j-groupware/tests/bff/bff.integration.test.ts"
+      ]
     },
     {
       "id": "GW-07",
@@ -519,9 +553,14 @@
       "items": [
         "G3"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_me_tenant_subject_roles_menu_csrf_pass; no_access_refresh_returned",
+      "code": [
+        "j-groupware/apps/server/src/app.ts",
+        "j-groupware/packages/contracts/src/index.ts",
+        "j-groupware/packages/permissions/src/index.ts",
+        "j-groupware/tests/bff/bff.integration.test.ts"
+      ]
     },
     {
       "id": "GW-08",
@@ -541,9 +580,12 @@
       "items": [
         "G4"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "auth_catalog_derived_role_menu_route_table_pass",
+      "code": [
+        "j-groupware/packages/permissions/src/index.ts",
+        "j-groupware/tests/server/security.test.ts"
+      ]
     },
     {
       "id": "GW-11",
@@ -552,9 +594,14 @@
       "items": [
         "G4"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "undeclared_route_registration_denied_unit_pass; actual_direct_board_role_and_csrf_denial_pass",
+      "code": [
+        "j-groupware/apps/server/src/app.ts",
+        "j-groupware/packages/permissions/src/index.ts",
+        "j-groupware/tests/server/security.test.ts",
+        "j-groupware/tests/bff/bff.integration.test.ts"
+      ]
     },
     {
       "id": "GW-12",
@@ -563,9 +610,13 @@
       "items": [
         "G4"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_me_menu_data_filtered_by_catalog_roles_pass; sidebar_ui_not_implemented",
+      "code": [
+        "j-groupware/packages/permissions/src/index.ts",
+        "j-groupware/apps/server/src/app.ts",
+        "j-groupware/tests/bff/bff.integration.test.ts"
+      ]
     },
     {
       "id": "GW-13",
@@ -607,9 +658,15 @@
       "items": [
         "G5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_pg_board_create_read_list_tenant_isolation_cursor_and_role_input_checks_pass; board_ui_playwright_not_implemented",
+      "code": [
+        "j-groupware/apps/server/src/db/board.ts",
+        "j-groupware/apps/server/src/app.ts",
+        "j-groupware/deploy/migrations/001-bff-sessions-board.sql",
+        "j-groupware/packages/contracts/src/index.ts",
+        "j-groupware/tests/bff/bff.integration.test.ts"
+      ]
     },
     {
       "id": "GW-21",
@@ -937,9 +994,17 @@
       "items": [
         "G1"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "workspace_build_typecheck_unit32_lint_format_pass; actual_compiled_loopback_https_pg_migration_restart_pass; auth_packages_registry_install_pass",
+      "code": [
+        "j-groupware/package.json",
+        "j-groupware/package-lock.json",
+        "j-groupware/apps/server/src/main.ts",
+        "j-groupware/apps/server/src/config.ts",
+        "j-groupware/apps/server/src/db/migrate.ts",
+        "j-groupware/deploy/server.env.example",
+        "j-groupware/tests/bff/bff.integration.test.ts"
+      ]
     },
     {
       "id": "GW-71",
@@ -2041,15 +2106,17 @@
       "code": []
     }
   ],
-  "verification_environment": "isolated cloud /workspace; j-auth-cloud-test; company laptop restriction unchanged",
+  "verification_environment": "isolated cloud /workspace; j-auth-cloud-test and separate j-groupware-cloud-test PostgreSQL; company laptop restriction unchanged",
   "verification_evidence": [
     "j-auth/docs/cloud-verification-2026-10-08.md",
-    "j-auth/docs/cloud-provisioning-verification-2026-10-08.md"
+    "j-auth/docs/cloud-provisioning-verification-2026-10-08.md",
+    "j-groupware/docs/cloud-bff-verification-2026-10-08.md"
   ],
   "pending_implementation": [
-    "I2 canonical login theme and browser/brute-force acceptance",
-    "I4 browser/BFF integration",
-    "I5 Nginx deployment and VM acceptance",
-    "Operator console/customer bootstrap callers and actual package registry distribution"
+    "G23 service-specific BFF token exchange/cache and downstream relay",
+    "G6 member management BFF/UI and organization integration",
+    "G2/G9 canonical UI guidelines/sidebar/board UI; I2 formal theme/Playwright/brute-force acceptance",
+    "Actual WSS/SSE connection closure and other service end-to-end scenarios",
+    "I5/G11 external Nginx, G18/G21 customer bootstrap/agent/VM acceptance and operator console"
   ]
 }

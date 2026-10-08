@@ -118,7 +118,9 @@ function npmEnvironment() {
 }
 
 async function runNpm(npmCli, args, { cwd, npmrc, registry } = {}) {
-  const npmArgs = [...args];
+  // npm config/view do not support implicit workspace selection. Publish only
+  // the explicit package directory, even when it belongs to a workspace root.
+  const npmArgs = [...args, '--workspaces=false'];
   if (npmrc) npmArgs.push('--userconfig', npmrc);
   npmArgs.push('--registry', registry || DEFAULT_REGISTRY);
 

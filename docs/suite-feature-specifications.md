@@ -8,6 +8,8 @@
 
 2026-10-08 클라우드에서 j-auth 서버·tenant DB·토큰/서비스 키 검증·회원 API를 구현하고 실제 Keycloak·PostgreSQL 통합 검사를 수행했다. [실행 결과와 미실행 범위](../../j-auth/docs/cloud-verification-2026-10-08.md)를 근거로 추적표를 갱신했다. 전체 브라우저·BFF·VM 인수는 아직 완료하지 않았다. 같은 클라우드의 후속 작업에서 가입 서비스 조회·활성화·해제와 고객 생성·비밀 교체 API를 구현했다. [후속 검증 기록](../../j-auth/docs/cloud-provisioning-verification-2026-10-08.md)의 단위/정적 48개·실제 통합 61개가 통과했으며, 독립 HTTP Code/PKCE 로그인 결과를 정식 theme·Playwright·BFF 인수와 구별한다.
 
+후속 고객 BFF 작업에서 HTTPS·PG 세션·Code/PKCE·refresh·RP/backchannel logout·권한 표·게시판 API를 구현했다. [BFF 검증 기록](cloud-bff-verification-2026-10-08.md)의 단위 32개·실제 통합 16개·registry 1개와 j-auth 회귀 61개가 통과했다. 정식 UI·Playwright·WSS/SSE·VM과 종단 인수는 완료하지 않았다.
+
 공통 결정의 원본은 [architecture.md](architecture.md), 서비스별 결정의 원본은 각 저장소의 `decisions.md`다. 기존 결정을 바꾸는 내용은 확정된 요구사항으로 추가하지 않는다. 아래 명세의 세부 처리·인수 시험은 기존 결정을 구체화한 구현 기준이며, 미정 표의 항목은 담당 Item에서 확인한 뒤 contracts에 고정한다.
 
 | 서비스 | 기존 기능 목록 | 상세 명세 | 기능 수 | 담당 Item |

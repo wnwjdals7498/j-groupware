@@ -1,0 +1,29 @@
+{
+  "name": "j-groupware",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {"node": ">=22.18.0"},
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "build": "npm run build --workspace=@j-groupware/contracts && npm run build --workspace=@j-groupware/permissions && npm run build --workspace=@j-groupware/server",
+    "check": "npm run build && npm run typecheck && npm test && npm run lint && npm run format:check",
+    "typecheck": "tsc --noEmit -p tsconfig.test.json",
+    "test": "vitest run --config vitest.config.ts",
+    "test:integration": "npm run build && node scripts/run-bff-integration.mjs",
+    "test:registry": "node --test tests/registry/registry.integration.test.mjs",
+    "lint": "eslint apps packages tests/server tests/bff",
+    "format:check": "prettier --check apps packages tests/server tests/bff *.config.ts eslint.config.mjs scripts/run-bff-integration.mjs scripts/prepare-bff-cloud-tests.mjs scripts/wire-bff-cloud-backchannel.mjs",
+    "start": "node apps/server/dist/main.js"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "@types/node": "22.20.4",
+    "@types/pg": "8.23.1",
+    "vitest": "4.1.0",
+    "eslint": "10.11.0",
+    "typescript-eslint": "8.71.0",
+    "prettier": "3.9.9",
+    "undici": "7.30.0"
+  }
+}

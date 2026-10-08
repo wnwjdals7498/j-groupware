@@ -1,6 +1,8 @@
 # j-groupware 기능 명세
 
-작성일: 2026-10-08. 상태: **구현·인수 시험 전**. [기능 목록](features.md), [결정](decisions.md), [제품군 명세 기준](suite-feature-specifications.md)을 따른다. 고객 BFF·모든 서비스 화면, control plane 콘솔, 설치·gateway·알림을 담당한다.
+작성일: 2026-10-08. 상태: **고객 BFF·권한·게시판 서버 구현, 전체 인수 시험 미완료**. [기능 목록](features.md), [결정](decisions.md), [제품군 명세 기준](suite-feature-specifications.md)을 따른다. 고객 BFF·모든 서비스 화면, control plane 콘솔, 설치·gateway·알림을 담당한다. 실제 실행 범위는 [검증 기록](cloud-bff-verification-2026-10-08.md)에 구별한다.
+
+서버 contracts는 flow 5분, `__Host-jgw-session`/`__Host-jgw-login`, 변경 시 `x-csrf-token`과 정확한 Origin, 목록 50개, 제목 200자·본문 20,000자·전체 body 64 KiB로 고정했다. 정식 UI·WSS/SSE·하위 서비스 중계는 아직 없다. RP logout은 client_id 기반 Keycloak 확인 화면을 거친다. [개발 안내](server-development.md)를 따른다.
 
 ## 입력·상태·데이터
 
