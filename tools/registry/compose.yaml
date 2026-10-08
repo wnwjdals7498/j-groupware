@@ -1,6 +1,7 @@
 services:
   verdaccio:
     image: verdaccio/verdaccio:6.10.5
+    user: "${VERDACCIO_UID:-10001}:${VERDACCIO_GID:-65533}"
     environment:
       VERDACCIO_PORT: "4873"
     ports:

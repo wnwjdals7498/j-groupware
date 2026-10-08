@@ -5,7 +5,8 @@
     "partial": 19,
     "not_started": 87,
     "total": 172,
-    "audited": 106
+    "audited": 106,
+    "source_commit": "ace3c0ddf0bd6045fafc17229deec11dc650b1e8"
   },
   "basis": "기존 명세/결정과 실제 소스·실행 증거 대조. 각 기능의 첫 미완료 단계 기준이며 구현 완료·제품 인수 완료를 뜻하지 않는다. 기술 계약과 선행 서비스는 구현자가 계속할 수 있는 작업이며 사용자/외부 환경 차단으로 취급하지 않는다.",
   "whole_suite_verified": false,
@@ -20,9 +21,9 @@
   },
   "summary": {
     "ui": 14,
-    "ready": 20,
     "vm": 9,
     "service": 34,
+    "ready": 14,
     "contract": 20,
     "policy": 9
   },
@@ -68,26 +69,6 @@
       "acceptance_complete": false
     },
     {
-      "id": "AU-06",
-      "name": "토큰 수명·갱신·로그아웃 설정",
-      "service": "j-auth",
-      "baseline_implementation": "partial",
-      "baseline_verification": "actual_groupware_bff_refresh_rotation_rp_confirmation_and_backchannel_session_end_pass; wss_sse_not_implemented",
-      "classification": "ready",
-      "classification_label": "구현 가능",
-      "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "토큰 5분·idle 30분·max 8시간과 갱신/로그아웃 계약이 확정됐고 관련 backend·WSS·SSE 증거가 있다.",
-      "next_step": "기존 증거와 세션 제한 인수를 재대조해 오래된 wss_sse_not_implemented 표기를 교정한다.",
-      "sources": [
-        "j-groupware/docs/implementation-progress.json",
-        "j-auth/docs/decisions.md",
-        "j-auth/docs/feature-specifications.md"
-      ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false
-    },
-    {
       "id": "AU-09",
       "name": "로그인 화면 테마",
       "service": "j-auth",
@@ -99,66 +80,6 @@
       "additional_dependencies": [],
       "reason": "정식 로그인 디자인 기준 문서가 없고 기존 사용자 질의가 대기 중이다.",
       "next_step": "기존 질의의 답을 적용해 Keycloak theme를 구현한다.",
-      "sources": [
-        "j-groupware/docs/implementation-progress.json",
-        "j-auth/docs/decisions.md",
-        "j-auth/docs/feature-specifications.md"
-      ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false
-    },
-    {
-      "id": "AU-11",
-      "name": "contracts 패키지",
-      "service": "j-auth",
-      "baseline_implementation": "partial",
-      "baseline_verification": "unit_build_pass; actual_contract_registry_publish_not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
-      "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "contracts 소스·build는 있고 registry 소비 증거가 다른 문서에 있으나 이 항목 증거가 미갱신이다.",
-      "next_step": "정확한 tarball·무결성·새 소비자 설치를 재대조해 게시 증거를 갱신한다.",
-      "sources": [
-        "j-groupware/docs/implementation-progress.json",
-        "j-auth/docs/decisions.md",
-        "j-auth/docs/feature-specifications.md"
-      ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false
-    },
-    {
-      "id": "AU-25",
-      "name": "변경 시 세션 종료",
-      "service": "j-auth",
-      "baseline_implementation": "partial",
-      "baseline_verification": "actual_jauth_grant_revoke_delete_and_bff_target_session_cache_end_pass; local_pending_callback_guard_pass; wss_sse_not_implemented",
-      "classification": "ready",
-      "classification_label": "구현 가능",
-      "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "실제 권한 변경·BFF 세션 종료·WSS/SSE 종료 증거가 있고 항목의 종료 표기가 오래됐다.",
-      "next_step": "실제 권한 회수·삭제·모든 transport 종료 증거를 대조해 추적표를 교정한다.",
-      "sources": [
-        "j-groupware/docs/implementation-progress.json",
-        "j-auth/docs/decisions.md",
-        "j-auth/docs/feature-specifications.md"
-      ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false
-    },
-    {
-      "id": "AU-50",
-      "name": "control plane 경로 허용 목록",
-      "service": "j-auth",
-      "baseline_implementation": "not_started",
-      "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
-      "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "인증 control-plane 경로 허용 목록·loopback·rate limit은 j-auth 결정 19에 명시돼 있다.",
-      "next_step": "독립 Nginx 설정과 실제 허용/거절 시험을 구현한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-auth/docs/decisions.md",
@@ -336,7 +257,9 @@
       "classification": "service",
       "classification_label": "서비스 구현 선행",
       "external_or_user_gate": false,
-      "additional_dependencies": ["ui"],
+      "additional_dependencies": [
+        "ui"
+      ],
       "reason": "손님 CRUD backend가 아직 docs-only다. UI 기준도 별도로 필요하다.",
       "next_step": "C1/C2/C3 backend 후 기존 BFF 인증 패턴으로 relay·화면을 연결한다.",
       "sources": [
@@ -356,7 +279,9 @@
       "classification": "service",
       "classification_label": "서비스 구현 선행",
       "external_or_user_gate": false,
-      "additional_dependencies": ["ui"],
+      "additional_dependencies": [
+        "ui"
+      ],
       "reason": "손님 API 키 backend가 아직 없으며 UI 기준도 필요하다.",
       "next_step": "C5 backend·one-time secret 계약 후 BFF와 화면을 연결한다.",
       "sources": [
@@ -396,7 +321,9 @@
       "classification": "service",
       "classification_label": "서비스 구현 선행",
       "external_or_user_gate": false,
-      "additional_dependencies": ["ui"],
+      "additional_dependencies": [
+        "ui"
+      ],
       "reason": "상담 회원 API backend가 없고 정식 UI 기준도 필요하다.",
       "next_step": "독립적인 talk 회원 API부터 구현한 뒤 BFF·화면을 연결한다.",
       "sources": [
@@ -416,7 +343,9 @@
       "classification": "service",
       "classification_label": "서비스 구현 선행",
       "external_or_user_gate": false,
-      "additional_dependencies": ["ui"],
+      "additional_dependencies": [
+        "ui"
+      ],
       "reason": "talk 출처·widget 키 backend가 없고 정식 UI 기준도 필요하다.",
       "next_step": "T1/T2/T4 관리 계약부터 구현한 뒤 BFF·화면을 연결한다.",
       "sources": [
@@ -436,7 +365,9 @@
       "classification": "service",
       "classification_label": "서비스 구현 선행",
       "external_or_user_gate": false,
-      "additional_dependencies": ["ui"],
+      "additional_dependencies": [
+        "ui"
+      ],
       "reason": "web backend/helper/H2가 없고 정식 UI 기준도 필요하다.",
       "next_step": "web DB·인증·helper·계약부터 구현한 뒤 BFF·화면을 연결한다.",
       "sources": [
@@ -556,7 +487,9 @@
       "classification": "contract",
       "classification_label": "기술 계약 확정 선행",
       "external_or_user_gate": false,
-      "additional_dependencies": ["policy_for_new_key_replacement_only"],
+      "additional_dependencies": [
+        "policy_for_new_key_replacement_only"
+      ],
       "reason": "j-auth 고객/realm 생성 API는 있으나 콘솔의 실패 복구·installer 키 교체 연결 계약이 남았다.",
       "next_step": "기존 key provisioning 경계를 유지해 등록 saga·실패 상태 계약을 정리한다.",
       "sources": [
@@ -596,7 +529,9 @@
       "classification": "contract",
       "classification_label": "기술 계약 확정 선행",
       "external_or_user_gate": false,
-      "additional_dependencies": ["policy_for_new_key_replacement_only"],
+      "additional_dependencies": [
+        "policy_for_new_key_replacement_only"
+      ],
       "reason": "desired 상태 API·agent 인증/키 교체·revision 계약을 G17/G21에서 연결해야 한다.",
       "next_step": "기존 최소 권한 API와 agent polling 계약을 확정하고 실제 연결한다.",
       "sources": [
@@ -708,26 +643,6 @@
       "acceptance_complete": false
     },
     {
-      "id": "GW-72",
-      "name": "패키지 레지스트리",
-      "service": "j-groupware",
-      "baseline_implementation": "partial",
-      "baseline_verification": "node_integration_pass; compose_runtime_blocked",
-      "classification": "ready",
-      "classification_label": "구현 가능",
-      "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "Node Verdaccio·불변 패키지 설치는 실행됐고 cloud Docker도 사용할 수 있어 과거 laptop 제약이 현재 차단은 아니다.",
-      "next_step": "격리 Compose 경로와 인증·게시·새 소비자 설치를 실제 실행하고 범위를 갱신한다.",
-      "sources": [
-        "j-groupware/docs/implementation-progress.json",
-        "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
-      ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false
-    },
-    {
       "id": "GW-73",
       "name": "VM 검증·측정",
       "service": "j-groupware",
@@ -759,26 +674,6 @@
       "additional_dependencies": [],
       "reason": "메신저 formal UI token 기준이 없다.",
       "next_step": "확정된 groupware UI token을 통합 client 화면에 적용한다.",
-      "sources": [
-        "j-groupware/docs/implementation-progress.json",
-        "j-messenger/docs/pmt-docs/11-implementation-plan.md",
-        "j-messenger/docs/suite-integration-specifications.md"
-      ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false
-    },
-    {
-      "id": "MS-08",
-      "name": "앱 동결",
-      "service": "j-messenger",
-      "baseline_implementation": "not_started",
-      "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
-      "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "standalone 소스 보존·suite client/internal server 사용이라는 M3 범위가 확정돼 있다.",
-      "next_step": "suite 전용 build/배포 profile에서 독립 앱을 제외하고 기존 소스 보존을 검증한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-messenger/docs/pmt-docs/11-implementation-plan.md",
@@ -856,7 +751,10 @@
       "classification": "service",
       "classification_label": "서비스 구현 선행",
       "external_or_user_gate": false,
-      "additional_dependencies": ["E8_policy", "vm"],
+      "additional_dependencies": [
+        "E8_policy",
+        "vm"
+      ],
       "reason": "전용 DB·migration은 검증됐고 E8 결정 뒤 outbox 및 systemd/VM 연결이 남았다.",
       "next_step": "E8 결정 후 outbox를 구현하고 installer 연결·VM 인수를 분리한다.",
       "sources": [
@@ -1056,7 +954,9 @@
       "classification": "contract",
       "classification_label": "기술 계약 확정 선행",
       "external_or_user_gate": false,
-      "additional_dependencies": ["public_write_routes_excluded"],
+      "additional_dependencies": [
+        "public_write_routes_excluded"
+      ],
       "reason": "현재 작업은 외부 쓰기 스코프의 계약 정의이며 공개 CRUD route는 첫 구현에서 열지 않는다.",
       "next_step": "C2/C5에서 guest:write 스코프 포함 규칙만 정의하고 외부 쓰기 route는 이후 범위로 남긴다.",
       "sources": [
@@ -1276,7 +1176,9 @@
       "classification": "service",
       "classification_label": "서비스 구현 선행",
       "external_or_user_gate": false,
-      "additional_dependencies": ["visitor_policy"],
+      "additional_dependencies": [
+        "visitor_policy"
+      ],
       "reason": "스크립트 load·활성 가입·브라우저 token 세 조건 요구는 확정됐으나 token/가입 조회가 없다.",
       "next_step": "T4/T5 정책·활성 조회 후 표시 조건을 검증한다.",
       "sources": [
@@ -1696,7 +1598,9 @@
       "classification": "contract",
       "classification_label": "기술 계약 확정 선행",
       "external_or_user_gate": false,
-      "additional_dependencies": ["visitor_policy"],
+      "additional_dependencies": [
+        "visitor_policy"
+      ],
       "reason": "관리/회원 계약은 독립 고정 가능하고 visitor 정책에 의존하는 계약 부분은 별도다.",
       "next_step": "T2 관리/회원 DTO를 먼저 고정하고 visitor 정책 결정을 분리한다.",
       "sources": [
@@ -2172,5 +2076,146 @@
     "AU-50: 결정 19의 실제 Nginx 인증 control-plane allowlist",
     "GW-63/64/65/66: 완성된 서비스 installer plan·probe·agent 연결; 실제 VM 적용은 별도",
     "MS-08/GW-72: suite 배포 profile과 실제 cloud registry Compose 경로"
+  ],
+  "current_progress": {
+    "implemented": 72,
+    "partial": 15,
+    "not_started": 85,
+    "total": 172,
+    "audited": 100
+  },
+  "completed_since_baseline": [
+    {
+      "id": "AU-06",
+      "name": "토큰 수명·갱신·로그아웃 설정",
+      "service": "j-auth",
+      "baseline_implementation": "partial",
+      "baseline_verification": "actual_groupware_bff_refresh_rotation_rp_confirmation_and_backchannel_session_end_pass; wss_sse_not_implemented",
+      "classification": "ready",
+      "classification_label": "구현 가능",
+      "external_or_user_gate": false,
+      "additional_dependencies": [],
+      "reason": "토큰 5분·idle 30분·max 8시간과 갱신/로그아웃 계약이 확정됐고 관련 backend·WSS·SSE 증거가 있다.",
+      "next_step": "기존 증거와 세션 제한 인수를 재대조해 오래된 wss_sse_not_implemented 표기를 교정한다.",
+      "sources": [
+        "j-groupware/docs/implementation-progress.json",
+        "j-auth/docs/decisions.md",
+        "j-auth/docs/feature-specifications.md"
+      ],
+      "implemented_in_this_batch": false,
+      "acceptance_complete": false,
+      "implementation": "implemented",
+      "verification": "actual_realm_rest_300_1800_28800_refresh_revoke_reuse0_jwt_ttl300_refresh_rotation_replay_reject_node22_node24; actual_bff_backchannel_wss_sse_end_full125_pass_node24; long_duration_idle_max_wait_not_run"
+    },
+    {
+      "id": "AU-11",
+      "name": "contracts 패키지",
+      "service": "j-auth",
+      "baseline_implementation": "partial",
+      "baseline_verification": "unit_build_pass; actual_contract_registry_publish_not_run",
+      "classification": "ready",
+      "classification_label": "구현 가능",
+      "external_or_user_gate": false,
+      "additional_dependencies": [],
+      "reason": "contracts 소스·build는 있고 registry 소비 증거가 다른 문서에 있으나 이 항목 증거가 미갱신이다.",
+      "next_step": "정확한 tarball·무결성·새 소비자 설치를 재대조해 게시 증거를 갱신한다.",
+      "sources": [
+        "j-groupware/docs/implementation-progress.json",
+        "j-auth/docs/decisions.md",
+        "j-auth/docs/feature-specifications.md"
+      ],
+      "implemented_in_this_batch": false,
+      "acceptance_complete": false,
+      "implementation": "implemented",
+      "verification": "actual_fresh_verdaccio_compose_publish_auth_contracts0.1_cold_consumer_dist_bytes_sha512_lock_integrity_duplicate_unpublish_deny_pass_node22_node24"
+    },
+    {
+      "id": "AU-25",
+      "name": "변경 시 세션 종료",
+      "service": "j-auth",
+      "baseline_implementation": "partial",
+      "baseline_verification": "actual_jauth_grant_revoke_delete_and_bff_target_session_cache_end_pass; local_pending_callback_guard_pass; wss_sse_not_implemented",
+      "classification": "ready",
+      "classification_label": "구현 가능",
+      "external_or_user_gate": false,
+      "additional_dependencies": [],
+      "reason": "실제 권한 변경·BFF 세션 종료·WSS/SSE 종료 증거가 있고 항목의 종료 표기가 오래됐다.",
+      "next_step": "실제 권한 회수·삭제·모든 transport 종료 증거를 대조해 추적표를 교정한다.",
+      "sources": [
+        "j-groupware/docs/implementation-progress.json",
+        "j-auth/docs/decisions.md",
+        "j-auth/docs/feature-specifications.md"
+      ],
+      "implemented_in_this_batch": false,
+      "acceptance_complete": false,
+      "implementation": "implemented",
+      "verification": "actual_members_role_revoke_delete_keycloak_session_end_and_partial_failure503_pass_node22_node24; bff_all_transports_session_end_full125_pass_node24"
+    },
+    {
+      "id": "AU-50",
+      "name": "control plane 경로 허용 목록",
+      "service": "j-auth",
+      "baseline_implementation": "not_started",
+      "baseline_verification": "not_run",
+      "classification": "ready",
+      "classification_label": "구현 가능",
+      "external_or_user_gate": false,
+      "additional_dependencies": [],
+      "reason": "인증 control-plane 경로 허용 목록·loopback·rate limit은 j-auth 결정 19에 명시돼 있다.",
+      "next_step": "독립 Nginx 설정과 실제 허용/거절 시험을 구현한다.",
+      "sources": [
+        "j-groupware/docs/implementation-progress.json",
+        "j-auth/docs/decisions.md",
+        "j-auth/docs/feature-specifications.md"
+      ],
+      "implemented_in_this_batch": false,
+      "acceptance_complete": false,
+      "implementation": "implemented",
+      "verification": "actual_nginx_tls_path_allowlist_upstream_auth_and_rate_limit429_no_credentials_log_4_pass_node22_node24; production_hostname_browser_vm_not_run"
+    },
+    {
+      "id": "GW-72",
+      "name": "패키지 레지스트리",
+      "service": "j-groupware",
+      "baseline_implementation": "partial",
+      "baseline_verification": "node_integration_pass; compose_runtime_blocked",
+      "classification": "ready",
+      "classification_label": "구현 가능",
+      "external_or_user_gate": false,
+      "additional_dependencies": [],
+      "reason": "Node Verdaccio·불변 패키지 설치는 실행됐고 cloud Docker도 사용할 수 있어 과거 laptop 제약이 현재 차단은 아니다.",
+      "next_step": "격리 Compose 경로와 인증·게시·새 소비자 설치를 실제 실행하고 범위를 갱신한다.",
+      "sources": [
+        "j-groupware/docs/implementation-progress.json",
+        "j-groupware/docs/decisions.md",
+        "j-groupware/docs/suite-feature-specifications.md"
+      ],
+      "implemented_in_this_batch": false,
+      "acceptance_complete": false,
+      "implementation": "implemented",
+      "verification": "actual_product_compose_nonroot_loopback_fresh_registry_publish_consume_immutable_acl_pass_node22_node24; prior_acl_backup_pass"
+    },
+    {
+      "id": "MS-08",
+      "name": "앱 동결",
+      "service": "j-messenger",
+      "baseline_implementation": "not_started",
+      "baseline_verification": "not_run",
+      "classification": "ready",
+      "classification_label": "구현 가능",
+      "external_or_user_gate": false,
+      "additional_dependencies": [],
+      "reason": "standalone 소스 보존·suite client/internal server 사용이라는 M3 범위가 확정돼 있다.",
+      "next_step": "suite 전용 build/배포 profile에서 독립 앱을 제외하고 기존 소스 보존을 검증한다.",
+      "sources": [
+        "j-groupware/docs/implementation-progress.json",
+        "j-messenger/docs/pmt-docs/11-implementation-plan.md",
+        "j-messenger/docs/suite-integration-specifications.md"
+      ],
+      "implemented_in_this_batch": false,
+      "acceptance_complete": false,
+      "implementation": "implemented",
+      "verification": "actual_suite_server_contracts_build_archive_2_pass_node22_node24; cold_install130_packages_auth_verifier0.1_lock_integrity_match; installed_artifact_static_ui404_ready200_both_nodes; existing_full_check_and_actual_pg21_pass_node24; native_build_operating_install_vm_not_run"
+    }
   ]
 }

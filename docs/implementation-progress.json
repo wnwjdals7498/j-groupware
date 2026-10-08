@@ -6,9 +6,9 @@
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 66,
-    "partial": 19,
-    "not_started": 87
+    "implemented": 72,
+    "partial": 15,
+    "not_started": 85
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
@@ -103,15 +103,16 @@
       "items": [
         "I2"
       ],
-      "implementation": "partial",
-      "verification": "actual_groupware_bff_refresh_rotation_rp_confirmation_and_backchannel_session_end_pass; actual_groupware_WSS_SSE_session_end_pass; formal_UI_and_VM_acceptance_pending",
+      "implementation": "implemented",
+      "verification": "actual_realm_rest_300_1800_28800_refresh_revoke_reuse0_jwt_ttl300_refresh_rotation_replay_reject_node22_node24; actual_bff_backchannel_wss_sse_end_full125_pass_node24; long_duration_idle_max_wait_not_run",
       "code": [
         "j-auth/packages/contracts/src/index.ts",
         "j-auth/scripts/realm/templates.mjs",
         "j-auth/tests/integration/authentication.test.ts",
         "j-groupware/tests/bff/bff.integration.test.ts",
         "j-groupware/docs/cloud-realtime-verification-2026-10-08.md",
-        "j-groupware/tests/bff/messenger.integration.test.ts"
+        "j-groupware/tests/bff/messenger.integration.test.ts",
+        "j-auth/docs/cloud-ready-auth-verification-2026-10-08.md"
       ]
     },
     {
@@ -188,11 +189,13 @@
       "items": [
         "I3"
       ],
-      "implementation": "partial",
-      "verification": "unit_build_pass; actual_contract_registry_publish_evidence_reconciliation_pending",
+      "implementation": "implemented",
+      "verification": "actual_fresh_verdaccio_compose_publish_auth_contracts0.1_cold_consumer_dist_bytes_sha512_lock_integrity_duplicate_unpublish_deny_pass_node22_node24",
       "code": [
         "j-auth/packages/contracts/src/index.ts",
-        "j-auth/packages/contracts/package.json"
+        "j-auth/packages/contracts/package.json",
+        "j-groupware/tests/registry/compose.integration.test.mjs",
+        "j-groupware/docs/cloud-ready-registry-verification-2026-10-08.md"
       ]
     },
     {
@@ -349,8 +352,8 @@
       "items": [
         "I6"
       ],
-      "implementation": "partial",
-      "verification": "actual_jauth_grant_revoke_delete_and_bff_target_session_cache_end_pass; local_pending_callback_guard_pass; actual_groupware_WSS_SSE_session_end_pass; formal_UI_and_VM_acceptance_pending",
+      "implementation": "implemented",
+      "verification": "actual_members_role_revoke_delete_keycloak_session_end_and_partial_failure503_pass_node22_node24; bff_all_transports_session_end_full125_pass_node24",
       "code": [
         "j-auth/apps/server/src/keycloak/members.ts",
         "j-auth/tests/integration/members.test.ts",
@@ -358,7 +361,8 @@
         "j-groupware/apps/server/src/members.ts",
         "j-groupware/apps/server/src/db/sessions.ts",
         "j-groupware/docs/cloud-realtime-verification-2026-10-08.md",
-        "j-groupware/tests/bff/messenger.integration.test.ts"
+        "j-groupware/tests/bff/messenger.integration.test.ts",
+        "j-auth/docs/cloud-ready-auth-verification-2026-10-08.md"
       ]
     },
     {
@@ -451,9 +455,14 @@
       "items": [
         "I5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_nginx_tls_path_allowlist_upstream_auth_and_rate_limit429_no_credentials_log_4_pass_node22_node24; production_hostname_browser_vm_not_run",
+      "code": [
+        "j-auth/deploy/gateway/gateway.mjs",
+        "j-auth/deploy/gateway/render.mjs",
+        "j-auth/tests/integration/gateway.test.ts",
+        "j-auth/docs/cloud-ready-auth-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "AU-51",
@@ -1182,13 +1191,16 @@
       "items": [
         "X1"
       ],
-      "implementation": "partial",
-      "verification": "node_integration_pass; immutable_messenger_registry_install_Node22_Node24_pass; isolated_compose_not_run_current_cloud_docker_available",
+      "implementation": "implemented",
+      "verification": "actual_product_compose_nonroot_loopback_fresh_registry_publish_consume_immutable_acl_pass_node22_node24; prior_acl_backup_pass",
       "code": [
         "j-groupware/tools/registry/compose.yaml",
         "j-groupware/tools/registry/config.yaml",
         "j-groupware/scripts/registry-publish.mjs",
-        "j-groupware/scripts/registry-backup.mjs"
+        "j-groupware/scripts/registry-backup.mjs",
+        "j-groupware/tools/registry/scripts/compose.mjs",
+        "j-groupware/tests/registry/compose.integration.test.mjs",
+        "j-groupware/docs/cloud-ready-registry-verification-2026-10-08.md"
       ]
     },
     {
@@ -1352,9 +1364,14 @@
       "items": [
         "M2"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_suite_server_contracts_build_archive_2_pass_node22_node24; cold_install130_packages_auth_verifier0.1_lock_integrity_match; installed_artifact_static_ui404_ready200_both_nodes; existing_full_check_and_actual_pg21_pass_node24; native_build_operating_install_vm_not_run",
+      "code": [
+        "j-messenger/deploy/build-suite-profile.mjs",
+        "j-messenger/deploy/suite-profile.json",
+        "j-messenger/tests/deploy/suite-profile.test.mjs",
+        "j-messenger/docs/cloud-ms08-suite-profile-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "MS-09",
