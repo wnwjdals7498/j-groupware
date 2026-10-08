@@ -6,6 +6,20 @@ export type Access =
   | { readonly kind: "session"; readonly role?: FunctionalRoleName };
 
 export const ROUTES = {
+  "GET /api/talk/rooms": { kind: "session", role: "talk:read" },
+  "GET /api/talk/rooms/:id": { kind: "session", role: "talk:read" },
+  "GET /api/talk/rooms/:id/messages": { kind: "session", role: "talk:read" },
+  "POST /api/talk/rooms/:id/assign-self": {
+    kind: "session",
+    role: "talk:write",
+  },
+  "POST /api/talk/rooms/:id/messages": { kind: "session", role: "talk:write" },
+  "POST /api/talk/rooms/:id/close": { kind: "session", role: "talk:write" },
+  "GET /api/talk/settings/origins": { kind: "session", role: "talk:write" },
+  "POST /api/talk/settings/origins": { kind: "session", role: "talk:write" },
+  "DELETE /api/talk/settings/origins": { kind: "session", role: "talk:write" },
+  "GET /api/talk/settings/widget-key": { kind: "session", role: "talk:write" },
+  "POST /api/talk/settings/widget-key": { kind: "session", role: "talk:write" },
   "GET /": { kind: "public" },
   "GET /health/live": { kind: "public" },
   "GET /health/ready": { kind: "public" },
