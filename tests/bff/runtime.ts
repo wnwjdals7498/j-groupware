@@ -1,6 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import { once } from "node:events";
+import { createConnection } from "node:net";
 import { request as httpsRequest } from "node:https";
 import { randomBytes } from "node:crypto";
 import { fileURLToPath } from "node:url";
@@ -23,7 +24,14 @@ export function required(name: string): string {
   return value;
 }
 export async function integrationRuntime(
-  options: { serviceEndpoints?: ServiceEndpoints } = {},
+  options: {
+    serviceEndpoints?: ServiceEndpoints;
+    serviceEndpointsForTenant?: (
+      tenant: string,
+      index: number,
+    ) => ServiceEndpoints;
+    serviceCa?: string;
+  } = {},
 ) {
   if (
     required("JGW_TEST_RUNTIME") !== "isolated-cloud" ||
@@ -35,6 +43,7 @@ export async function integrationRuntime(
       readFile(required(name), "utf8"),
     ),
   );
+  if (options.serviceCa) ca.push(options.serviceCa);
   const agents: [Agent, Agent] = [true, false].map(
     (bridge) =>
       new Agent({
@@ -72,6 +81,23 @@ export async function integrationRuntime(
   const secretValues = new Set<string>();
   const children: ReturnType<typeof spawn>[] = [];
   const start = async (cwd: string, args: string[], url: string) => {
+    const occupied = await new Promise<boolean>((resolve) => {
+      const socket = createConnection({
+        host: "127.0.0.1",
+        port: Number(new URL(url).port),
+      });
+      const done = (value: boolean) => {
+        socket.destroy();
+        resolve(value);
+      };
+      socket.once("connect", () => done(true));
+      socket.once("error", () => done(false));
+      socket.setTimeout(500, () => done(false));
+    });
+    if (occupied)
+      throw new Error(
+        "Isolated service port already occupied. Existing process preserved.",
+      );
     const child = spawn(process.execPath, args, {
       cwd,
       stdio: ["ignore", "pipe", "pipe"],
@@ -94,7 +120,7 @@ export async function integrationRuntime(
     throw new Error("Compiled service did not become ready.");
   };
   const stop = async (child: ReturnType<typeof spawn>) => {
-    if (child.exitCode === null) {
+    if (child.exitCode === null && child.signalCode === null) {
       const done = once(child, "exit");
       child.kill("SIGTERM");
       await done;
@@ -400,9 +426,14 @@ export async function integrationRuntime(
           config,
           oidc,
           memberAuth,
-          ...(options.serviceEndpoints
-            ? { serviceEndpoints: options.serviceEndpoints }
+          ...(options.serviceEndpoints || options.serviceEndpointsForTenant
+            ? {
+                serviceEndpoints:
+                  options.serviceEndpointsForTenant?.(tenant, index) ??
+                  options.serviceEndpoints!,
+              }
             : {}),
+          serviceFetch: fetchLoopback,
           https: { cert, key: keyMaterial, minVersion: "TLSv1.2" },
           onSessionEnd: (hashes) => closed.push(...hashes),
         });
@@ -620,6 +651,12 @@ export async function integrationRuntime(
             ? {
                 JGW_SERVICE_MESSENGER_URL:
                   options.serviceEndpoints["j-messenger"],
+              }
+            : {}),
+          ...(options.serviceEndpoints?.["j-approval"]
+            ? {
+                JGW_SERVICE_APPROVAL_URL:
+                  options.serviceEndpoints["j-approval"],
               }
             : {}),
         };

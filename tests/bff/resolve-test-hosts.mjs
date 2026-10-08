@@ -7,6 +7,8 @@ const ca = [
   process.env.JAUTH_TLS_CERTIFICATE,
   process.env.JGW_TLS_CERTIFICATE,
 ].map((file) => readFileSync(file, "utf8"));
+if (process.env.JGW_TEST_APPROVAL_CA)
+  ca.push(readFileSync(process.env.JGW_TEST_APPROVAL_CA, "utf8"));
 setGlobalDispatcher(
   new Agent({
     connect: {

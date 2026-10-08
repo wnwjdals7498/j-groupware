@@ -7,8 +7,8 @@
   "whole_suite_verified": false,
   "summary": {
     "implemented": 46,
-    "partial": 14,
-    "not_started": 112
+    "partial": 15,
+    "not_started": 111
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
@@ -823,9 +823,13 @@
       "items": [
         "G16"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "cloud_actual_bff_compiled_approval_keycloak_postgres_10_pass; overall_73_pass; UI_Playwright_VM_not_run",
+      "code": [
+        "j-groupware/apps/server/src/approval-routes.ts",
+        "j-groupware/tests/bff/approval.integration.test.ts",
+        "j-groupware/docs/cloud-approval-bff-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "GW-35",
@@ -1543,7 +1547,7 @@
         "A6"
       ],
       "implementation": "implemented",
-      "verification": "cloud_immutable_snapshot_line_validation_pass; actual_bff_org_change_workflow_not_run",
+      "verification": "cloud_snapshot_line_validation_and_actual_bff_organization_placement_change_pass; UI_VM_not_run",
       "code": [
         "j-approval/apps/server/src/app.ts",
         "j-approval/apps/server/src/db/documents.ts",

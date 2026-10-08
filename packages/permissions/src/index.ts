@@ -71,6 +71,17 @@ export const ROUTES = {
   },
   "GET /api/messenger/ws": { kind: "session", role: "messenger:use" },
   "GET /api/notifications/stream": { kind: "session" },
+  "POST /api/approval/documents": { kind: "session", role: "approval:use" },
+  "GET /api/approval/documents": { kind: "session", role: "approval:use" },
+  "GET /api/approval/documents/:id": { kind: "session", role: "approval:use" },
+  "GET /api/approval/documents/:id/history": {
+    kind: "session",
+    role: "approval:use",
+  },
+  "POST /api/approval/documents/:id/decisions": {
+    kind: "session",
+    role: "approval:use",
+  },
 } as const satisfies Record<string, Access>;
 
 export const MENUS = [

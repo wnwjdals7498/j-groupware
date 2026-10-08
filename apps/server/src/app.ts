@@ -28,6 +28,7 @@ import { registerOrganizationRoutes } from "./organization-routes.js";
 import websocket from "@fastify/websocket";
 import { RealtimeSessions } from "./realtime-sessions.js";
 import { registerRealtimeRoutes } from "./realtime-routes.js";
+import { registerApprovalRoutes } from "./approval-routes.js";
 
 export function createApp(options: {
   pool: Pool;
@@ -368,6 +369,17 @@ export function createApp(options: {
     (request) => identities.get(request)!,
   );
   const serviceTokens = new ServiceTokens(sessions, oidc);
+  const services = new ServiceClient(
+    serviceTokens,
+    options.serviceEndpoints ?? {},
+    options.serviceFetch,
+  );
+  registerApprovalRoutes(
+    app,
+    services,
+    new OrganizationStore(options.pool, options.config.tenant),
+    (request) => identities.get(request)!,
+  );
   app.register(websocket, {
     options: { maxPayload: 1048576, perMessageDeflate: false },
     errorHandler: (_error, socket) => socket.terminate(),
@@ -386,10 +398,6 @@ export function createApp(options: {
   return Object.assign(app, {
     realtime,
     serviceTokens,
-    services: new ServiceClient(
-      serviceTokens,
-      options.serviceEndpoints ?? {},
-      options.serviceFetch,
-    ),
+    services,
   });
 }
