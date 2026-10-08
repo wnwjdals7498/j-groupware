@@ -110,3 +110,7 @@ G6 서버 API·원래 Bearer/서비스 키·대상 세션 종료·미배치 저�
 ## G22 backend 실제 배달 계약
 
 [수신·조회·SSE snapshot·키/retention·실제 복구 증거](cloud-notification-verification-2026-10-08.md)를 따른다. `GET /api/notifications`와 `POST /api/notifications/:id/read`는 현재 회원의 대상/role/tenant/30일 필터를 공유하며 SSE는 최신 목록 snapshot을 보낸다. 결재의 실제 업무 사건→송신→수신→목록/unread/SSE와 중단/ACK 실패/실제 lease 만료 복구를 검증했다. 구독 상태 자동 투영·운영 키 provisioning·알림 화면/Playwright·고객 VM 인수는 미완료다.
+
+## G12 실제 메신저 연결의 검증 범위
+
+[실제 M1 인증과 BFF WSS 검증](cloud-messenger-auth-verification-2026-10-08.md)에서 실제 서비스 ready frame·logout/role 회수 종료를 확인했다. 두 회원 메시지/중복/cursor 복구는 직접 서비스 HTTP와 격리 SQLite로 확인했다. BFF 업무 HTTP, PostgreSQL M5, client 패키지와 정식 화면/VM 인수는 미완료다.

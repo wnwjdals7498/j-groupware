@@ -1,5 +1,6 @@
 import { spawn } from "node:child_process";
-import { realpath } from "node:fs/promises";
+import { readFile, realpath, writeFile } from "node:fs/promises";
+import { parseEnv } from "node:util";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 const repository = fileURLToPath(new URL("../", import.meta.url));
@@ -10,6 +11,25 @@ try {
   );
   if (!path.relative(repository, env).startsWith(".." + path.sep))
     throw new Error();
+  const runtime = { ...parseEnv(await readFile(env, "utf8")), ...process.env };
+  if (
+    runtime.JGW_TEST_RUNTIME !== "isolated-cloud" ||
+    runtime.JAUTH_TEST_RUNTIME !== "isolated-cloud"
+  )
+    throw new Error();
+  const certificates = await Promise.all(
+    [
+      ...new Set(
+        [
+          runtime.JAUTH_TLS_CERTIFICATE,
+          runtime.JGW_TLS_CERTIFICATE,
+          runtime.NODE_EXTRA_CA_CERTS,
+        ].filter(Boolean),
+      ),
+    ].map((file) => readFile(file, "utf8")),
+  );
+  const trustBundle = env + ".trust.pem";
+  await writeFile(trustBundle, certificates.join("\n"), { mode: 0o600 });
   const child = spawn(
     process.execPath,
     [
@@ -22,7 +42,11 @@ try {
     ],
     {
       cwd: repository,
-      env: { ...process.env, JGW_TEST_ENV: env },
+      env: {
+        ...process.env,
+        JGW_TEST_ENV: env,
+        NODE_EXTRA_CA_CERTS: trustBundle,
+      },
       shell: false,
       stdio: "inherit",
     },

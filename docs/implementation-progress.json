@@ -6,9 +6,9 @@
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 50,
+    "implemented": 53,
     "partial": 15,
-    "not_started": 107
+    "not_started": 104
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
@@ -774,13 +774,15 @@
         "G12"
       ],
       "implementation": "partial",
-      "verification": "actual_tls_wss_transport_single_audience_token_refresh_origin_tenant_session_closure_pass_using_protocol_peer; actual_messenger_http_business_auth_pg_integration_client_ui_pending",
+      "verification": "actual_compiled_messenger_j_auth_business_WSS_relay_logout_and_role_revocation_pass; direct_SQLite_message_dedup_cursor_sync_verified; PostgreSQL_BFF_HTTP_client_UI_VM_pending",
       "code": [
         "j-groupware/apps/server/src/realtime-sessions.ts",
         "j-groupware/apps/server/src/realtime-routes.ts",
         "j-groupware/deploy/migrations/005-realtime-session-events.sql",
         "j-groupware/tests/bff/realtime.integration.test.ts",
-        "j-groupware/packages/permissions/src/index.ts"
+        "j-groupware/packages/permissions/src/index.ts",
+        "j-groupware/tests/bff/messenger.integration.test.ts",
+        "j-groupware/docs/cloud-messenger-auth-verification-2026-10-08.md"
       ]
     },
     {
@@ -1165,9 +1167,19 @@
       "items": [
         "M1"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_Keycloak_two_tenant_HTTP_WSS_single_audience_role_cookie_query_boundary_identity_mapping_JWKS_outage_compiled_main_pass; SQLite_foundation_only_PG_VM_UI_acceptance_pending",
+      "code": [
+        "j-messenger/apps/server/src/modules/identity/index.ts",
+        "j-messenger/apps/server/src/platform/http/index.ts",
+        "j-messenger/apps/server/src/platform/config/index.ts",
+        "j-messenger/apps/server/src/bootstrap/application.ts",
+        "j-messenger/apps/server/test/modules/identity.test.ts",
+        "j-messenger/apps/server/test/platform/http.test.ts",
+        "j-messenger/docs/cloud-j-auth-verification-2026-10-08.md",
+        "j-groupware/tests/bff/messenger.integration.test.ts",
+        "j-groupware/docs/cloud-messenger-auth-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "MS-03",
@@ -1176,9 +1188,19 @@
       "items": [
         "M1"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_Keycloak_two_tenant_HTTP_WSS_single_audience_role_cookie_query_boundary_identity_mapping_JWKS_outage_compiled_main_pass; SQLite_foundation_only_PG_VM_UI_acceptance_pending",
+      "code": [
+        "j-messenger/apps/server/src/modules/identity/index.ts",
+        "j-messenger/apps/server/src/platform/http/index.ts",
+        "j-messenger/apps/server/src/platform/config/index.ts",
+        "j-messenger/apps/server/src/bootstrap/application.ts",
+        "j-messenger/apps/server/test/modules/identity.test.ts",
+        "j-messenger/apps/server/test/platform/http.test.ts",
+        "j-messenger/docs/cloud-j-auth-verification-2026-10-08.md",
+        "j-groupware/tests/bff/messenger.integration.test.ts",
+        "j-groupware/docs/cloud-messenger-auth-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "MS-04",
@@ -1187,9 +1209,19 @@
       "items": [
         "M1"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_Keycloak_two_tenant_HTTP_WSS_single_audience_role_cookie_query_boundary_identity_mapping_JWKS_outage_compiled_main_pass; SQLite_foundation_only_PG_VM_UI_acceptance_pending",
+      "code": [
+        "j-messenger/apps/server/src/modules/identity/index.ts",
+        "j-messenger/apps/server/src/platform/http/index.ts",
+        "j-messenger/apps/server/src/platform/config/index.ts",
+        "j-messenger/apps/server/src/bootstrap/application.ts",
+        "j-messenger/apps/server/test/modules/identity.test.ts",
+        "j-messenger/apps/server/test/platform/http.test.ts",
+        "j-messenger/docs/cloud-j-auth-verification-2026-10-08.md",
+        "j-groupware/tests/bff/messenger.integration.test.ts",
+        "j-groupware/docs/cloud-messenger-auth-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "MS-05",
@@ -2276,7 +2308,7 @@
       "code": []
     }
   ],
-  "verification_environment": "isolated cloud /workspace; j-auth-cloud-test and separate j-groupware-cloud-test PostgreSQL; company laptop restriction unchanged",
+  "verification_environment": "isolated cloud /workspace; real Keycloak/j-auth and dedicated j-groupware/j-approval PostgreSQL; messenger M1 verified against isolated SQLite only; company laptop restriction unchanged",
   "verification_evidence": [
     "j-auth/docs/cloud-verification-2026-10-08.md",
     "j-auth/docs/cloud-provisioning-verification-2026-10-08.md",
@@ -2289,13 +2321,15 @@
     "j-groupware/docs/cloud-approval-bff-verification-2026-10-08.md",
     "j-approval/docs/cloud-approval-verification-2026-10-08.md",
     "j-approval/docs/cloud-notification-delivery-2026-10-08.md",
-    "j-groupware/docs/cloud-notification-verification-2026-10-08.md"
+    "j-groupware/docs/cloud-notification-verification-2026-10-08.md",
+    "j-messenger/docs/cloud-j-auth-verification-2026-10-08.md",
+    "j-groupware/docs/cloud-messenger-auth-verification-2026-10-08.md"
   ],
   "pending_implementation": [
     "Product-specific BFF business API relays using the verified G23 helper and actual downstream services",
     "G6/G15 formal member/organization/repair UI and Playwright; G16 formal approval UI and Playwright (actual BFF business API and snapshot already verified)",
     "G2/G9 canonical UI guidelines/sidebar/board UI; I2 formal theme/Playwright/brute-force acceptance",
-    "Actual messenger/talk business WSS and actual mail/talk notification senders; approval notification backend delivery/retry/SSE independently verified",
+    "Messenger PostgreSQL/BFF HTTP/client UI and talk business WSS; real messenger auth/WSS relay and approval notification delivery/retry/SSE independently verified",
     "I5/G11 external Nginx, G18/G21 customer bootstrap/agent/VM acceptance and operator console",
     "G22 formal notification UI/Playwright, G18/G21 automatic subscribed-service/key registry projection and customer VM acceptance"
   ]
