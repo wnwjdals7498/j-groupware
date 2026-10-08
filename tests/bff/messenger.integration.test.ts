@@ -6,6 +6,7 @@ import { once } from "node:events";
 import { fileURLToPath } from "node:url";
 import WebSocket from "ws";
 import { decodeJwt } from "jose";
+import { Pool } from "pg";
 import { SESSION_POLICY } from "@j-groupware/contracts";
 import {
   Browser,
@@ -18,9 +19,30 @@ import { digest } from "../../apps/server/src/security.js";
 import { createApplication } from "../../../j-messenger/apps/server/dist/bootstrap/application.js";
 import { loadConfig } from "../../../j-messenger/apps/server/dist/platform/config/index.js";
 
-describe("actual messenger j-auth HTTP/WSS + BFF relay (SQLite foundation; PostgreSQL pending)", () => {
+describe("actual messenger j-auth HTTP/WSS + BFF relay with selected storage", () => {
   let rt: Runtime, root: string, ca: Buffer[];
   let conversationId: string;
+  const postgres = process.env.JMS_TEST_DATABASE_URL;
+  if (postgres) {
+    const parsed = new URL(postgres);
+    if (
+      process.env.JMS_PG_TEST_MARKER !== "isolated-cloud-messenger-pg" ||
+      parsed.hostname !== "127.0.0.1" ||
+      parsed.port !== "54240" ||
+      parsed.pathname !== "/jgw_messenger" ||
+      parsed.username !== "jgw_messenger"
+    )
+      throw new Error("Isolated messenger PostgreSQL environment required.");
+  }
+  const schema = `test_ms_${randomUUID().replaceAll("-", "")}`;
+  const postgresConfig = (name = schema) =>
+    postgres
+      ? {
+          DATABASE_DRIVER: "postgres",
+          DATABASE_URL: postgres,
+          DATABASE_SCHEMA: name,
+        }
+      : {};
   const apps: Awaited<ReturnType<typeof createApplication>>[] = [],
     browsers: Browser[] = [],
     tokens: string[] = [],
@@ -56,6 +78,7 @@ describe("actual messenger j-auth HTTP/WSS + BFF relay (SQLite foundation; Postg
         JAUTH_TENANT: rt.fixtures[index]!.tenant,
         KC_PUBLIC_URL: rt.fixtures[index]!.config.keycloakOrigin,
         DB_PATH: root + "/messenger.sqlite",
+        ...postgresConfig(),
         TLS_CERT_PATH: required("JGW_TLS_CERTIFICATE"),
         TLS_KEY_PATH: required("JGW_TLS_KEY"),
       },
@@ -177,10 +200,12 @@ describe("actual messenger j-auth HTTP/WSS + BFF relay (SQLite foundation; Postg
       },
       true,
     );
-  const userCount = () =>
+  const userCount = async () =>
     Number(
       (
-        apps[0]!.db.prepare("SELECT count(*) AS n FROM users").get() as {
+        (await apps[0]!.db
+          .prepare("SELECT count(*) AS n FROM users")
+          .get()) as {
           n: bigint;
         }
       ).n,
@@ -235,6 +260,15 @@ describe("actual messenger j-auth HTTP/WSS + BFF relay (SQLite foundation; Postg
   afterAll(async () => {
     for (const socket of sockets) socket.terminate();
     for (const app of apps) await app.close();
+    if (postgres) {
+      const pool = new Pool({ connectionString: postgres });
+      try {
+        for (const name of [schema, schema + "_outage", schema + "_compiled"])
+          await pool.query(`DROP SCHEMA IF EXISTS "${name}" CASCADE`);
+      } finally {
+        await pool.end();
+      }
+    }
     if (rt) await rt.close();
     if (root) await rm(root, { recursive: true, force: true });
   });
@@ -258,23 +292,25 @@ describe("actual messenger j-auth HTTP/WSS + BFF relay (SQLite foundation; Postg
     expect(
       Number(
         (
-          apps[0]!.db.prepare("SELECT count(*) AS n FROM sessions").get() as {
+          (await apps[0]!.db
+            .prepare("SELECT count(*) AS n FROM sessions")
+            .get()) as {
             n: bigint;
           }
         ).n,
       ),
     ).toBe(0);
     expect((await request(tokens[0])).status).toBe(200);
-    expect(userCount()).toBe(2);
+    expect(await userCount()).toBe(2);
   });
   it("rejects real role-less, wrong-audience/realm and corrupt bearer before user writes", async () => {
-    const before = userCount();
+    const before = await userCount();
     expect((await request(noRoleToken)).status).toBe(403);
     expect((await request(sources[0])).status).toBe(401);
     expect((await request(tokens[1])).status).toBe(401);
     expect((await request(tokens[0]! + "x")).status).toBe(401);
     expect((await request(undefined)).status).toBe(401);
-    expect(userCount()).toBe(before);
+    expect(await userCount()).toBe(before);
   });
   it("does not expose own login/logout/server list and refuses cookie/query/origin fallback", async () => {
     for (const [path, method, body] of [
@@ -461,6 +497,7 @@ describe("actual messenger j-auth HTTP/WSS + BFF relay (SQLite foundation; Postg
           AUTH_MODE: "j-auth",
           JAUTH_TENANT: rt.fixtures[0]!.tenant,
           KC_PUBLIC_URL: rt.fixtures[0]!.config.keycloakOrigin,
+          ...postgresConfig(schema + "_outage"),
         },
         root + "/outage",
       ),
@@ -484,7 +521,9 @@ describe("actual messenger j-auth HTTP/WSS + BFF relay (SQLite foundation; Postg
       expect(
         Number(
           (
-            denied.db.prepare("SELECT count(*) AS n FROM users").get() as {
+            (await denied.db
+              .prepare("SELECT count(*) AS n FROM users")
+              .get()) as {
               n: bigint;
             }
           ).n,
@@ -494,11 +533,13 @@ describe("actual messenger j-auth HTTP/WSS + BFF relay (SQLite foundation; Postg
       await denied.close();
     }
   });
-  it("reopens the actual file database and revalidates tokens while preserving users/messages", async () => {
-    const count = userCount(),
+  it("reopens the actual database and revalidates tokens while preserving users/messages", async () => {
+    const count = await userCount(),
       rows = Number(
         (
-          apps[0]!.db.prepare("SELECT count(*) AS n FROM messages").get() as {
+          (await apps[0]!.db
+            .prepare("SELECT count(*) AS n FROM messages")
+            .get()) as {
             n: bigint;
           }
         ).n,
@@ -506,11 +547,13 @@ describe("actual messenger j-auth HTTP/WSS + BFF relay (SQLite foundation; Postg
     await apps[0]!.close();
     apps[0] = await boot(0);
     expect((await request(secondToken)).status).toBe(200);
-    expect(userCount()).toBe(count);
+    expect(await userCount()).toBe(count);
     expect(
       Number(
         (
-          apps[0]!.db.prepare("SELECT count(*) AS n FROM messages").get() as {
+          (await apps[0]!.db
+            .prepare("SELECT count(*) AS n FROM messages")
+            .get()) as {
             n: bigint;
           }
         ).n,
@@ -548,6 +591,7 @@ describe("actual messenger j-auth HTTP/WSS + BFF relay (SQLite foundation; Postg
           JAUTH_TENANT: rt.fixtures[0]!.tenant,
           KC_PUBLIC_URL: rt.fixtures[0]!.config.keycloakOrigin,
           DB_PATH: root + "/compiled/messenger.sqlite",
+          ...postgresConfig(schema + "_compiled"),
           FILE_ROOT: root + "/compiled/files",
           TEMP_ROOT: root + "/compiled/temp",
           WEB_DIST: root + "/compiled/web",

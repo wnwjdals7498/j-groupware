@@ -6,13 +6,13 @@
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 53,
+    "implemented": 54,
     "partial": 15,
-    "not_started": 104
+    "not_started": 103
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
-    "Actual messenger PostgreSQL/BFF integration, product-specific mail/talk relays, automatic subscription projection to notification registry and operator/installer console remain unimplemented",
+    "Messenger BFF business HTTP/client UI, product-specific mail/talk relays, automatic subscription/key projection to notification registry and operator/installer console remain unimplemented",
     "Hyper-V/VM/customer-server and external Nginx deployment/installation acceptance not executed in this cloud test runtime"
   ],
   "features": [
@@ -774,7 +774,7 @@
         "G12"
       ],
       "implementation": "partial",
-      "verification": "actual_compiled_messenger_j_auth_business_WSS_relay_logout_and_role_revocation_pass; direct_SQLite_message_dedup_cursor_sync_verified; PostgreSQL_BFF_HTTP_client_UI_VM_pending",
+      "verification": "actual_compiled_messenger_j_auth_PostgreSQL_HTTP_WSS_relay_logout_role_revocation_dedup_cursor_sync_pass; BFF_business_HTTP_client_UI_VM_pending",
       "code": [
         "j-groupware/apps/server/src/realtime-sessions.ts",
         "j-groupware/apps/server/src/realtime-routes.ts",
@@ -782,7 +782,8 @@
         "j-groupware/tests/bff/realtime.integration.test.ts",
         "j-groupware/packages/permissions/src/index.ts",
         "j-groupware/tests/bff/messenger.integration.test.ts",
-        "j-groupware/docs/cloud-messenger-auth-verification-2026-10-08.md"
+        "j-groupware/docs/cloud-messenger-auth-verification-2026-10-08.md",
+        "j-groupware/docs/cloud-messenger-postgres-verification-2026-10-08.md"
       ]
     },
     {
@@ -1156,9 +1157,21 @@
       "items": [
         "M5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_PostgreSQL_15_pass_Node22_SQLite_import_source_hash_attachment_cursor_sequence_atomic_rollback_multi_instance_HTTP_retry_backup_restore_pass; actual_Keycloak_PG_HTTP_WSS_11_and_full_BFF_100_pass; customer_cutover_load_VM_pending",
+      "code": [
+        "j-messenger/apps/server/src/platform/storage/index.ts",
+        "j-messenger/apps/server/src/platform/storage/postgres.ts",
+        "j-messenger/apps/server/src/platform/storage/sqlite.ts",
+        "j-messenger/apps/server/src/bootstrap/import-sqlite.ts",
+        "j-messenger/apps/server/src/bootstrap/import-main.ts",
+        "j-messenger/apps/server/src/bootstrap/application.ts",
+        "j-messenger/deploy/postgres-migrations/20261008110000-storage.sql",
+        "j-messenger/deploy/postgres-init.sh",
+        "j-messenger/apps/server/integration/postgres.integration.ts",
+        "j-messenger/docs/cloud-postgres-verification-2026-10-08.md",
+        "j-groupware/tests/bff/messenger.integration.test.ts"
+      ]
     },
     {
       "id": "MS-02",
@@ -1168,7 +1181,7 @@
         "M1"
       ],
       "implementation": "implemented",
-      "verification": "actual_Keycloak_two_tenant_HTTP_WSS_single_audience_role_cookie_query_boundary_identity_mapping_JWKS_outage_compiled_main_pass; SQLite_foundation_only_PG_VM_UI_acceptance_pending",
+      "verification": "actual_Keycloak_two_tenant_HTTP_WSS_single_audience_role_cookie_query_boundary_identity_mapping_JWKS_outage_compiled_main_pass; actual_PostgreSQL_Keycloak_HTTP_WSS_pass_VM_UI_acceptance_pending",
       "code": [
         "j-messenger/apps/server/src/modules/identity/index.ts",
         "j-messenger/apps/server/src/platform/http/index.ts",
@@ -1178,7 +1191,8 @@
         "j-messenger/apps/server/test/platform/http.test.ts",
         "j-messenger/docs/cloud-j-auth-verification-2026-10-08.md",
         "j-groupware/tests/bff/messenger.integration.test.ts",
-        "j-groupware/docs/cloud-messenger-auth-verification-2026-10-08.md"
+        "j-groupware/docs/cloud-messenger-auth-verification-2026-10-08.md",
+        "j-messenger/docs/cloud-postgres-verification-2026-10-08.md"
       ]
     },
     {
@@ -1189,7 +1203,7 @@
         "M1"
       ],
       "implementation": "implemented",
-      "verification": "actual_Keycloak_two_tenant_HTTP_WSS_single_audience_role_cookie_query_boundary_identity_mapping_JWKS_outage_compiled_main_pass; SQLite_foundation_only_PG_VM_UI_acceptance_pending",
+      "verification": "actual_Keycloak_two_tenant_HTTP_WSS_single_audience_role_cookie_query_boundary_identity_mapping_JWKS_outage_compiled_main_pass; actual_PostgreSQL_Keycloak_HTTP_WSS_pass_VM_UI_acceptance_pending",
       "code": [
         "j-messenger/apps/server/src/modules/identity/index.ts",
         "j-messenger/apps/server/src/platform/http/index.ts",
@@ -1199,7 +1213,8 @@
         "j-messenger/apps/server/test/platform/http.test.ts",
         "j-messenger/docs/cloud-j-auth-verification-2026-10-08.md",
         "j-groupware/tests/bff/messenger.integration.test.ts",
-        "j-groupware/docs/cloud-messenger-auth-verification-2026-10-08.md"
+        "j-groupware/docs/cloud-messenger-auth-verification-2026-10-08.md",
+        "j-messenger/docs/cloud-postgres-verification-2026-10-08.md"
       ]
     },
     {
@@ -1210,7 +1225,7 @@
         "M1"
       ],
       "implementation": "implemented",
-      "verification": "actual_Keycloak_two_tenant_HTTP_WSS_single_audience_role_cookie_query_boundary_identity_mapping_JWKS_outage_compiled_main_pass; SQLite_foundation_only_PG_VM_UI_acceptance_pending",
+      "verification": "actual_Keycloak_two_tenant_HTTP_WSS_single_audience_role_cookie_query_boundary_identity_mapping_JWKS_outage_compiled_main_pass; actual_PostgreSQL_Keycloak_HTTP_WSS_pass_VM_UI_acceptance_pending",
       "code": [
         "j-messenger/apps/server/src/modules/identity/index.ts",
         "j-messenger/apps/server/src/platform/http/index.ts",
@@ -1220,7 +1235,8 @@
         "j-messenger/apps/server/test/platform/http.test.ts",
         "j-messenger/docs/cloud-j-auth-verification-2026-10-08.md",
         "j-groupware/tests/bff/messenger.integration.test.ts",
-        "j-groupware/docs/cloud-messenger-auth-verification-2026-10-08.md"
+        "j-groupware/docs/cloud-messenger-auth-verification-2026-10-08.md",
+        "j-messenger/docs/cloud-postgres-verification-2026-10-08.md"
       ]
     },
     {

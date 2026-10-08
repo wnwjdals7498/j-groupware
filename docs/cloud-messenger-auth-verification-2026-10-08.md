@@ -1,5 +1,7 @@
 # 클라우드 실제 메신저 인증·WSS 연결 — 2026-10-08
 
+아래는 M1의 SQLite 실행 기록이다. 후속 [M5 PostgreSQL 실제 검증](cloud-messenger-postgres-verification-2026-10-08.md)과 구분한다.
+
 j-groupware `9993f9cd8f3f28bcc3566bcc3639ffe98b5c411a`와 j-messenger M1 `0447c9bfab3543233eafa1cff22185c5ebafee91`을 연결했다. [메신저 고정 계약/모듈 회귀/미완료 범위](../../j-messenger/docs/cloud-j-auth-verification-2026-10-08.md)를 함께 읽는다.
 
 ## 실제 서비스 관통 시험
