@@ -6,6 +6,23 @@ export type Access =
   | { readonly kind: "session"; readonly role?: FunctionalRoleName };
 
 export const ROUTES = {
+  "GET /api/customer-auth/guests": { kind: "session", role: "guest:read" },
+  "GET /api/customer-auth/guests/:id": { kind: "session", role: "guest:read" },
+  "POST /api/customer-auth/guests": { kind: "session", role: "guest:write" },
+  "PATCH /api/customer-auth/guests/:id": {
+    kind: "session",
+    role: "guest:write",
+  },
+  "DELETE /api/customer-auth/guests/:id": {
+    kind: "session",
+    role: "guest:write",
+  },
+  "GET /api/customer-auth/api-keys": { kind: "session", role: "guest:write" },
+  "POST /api/customer-auth/api-keys": { kind: "session", role: "guest:write" },
+  "DELETE /api/customer-auth/api-keys/:id": {
+    kind: "session",
+    role: "guest:write",
+  },
   "GET /api/talk/rooms": { kind: "session", role: "talk:read" },
   "GET /api/talk/rooms/:id": { kind: "session", role: "talk:read" },
   "GET /api/talk/rooms/:id/messages": { kind: "session", role: "talk:read" },

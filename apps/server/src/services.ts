@@ -41,7 +41,7 @@ export class ServiceClient {
     service: TenantServiceId,
     path: string,
     options: {
-      method?: "GET" | "POST" | "PUT" | "DELETE";
+      method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
       body?: unknown;
       multipart?: { stream: Readable; boundary: string; bytes: number };
       signal?: AbortSignal;

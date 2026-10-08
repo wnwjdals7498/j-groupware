@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { once } from "node:events";
 import { spawn } from "node:child_process";
 import { createConnection } from "node:net";
+import { request as httpsRequest } from "node:https";
 import { Pool } from "pg";
 import { createLocalJWKSet, jwtVerify, decodeJwt } from "jose";
 import Fastify from "fastify";
@@ -16,6 +17,7 @@ import { SESSION_POLICY } from "@j-groupware/contracts";
 import { digest } from "../../apps/server/src/security.js";
 import { PostgresServiceDatabase } from "../../deploy/agent/service-database.mjs";
 import { execute } from "../../deploy/gateway/gateway.mjs";
+import { createApp as createBffApp } from "../../apps/server/src/app.js";
 import { createApp } from "../../../j-customer-auth-db/apps/server/dist/app.js";
 import { GuestSigner } from "../../../j-customer-auth-db/apps/server/dist/security.js";
 import { PageCursor } from "../../../j-customer-auth-db/apps/server/dist/security.js";
@@ -25,7 +27,7 @@ import type {
   Guest,
   IssuedApiKey,
   GuestLoginResult,
-} from "../../../j-customer-auth-db/packages/contracts/dist/index.js";
+} from "@j-customer-auth-db/contracts";
 
 describe("actual customer-auth PostgreSQL and member/site authentication", () => {
   let rt: Runtime,
@@ -42,6 +44,12 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
     faultApp: Awaited<ReturnType<typeof createApp>>,
     jwksFault: FastifyInstance;
   let first: Guest, second: Guest, issued: IssuedApiKey;
+  let ownerBrowser: Browser,
+    readerBrowser: Browser,
+    deniedBrowser: Browser,
+    writerBrowser: Browser,
+    foreignBrowser: Browser;
+  let malformedMode = "extra";
   const container = "jcadb-integration-" + randomUUID().slice(0, 8),
     password = randomBytes(32).toString("base64url"),
     guestPassword = "permanent-guest-fixture-7498",
@@ -141,7 +149,7 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
   beforeAll(async () => {
     if (process.env.JGW_TEST_RUNTIME !== "isolated-cloud")
       throw new Error("Explicit isolated runtime required; no skip.");
-    for (const port of [55070, 55071, 55072, 55073]) await free(port);
+    for (const port of [55070, 55071, 55072, 55073, 55076]) await free(port);
     root = await mkdtemp(tmpdir() + "/jcadb-");
     await writeFile(
       root + "/postgres.env",
@@ -182,7 +190,11 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
       }
     }
     expect(ready).toBe(true);
-    rt = await integrationRuntime();
+    rt = await integrationRuntime({
+      serviceEndpointsForTenant: (_tenant, index) => ({
+        "j-customer-auth-db": `https://127.0.0.1:${55071 + index}`,
+      }),
+    });
     rt.secretValues.add(guestPassword);
     rt.secretValues.add(dbPassword);
     for (const [index] of rt.fixtures.entries())
@@ -279,6 +291,8 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
     }
     const owner = new Browser(rt.fetch, rt.fixtures[0]!.origin),
       foreign = new Browser(rt.fetch, rt.fixtures[1]!.origin);
+    ownerBrowser = owner;
+    foreignBrowser = foreign;
     await owner.login(rt.fixtures[0]!.password);
     await foreign.login(rt.fixtures[1]!.password);
     const own = await token(owner);
@@ -288,6 +302,7 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
     for (const [name, roles] of [
       ["guest-reader", ["guest:read"]],
       ["guest-denied", []],
+      ["guest-writer", ["guest:write"]],
     ] as const) {
       const memberPassword = randomBytes(24).toString("base64url");
       rt.secretValues.add(memberPassword);
@@ -303,8 +318,13 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
       const browser = new Browser(rt.fetch, rt.fixtures[0]!.origin);
       await browser.login(memberPassword, name);
       const value = (await token(browser)).value;
-      if (name === "guest-reader") readerToken = value;
-      else deniedToken = value;
+      if (name === "guest-reader") {
+        readerToken = value;
+        readerBrowser = browser;
+      } else if (name === "guest-denied") {
+        deniedToken = value;
+        deniedBrowser = browser;
+      } else writerBrowser = browser;
     }
     signer = await GuestSigner.create(signingKey, rt.fixtures[0]!.origin);
     const [cert, key] = await Promise.all([
@@ -313,6 +333,28 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
     ]);
     jwksFault = Fastify({ https: { cert, key } });
     servers.push(jwksFault);
+    jwksFault.get<{ Params: { id: string } }>(
+      "/customer-auth/guests/:id",
+      async (request, reply) => {
+        if (malformedMode === "error")
+          return reply
+            .code(404)
+            .send({ message: "private SQL and password fixture" });
+        if (malformedMode === "large")
+          return reply.type("application/json").send("x".repeat(1048577));
+        return reply.header("Set-Cookie", "upstream-private=fixture").send({
+          id: request.params.id,
+          name: malformedMode === "type" ? { private: true } : "upstream guest",
+          loginId: "upstream-guest",
+          contact: "",
+          createdAt: "2026-10-08T00:00:00.000Z",
+          updatedAt: "2026-10-08T00:00:00.000Z",
+          password_hash: "private-password-hash-fixture",
+          tenant_id: "private-tenant",
+          api_key: "private-key-fixture",
+        });
+      },
+    );
     jwksFault.get("/*", async (_request, reply) =>
       reply.code(503).send({ unavailable: true }),
     );
@@ -344,6 +386,299 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
     if (containerOwned)
       await execute("docker", ["rm", "--force", "--volumes", container]);
     if (root) await rm(root, { recursive: true, force: true });
+  });
+  it("relays real BFF guest CRUD, literal paging and write-implies-read with the published contracts", async () => {
+    expect((await writerBrowser.me()).roles).toContain("guest:read");
+    const made: Guest[] = [];
+    for (const suffix of ["a", "b"]) {
+      const response = await writerBrowser.change("/api/customer-auth/guests", {
+        name: "relay %_ " + suffix,
+        loginId: "relay-" + suffix,
+        contact: "server fixture",
+        password: guestPassword,
+      });
+      expect(response.status).toBe(201);
+      made.push((await response.json()) as Guest);
+    }
+    const response = await readerBrowser.request(
+      "/api/customer-auth/guests?q=" +
+        encodeURIComponent("relay %_") +
+        "&limit=1",
+    );
+    expect(response.status).toBe(200);
+    const page = (await response.json()) as { items: Guest[]; next: string };
+    expect(page.items).toHaveLength(1);
+    expect(page.next).toBeTruthy();
+    const next = await readerBrowser.request(
+      "/api/customer-auth/guests?q=" +
+        encodeURIComponent("relay %_") +
+        "&limit=1&cursor=" +
+        encodeURIComponent(page.next),
+    );
+    expect(next.status).toBe(200);
+    expect(((await next.json()) as { items: Guest[] }).items[0]!.id).not.toBe(
+      page.items[0]!.id,
+    );
+    const changed = await writerBrowser.change(
+      "/api/customer-auth/guests/" + made[0]!.id.toUpperCase(),
+      { name: "수정한 손님" },
+      "PATCH",
+    );
+    expect(changed.status).toBe(200);
+    expect(((await changed.json()) as Guest).name).toBe("수정한 손님");
+    const direct = await request(
+      "/customer-auth/guests/" + made[0]!.id,
+      readerToken,
+    );
+    expect(((await direct.json()) as Guest).name).toBe("수정한 손님");
+    const keys = Object.keys(
+      (await (
+        await readerBrowser.request("/api/customer-auth/guests/" + made[0]!.id)
+      ).json()) as object,
+    ).sort();
+    expect(keys).toEqual([
+      "contact",
+      "createdAt",
+      "id",
+      "loginId",
+      "name",
+      "updatedAt",
+    ]);
+    for (const guest of made)
+      expect(
+        (
+          await writerBrowser.change(
+            "/api/customer-auth/guests/" + guest.id,
+            undefined,
+            "DELETE",
+          )
+        ).status,
+      ).toBe(204);
+    expect(
+      (await readerBrowser.request("/api/customer-auth/guests/" + made[0]!.id))
+        .status,
+    ).toBe(404);
+    const cached = await rt.pool.query<{ access_token: string }>(
+      "SELECT access_token FROM service_tokens WHERE tenant_id=$1 AND service_id='j-customer-auth-db'",
+      [rt.fixtures[0]!.tenant],
+    );
+    expect(cached.rowCount).toBeGreaterThan(0);
+    for (const row of cached.rows) {
+      rt.secretValues.add(row.access_token);
+      expect(decodeJwt(row.access_token).aud).toBe("j-customer-auth-db");
+    }
+  });
+  it("refuses BFF missing session, roles, CSRF, tenant spoofing and cross-tenant resources before changing data", async () => {
+    const before = (
+      await pool.query(
+        "SELECT id,name,login_id FROM guests ORDER BY tenant_id,id",
+      )
+    ).rows;
+    const input = {
+      name: "forbidden guest",
+      loginId: "forbidden-guest",
+      password: guestPassword,
+    };
+    const anon = new Browser(rt.fetch, rt.fixtures[0]!.origin);
+    expect((await anon.request("/api/customer-auth/guests")).status).toBe(401);
+    expect(
+      (await deniedBrowser.request("/api/customer-auth/guests")).status,
+    ).toBe(403);
+    expect(
+      (await readerBrowser.change("/api/customer-auth/guests", input)).status,
+    ).toBe(403);
+    expect(
+      (await readerBrowser.request("/api/customer-auth/api-keys")).status,
+    ).toBe(403);
+    expect(
+      (
+        await ownerBrowser.request("/api/customer-auth/guests", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(input),
+        })
+      ).status,
+    ).toBe(403);
+    expect(
+      (
+        await ownerBrowser.change("/api/customer-auth/guests", {
+          ...input,
+          tenant: rt.fixtures[1]!.tenant,
+        })
+      ).status,
+    ).toBe(400);
+    expect(
+      (await ownerBrowser.request("/api/customer-auth/guests?q=%00")).status,
+    ).toBe(400);
+    const guestResponse = await ownerBrowser.change(
+      "/api/customer-auth/guests",
+      { ...input, loginId: "isolated-relay" },
+    );
+    expect(guestResponse.status).toBe(201);
+    const guest = (await guestResponse.json()) as Guest;
+    expect(
+      (await foreignBrowser.request("/api/customer-auth/guests/" + guest.id))
+        .status,
+    ).toBe(404);
+    expect(
+      (
+        await foreignBrowser.change(
+          "/api/customer-auth/guests/" + guest.id,
+          { name: "foreign" },
+          "PATCH",
+        )
+      ).status,
+    ).toBe(404);
+    expect(
+      (
+        await ownerBrowser.change(
+          "/api/customer-auth/guests/" + guest.id,
+          undefined,
+          "DELETE",
+        )
+      ).status,
+    ).toBe(204);
+    expect(
+      (
+        await pool.query(
+          "SELECT id,name,login_id FROM guests ORDER BY tenant_id,id",
+        )
+      ).rows,
+    ).toEqual(before);
+  });
+  it("issues and revokes BFF API keys once while refusing external login/write proxy routes", async () => {
+    const created = await writerBrowser.change("/api/customer-auth/api-keys", {
+      name: "relay-site",
+      scopes: ["guest:read"],
+    });
+    expect(created.status).toBe(201);
+    const key = (await created.json()) as IssuedApiKey;
+    rt.secretValues.add(key.secret);
+    const rows = await writerBrowser.request("/api/customer-auth/api-keys");
+    expect(rows.status).toBe(200);
+    const text = await rows.text();
+    expect(text).not.toContain(key.secret);
+    expect(text).not.toContain("key_hash");
+    expect(
+      (await external("/ext/customer-auth/v1/guests", key.secret)).status,
+    ).toBe(200);
+    const revoked = await writerBrowser.change(
+      "/api/customer-auth/api-keys/" + key.apiKey.id.toUpperCase(),
+      undefined,
+      "DELETE",
+    );
+    expect(revoked.status).toBe(200);
+    expect(
+      ((await revoked.json()) as { revokedAt: string }).revokedAt,
+    ).toBeTruthy();
+    expect(
+      (await external("/ext/customer-auth/v1/guests", key.secret)).status,
+    ).toBe(401);
+    expect(
+      (
+        await writerBrowser.request("/api/customer-auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            loginId: "relay-site",
+            password: guestPassword,
+          }),
+        })
+      ).status,
+    ).toBe(404);
+    expect(
+      (
+        await writerBrowser.request(
+          "/api/customer-auth/ext/customer-auth/v1/guests",
+        )
+      ).status,
+    ).toBe(404);
+  });
+  it("bounds and whitelists actual TLS upstream responses without forwarding private fields, cookies or error text", async () => {
+    const fixture = rt.fixtures[0]!;
+    const bff = createBffApp({
+      pool: rt.pool,
+      config: fixture.config,
+      oidc: new OidcClient(fixture.config, { fetch: rt.fetch }),
+      https: {
+        cert: await readFile(process.env.JGW_TLS_CERTIFICATE!),
+        key: await readFile(process.env.JGW_TLS_KEY!),
+      },
+      serviceEndpoints: { "j-customer-auth-db": "https://127.0.0.1:55073" },
+      serviceFetch: rt.fetchLoopback,
+    });
+    servers.push(bff);
+    await bff.listen({ host: "127.0.0.1", port: 55076 });
+    const cookie = ownerBrowser.cookies
+      .get(new URL(fixture.origin).origin)!
+      .get(SESSION_POLICY.cookie)!;
+    const ca = await readFile(process.env.JGW_TLS_CERTIFICATE!);
+    const call = () =>
+      new Promise<Response>((resolve, reject) => {
+        const request = httpsRequest(
+          {
+            hostname: "127.0.0.1",
+            port: 55076,
+            servername: new URL(fixture.origin).hostname,
+            ca,
+            path: "/api/customer-auth/guests/" + randomUUID(),
+            headers: {
+              Host: new URL(fixture.origin).host,
+              Cookie: SESSION_POLICY.cookie + "=" + cookie,
+            },
+          },
+          (response) => {
+            const chunks: Buffer[] = [];
+            let size = 0;
+            response.on("data", (chunk: Buffer) => {
+              size += chunk.length;
+              if (size > 2097152)
+                response.destroy(
+                  new Error("Bounded fixture response exceeded."),
+                );
+              else chunks.push(chunk);
+            });
+            response.on("error", reject);
+            response.on("end", () => {
+              const headers = new Headers();
+              for (const [name, value] of Object.entries(response.headers))
+                for (const item of Array.isArray(value)
+                  ? value
+                  : value === undefined
+                    ? []
+                    : [value])
+                  headers.append(name, item);
+              resolve(
+                new Response(Buffer.concat(chunks), {
+                  status: response.statusCode!,
+                  headers,
+                }),
+              );
+            });
+          },
+        );
+        request.on("error", reject);
+        request.setTimeout(10000, () =>
+          request.destroy(new Error("Fixture request timed out.")),
+        );
+        request.end();
+      });
+    malformedMode = "extra";
+    const safe = await call();
+    expect(safe.status).toBe(200);
+    const body = await safe.text();
+    expect(body).not.toContain("private");
+    expect(safe.headers.get("set-cookie")).toBeNull();
+    for (const mode of ["type", "large"]) {
+      malformedMode = mode;
+      expect((await call()).status).toBe(503);
+    }
+    malformedMode = "error";
+    const error = await call();
+    expect(error.status).toBe(404);
+    expect(await error.text()).not.toContain("private SQL");
+    await bff.close();
+    servers.splice(servers.indexOf(bff), 1);
   });
   it("creates actual non-superuser isolated database and detects migration checksum drift", async () => {
     expect(
