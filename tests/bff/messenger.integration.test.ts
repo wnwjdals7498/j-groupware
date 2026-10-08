@@ -17,7 +17,7 @@ import {
 import { OidcClient } from "../../apps/server/src/oidc.js";
 import { digest } from "../../apps/server/src/security.js";
 import { createApplication } from "../../../j-messenger/apps/server/dist/bootstrap/application.js";
-import { createGroupwareMessengerClient } from "../../../j-messenger/packages/client-core/dist/index.js";
+import { createGroupwareMessengerClient } from "@j-messenger/client-core";
 import { loadConfig } from "../../../j-messenger/apps/server/dist/platform/config/index.js";
 
 describe("actual messenger j-auth HTTP/WSS + BFF relay with selected storage", () => {

@@ -17,6 +17,7 @@
     "start": "node apps/server/dist/main.js"
   },
   "devDependencies": {
+    "@j-messenger/client-core": "0.2.0",
     "typescript": "5.9.3",
     "@types/node": "22.20.4",
     "@types/pg": "8.23.1",

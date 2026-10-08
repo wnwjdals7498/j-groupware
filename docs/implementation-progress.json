@@ -6,13 +6,13 @@
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 55,
+    "implemented": 56,
     "partial": 15,
-    "not_started": 102
+    "not_started": 101
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
-    "Messenger formal client UI/registry publication/file BFF, product-specific mail/talk relays, production installer/agent wiring of subscription/key projection and operator/installer console remain unimplemented",
+    "Messenger formal client UI/file BFF, product-specific mail/talk relays, production installer/agent wiring of subscription/key projection and operator/installer console remain unimplemented",
     "Hyper-V/VM/customer-server and external Nginx deployment/installation acceptance not executed in this cloud test runtime"
   ],
   "features": [
@@ -774,7 +774,7 @@
         "G12"
       ],
       "implementation": "partial",
-      "verification": "actual_Keycloak_PG_BFF_HTTP9_public_client_cookie_CSRF_dedup_conflict_tenant404_WSS_receipts_cursor_outage_logout_role_revocation_pass; formal_UI_registry_file_BFF_VM_pending",
+      "verification": "actual_Keycloak_PG_BFF_HTTP9_public_client_cookie_CSRF_dedup_conflict_tenant404_WSS_receipts_cursor_outage_logout_role_revocation_pass; registry_exact_install_pass; formal_UI_file_BFF_VM_pending",
       "code": [
         "j-groupware/apps/server/src/realtime-sessions.ts",
         "j-groupware/apps/server/src/realtime-routes.ts",
@@ -1254,9 +1254,18 @@
       "items": [
         "M2"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_loopback_registry_core_react_contracts_0.2.0_first_publish_exact_version_SHA512_lock_public_types_CSS_bundle_single_React_duplicate_refusal_Node22_24_pass; actual_registry_installed_core_Keycloak_PG_BFF114_pass; formal_UI_VM_pending",
+      "code": [
+        "j-messenger/packages/contracts/package.json",
+        "j-messenger/packages/client-core/package.json",
+        "j-messenger/packages/client-react/package.json",
+        "j-messenger/tests/registry/client-packages.test.mjs",
+        "j-messenger/docs/cloud-client-registry-verification-2026-10-08.md",
+        "j-groupware/package-lock.json",
+        "j-groupware/tests/bff/messenger.integration.test.ts",
+        "j-groupware/docs/cloud-client-registry-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "MS-06",
@@ -1266,7 +1275,7 @@
         "M2"
       ],
       "implementation": "implemented",
-      "verification": "public_client_HTTP_WSS_BFF_addresses_cookie_fresh_CSRF_no_bearer_unit17_and_actual_Keycloak_PG_BFF14_pass; registry_install_UI_and_VM_acceptance_pending",
+      "verification": "public_client_HTTP_WSS_BFF_addresses_cookie_fresh_CSRF_no_bearer_unit17_and_actual_Keycloak_PG_BFF14_pass; actual_registry_install_pass; UI_and_VM_acceptance_pending",
       "code": [
         "j-messenger/packages/client-core/src/index.ts",
         "j-messenger/packages/client-core/test/client.test.ts",
@@ -2358,13 +2367,15 @@
     "j-messenger/docs/cloud-postgres-verification-2026-10-08.md",
     "j-groupware/docs/cloud-messenger-bff-verification-2026-10-08.md",
     "j-messenger/docs/cloud-bff-client-verification-2026-10-08.md",
-    "j-groupware/docs/cloud-notification-projection-verification-2026-10-08.md"
+    "j-groupware/docs/cloud-notification-projection-verification-2026-10-08.md",
+    "j-messenger/docs/cloud-client-registry-verification-2026-10-08.md",
+    "j-groupware/docs/cloud-client-registry-verification-2026-10-08.md"
   ],
   "pending_implementation": [
     "Remaining mail/talk/customer/web BFF business API relays using the verified G23 helper and actual downstream services",
     "G6/G15 formal member/organization/repair UI and Playwright; G16 formal approval UI and Playwright (actual BFF business API and snapshot already verified)",
     "G2/G9 canonical UI guidelines/sidebar/board UI; I2 formal theme/Playwright/brute-force acceptance",
-    "Messenger formal UI/registry publication/file BFF and talk business WSS; actual messenger PG/BFF HTTP/client transport/WSS and approval notification delivery independently verified",
+    "Messenger formal UI/app product-path freezing/file BFF and talk business WSS; actual messenger PG/BFF HTTP/client transport/WSS and approval notification delivery independently verified",
     "I5/G11 external Nginx, G18/G21 customer bootstrap/agent/VM acceptance and operator console",
     "G22 formal notification UI/Playwright, G18/G21 production installer/agent subscription/key projection wiring and customer VM acceptance"
   ]
