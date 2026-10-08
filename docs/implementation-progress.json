@@ -6,12 +6,12 @@
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 15,
+    "implemented": 20,
     "partial": 6,
-    "not_started": 151
+    "not_started": 146
   },
   "blocked_runtime": [
-    "Browser OIDC/PKCE and BFF backchannel/WSS: j-groupware BFF apps/server is not implemented",
+    "j-groupware browser/BFF callback, RP logout/backchannel/WSS: BFF apps/server is not implemented; isolated HTTP Code/PKCE login passed",
     "Login theme: canonical j-groupware/docs/ui-guidelines.md is absent",
     "Hyper-V/VM/customer-server and external Nginx verification not executed in this cloud test runtime"
   ],
@@ -39,9 +39,12 @@
         "I2"
       ],
       "implementation": "partial",
-      "verification": "cloud_four_realm_import_and_claims_pass; login_theme_and_browser_acceptance_pending",
+      "verification": "cloud_import_and_owned_realm_generation_pass; canonical_bootstrap_user_and_claims_pass; login_theme_and_browser_acceptance_pending",
       "code": [
-        "j-auth/scripts/realm/templates.mjs"
+        "j-auth/scripts/realm/templates.mjs",
+        "j-auth/apps/server/src/keycloak/realm-model.ts",
+        "j-auth/apps/server/src/keycloak/provisioning.ts",
+        "j-auth/tests/integration/provisioning.test.ts"
       ]
     },
     {
@@ -82,9 +85,11 @@
         "I4"
       ],
       "implementation": "partial",
-      "verification": "pkce_redirect_bruteforce_configuration_checked; browser_login_callback_theme_not_run",
+      "verification": "actual_http_authorization_code_pkce_login_and_claims_pass; missing_pkce_and_wrong_redirect_denied; theme_playwright_bff_bruteforce_not_run",
       "code": [
-        "j-auth/scripts/realm/templates.mjs"
+        "j-auth/scripts/realm/templates.mjs",
+        "j-auth/tests/integration/oidc-code.ts",
+        "j-auth/tests/integration/provisioning.test.ts"
       ]
     },
     {
@@ -124,10 +129,14 @@
         "I2"
       ],
       "implementation": "implemented",
-      "verification": "cloud_fgap_v2_user_crud_logout_and_role_allowlist_pass; secret_and_admin_role_denied; provisioner_followup",
+      "verification": "cloud_fgap_user_crud_role_allowlist_and_subscription_permission_sync_pass; realm_provisioner_two_role_boundary_and_foreign_realm_denial_pass",
       "code": [
         "j-auth/apps/server/src/keycloak/admin-permissions.ts",
-        "j-auth/tests/integration/admin-permissions.test.ts"
+        "j-auth/tests/integration/admin-permissions.test.ts",
+        "j-auth/apps/server/src/keycloak/realm-model.ts",
+        "j-auth/apps/server/src/keycloak/subscriptions.ts",
+        "j-auth/tests/integration/subscriptions.test.ts",
+        "j-auth/tests/integration/provisioning.test.ts"
       ]
     },
     {
@@ -149,7 +158,7 @@
         "I3"
       ],
       "implementation": "implemented",
-      "verification": "cloud_db_isolation_concurrent_idempotent_migration_and_postgres_server_restart_pass",
+      "verification": "actual_db_isolation_migrations_checksum_guard_and_restart_pass; tenant_advisory_lock_conflict_and_pg_trigger_rollback_pass",
       "code": [
         "j-auth/apps/server/src/main.ts",
         "j-auth/apps/server/src/config.ts",
@@ -157,7 +166,10 @@
         "j-auth/apps/server/src/db/tenants.ts",
         "j-auth/deploy/migrations/001-tenant-control-plane.sql",
         "j-auth/tests/integration/database.test.ts",
-        "j-auth/tests/integration/main-process.test.ts"
+        "j-auth/tests/integration/main-process.test.ts",
+        "j-auth/deploy/migrations/002-provisioning-ownership.sql",
+        "j-auth/tests/integration/subscriptions.test.ts",
+        "j-auth/tests/integration/provisioning.test.ts"
       ]
     },
     {
@@ -211,13 +223,15 @@
         "I3"
       ],
       "implementation": "implemented",
-      "verification": "constant_time_digest_unit_and_cloud_tenant_console_key_boundary_pass; db_expiring_dual_hash_pass; rotation_api_pending",
+      "verification": "digest_unit_and_real_tenant_console_boundary_pass; actual_rotation_two_hash_300s_overlap_expiry_and_repeat_conflict_pass",
       "code": [
         "j-auth/apps/server/src/security/service-key.ts",
         "j-auth/apps/server/src/security/authorize.ts",
         "j-auth/apps/server/src/db/tenants.ts",
         "j-auth/tests/integration/database.test.ts",
-        "j-auth/tests/integration/authentication.test.ts"
+        "j-auth/tests/integration/authentication.test.ts",
+        "j-auth/apps/server/src/keycloak/provisioning.ts",
+        "j-auth/tests/integration/provisioning.test.ts"
       ]
     },
     {
@@ -228,12 +242,14 @@
         "I3"
       ],
       "implementation": "implemented",
-      "verification": "cloud_master_secret_memory_read_pass; owned_realm_create_realm_only_credential_pass; db_and_process_logs_no_plaintext",
+      "verification": "actual_create_realm_only_master_credential_secret_read_create_and_rotation_pass; db_and_compiled_process_logs_no_plaintext",
       "code": [
         "j-auth/apps/server/src/keycloak/client.ts",
         "j-auth/tests/integration/realm-creator.test.ts",
         "j-auth/tests/integration/authentication.test.ts",
-        "j-auth/tests/integration/main-process.test.ts"
+        "j-auth/tests/integration/main-process.test.ts",
+        "j-auth/apps/server/src/keycloak/provisioning.ts",
+        "j-auth/tests/integration/provisioning.test.ts"
       ]
     },
     {
@@ -332,9 +348,13 @@
       "items": [
         "I7"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "real_keycloak_subscription_state_pass_including_stale_db_snapshot; readonly_operator_and_wrong_key_denied",
+      "code": [
+        "j-auth/apps/server/src/app.ts",
+        "j-auth/apps/server/src/keycloak/subscriptions.ts",
+        "j-auth/tests/integration/subscriptions.test.ts"
+      ]
     },
     {
       "id": "AU-31",
@@ -343,9 +363,15 @@
       "items": [
         "I7"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_client_roles_composites_scopes_mappers_fgap_and_db_snapshot_pass; duplicate_call_and_injected_transport_failure_resume_pass; minimum_provisioner_roles_confirmed",
+      "code": [
+        "j-auth/apps/server/src/app.ts",
+        "j-auth/apps/server/src/keycloak/subscriptions.ts",
+        "j-auth/apps/server/src/keycloak/realm-model.ts",
+        "j-auth/tests/integration/subscriptions.test.ts",
+        "j-auth/tests/integration/provisioning.test.ts"
+      ]
     },
     {
       "id": "AU-32",
@@ -354,9 +380,14 @@
       "items": [
         "I7"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_fgap_withdrawal_reference_client_delete_and_new_token_role_audience_removal_pass; repeated_delete_and_injected_transport_failure_resume_pass",
+      "code": [
+        "j-auth/apps/server/src/app.ts",
+        "j-auth/apps/server/src/keycloak/subscriptions.ts",
+        "j-auth/tests/integration/subscriptions.test.ts",
+        "j-auth/tests/integration/provisioning.test.ts"
+      ]
     },
     {
       "id": "AU-40",
@@ -365,9 +396,16 @@
       "items": [
         "I8"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_isolated_tenant_create_one_time_secrets_and_pkce_login_pass; ownership_guard_canonical_username_concurrent_409_and_resume_pass; actual_pg_activation_failure_rollback_pass",
+      "code": [
+        "j-auth/apps/server/src/app.ts",
+        "j-auth/apps/server/src/keycloak/provisioning.ts",
+        "j-auth/apps/server/src/keycloak/realm-model.ts",
+        "j-auth/deploy/migrations/002-provisioning-ownership.sql",
+        "j-auth/tests/integration/provisioning.test.ts",
+        "j-auth/tests/integration/main-process.test.ts"
+      ]
     },
     {
       "id": "AU-41",
@@ -376,9 +414,15 @@
       "items": [
         "I8"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_isolated_tenant_rotation_old_client_secret_denial_dual_service_key_overlap_expiry_and_conflict_pass; unknown_keycloak_response_and_actual_pg_failure_503_recovery_pass; other_tenant_unchanged",
+      "code": [
+        "j-auth/apps/server/src/app.ts",
+        "j-auth/apps/server/src/keycloak/provisioning.ts",
+        "j-auth/apps/server/src/db/tenants.ts",
+        "j-auth/tests/integration/provisioning.test.ts",
+        "j-auth/tests/integration/main-process.test.ts"
+      ]
     },
     {
       "id": "AU-50",
@@ -1999,12 +2043,13 @@
   ],
   "verification_environment": "isolated cloud /workspace; j-auth-cloud-test; company laptop restriction unchanged",
   "verification_evidence": [
-    "j-auth/docs/cloud-verification-2026-10-08.md"
+    "j-auth/docs/cloud-verification-2026-10-08.md",
+    "j-auth/docs/cloud-provisioning-verification-2026-10-08.md"
   ],
   "pending_implementation": [
-    "I7 subscription management APIs",
-    "I8 tenant provisioning and public secret rotation APIs",
+    "I2 canonical login theme and browser/brute-force acceptance",
     "I4 browser/BFF integration",
-    "I5 Nginx deployment and VM acceptance"
+    "I5 Nginx deployment and VM acceptance",
+    "Operator console/customer bootstrap callers and actual package registry distribution"
   ]
 }
