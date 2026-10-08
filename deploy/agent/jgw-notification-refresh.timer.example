@@ -1,0 +1,12 @@
+# Inactive source example. Does not issue credentials or register an operating timer.
+[Unit]
+Description=Refresh notification lease before its 60-second expiry
+
+[Timer]
+OnBootSec=20s
+OnUnitInactiveSec=20s
+AccuracySec=1s
+Unit=jgw-notification-refresh.service
+
+[Install]
+WantedBy=timers.target

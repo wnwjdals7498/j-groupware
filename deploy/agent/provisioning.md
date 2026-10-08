@@ -35,8 +35,12 @@ and refreshes authoritative subscription leases. Existing key replacement is
 refused; an explicit key rotation workflow remains separate. Actual auth outage
 preserves manifest intent, disables projection and retries the same generation.
 The lifecycle registers after readiness and removes registration after cleanup.
-Production subscription-reader credentials and periodic worker activation are
-still unbound; importing the adapter does not activate a control-plane worker.
+The [explicit one-shot worker](notification-worker.md) now binds externally
+supplied private short-lived access-token files to the actual subscription reader.
+Expiry/lookup failures deactivate the projection and preserve manifest intent.
+Actual isolated auth/PG/receiver and CLI execution are checked. Production
+credential renewal/topology and operating worker/timer activation remain pending;
+importing the adapter does not start a control-plane worker.
 
 `WebServiceCleanup` exposes only root-owned fixed `/usr/local/sbin/jweb-helper
 remove-all` with bounded JSON stdin/output and a minimal child environment.

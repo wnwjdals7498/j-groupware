@@ -60,8 +60,9 @@ Node22.18/24.19 각각 4개 실제 검사에서 다섯 제품 archive/lockfile�
 압축 해제한 Talk/Web은 각자의 실제 격리 PostgreSQL에 연결되어 TLS 준비 상태를
 통과했고 Talk의 packaged widget도 정확한 파일 바이트를 제공했다.
 Approval/Mail/Messenger는 cold 의존성 설치와 compiled config import까지만
-검사했다. 새 unpack 검사 17개는 기본 BFF/Talk의 실제 설치, idempotence,
-기존 파일 보존과 독립 Python tar writer로 만든 위험 archive 14종 거부를 확인한다.
+검사했다. 새 unpack 검사 19개는 기본 BFF/Talk의 실제 설치, idempotence,
+기존 파일 보존과 독립 Python tar writer로 만든 위험 archive 14종 거부,
+의존성 프로세스 실패/취소 후 stage와 lock 정리를 확인한다.
 기본 BFF 통합 검사 4개는 봉인→안전 해제→cold 기동 후 실제 Keycloak 코드
 로그인, PostgreSQL 게시판, 다른 tenant의 접근 거부, CSRF/Host/로그아웃을 확인한다.
 이 세 제품의 cold 전체 기동, 고객 VM·20GB 디스크·systemd·CA 신뢰와

@@ -263,8 +263,10 @@ export async function buildProductBundle({
         "bootstrap-files",
         "base-environment",
         "console-client",
+        "control-files",
         "native-platform",
         "notification-manifest",
+        "notification-worker",
         "private-files",
         "product-environment",
         "product-gateway",
@@ -276,6 +278,7 @@ export async function buildProductBundle({
         "service-database",
         "service-environment",
         "service-lifecycle",
+        "subscription-credentials",
         "web-cleanup",
         "bundle-install",
       ])

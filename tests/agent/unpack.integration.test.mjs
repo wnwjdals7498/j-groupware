@@ -93,7 +93,7 @@ test("installs base and Talk from fresh runtime archives, npm ci and local works
       await execute(process.execPath, [
         "--input-type=module",
         "-e",
-        `await import(${JSON.stringify(target + "/deploy/agent/bundle-install.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/base-environment.mjs")});`,
+        `await import(${JSON.stringify(target + "/deploy/agent/bundle-install.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/base-environment.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/notification-worker.mjs")});`,
       ]);
     assert(
       (await readdir(target + "/deploy/migrations")).some((name) =>
@@ -234,7 +234,7 @@ for (const kind of [
       assert.equal((await readdir(root)).includes("outside"), false);
       assert.equal(
         (await readdir(bundleRoot)).some(
-          (name) => name.startsWith(".install-") || name === ".reconcile.lock",
+          (name) => name.startsWith(".install-") || name === ".run.lock",
         ),
         false,
       );
@@ -247,3 +247,60 @@ for (const kind of [
     },
   );
 }
+test("dependency command failure removes only its stage and leaves no ready bundle or lock", async () => {
+  const target = root + "/failed-npm";
+  await mkdir(target);
+  await chmod(target, 0o755);
+  const binary = root + "/fail-npm.mjs";
+  await writeFile(binary, "process.exit(13);\n", { mode: 0o600 });
+  const one = new BundleInstaller({
+    root: target,
+    npmConfig,
+    cache,
+    npmCli: binary,
+  });
+  await assert.rejects(one.install(archives.get("j-talk")), {
+    code: "bundle_dependency_install_failed",
+  });
+  assert.deepEqual(await readdir(target), []);
+});
+test("cancellation stops the dependency process before releasing the stage and lock", async () => {
+  const target = root + "/cancel-npm";
+  await mkdir(target);
+  await chmod(target, 0o755);
+  const binary = root + "/wait-npm.mjs",
+    started = root + "/npm-started.json";
+  await writeFile(
+    binary,
+    `import {writeFileSync} from 'node:fs'; writeFileSync(${JSON.stringify(started)}, JSON.stringify({pid: process.pid})); setInterval(()=>{},1000);\n`,
+    { mode: 0o600 },
+  );
+  const one = new BundleInstaller({
+    root: target,
+    npmConfig,
+    cache,
+    npmCli: binary,
+  });
+  const controller = new AbortController();
+  const running = one.install(archives.get("j-talk"), controller.signal);
+  let began = false;
+  try {
+    for (let i = 0; i < 100; i++) {
+      try {
+        await stat(started);
+        began = true;
+        break;
+      } catch (error) {
+        if (error.code !== "ENOENT") throw error;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 20));
+    }
+    assert.equal(began, true);
+  } finally {
+    controller.abort();
+  }
+  await assert.rejects(running, { code: "cancelled" });
+  const { pid } = JSON.parse(await readFile(started, "utf8"));
+  assert.throws(() => process.kill(pid, 0), { code: "ESRCH" });
+  assert.deepEqual(await readdir(target), []);
+});
