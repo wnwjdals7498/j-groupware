@@ -6,13 +6,13 @@
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 72,
-    "partial": 15,
-    "not_started": 85
+    "implemented": 76,
+    "partial": 20,
+    "not_started": 76
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
-    "Messenger formal client UI, talk/guest/web product relays, formal mail UI, production installer/agent wiring and operator/installer console remain unimplemented",
+    "Messenger formal client UI, guest/talk room and web hosting product relays, formal mail UI, customer/subscription/agent console producer APIs, installer wiring and formal console UI remain incomplete; operator console login backend is cloud verified",
     "Hyper-V/VM/customer-server and external Nginx deployment/installation acceptance not executed in this cloud test runtime",
     "Mail E8 needs FS-U07 pre-webhook loss criteria and full SMTP envelope recipient preservation contract; no outbox/ingress recovery policy invented"
   ],
@@ -1005,9 +1005,17 @@
       "items": [
         "G7"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_operator_code_pkce_nonce_state_separate_console_db_cookie_customer_denial_csrf_refresh_lock_real_backchannel_compiled_https_sigterm_8_pass_node22_node24; full_customer_bff133_pass_node24; formal_ui_gateway_vm_not_run",
+      "code": [
+        "j-groupware/apps/console-server/src/app.ts",
+        "j-groupware/apps/console-server/src/main.ts",
+        "j-groupware/apps/console-server/src/db/migrate.ts",
+        "j-groupware/packages/bff-auth/src/oidc.ts",
+        "j-groupware/packages/bff-auth/src/db/sessions.ts",
+        "j-groupware/tests/bff/console.integration.test.ts",
+        "j-groupware/docs/cloud-console-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "GW-51",
@@ -2073,9 +2081,13 @@
       "items": [
         "T4"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_db_exact_origin_http_get_options_cors_registered_only_pass_node22_node24; visitor_http_and_wss_auth_transport_not_implemented",
+      "code": [
+        "j-talk/apps/server/src/settings.ts",
+        "j-talk/apps/server/src/app.ts",
+        "j-talk/tests/integration/settings.integration.test.ts"
+      ]
     },
     {
       "id": "TK-14",
@@ -2150,9 +2162,14 @@
       "items": [
         "T5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_db_origin_crud_pagination_exact_origin_invalid_wildcard_path_alias_tenant_isolation_role_and_failure_pass_node22_node24",
+      "code": [
+        "j-talk/apps/server/src/app.ts",
+        "j-talk/apps/server/src/settings.ts",
+        "j-talk/tests/integration/settings.integration.test.ts",
+        "j-talk/docs/cloud-settings-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "TK-26",
@@ -2161,9 +2178,14 @@
       "items": [
         "T5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_db_widget_key_one_time_response_current_previous24h_boundary_hmac_signature_constant_time_invalid_anonymous_foreign_tenant_atomic_concurrent_rotation_pass_node22_node24",
+      "code": [
+        "j-talk/apps/server/src/settings.ts",
+        "j-talk/deploy/migrations/001-settings.sql",
+        "j-talk/tests/integration/settings.integration.test.ts",
+        "j-talk/docs/cloud-settings-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "TK-27",
@@ -2172,9 +2194,13 @@
       "items": [
         "T4"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_member_single_jtalk_aud_azp_tenant_sid_role_cookie_refusal_401_403_404_409_real_jwks_and_db503_pass_node22_node24; visitor_token_lifetime_rotation_rebinding_wss_and_rate_limit_not_implemented",
+      "code": [
+        "j-talk/apps/server/src/auth.ts",
+        "j-talk/apps/server/src/app.ts",
+        "j-talk/tests/integration/settings.integration.test.ts"
+      ]
     },
     {
       "id": "TK-30",
@@ -2194,9 +2220,15 @@
       "items": [
         "T1"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_server_local_contracts_dedicated_jgw_talk_nonsuperuser_migration_tenant_checksum_cross_db_denied_and_https_pass_node22_node24; widget_workspace_full_visitor_room_contract_registry_publish_not_implemented",
+      "code": [
+        "j-talk/apps/server/src/main.ts",
+        "j-talk/apps/server/src/db/migrate.ts",
+        "j-talk/deploy/migrations/001-settings.sql",
+        "j-talk/packages/contracts/src/index.ts",
+        "j-talk/docs/cloud-settings-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "TK-41",
@@ -2293,9 +2325,13 @@
       "items": [
         "H4"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_jweb_single_aud_tenant_member_sid_cookie_refusal_read_write_composite_read_and_no_role_403_foreign_id404_jwks_db503_pass_node22_node24; actual_web_write_lifecycle_gate_not_implemented",
+      "code": [
+        "j-web/apps/server/src/auth.ts",
+        "j-web/apps/server/src/app.ts",
+        "j-web/tests/integration/membership.integration.test.ts"
+      ]
     },
     {
       "id": "WB-10",
@@ -2393,9 +2429,15 @@
       "items": [
         "H6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "fixed_root_real_mountinfo_device_symlink_statfs_guard; actual_cloud_missing_mount_fail_closed_pass_node22_node24; positive_mount_parser_unit_only; site_du_helper_write_gate_and_actual_separate20gb_disk_not_implemented_or_not_run",
+      "code": [
+        "j-web/apps/server/src/disk.ts",
+        "j-web/apps/server/src/disk-cli.ts",
+        "j-web/tests/server/disk.test.ts",
+        "j-web/tests/integration/membership.integration.test.ts",
+        "j-web/docs/cloud-foundation-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "WB-25",
@@ -2415,9 +2457,15 @@
       "items": [
         "H1"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_dedicated_jgw_web_nonsuperuser_tenant_tables_migration_checksum_conflict_rollback_cross_db_connection_denied_https_read_and_real_db_restart_pass_node22_node24",
+      "code": [
+        "j-web/apps/server/src/db/migrate.ts",
+        "j-web/apps/server/src/db/pool.ts",
+        "j-web/deploy/migrations/001-sites.sql",
+        "j-web/tests/integration/membership.integration.test.ts",
+        "j-web/docs/cloud-foundation-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "WB-31",

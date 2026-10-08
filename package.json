@@ -6,7 +6,7 @@
   "engines": {"node": ">=22.18.0"},
   "workspaces": ["apps/*", "packages/*"],
   "scripts": {
-    "build": "npm run build --workspace=@j-groupware/contracts && npm run build --workspace=@j-groupware/permissions && npm run build --workspace=@j-groupware/server",
+    "build": "npm run build --workspace=@j-groupware/contracts && npm run build --workspace=@j-groupware/permissions && npm run build --workspace=@j-groupware/bff-auth && npm run build --workspace=@j-groupware/server && npm run build --workspace=@j-groupware/console-server",
     "check": "npm run build && npm run typecheck && npm test && npm run lint && npm run format:check",
     "typecheck": "tsc --noEmit -p tsconfig.test.json",
     "test": "vitest run --config vitest.config.ts",

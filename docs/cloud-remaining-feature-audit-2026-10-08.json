@@ -22,10 +22,9 @@
   "summary": {
     "ui": 14,
     "vm": 9,
-    "service": 34,
-    "ready": 14,
+    "service": 42,
     "contract": 20,
-    "policy": 9
+    "policy": 11
   },
   "items": [
     {
@@ -46,7 +45,9 @@
         "j-auth/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "partial",
+      "current_verification": "cloud_import_and_owned_realm_generation_pass; canonical_bootstrap_user_and_claims_pass; login_theme_and_browser_acceptance_pending; actual_legacy_import_canonical_role_owner_lookup_member_201_wrong_alias_403_reduced_mail_role_pass_node22_node24; existing_fgap_catalog_hash_unchanged; corrected_new_import_scope_pass"
     },
     {
       "id": "AU-05",
@@ -66,7 +67,9 @@
         "j-auth/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "partial",
+      "current_verification": "actual_groupware_bff_code_pkce_state_nonce_cookie_pass; theme_playwright_bruteforce_not_run"
     },
     {
       "id": "AU-09",
@@ -86,7 +89,9 @@
         "j-auth/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "AU-51",
@@ -106,7 +111,9 @@
         "j-auth/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "GW-12",
@@ -126,7 +133,9 @@
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "partial",
+      "current_verification": "actual_me_menu_data_filtered_by_catalog_roles_pass; sidebar_ui_not_implemented"
     },
     {
       "id": "GW-13",
@@ -146,7 +155,9 @@
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "partial",
+      "current_verification": "actual_bff_member_list_create_delete_original_bearer_tenant_service_key_csrf_foreign_target_duplicate_concurrent_creation_pass; confirmed_delete_local_failure_retry_recovery_pass; confirmed_create_local_failure_registration_repair_pass; member_ui_playwright_pending"
     },
     {
       "id": "GW-14",
@@ -166,7 +177,9 @@
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "partial",
+      "current_verification": "actual_bff_grantable_catalog_implication_data_and_role_grant_revoke_effective_read_write_pass; checkbox_ui_not_implemented"
     },
     {
       "id": "GW-20",
@@ -186,7 +199,9 @@
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "partial",
+      "current_verification": "actual_pg_board_create_read_list_tenant_isolation_cursor_and_role_input_checks_pass; board_ui_playwright_not_implemented"
     },
     {
       "id": "GW-21",
@@ -206,7 +221,9 @@
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "partial",
+      "current_verification": "actual_org_crud_tree_cycles_depth_count_limits_composite_fk_tenant_csrf_revision_concurrency_failure_rollback_pass; org_ui_playwright_pending"
     },
     {
       "id": "GW-30",
@@ -226,7 +243,9 @@
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": true,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "partial",
+      "current_verification": "actual_Keycloak_PG_BFF_HTTP_WSS_receipts_sync_logout_role_revocation_registry_client_pass; multipart_5MB_attachment_bind_dedup_conflict_tenant_CSRF_download_independent_5day_14day_retention_pass_Node22_Node24; actual_full_BFF125_and_gateway14_each_Node22_Node24_pass; formal_UI_Playwright_VM_pending"
     },
     {
       "id": "GW-31",
@@ -246,7 +265,9 @@
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "partial",
+      "current_verification": "actual_cookie_bff_compiled_mail_network_none_smtp_keycloak_pg_8_pass_node22_node24; source_tenant_injection_denied; role_revocation_session_end_pass; formal_ui_sandbox_playwright_pending"
     },
     {
       "id": "GW-32",
@@ -268,7 +289,9 @@
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "GW-33",
@@ -290,7 +313,9 @@
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "GW-34",
@@ -310,7 +335,9 @@
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "partial",
+      "current_verification": "cloud_actual_bff_compiled_approval_keycloak_postgres_10_pass; overall_73_pass; UI_Playwright_VM_not_run"
     },
     {
       "id": "GW-35",
@@ -332,7 +359,9 @@
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "GW-36",
@@ -346,15 +375,17 @@
       "additional_dependencies": [
         "ui"
       ],
-      "reason": "talk 출처·widget 키 backend가 없고 정식 UI 기준도 필요하다.",
-      "next_step": "T1/T2/T4 관리 계약부터 구현한 뒤 BFF·화면을 연결한다.",
+      "reason": "talk Origin·widget 키 backend는 실제 검증했다. 그룹웨어 설정 BFF relay와 정식 UI가 없다.",
+      "next_step": "관리 API 계약으로 token 축소 relay를 연결하고 UI 기준 도착 후 화면을 구현한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "GW-37",
@@ -368,7 +399,7 @@
       "additional_dependencies": [
         "ui"
       ],
-      "reason": "web backend/helper/H2가 없고 정식 UI 기준도 필요하다.",
+      "reason": "web DB·회원 조회 backend는 구현했다. helper·사이트/계정 변경·정식 웹 관리 UI가 없다.",
       "next_step": "web DB·인증·helper·계약부터 구현한 뒤 BFF·화면을 연결한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
@@ -376,7 +407,9 @@
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "GW-38",
@@ -388,7 +421,7 @@
       "classification_label": "서비스 구현 선행",
       "external_or_user_gate": false,
       "additional_dependencies": [],
-      "reason": "web deploy와 talk origin API가 없으며 deploy 성공과 origin 실패 분리는 확정돼 있다.",
+      "reason": "talk origin API는 실제 검증했다. web deploy 및 성공/출처 등록 부분 실패 BFF 연결이 없다.",
       "next_step": "각 backend 완성 후 성공/후속 origin 실패를 분리한 BFF 연결을 구현한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
@@ -396,7 +429,9 @@
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "GW-40",
@@ -416,7 +451,9 @@
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "partial",
+      "current_verification": "actual_isolated_j_auth_subscription_GET_unsubscribe_resubscribe_PG_registry_hash_generation_overlap_expiry_fail_closed_multi_instance_rollback_poll_retry_compiled_projection_receiver_pass; production_installer_agent_key_provisioning_pending"
     },
     {
       "id": "GW-44",
@@ -436,27 +473,9 @@
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
-    },
-    {
-      "id": "GW-50",
-      "name": "콘솔 로그인",
-      "service": "j-groupware",
-      "baseline_implementation": "not_started",
-      "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
-      "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "operator realm OIDC 계약은 확정돼 있고 기존 BFF Code/PKCE 패턴을 재사용할 수 있다.",
-      "next_step": "별도 운영 콘솔 세션·operator 인증·기본 거부를 구현한다.",
-      "sources": [
-        "j-groupware/docs/implementation-progress.json",
-        "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
-      ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "partial",
+      "current_verification": "actual_list_unread_and_idempotent_per_member_read_backend_pass; icon_click_navigation_formal_UI_Playwright_pending"
     },
     {
       "id": "GW-51",
@@ -476,7 +495,9 @@
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "GW-52",
@@ -498,7 +519,9 @@
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "GW-53",
@@ -518,7 +541,9 @@
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "GW-54",
@@ -540,7 +565,9 @@
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "GW-63",
@@ -548,19 +575,24 @@
       "service": "j-groupware",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
+      "classification": "service",
+      "classification_label": "서비스 구현 선행",
       "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "S14 bootstrap 순서는 확정돼 있어 계획·probe 코드는 cloud에서 작성 가능하다.",
-      "next_step": "부트스트랩 계획·격리 probe를 구현하고 실제 OS 적용 인수는 VM으로 분리한다.",
+      "additional_dependencies": [
+        "GW-52",
+        "GW-54"
+      ],
+      "reason": "콘솔 로그인은 실제 검증했지만 GW-52의 one-time agent 키·고객 bootstrap 정보 producer와 GW-54의 agent 인증 계약 및 패키지/env/CA·agent 설치 묶음이 없다.",
+      "next_step": "GW-52/GW-54의 agent 키·desired-state producer 후 기본 bundle/env/CA와 격리 bootstrap adapter를 구현한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "GW-64",
@@ -568,19 +600,26 @@
       "service": "j-groupware",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
+      "classification": "service",
+      "classification_label": "서비스 구현 선행",
       "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "S14 설치 순서와 desired/actual 분리는 확정돼 있어 installer plan·probe를 만들 수 있다.",
-      "next_step": "완성된 서비스부터 실제 파일·process adapter와 health probe를 연결한다.",
+      "additional_dependencies": [
+        "GW-63",
+        "GW-40",
+        "WB-20",
+        "TK-40"
+      ],
+      "reason": "실제 service bundle/env 프로필·알림 키 provisioning과 설치 inventory가 없고, guest·talk 방문자·web helper 등 일부 producer가 미완료다.",
+      "next_step": "완성된 서비스별 bundle manifest·notification key 등록과 격리 DB/unit/nginx adapter를 구현한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "GW-65",
@@ -588,19 +627,24 @@
       "service": "j-groupware",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
+      "classification": "service",
+      "classification_label": "서비스 구현 선행",
       "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "S14 해지는 백업·stop·설정 제거 순서가 확정돼 있다.",
-      "next_step": "기존 서비스의 해지 계획·백업 실패 중단·재실행을 격리 fixture로 검증한다.",
+      "additional_dependencies": [
+        "GW-64",
+        "WB-25"
+      ],
+      "reason": "설치 inventory·DB/계정 소유권과 서비스별 remove adapter가 없어서 systemd→dump→NOLOGIN→고유 정리→nginx rollback→env 삭제를 한 경로로 실행할 수 없다.",
+      "next_step": "GW-64 소유권 기록·WB-25/mail volume 정리와 함께 S14 실행 adapter를 실제 격리 fixture로 검증한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "GW-66",
@@ -620,7 +664,9 @@
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "partial",
+      "current_verification": "cloud_internal_reconciler_actual_fixture_files_and_processes_node22_node24_14_each_pass; cross_process_lock_idempotence_observation_failure_retry_cancellation_descendant_stop_pass; actual_bff_regression_114_pass; console_wire_auth_installer_probe_real_os_wiring_and_timer_activation_not_run"
     },
     {
       "id": "GW-71",
@@ -640,7 +686,9 @@
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "GW-73",
@@ -660,7 +708,9 @@
         "j-groupware/docs/suite-feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "MS-07",
@@ -680,7 +730,9 @@
         "j-messenger/docs/suite-integration-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "MS-09",
@@ -700,7 +752,9 @@
         "j-messenger/docs/suite-integration-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "ML-03",
@@ -720,7 +774,9 @@
         "j-mail/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "partial",
+      "current_verification": "no_relay_network_none_capture_pass; customer_vm_egress_firewall_not_run"
     },
     {
       "id": "ML-20",
@@ -740,7 +796,9 @@
         "j-mail/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "ML-30",
@@ -763,7 +821,9 @@
         "j-mail/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "partial",
+      "current_verification": "dedicated_pg_role_cross_db_denial_checksum_migration_pass; outbox_systemd_vm_pending"
     },
     {
       "id": "ML-32",
@@ -783,7 +843,9 @@
         "j-mail/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "CA-01",
@@ -803,7 +865,9 @@
         "j-customer-auth-db/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "CA-02",
@@ -823,7 +887,9 @@
         "j-customer-auth-db/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "CA-03",
@@ -843,7 +909,9 @@
         "j-customer-auth-db/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "CA-04",
@@ -863,7 +931,9 @@
         "j-customer-auth-db/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "CA-10",
@@ -883,7 +953,9 @@
         "j-customer-auth-db/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "CA-11",
@@ -903,7 +975,9 @@
         "j-customer-auth-db/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "CA-12",
@@ -923,7 +997,9 @@
         "j-customer-auth-db/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "CA-20",
@@ -943,7 +1019,9 @@
         "j-customer-auth-db/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "CA-21",
@@ -965,7 +1043,9 @@
         "j-customer-auth-db/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "CA-22",
@@ -985,7 +1065,9 @@
         "j-customer-auth-db/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "CA-23",
@@ -1005,7 +1087,9 @@
         "j-customer-auth-db/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "CA-24",
@@ -1025,7 +1109,9 @@
         "j-customer-auth-db/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "CA-25",
@@ -1045,7 +1131,9 @@
         "j-customer-auth-db/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "CA-30",
@@ -1065,7 +1153,9 @@
         "j-customer-auth-db/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "CA-31",
@@ -1085,7 +1175,9 @@
         "j-customer-auth-db/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "CA-32",
@@ -1105,7 +1197,9 @@
         "j-customer-auth-db/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "AP-32",
@@ -1125,7 +1219,9 @@
         "j-approval/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "TK-01",
@@ -1133,19 +1229,26 @@
       "service": "j-talk",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
+      "classification": "service",
+      "classification_label": "서비스 구현 선행",
       "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "S5 예외인 vanilla TS·Shadow DOM·단일 widget.min.js·캐시·30KB 제한은 확정돼 있다.",
-      "next_step": "widget build·압축 용량·캐시 계약을 구현하고 실제 visitor 연결은 T4/T5 후 검증한다.",
+      "additional_dependencies": [
+        "TK-10",
+        "TK-12",
+        "TK-24",
+        "TK-41"
+      ],
+      "reason": "단일 JS 번들만 만드는 것은 실제 방문자 채팅 위젯 완료가 아니다. 방문자·방·WSS/outbox API producer와 표시 조건 relay가 없다.",
+      "next_step": "TK-10/12/24/41 뒤 실제 widget를 만들고 고정 경로·ETag·gzip 크기를 측정한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-talk/docs/decisions.md",
         "j-talk/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "TK-02",
@@ -1165,7 +1268,9 @@
         "j-talk/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "TK-03",
@@ -1187,7 +1292,9 @@
         "j-talk/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "TK-04",
@@ -1207,7 +1314,9 @@
         "j-talk/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "TK-05",
@@ -1227,7 +1336,9 @@
         "j-talk/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "TK-06",
@@ -1247,7 +1358,9 @@
         "j-talk/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "TK-07",
@@ -1267,7 +1380,9 @@
         "j-talk/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "TK-08",
@@ -1287,7 +1402,9 @@
         "j-talk/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "TK-10",
@@ -1307,7 +1424,9 @@
         "j-talk/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "TK-11",
@@ -1327,7 +1446,9 @@
         "j-talk/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "TK-12",
@@ -1347,7 +1468,9 @@
         "j-talk/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "TK-13",
@@ -1355,19 +1478,27 @@
       "service": "j-talk",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
-      "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "정확한 Origin의 허용 목록을 HTTP CORS와 WSS에 동일 적용하도록 정해져 있다.",
-      "next_step": "공유 exact-origin validator와 tenant별 출처 저장/거절을 구현한다.",
+      "classification": "policy",
+      "classification_label": "제품 정책 결정 필요",
+      "external_or_user_gate": true,
+      "additional_dependencies": [
+        "TK-41",
+        "TK-24"
+      ],
+      "reason": "정확한 Origin DB 검사와 실제 HTTP GET/OPTIONS는 구현했다. 방문자 WSS 인증 운반·재연결 정책과 이를 소비할 WSS endpoint가 미정이다.",
+      "next_step": "방문자 WSS 인증 정책 확정 후 같은 Origin owner로 actual upgrade/denial을 연결한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
+        "j-talk/docs/feature-specifications.md",
+        "j-talk/apps/server/src/settings.ts",
+        "j-talk/apps/server/src/app.ts",
+        "j-talk/tests/integration/settings.integration.test.ts"
       ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "implemented_in_this_batch": true,
+      "acceptance_complete": false,
+      "current_implementation": "partial",
+      "current_verification": "actual_db_exact_origin_http_get_options_cors_registered_only_pass_node22_node24; visitor_http_and_wss_auth_transport_not_implemented"
     },
     {
       "id": "TK-14",
@@ -1387,7 +1518,9 @@
         "j-talk/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "TK-20",
@@ -1407,7 +1540,9 @@
         "j-talk/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "TK-21",
@@ -1427,7 +1562,9 @@
         "j-talk/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "TK-22",
@@ -1447,7 +1584,9 @@
         "j-talk/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "TK-23",
@@ -1467,7 +1606,9 @@
         "j-talk/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "TK-24",
@@ -1487,47 +1628,9 @@
         "j-talk/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
-    },
-    {
-      "id": "TK-25",
-      "name": "허용 출처 관리",
-      "service": "j-talk",
-      "baseline_implementation": "not_started",
-      "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
-      "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "talk:write 기반 tenant별 허용 출처 관리 요구가 확정돼 있다.",
-      "next_step": "T1/T2 이후 관리 CRUD와 실제 auth/PG 격리를 구현한다.",
-      "sources": [
-        "j-groupware/docs/implementation-progress.json",
-        "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
-      ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false
-    },
-    {
-      "id": "TK-26",
-      "name": "위젯 비밀키 관리",
-      "service": "j-talk",
-      "baseline_implementation": "not_started",
-      "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
-      "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "현재/이전 widget HMAC 키와 24시간 겹침·1회 표시 요구가 확정돼 있다.",
-      "next_step": "T1/T2 이후 키 관리·서명·이전 키 만료를 구현한다.",
-      "sources": [
-        "j-groupware/docs/implementation-progress.json",
-        "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
-      ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "TK-27",
@@ -1535,19 +1638,28 @@
       "service": "j-talk",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
-      "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "하위 회원 j-talk audience·talk:read/write·tenant·기본 거부가 확정돼 있다.",
-      "next_step": "회원 인증 게이트를 visitor 세션 정책과 분리해 구현한다.",
+      "classification": "policy",
+      "classification_label": "제품 정책 결정 필요",
+      "external_or_user_gate": true,
+      "additional_dependencies": [
+        "TK-10",
+        "TK-11",
+        "TK-41"
+      ],
+      "reason": "회원 JWT·role·tenant·실제 JWKS/DB 실패는 구현했다. 방문자 token 수명/회전/회수와 손님 재연결·기존 방 소유권 변경 정책은 미정이다.",
+      "next_step": "TTL/rotation/revocation/rebinding 정책을 확정한 뒤 visitor 인증·방 소유권·제한을 구현한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
+        "j-talk/docs/feature-specifications.md",
+        "j-talk/apps/server/src/auth.ts",
+        "j-talk/apps/server/src/app.ts",
+        "j-talk/tests/integration/settings.integration.test.ts"
       ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "implemented_in_this_batch": true,
+      "acceptance_complete": false,
+      "current_implementation": "partial",
+      "current_verification": "actual_member_single_jtalk_aud_azp_tenant_sid_role_cookie_refusal_401_403_404_409_real_jwks_and_db503_pass_node22_node24; visitor_token_lifetime_rotation_rebinding_wss_and_rate_limit_not_implemented"
     },
     {
       "id": "TK-30",
@@ -1567,7 +1679,9 @@
         "j-talk/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "TK-40",
@@ -1575,19 +1689,30 @@
       "service": "j-talk",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
+      "classification": "service",
+      "classification_label": "서비스 구현 선행",
       "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "jgw_talk 전용 PG·tenant 테이블·server/widget/contracts 구조가 확정돼 있다.",
-      "next_step": "T1 전용 DB·최소 서버·마이그레이션·실제 권한 검증부터 구현한다.",
+      "additional_dependencies": [
+        "TK-10",
+        "TK-12",
+        "TK-41"
+      ],
+      "reason": "server·내부 관리 contracts·실제 전용 PG/HTTPS는 구현했다. apps/widget와 방·방문자 contracts/엔진·전체 T2 게시가 없다.",
+      "next_step": "실제 visitor/room producer를 구현한 뒤 widget workspace·완전한 T2 계약을 만든다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
+        "j-talk/docs/feature-specifications.md",
+        "j-talk/apps/server/src/main.ts",
+        "j-talk/apps/server/src/db/migrate.ts",
+        "j-talk/deploy/migrations/001-settings.sql",
+        "j-talk/packages/contracts/src/index.ts",
+        "j-talk/docs/cloud-settings-verification-2026-10-08.md"
       ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "implemented_in_this_batch": true,
+      "acceptance_complete": false,
+      "current_implementation": "partial",
+      "current_verification": "actual_server_local_contracts_dedicated_jgw_talk_nonsuperuser_migration_tenant_checksum_cross_db_denied_and_https_pass_node22_node24; widget_workspace_full_visitor_room_contract_registry_publish_not_implemented"
     },
     {
       "id": "TK-41",
@@ -1609,7 +1734,9 @@
         "j-talk/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "TK-42",
@@ -1629,7 +1756,9 @@
         "j-talk/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "WB-01",
@@ -1649,7 +1778,9 @@
         "j-web/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "WB-02",
@@ -1669,7 +1800,9 @@
         "j-web/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "WB-03",
@@ -1689,7 +1822,9 @@
         "j-web/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "WB-04",
@@ -1709,7 +1844,9 @@
         "j-web/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "WB-05",
@@ -1729,7 +1866,9 @@
         "j-web/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "WB-06",
@@ -1749,7 +1888,9 @@
         "j-web/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "WB-07",
@@ -1757,19 +1898,28 @@
       "service": "j-web",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
+      "classification": "service",
+      "classification_label": "서비스 구현 선행",
       "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "j-web audience·web:read/write·tenant·기본 거부 계약이 확정돼 있다.",
-      "next_step": "H1/H2 이후 회원 인증과 cross-tenant 거절을 구현한다.",
+      "additional_dependencies": [
+        "WB-20",
+        "WB-03",
+        "WB-05"
+      ],
+      "reason": "실제 회원 j-web aud·read/write 복합 조회·401/403·foreign404·JWKS/DB503은 검증했다. helper를 쓰는 실제 web:write 변경 route가 없다.",
+      "next_step": "H5/H6 helper·사이트/계정 변경 route에 같은 memberGate로 write 검사를 연결한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-web/docs/decisions.md",
-        "j-web/docs/feature-specifications.md"
+        "j-web/docs/feature-specifications.md",
+        "j-web/apps/server/src/auth.ts",
+        "j-web/apps/server/src/app.ts",
+        "j-web/tests/integration/membership.integration.test.ts"
       ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "implemented_in_this_batch": true,
+      "acceptance_complete": false,
+      "current_implementation": "partial",
+      "current_verification": "actual_jweb_single_aud_tenant_member_sid_cookie_refusal_read_write_composite_read_and_no_role_403_foreign_id404_jwks_db503_pass_node22_node24; actual_web_write_lifecycle_gate_not_implemented"
     },
     {
       "id": "WB-10",
@@ -1789,7 +1939,9 @@
         "j-web/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "WB-11",
@@ -1809,7 +1961,9 @@
         "j-web/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "WB-12",
@@ -1829,7 +1983,9 @@
         "j-web/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "WB-13",
@@ -1849,7 +2005,9 @@
         "j-web/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "WB-20",
@@ -1857,19 +2015,25 @@
       "service": "j-web",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
+      "classification": "service",
+      "classification_label": "서비스 구현 선행",
       "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "root-owned helper 위치·고정 하위 명령·UUID/domain/account 재검증·shell 금지가 결정 13에 명시돼 있다.",
-      "next_step": "실제 명령 adapter와 입력 거절·nginx 실패 복구를 격리 fixture로 구현한다.",
+      "additional_dependencies": [
+        "WB-32",
+        "WB-22",
+        "WB-23"
+      ],
+      "reason": "H5의 실제 SFTP/FTPS/local-user 호스팅 fixture(WB-32)와 OS helper 실행·부분 상태/rollback producer가 없다. 하위 명령·경로 규칙은 확정된 구현자 작업이다.",
+      "next_step": "H5 공식 제품/계정 fixture를 만든 뒤 7개 고정 helper 명령·secret stdin·Nginx rollback을 격리 root container에서 검증한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-web/docs/decisions.md",
         "j-web/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "WB-21",
@@ -1889,7 +2053,9 @@
         "j-web/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "WB-22",
@@ -1909,7 +2075,9 @@
         "j-web/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "WB-23",
@@ -1929,7 +2097,9 @@
         "j-web/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "WB-24",
@@ -1937,19 +2107,30 @@
       "service": "j-web",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
+      "classification": "service",
+      "classification_label": "서비스 구현 선행",
       "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "/srv/jweb 별도 20GB 데이터 디스크·마운트 확인·용량 표시·사이트 quota 제외가 확정돼 있다.",
-      "next_step": "마운트 probe와 디스크 미준비 거절을 구현하고 실제 mount 적용은 VM에서 검증한다.",
+      "additional_dependencies": [
+        "WB-20",
+        "WB-03",
+        "vm"
+      ],
+      "reason": "고정 루트 실제 mountinfo·device·statfs와 cloud mount 누락 거절은 구현했다. site du 및 helper 쓰기 전 probe 연결과 실제 별도 디스크가 남았다.",
+      "next_step": "WB-20/사이트 디렉터리 producer에 du·쓰기 guard를 연결하고 별도 20GB 대상의 positive mount 인수를 실행한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-web/docs/decisions.md",
-        "j-web/docs/feature-specifications.md"
+        "j-web/docs/feature-specifications.md",
+        "j-web/apps/server/src/disk.ts",
+        "j-web/apps/server/src/disk-cli.ts",
+        "j-web/tests/server/disk.test.ts",
+        "j-web/tests/integration/membership.integration.test.ts",
+        "j-web/docs/cloud-foundation-verification-2026-10-08.md"
       ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "implemented_in_this_batch": true,
+      "acceptance_complete": false,
+      "current_implementation": "partial",
+      "current_verification": "fixed_root_real_mountinfo_device_symlink_statfs_guard; actual_cloud_missing_mount_fail_closed_pass_node22_node24; positive_mount_parser_unit_only; site_du_helper_write_gate_and_actual_separate20gb_disk_not_implemented_or_not_run"
     },
     {
       "id": "WB-25",
@@ -1969,27 +2150,9 @@
         "j-web/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
-    },
-    {
-      "id": "WB-30",
-      "name": "저장소 골격·DB",
-      "service": "j-web",
-      "baseline_implementation": "not_started",
-      "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
-      "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "jgw_web 전용 PG·tenant 테이블·server/contracts 골격이 확정돼 있다.",
-      "next_step": "H1 전용 DB·최소 서버·마이그레이션부터 구현한다.",
-      "sources": [
-        "j-groupware/docs/implementation-progress.json",
-        "j-web/docs/decisions.md",
-        "j-web/docs/feature-specifications.md"
-      ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "WB-31",
@@ -2009,7 +2172,9 @@
         "j-web/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "WB-32",
@@ -2029,7 +2194,9 @@
         "j-web/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     },
     {
       "id": "WB-33",
@@ -2049,7 +2216,9 @@
         "j-web/docs/feature-specifications.md"
       ],
       "implemented_in_this_batch": false,
-      "acceptance_complete": false
+      "acceptance_complete": false,
+      "current_implementation": "not_started",
+      "current_verification": "not_run"
     }
   ],
   "E8": {
@@ -2078,11 +2247,11 @@
     "MS-08/GW-72: suite 배포 profile과 실제 cloud registry Compose 경로"
   ],
   "current_progress": {
-    "implemented": 72,
-    "partial": 15,
-    "not_started": 85,
+    "implemented": 76,
+    "partial": 20,
+    "not_started": 76,
     "total": 172,
-    "audited": 100
+    "audited": 96
   },
   "completed_since_baseline": [
     {
@@ -2216,6 +2385,144 @@
       "acceptance_complete": false,
       "implementation": "implemented",
       "verification": "actual_suite_server_contracts_build_archive_2_pass_node22_node24; cold_install130_packages_auth_verifier0.1_lock_integrity_match; installed_artifact_static_ui404_ready200_both_nodes; existing_full_check_and_actual_pg21_pass_node24; native_build_operating_install_vm_not_run"
+    },
+    {
+      "id": "GW-50",
+      "name": "콘솔 로그인",
+      "service": "j-groupware",
+      "baseline_implementation": "not_started",
+      "baseline_verification": "not_run",
+      "classification": "ready",
+      "classification_label": "구현 가능",
+      "external_or_user_gate": false,
+      "additional_dependencies": [],
+      "reason": "operator realm OIDC 계약은 확정돼 있고 기존 BFF Code/PKCE 패턴을 재사용할 수 있다.",
+      "next_step": "별도 운영 콘솔 세션·operator 인증·기본 거부를 구현한다.",
+      "sources": [
+        "j-groupware/docs/implementation-progress.json",
+        "j-groupware/docs/decisions.md",
+        "j-groupware/docs/suite-feature-specifications.md"
+      ],
+      "implemented_in_this_batch": true,
+      "acceptance_complete": false,
+      "implementation": "implemented",
+      "verification": "actual_operator_code_pkce_nonce_state_separate_console_db_cookie_customer_denial_csrf_refresh_lock_real_backchannel_compiled_https_sigterm_8_pass_node22_node24; full_customer_bff133_pass_node24; formal_ui_gateway_vm_not_run"
+    },
+    {
+      "id": "TK-25",
+      "name": "허용 출처 관리",
+      "service": "j-talk",
+      "baseline_implementation": "not_started",
+      "baseline_verification": "not_run",
+      "classification": "ready",
+      "classification_label": "구현 가능",
+      "external_or_user_gate": false,
+      "additional_dependencies": [],
+      "reason": "talk:write 기반 tenant별 허용 출처 관리 요구가 확정돼 있다.",
+      "next_step": "T1/T2 이후 관리 CRUD와 실제 auth/PG 격리를 구현한다.",
+      "sources": [
+        "j-groupware/docs/implementation-progress.json",
+        "j-talk/docs/decisions.md",
+        "j-talk/docs/feature-specifications.md"
+      ],
+      "implemented_in_this_batch": true,
+      "acceptance_complete": false,
+      "implementation": "implemented",
+      "verification": "actual_db_origin_crud_pagination_exact_origin_invalid_wildcard_path_alias_tenant_isolation_role_and_failure_pass_node22_node24"
+    },
+    {
+      "id": "TK-26",
+      "name": "위젯 비밀키 관리",
+      "service": "j-talk",
+      "baseline_implementation": "not_started",
+      "baseline_verification": "not_run",
+      "classification": "ready",
+      "classification_label": "구현 가능",
+      "external_or_user_gate": false,
+      "additional_dependencies": [],
+      "reason": "현재/이전 widget HMAC 키와 24시간 겹침·1회 표시 요구가 확정돼 있다.",
+      "next_step": "T1/T2 이후 키 관리·서명·이전 키 만료를 구현한다.",
+      "sources": [
+        "j-groupware/docs/implementation-progress.json",
+        "j-talk/docs/decisions.md",
+        "j-talk/docs/feature-specifications.md"
+      ],
+      "implemented_in_this_batch": true,
+      "acceptance_complete": false,
+      "implementation": "implemented",
+      "verification": "actual_db_widget_key_one_time_response_current_previous24h_boundary_hmac_signature_constant_time_invalid_anonymous_foreign_tenant_atomic_concurrent_rotation_pass_node22_node24"
+    },
+    {
+      "id": "WB-30",
+      "name": "저장소 골격·DB",
+      "service": "j-web",
+      "baseline_implementation": "not_started",
+      "baseline_verification": "not_run",
+      "classification": "ready",
+      "classification_label": "구현 가능",
+      "external_or_user_gate": false,
+      "additional_dependencies": [],
+      "reason": "jgw_web 전용 PG·tenant 테이블·server/contracts 골격이 확정돼 있다.",
+      "next_step": "H1 전용 DB·최소 서버·마이그레이션부터 구현한다.",
+      "sources": [
+        "j-groupware/docs/implementation-progress.json",
+        "j-web/docs/decisions.md",
+        "j-web/docs/feature-specifications.md"
+      ],
+      "implemented_in_this_batch": true,
+      "acceptance_complete": false,
+      "implementation": "implemented",
+      "verification": "actual_dedicated_jgw_web_nonsuperuser_tenant_tables_migration_checksum_conflict_rollback_cross_db_connection_denied_https_read_and_real_db_restart_pass_node22_node24"
     }
-  ]
+  ],
+  "checkpoints": [
+    {
+      "source_commit": "d40b65cde083ce89cf40df3ca15142cb683ceef2",
+      "implemented": 72,
+      "partial": 15,
+      "not_started": 85,
+      "ready": 14
+    }
+  ],
+  "ready_batch": {
+    "initial_ids": [
+      "AU-06",
+      "AU-11",
+      "AU-25",
+      "AU-50",
+      "GW-50",
+      "GW-63",
+      "GW-64",
+      "GW-65",
+      "GW-72",
+      "MS-08",
+      "TK-01",
+      "TK-13",
+      "TK-25",
+      "TK-26",
+      "TK-27",
+      "TK-40",
+      "WB-07",
+      "WB-20",
+      "WB-24",
+      "WB-30"
+    ],
+    "implemented": 10,
+    "partial": 5,
+    "not_started": 5,
+    "remaining_ids": [
+      "GW-63",
+      "GW-64",
+      "GW-65",
+      "TK-01",
+      "TK-13",
+      "TK-27",
+      "TK-40",
+      "WB-07",
+      "WB-20",
+      "WB-24"
+    ],
+    "reclassification_does_not_mean_complete": true
+  },
+  "continueable_work_note": "service·contract는 구현자가 계속할 수 있는 선행 작업이다. 실제 외부 차단으로 취급하지 않으며, ready 0은 전체 구현 완료를 뜻하지 않는다."
 }

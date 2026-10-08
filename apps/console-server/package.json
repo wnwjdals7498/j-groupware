@@ -1,0 +1,16 @@
+{
+  "name": "@j-groupware/console-server",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@j-groupware/bff-auth": "0.1.0",
+    "@j-groupware/contracts": "0.1.0",
+    "@j-auth/contracts": "0.1.0",
+    "fastify": "5.12.5",
+    "pg": "8.23.1"
+  }
+}
