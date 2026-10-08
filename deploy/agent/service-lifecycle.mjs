@@ -82,6 +82,7 @@ export class ServiceLifecycle {
       !state?.read ||
       !state?.write ||
       !database?.ensure ||
+      !database?.inspect ||
       !database?.dump ||
       !database?.disable ||
       !platform?.preflight ||
@@ -118,6 +119,7 @@ export class ServiceLifecycle {
       phase = "preflight";
     const record = async (status) => {
       state = { ...state, status, phase };
+      if (["active", "removed"].includes(status)) delete state.error;
       await this.state.write(service, state);
     };
     try {
@@ -177,10 +179,24 @@ export class ServiceLifecycle {
       )
         throw new ProvisionError("notification_registration_unbound");
       state.action = "remove";
+      phase = "inspect";
+      await record("removing");
+      const allocation = await this.database.inspect(service);
+      if (
+        !allocation ||
+        typeof allocation.role !== "boolean" ||
+        typeof allocation.database !== "boolean" ||
+        (allocation.database && !allocation.role)
+      )
+        throw new ProvisionError("invalid_database_allocation");
+      state.allocation = {
+        role: allocation.role,
+        database: allocation.database,
+      };
       phase = "stop";
       await record("removing");
-      await this.platform.stop(service);
-      if (!state.backup) {
+      await this.platform.stop(service, { allowMissing: true });
+      if (allocation.database && !state.backup) {
         phase = "dump";
         await record("removing");
         const destination = await this.environment.backupPath(service);
@@ -190,7 +206,9 @@ export class ServiceLifecycle {
       }
       phase = "disable";
       await record("removing");
-      await this.database.disable(service);
+      await this.database.disable(service, {
+        expectDatabaseAbsent: !allocation.database,
+      });
       phase = "cleanup";
       await record("removing");
       await this.cleanup.run(service);

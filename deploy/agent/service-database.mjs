@@ -220,6 +220,18 @@ export class PostgresServiceDatabase {
     }
     return { database: name, user: name };
   }
+  async inspect(service) {
+    return this.locked(service, async (client, name) => {
+      const { role, database } = await this.owned(client, name, service);
+      if (database && !role)
+        throw new ProvisionError("inconsistent_database_allocation");
+      return {
+        role: Boolean(role),
+        database: Boolean(database),
+        login: role?.rolcanlogin ?? false,
+      };
+    });
+  }
   async dump(service, destination) {
     externalPath(destination);
     const directory = destination.slice(0, destination.lastIndexOf("/")),
@@ -268,16 +280,22 @@ export class PostgresServiceDatabase {
       await rm(temporary, { force: true });
     }
   }
-  async disable(service) {
+  async disable(service, { expectDatabaseAbsent = false } = {}) {
     return this.locked(service, async (client, name) => {
       const { role, database } = await this.owned(client, name, service);
-      if (!role || !database) throw new ProvisionError("database_missing");
+      if (expectDatabaseAbsent && database)
+        throw new ProvisionError("database_allocation_changed");
+      if (!role) {
+        if (database)
+          throw new ProvisionError("inconsistent_database_allocation");
+        return { database: false, role: false, login: false };
+      }
       await client.query(`ALTER ROLE ${ident(name)} NOLOGIN`);
       await client.query(
         "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE usename=$1 AND pid<>pg_backend_pid()",
         [name],
       );
-      return { database: name, login: false };
+      return { database: database ? name : false, role: true, login: false };
     });
   }
 }

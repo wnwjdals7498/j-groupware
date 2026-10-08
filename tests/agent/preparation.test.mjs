@@ -20,6 +20,7 @@ import {
 import {
   NativeSystemdPlatform,
   renderServiceUnit,
+  parseUnitObservation,
 } from "../../deploy/agent/native-platform.mjs";
 import { execute } from "../../deploy/gateway/gateway.mjs";
 let root, input;
@@ -137,6 +138,7 @@ test("private service env preserves generated credentials across retry and remai
     environment,
     database: {
       ensure: async () => events.push("database"),
+      inspect: async () => ({ role: true, database: true, login: true }),
       dump: async (_service, file) => {
         if (backupFailure) throw new Error();
         dumps++;
@@ -229,4 +231,16 @@ test("native units carry fixed entrypoints, separate users and web helper privil
   assert.throws(() =>
     renderServiceUnit("j-talk;id", bundleRoot, environmentRoot),
   );
+  assert.deepEqual(
+    parseUnitObservation(
+      "LoadState=not-found\nFragmentPath=\nActiveState=inactive\n",
+    ),
+    { LoadState: "not-found", FragmentPath: "", ActiveState: "inactive" },
+  );
+  for (const observed of [
+    "LoadState=not-found\nActiveState=inactive\n",
+    "LoadState=loaded\nFragmentPath=/foreign\nActiveState=active\nLoadState=not-found\n",
+    "LoadState=error\nFragmentPath=\nActiveState=inactive\n",
+  ])
+    assert.throws(() => parseUnitObservation(observed));
 });

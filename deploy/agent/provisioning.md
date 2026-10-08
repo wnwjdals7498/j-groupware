@@ -17,6 +17,10 @@ the existing credentials instead of rotating them. Backup uses custom pg_dump
 and a private PGPASSFILE, never secret argv. Removal sets NOLOGIN, ends that
 role's sessions and preserves the database and backup. Reinstallation of removed
 data fails for review; automatic purging is not implemented.
+`inspect` validates ownership even for absent/role-only allocations. Teardown
+skips the dump only when the database is actually absent, revokes a committed
+owned role without requiring a DB, and refuses a database appearing after an
+absent observation. Foreign allocations are refused before stopping a unit.
 
 `ServiceLifecycle` durably records each stage, preserves generated env secrets
 across retries, requires notification registration after actual readiness for approval/talk/mail, and
@@ -40,14 +44,21 @@ The actual isolated root fixture proves account/site route removal, private
 backup preservation of manual uploads, unchanged gateway and repeated cleanup.
 Its runtime image is Node22.18; both Node22/24 test orchestrators pass two tests.
 It refuses non-Web services, non-root execution and unsafe helper ownership.
-Other product cleanup adapters and Web OS/storage installation remain pending.
+`ProductCleanup` retains the already-backed-up PostgreSQL data and compiled
+bundle for Approval/Talk, whose servers have no separate persistent file store.
+Web delegates to the fixed helper; Messenger file storage, Mailpit storage and
+customer-auth cleanup require dedicated adapters and currently fail closed.
+Web OS/storage installation remains pending.
 
 `NativeSystemdPlatform` renders fixed entrypoints, dedicated nologin users and
 private env files. Root-owned bundle ancestry, metadata/lockfile digest and the
 dependency-install completion marker are checked.
 Readiness and stop also refuse a unit whose fixed content or ownership differs;
-an install failing before a managed unit/DB exists still requires phase-aware
-teardown work rather than treating an incomplete allocation as fully removed.
+an absent unit is accepted on teardown only after an actual systemctl property
+query confirms not-found/inactive with no fragment. Loaded foreign fragments,
+changed unit files and unobserved states are refused. The property protocol is
+checked against [systemd's source](https://github.com/systemd/systemd/blob/v257/src/systemctl/systemctl-show.c);
+actual systemd stop/absent-unit acceptance remains unexecuted on a customer host.
 Only j-web permits privilege elevation for its fixed sudo helper. Readiness is
 a required product adapter. These operating-system methods were not run on the
 cloud host and are not customer VM acceptance.

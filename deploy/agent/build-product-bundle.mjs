@@ -268,6 +268,7 @@ export async function buildProductBundle({
         "private-files",
         "product-environment",
         "product-gateway",
+        "product-cleanup",
         "product-readiness",
         "provision-command",
         "provision-error",

@@ -13,6 +13,12 @@ import {
 import { tmpdir } from "node:os";
 import { PostgresServiceDatabase } from "../../deploy/agent/service-database.mjs";
 import { execute } from "../../deploy/gateway/gateway.mjs";
+import { ServiceEnvironment } from "../../deploy/agent/service-environment.mjs";
+import {
+  ServiceLifecycle,
+  ServiceStateFiles,
+} from "../../deploy/agent/service-lifecycle.mjs";
+import { ProductCleanup } from "../../deploy/agent/product-cleanup.mjs";
 const password = randomBytes(32).toString("base64url"),
   talkPassword = randomBytes(32).toString("base64url"),
   webPassword = randomBytes(32).toString("base64url");
@@ -225,4 +231,161 @@ test("actual pg_dump restores committed bytes; NOLOGIN terminates owned connecti
   await assert.rejects(db.ensure("j-talk", talkPassword), {
     code: "disabled_database_requires_review",
   });
+});
+function lifecycle(prefix, database, events) {
+  const state = new ServiceStateFiles(
+    root + "/" + prefix + "/state",
+    "agent-fixture",
+  );
+  const environment = new ServiceEnvironment({
+    root: root + "/" + prefix + "/env",
+    backups: root + "/" + prefix + "/backups",
+    render: (_service, value) => JSON.stringify(value),
+    read: (_service, text) => JSON.parse(text),
+  });
+  const instance = new ServiceLifecycle({
+    tenant: "agent-fixture",
+    state,
+    environment,
+    database,
+    // Component ports exercise ordering around real PG allocation. No operating
+    // system service or production subscription is activated by these ports.
+    platform: {
+      preflight: async () => {},
+      install: async () => events.push("install"),
+      start: async () => {},
+      ready: async () => {},
+      stop: async (_service, options) => {
+        assert.equal(options.allowMissing, true);
+        events.push("stop-absent-port");
+      },
+    },
+    notifications: {
+      register: async () => {},
+      remove: async () => events.push("notification-remove-port"),
+    },
+    gateway: {
+      set: async (_service, enabled) => {
+        assert.equal(enabled, false);
+        events.push("gateway-remove-port");
+      },
+    },
+    cleanup: new ProductCleanup(),
+  });
+  return { instance, state, environment };
+}
+test("removes a pre-DB allocation without fabricated backup, and refuses another owner's role before stop", async () => {
+  const events = [],
+    fresh = lifecycle("fresh", db, events);
+  assert.deepEqual(await db.inspect("j-approval"), {
+    role: false,
+    database: false,
+    login: false,
+  });
+  const result = await fresh.instance.run("j-approval", "remove");
+  assert.equal(result.status, "removed");
+  assert.equal(result.backup, undefined);
+  assert.equal(
+    (await fresh.state.read("j-approval")).allocation.database,
+    false,
+  );
+  assert.deepEqual(await db.inspect("j-approval"), {
+    role: false,
+    database: false,
+    login: false,
+  });
+  const foreignEvents = [],
+    foreign = lifecycle("foreign", db, foreignEvents);
+  await assert.rejects(foreign.instance.run("j-mail", "remove"), {
+    code: "unmanaged_role",
+  });
+  assert.deepEqual(foreignEvents, []);
+  assert.equal((await foreign.state.read("j-mail")).phase, "inspect");
+  assert.equal(
+    (
+      await admin.query(
+        "SELECT rolcanlogin FROM pg_roles WHERE rolname='jgw_mail'",
+      )
+    ).rows[0].rolcanlogin,
+    true,
+  );
+  assert.equal(
+    (await web.query("SELECT value FROM preserved")).rows[0].value,
+    "other-service-preserved",
+  );
+});
+test("an actual committed owned role survives a CREATE DATABASE fault, then teardown revokes it without requiring a nonexistent DB/unit", async () => {
+  const faultAdmin = {
+    connect: async () => {
+      const client = await admin.connect();
+      return {
+        query: (sql, params) => {
+          if (
+            typeof sql === "string" &&
+            sql.startsWith('CREATE DATABASE "jgw_approval"')
+          )
+            throw new Error("explicit_create_database_fault");
+          return client.query(sql, params);
+        },
+        release: (...args) => client.release(...args),
+      };
+    },
+  };
+  const faultDb = new PostgresServiceDatabase({
+    admin: faultAdmin,
+    tenant: "agent-fixture",
+    connection: () => ({ host: "127.0.0.1", port }),
+    dumpBinary: "/workspace/.cloud-setup/pg18/bin/pg_dump",
+    dumpEnv: {
+      PGHOST: "127.0.0.1",
+      PGPORT: String(port),
+      PGUSER: "postgres",
+      PGPASSFILE: passfile,
+    },
+  });
+  const events = [],
+    partial = lifecycle("role-only", faultDb, events);
+  await assert.rejects(partial.instance.run("j-approval"), {
+    code: "service_database_failed",
+  });
+  assert.equal((await partial.state.read("j-approval")).phase, "database");
+  assert.deepEqual(await faultDb.inspect("j-approval"), {
+    role: true,
+    database: false,
+    login: true,
+  });
+  await stat(partial.environment.file("j-approval"));
+  const removed = await partial.instance.run("j-approval", "remove");
+  assert.equal(removed.status, "removed");
+  assert.equal(removed.backup, undefined);
+  assert.equal((await partial.state.read("j-approval")).error, undefined);
+  assert.deepEqual(await faultDb.inspect("j-approval"), {
+    role: true,
+    database: false,
+    login: false,
+  });
+  await assert.rejects(stat(partial.environment.file("j-approval")), {
+    code: "ENOENT",
+  });
+  assert.equal(events.includes("install"), false);
+  assert.equal(events.includes("gateway-remove-port"), true);
+  assert.equal(
+    (await web.query("SELECT value FROM preserved")).rows[0].value,
+    "other-service-preserved",
+  );
+});
+test("refuses a newly appeared database after an absent observation and keeps LOGIN unchanged until its backup can be taken", async () => {
+  await db.ensure("j-messenger", randomBytes(32).toString("base64url"));
+  await assert.rejects(
+    db.disable("j-messenger", { expectDatabaseAbsent: true }),
+    { code: "database_allocation_changed" },
+  );
+  assert.equal((await db.inspect("j-messenger")).login, true);
+  await assert.rejects(new ProductCleanup().run("j-mail"), {
+    code: "cleanup_adapter_unbound",
+  });
+  await assert.rejects(new ProductCleanup().run("j-messenger"), {
+    code: "cleanup_adapter_unbound",
+  });
+  assert.equal((await new ProductCleanup().run("j-talk")).data, "retained");
 });
