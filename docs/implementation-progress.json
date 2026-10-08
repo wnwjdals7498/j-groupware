@@ -1,0 +1,1952 @@
+{
+  "updated_date": "2026-10-08",
+  "scope": "suite integration features only; existing messenger feature set is separate",
+  "status_basis": "source implementation and last bounded Node checks; this is not service-level acceptance completion",
+  "system_installation": "forbidden on company laptop",
+  "docker_apply_executed": false,
+  "whole_suite_verified": false,
+  "summary": {
+    "not_started": 160,
+    "partial": 11,
+    "implemented": 1
+  },
+  "blocked_runtime": [
+    "Docker Compose execution",
+    "Keycloak OIDC/token/FGAP and realm import",
+    "PostgreSQL isolation/migrations integration",
+    "Hyper-V/VM service verification"
+  ],
+  "features": [
+    {
+      "id": "AU-01",
+      "service": "j-auth",
+      "name": "Keycloak 실행 환경",
+      "items": [
+        "I1"
+      ],
+      "implementation": "partial",
+      "verification": "static_only; keycloak_postgres_runtime_blocked",
+      "code": [
+        "j-auth/deploy/compose.yaml",
+        "j-auth/deploy/postgres/init-control-plane-databases.sh"
+      ]
+    },
+    {
+      "id": "AU-02",
+      "service": "j-auth",
+      "name": "고객 realm 템플릿",
+      "items": [
+        "I2"
+      ],
+      "implementation": "partial",
+      "verification": "unit_static_only; actual_import_blocked",
+      "code": [
+        "j-auth/scripts/realm/templates.mjs"
+      ]
+    },
+    {
+      "id": "AU-03",
+      "service": "j-auth",
+      "name": "운영사 realm",
+      "items": [
+        "I2"
+      ],
+      "implementation": "partial",
+      "verification": "unit_static_only; actual_import_blocked",
+      "code": [
+        "j-auth/scripts/realm/templates.mjs"
+      ]
+    },
+    {
+      "id": "AU-04",
+      "service": "j-auth",
+      "name": "샘플 realm·기본 계정",
+      "items": [
+        "I2"
+      ],
+      "implementation": "partial",
+      "verification": "unit_static_only; account_import_blocked",
+      "code": [
+        "j-auth/scripts/realm/templates.mjs"
+      ]
+    },
+    {
+      "id": "AU-05",
+      "service": "j-auth",
+      "name": "OIDC 로그인",
+      "items": [
+        "I2",
+        "I4"
+      ],
+      "implementation": "partial",
+      "verification": "configuration_only; actual_oidc_login_blocked",
+      "code": [
+        "j-auth/scripts/realm/templates.mjs"
+      ]
+    },
+    {
+      "id": "AU-06",
+      "service": "j-auth",
+      "name": "토큰 수명·갱신·로그아웃 설정",
+      "items": [
+        "I2"
+      ],
+      "implementation": "partial",
+      "verification": "configuration_only; refresh_logout_runtime_blocked",
+      "code": [
+        "j-auth/packages/contracts/src/index.ts",
+        "j-auth/scripts/realm/templates.mjs"
+      ]
+    },
+    {
+      "id": "AU-07",
+      "service": "j-auth",
+      "name": "토큰 축소(token exchange) 허용",
+      "items": [
+        "I2"
+      ],
+      "implementation": "partial",
+      "verification": "configuration_only; token_exchange_runtime_blocked",
+      "code": [
+        "j-auth/scripts/realm/templates.mjs"
+      ]
+    },
+    {
+      "id": "AU-08",
+      "service": "j-auth",
+      "name": "FGAP v2 권한",
+      "items": [
+        "I2"
+      ],
+      "implementation": "partial",
+      "verification": "bootstrap_plan_only; fgap_runtime_blocked",
+      "code": [
+        "j-auth/scripts/realm/templates.mjs"
+      ]
+    },
+    {
+      "id": "AU-09",
+      "service": "j-auth",
+      "name": "로그인 화면 테마",
+      "items": [
+        "I2"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AU-10",
+      "service": "j-auth",
+      "name": "서버 골격·DB",
+      "items": [
+        "I3"
+      ],
+      "implementation": "partial",
+      "verification": "workspace_and_database_config_only; tenant_tables_not_implemented",
+      "code": [
+        "j-auth/package.json",
+        "j-auth/tsconfig.base.json",
+        "j-auth/deploy/postgres/init-control-plane-databases.sh"
+      ]
+    },
+    {
+      "id": "AU-11",
+      "service": "j-auth",
+      "name": "contracts 패키지",
+      "items": [
+        "I3"
+      ],
+      "implementation": "partial",
+      "verification": "unit_build_pass; actual_contract_registry_publish_not_run",
+      "code": [
+        "j-auth/packages/contracts/src/index.ts",
+        "j-auth/packages/contracts/package.json"
+      ]
+    },
+    {
+      "id": "AU-12",
+      "service": "j-auth",
+      "name": "서비스 카탈로그",
+      "items": [
+        "I3"
+      ],
+      "implementation": "implemented",
+      "verification": "unit_build_pass; catalog_computation_only",
+      "code": [
+        "j-auth/packages/contracts/src/index.ts",
+        "j-auth/packages/contracts/test/catalog.test.mjs"
+      ]
+    },
+    {
+      "id": "AU-13",
+      "service": "j-auth",
+      "name": "토큰 검증 공통 코드",
+      "items": [
+        "I3"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AU-14",
+      "service": "j-auth",
+      "name": "서비스 키 검사",
+      "items": [
+        "I3"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AU-15",
+      "service": "j-auth",
+      "name": "Keycloak 비밀값 읽기",
+      "items": [
+        "I3"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AU-20",
+      "service": "j-auth",
+      "name": "회원 목록",
+      "items": [
+        "I6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AU-21",
+      "service": "j-auth",
+      "name": "회원 추가",
+      "items": [
+        "I6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AU-22",
+      "service": "j-auth",
+      "name": "회원 삭제",
+      "items": [
+        "I6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AU-23",
+      "service": "j-auth",
+      "name": "권한 부여·회수",
+      "items": [
+        "I6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AU-24",
+      "service": "j-auth",
+      "name": "부여 가능 role 조회",
+      "items": [
+        "I6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AU-25",
+      "service": "j-auth",
+      "name": "변경 시 세션 종료",
+      "items": [
+        "I6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AU-30",
+      "service": "j-auth",
+      "name": "가입 서비스 조회",
+      "items": [
+        "I7"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AU-31",
+      "service": "j-auth",
+      "name": "서비스 활성화",
+      "items": [
+        "I7"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AU-32",
+      "service": "j-auth",
+      "name": "서비스 해제",
+      "items": [
+        "I7"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AU-40",
+      "service": "j-auth",
+      "name": "고객 realm 자동 생성",
+      "items": [
+        "I8"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AU-41",
+      "service": "j-auth",
+      "name": "고객 비밀값 교체",
+      "items": [
+        "I8"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AU-50",
+      "service": "j-auth",
+      "name": "control plane 경로 허용 목록",
+      "items": [
+        "I5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AU-51",
+      "service": "j-auth",
+      "name": "VM 검증·측정",
+      "items": [
+        "I5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-01",
+      "service": "j-groupware",
+      "name": "OIDC 로그인",
+      "items": [
+        "G3"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-02",
+      "service": "j-groupware",
+      "name": "로그인 콜백",
+      "items": [
+        "G3"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-03",
+      "service": "j-groupware",
+      "name": "서버 세션",
+      "items": [
+        "G3"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-04",
+      "service": "j-groupware",
+      "name": "토큰 갱신",
+      "items": [
+        "G3"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-05",
+      "service": "j-groupware",
+      "name": "로그아웃",
+      "items": [
+        "G3"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-06",
+      "service": "j-groupware",
+      "name": "백채널 로그아웃",
+      "items": [
+        "G3"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-07",
+      "service": "j-groupware",
+      "name": "내 정보",
+      "items": [
+        "G3"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-08",
+      "service": "j-groupware",
+      "name": "토큰 축소",
+      "items": [
+        "G23"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-10",
+      "service": "j-groupware",
+      "name": "권한 표",
+      "items": [
+        "G4"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-11",
+      "service": "j-groupware",
+      "name": "서버 권한 검사",
+      "items": [
+        "G4"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-12",
+      "service": "j-groupware",
+      "name": "메뉴 숨김",
+      "items": [
+        "G4"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-13",
+      "service": "j-groupware",
+      "name": "회원 목록·추가·삭제",
+      "items": [
+        "G6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-14",
+      "service": "j-groupware",
+      "name": "권한 부여·회수 화면",
+      "items": [
+        "G6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-15",
+      "service": "j-groupware",
+      "name": "권한 변경 후 세션 정리",
+      "items": [
+        "G6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-20",
+      "service": "j-groupware",
+      "name": "게시판",
+      "items": [
+        "G5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-21",
+      "service": "j-groupware",
+      "name": "조직도 편집",
+      "items": [
+        "G15"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-22",
+      "service": "j-groupware",
+      "name": "미배치 자동 등록",
+      "items": [
+        "G15"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-23",
+      "service": "j-groupware",
+      "name": "기본 결재선 산출",
+      "items": [
+        "G15"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-30",
+      "service": "j-groupware",
+      "name": "메신저 화면",
+      "items": [
+        "G12"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-31",
+      "service": "j-groupware",
+      "name": "메일 화면",
+      "items": [
+        "G14"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-32",
+      "service": "j-groupware",
+      "name": "손님 관리 화면",
+      "items": [
+        "G13"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-33",
+      "service": "j-groupware",
+      "name": "API 키 화면",
+      "items": [
+        "G13"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-34",
+      "service": "j-groupware",
+      "name": "결재 화면",
+      "items": [
+        "G16"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-35",
+      "service": "j-groupware",
+      "name": "상담 화면",
+      "items": [
+        "G19"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-36",
+      "service": "j-groupware",
+      "name": "상담 설정",
+      "items": [
+        "G19"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-37",
+      "service": "j-groupware",
+      "name": "웹 관리 화면",
+      "items": [
+        "G20"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-38",
+      "service": "j-groupware",
+      "name": "배포 후 허용 출처 등록",
+      "items": [
+        "G20"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-40",
+      "service": "j-groupware",
+      "name": "알림 수신 API",
+      "items": [
+        "G22"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-41",
+      "service": "j-groupware",
+      "name": "알림 종류 표",
+      "items": [
+        "G22"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-42",
+      "service": "j-groupware",
+      "name": "알림 저장·보관",
+      "items": [
+        "G22"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-43",
+      "service": "j-groupware",
+      "name": "실시간 알림",
+      "items": [
+        "G22"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-44",
+      "service": "j-groupware",
+      "name": "알림 화면",
+      "items": [
+        "G22"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-50",
+      "service": "j-groupware",
+      "name": "콘솔 로그인",
+      "items": [
+        "G7"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-51",
+      "service": "j-groupware",
+      "name": "고객 목록·계약 상태",
+      "items": [
+        "G7"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-52",
+      "service": "j-groupware",
+      "name": "고객 등록",
+      "items": [
+        "G17"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-53",
+      "service": "j-groupware",
+      "name": "가입 서비스 관리",
+      "items": [
+        "G17"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-54",
+      "service": "j-groupware",
+      "name": "원하는 상태 API",
+      "items": [
+        "G21"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-60",
+      "service": "j-groupware",
+      "name": "gateway 기본 설정",
+      "items": [
+        "G11"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-61",
+      "service": "j-groupware",
+      "name": "예외 경로",
+      "items": [
+        "G11"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-62",
+      "service": "j-groupware",
+      "name": "남용 방지",
+      "items": [
+        "G11"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-63",
+      "service": "j-groupware",
+      "name": "부트스트랩",
+      "items": [
+        "G18"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-64",
+      "service": "j-groupware",
+      "name": "서비스 설치",
+      "items": [
+        "G18"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-65",
+      "service": "j-groupware",
+      "name": "서비스 해지",
+      "items": [
+        "G18"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-66",
+      "service": "j-groupware",
+      "name": "프로비저닝 에이전트",
+      "items": [
+        "G21"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-70",
+      "service": "j-groupware",
+      "name": "저장소 골격",
+      "items": [
+        "G1"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-71",
+      "service": "j-groupware",
+      "name": "UI 기준",
+      "items": [
+        "G2",
+        "G9"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "GW-72",
+      "service": "j-groupware",
+      "name": "패키지 레지스트리",
+      "items": [
+        "X1"
+      ],
+      "implementation": "partial",
+      "verification": "node_integration_pass; compose_runtime_blocked",
+      "code": [
+        "j-groupware/tools/registry/compose.yaml",
+        "j-groupware/tools/registry/config.yaml",
+        "j-groupware/scripts/registry-publish.mjs",
+        "j-groupware/scripts/registry-backup.mjs"
+      ]
+    },
+    {
+      "id": "GW-73",
+      "service": "j-groupware",
+      "name": "VM 검증·측정",
+      "items": [
+        "G10"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "MS-01",
+      "service": "j-messenger",
+      "name": "PostgreSQL 전환",
+      "items": [
+        "M5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "MS-02",
+      "service": "j-messenger",
+      "name": "Bearer 인증 모드",
+      "items": [
+        "M1"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "MS-03",
+      "service": "j-messenger",
+      "name": "사용 권한 검사",
+      "items": [
+        "M1"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "MS-04",
+      "service": "j-messenger",
+      "name": "tenant 매핑",
+      "items": [
+        "M1"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "MS-05",
+      "service": "j-messenger",
+      "name": "client 패키지 게시",
+      "items": [
+        "M2"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "MS-06",
+      "service": "j-messenger",
+      "name": "중계 경로 설정",
+      "items": [
+        "M2"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "MS-07",
+      "service": "j-messenger",
+      "name": "UI 토큰 적용",
+      "items": [
+        "M2"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "MS-08",
+      "service": "j-messenger",
+      "name": "앱 동결",
+      "items": [
+        "M2"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "MS-09",
+      "service": "j-messenger",
+      "name": "고객 서버 검증",
+      "items": [
+        "M4"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "ML-01",
+      "service": "j-mail",
+      "name": "SMTP 수신·보관",
+      "items": [
+        "E1"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "ML-02",
+      "service": "j-mail",
+      "name": "허용 수신자",
+      "items": [
+        "E2"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "ML-03",
+      "service": "j-mail",
+      "name": "외부 발신 차단",
+      "items": [
+        "E2",
+        "E7"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "ML-10",
+      "service": "j-mail",
+      "name": "메일 목록",
+      "items": [
+        "E3"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "ML-11",
+      "service": "j-mail",
+      "name": "메일 상세",
+      "items": [
+        "E3"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "ML-12",
+      "service": "j-mail",
+      "name": "tenant 격리",
+      "items": [
+        "E3"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "ML-13",
+      "service": "j-mail",
+      "name": "인증·권한",
+      "items": [
+        "E3"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "ML-20",
+      "service": "j-mail",
+      "name": "새 메일 알림",
+      "items": [
+        "E8"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "ML-30",
+      "service": "j-mail",
+      "name": "저장소 골격·DB",
+      "items": [
+        "E1"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "ML-31",
+      "service": "j-mail",
+      "name": "contracts",
+      "items": [
+        "E3"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "ML-32",
+      "service": "j-mail",
+      "name": "고객 서버 검증",
+      "items": [
+        "E7"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "CA-01",
+      "service": "j-customer-auth-db",
+      "name": "손님 목록·조회",
+      "items": [
+        "C3"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "CA-02",
+      "service": "j-customer-auth-db",
+      "name": "손님 등록",
+      "items": [
+        "C3"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "CA-03",
+      "service": "j-customer-auth-db",
+      "name": "손님 수정·삭제",
+      "items": [
+        "C3"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "CA-04",
+      "service": "j-customer-auth-db",
+      "name": "권한·tenant 검사",
+      "items": [
+        "C3"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "CA-10",
+      "service": "j-customer-auth-db",
+      "name": "API 키 발급",
+      "items": [
+        "C5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "CA-11",
+      "service": "j-customer-auth-db",
+      "name": "API 키 목록",
+      "items": [
+        "C5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "CA-12",
+      "service": "j-customer-auth-db",
+      "name": "API 키 회수",
+      "items": [
+        "C5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "CA-20",
+      "service": "j-customer-auth-db",
+      "name": "손님 목록 조회",
+      "items": [
+        "C5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "CA-21",
+      "service": "j-customer-auth-db",
+      "name": "손님 쓰기",
+      "items": [
+        "C5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "CA-22",
+      "service": "j-customer-auth-db",
+      "name": "손님 로그인",
+      "items": [
+        "C4"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "CA-23",
+      "service": "j-customer-auth-db",
+      "name": "JWKS 공개",
+      "items": [
+        "C4"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "CA-24",
+      "service": "j-customer-auth-db",
+      "name": "로그인 시도 제한",
+      "items": [
+        "C4"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "CA-25",
+      "service": "j-customer-auth-db",
+      "name": "OpenAPI 문서",
+      "items": [
+        "C5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "CA-30",
+      "service": "j-customer-auth-db",
+      "name": "저장소 골격·DB",
+      "items": [
+        "C1"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "CA-31",
+      "service": "j-customer-auth-db",
+      "name": "contracts",
+      "items": [
+        "C2"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "CA-32",
+      "service": "j-customer-auth-db",
+      "name": "고객 서버 검증",
+      "items": [
+        "C8"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AP-01",
+      "service": "j-approval",
+      "name": "상신",
+      "items": [
+        "A5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AP-02",
+      "service": "j-approval",
+      "name": "결재선 검증·스냅샷",
+      "items": [
+        "A6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AP-03",
+      "service": "j-approval",
+      "name": "내 문서",
+      "items": [
+        "A5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AP-04",
+      "service": "j-approval",
+      "name": "결재함",
+      "items": [
+        "A5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AP-05",
+      "service": "j-approval",
+      "name": "문서 조회",
+      "items": [
+        "A5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AP-06",
+      "service": "j-approval",
+      "name": "승인",
+      "items": [
+        "A5",
+        "A6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AP-07",
+      "service": "j-approval",
+      "name": "반려",
+      "items": [
+        "A5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AP-08",
+      "service": "j-approval",
+      "name": "종결 후 불변·동시 처리 보호",
+      "items": [
+        "A5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AP-09",
+      "service": "j-approval",
+      "name": "처리 이력",
+      "items": [
+        "A5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AP-10",
+      "service": "j-approval",
+      "name": "인증·권한·tenant 격리",
+      "items": [
+        "A4"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AP-20",
+      "service": "j-approval",
+      "name": "결재 알림 송신",
+      "items": [
+        "A9"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AP-30",
+      "service": "j-approval",
+      "name": "저장소 골격·DB",
+      "items": [
+        "A1"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AP-31",
+      "service": "j-approval",
+      "name": "contracts",
+      "items": [
+        "A2"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "AP-32",
+      "service": "j-approval",
+      "name": "고객 서버 검증",
+      "items": [
+        "A8"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-01",
+      "service": "j-talk",
+      "name": "위젯 배포 파일",
+      "items": [
+        "T6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-02",
+      "service": "j-talk",
+      "name": "FAB·대화창",
+      "items": [
+        "T6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-03",
+      "service": "j-talk",
+      "name": "표시 조건",
+      "items": [
+        "T6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-04",
+      "service": "j-talk",
+      "name": "방문자 토큰 보관",
+      "items": [
+        "T6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-05",
+      "service": "j-talk",
+      "name": "손님 구분자 전달",
+      "items": [
+        "T6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-06",
+      "service": "j-talk",
+      "name": "실시간 수신·재연결",
+      "items": [
+        "T6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-07",
+      "service": "j-talk",
+      "name": "제한 안내",
+      "items": [
+        "T6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-08",
+      "service": "j-talk",
+      "name": "삽입 예제 페이지",
+      "items": [
+        "T6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-10",
+      "service": "j-talk",
+      "name": "방문자 토큰 발급",
+      "items": [
+        "T4"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-11",
+      "service": "j-talk",
+      "name": "손님 구분자 검증·연결",
+      "items": [
+        "T4",
+        "T5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-12",
+      "service": "j-talk",
+      "name": "문의 메시지 보내기·받기",
+      "items": [
+        "T5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-13",
+      "service": "j-talk",
+      "name": "출처 검사",
+      "items": [
+        "T4"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-14",
+      "service": "j-talk",
+      "name": "남용 제한",
+      "items": [
+        "T5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-20",
+      "service": "j-talk",
+      "name": "문의방 목록·조회",
+      "items": [
+        "T5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-21",
+      "service": "j-talk",
+      "name": "배정·재배정",
+      "items": [
+        "T5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-22",
+      "service": "j-talk",
+      "name": "답장",
+      "items": [
+        "T5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-23",
+      "service": "j-talk",
+      "name": "종료",
+      "items": [
+        "T5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-24",
+      "service": "j-talk",
+      "name": "실시간 전달",
+      "items": [
+        "T5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-25",
+      "service": "j-talk",
+      "name": "허용 출처 관리",
+      "items": [
+        "T5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-26",
+      "service": "j-talk",
+      "name": "위젯 비밀키 관리",
+      "items": [
+        "T5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-27",
+      "service": "j-talk",
+      "name": "인증·tenant 격리",
+      "items": [
+        "T4"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-30",
+      "service": "j-talk",
+      "name": "상담 알림 송신",
+      "items": [
+        "T9"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-40",
+      "service": "j-talk",
+      "name": "저장소 골격·DB",
+      "items": [
+        "T1"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-41",
+      "service": "j-talk",
+      "name": "contracts",
+      "items": [
+        "T2"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "TK-42",
+      "service": "j-talk",
+      "name": "고객 서버 검증",
+      "items": [
+        "T8"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "WB-01",
+      "service": "j-web",
+      "name": "사이트 목록·상태",
+      "items": [
+        "H6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "WB-02",
+      "service": "j-web",
+      "name": "DNS 안내",
+      "items": [
+        "H6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "WB-03",
+      "service": "j-web",
+      "name": "사이트 생성",
+      "items": [
+        "H6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "WB-04",
+      "service": "j-web",
+      "name": "사이트 삭제",
+      "items": [
+        "H6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "WB-05",
+      "service": "j-web",
+      "name": "사이트 계정",
+      "items": [
+        "H6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "WB-06",
+      "service": "j-web",
+      "name": "계정 비밀번호 재설정",
+      "items": [
+        "H6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "WB-07",
+      "service": "j-web",
+      "name": "인증·tenant 격리",
+      "items": [
+        "H4"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "WB-10",
+      "service": "j-web",
+      "name": "콘텐츠 입력",
+      "items": [
+        "H7"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "WB-11",
+      "service": "j-web",
+      "name": "미리보기",
+      "items": [
+        "H7"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "WB-12",
+      "service": "j-web",
+      "name": "배포",
+      "items": [
+        "H7"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "WB-13",
+      "service": "j-web",
+      "name": "위젯 스니펫 삽입",
+      "items": [
+        "H7"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "WB-20",
+      "service": "j-web",
+      "name": "특권 helper",
+      "items": [
+        "H6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "WB-21",
+      "service": "j-web",
+      "name": "사이트 서빙",
+      "items": [
+        "H6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "WB-22",
+      "service": "j-web",
+      "name": "사이트용 SFTP",
+      "items": [
+        "H6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "WB-23",
+      "service": "j-web",
+      "name": "FTPS",
+      "items": [
+        "H5",
+        "H6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "WB-24",
+      "service": "j-web",
+      "name": "사이트 데이터 디스크",
+      "items": [
+        "H6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "WB-25",
+      "service": "j-web",
+      "name": "해지 정리",
+      "items": [
+        "H6"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "WB-30",
+      "service": "j-web",
+      "name": "저장소 골격·DB",
+      "items": [
+        "H1"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "WB-31",
+      "service": "j-web",
+      "name": "contracts",
+      "items": [
+        "H2"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "WB-32",
+      "service": "j-web",
+      "name": "로컬 테스트 호스팅",
+      "items": [
+        "H5"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    },
+    {
+      "id": "WB-33",
+      "service": "j-web",
+      "name": "고객 서버 검증",
+      "items": [
+        "H9"
+      ],
+      "implementation": "not_started",
+      "verification": "not_run",
+      "code": []
+    }
+  ]
+}
