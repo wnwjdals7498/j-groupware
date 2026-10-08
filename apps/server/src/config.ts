@@ -21,10 +21,10 @@ export interface ServerConfig {
   readonly serviceEndpoints: ServiceEndpoints;
   readonly authOrigin: string;
   readonly serviceKey: string;
-  readonly notificationReceiver?: {
-    port: number;
-    keyHashes: NotificationKeyHashes;
-  };
+  readonly notificationReceiver?: { port: number } & (
+    | { mode: "static"; keyHashes: NotificationKeyHashes }
+    | { mode: "projection" }
+  );
 }
 const repository = fileURLToPath(new URL("../../../", import.meta.url));
 const required = (env: NodeJS.ProcessEnv, name: string): string => {
@@ -86,6 +86,16 @@ export function loadDatabaseConfig(
   };
 }
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
+  const registryMode = env.JGW_NOTIFICATION_REGISTRY_MODE ?? "static";
+  if (
+    !["static", "projection"].includes(registryMode) ||
+    (registryMode === "projection" &&
+      (!env.JGW_INTERNAL_NOTIFICATIONS_PORT ||
+        env.JGW_NOTIFICATION_SERVICE_KEY_HASHES !== undefined))
+  )
+    throw new Error(
+      "Projection mode requires a private listener and forbids static key configuration.",
+    );
   const tenant = required(env, "JGW_TENANT");
   assertCustomerTenantId(tenant);
   const publicOrigin = origin(required(env, "JGW_PUBLIC_ORIGIN"));
@@ -122,9 +132,14 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
       ? {
           notificationReceiver: {
             port: port(env.JGW_INTERNAL_NOTIFICATIONS_PORT),
-            keyHashes: JSON.parse(
-              required(env, "JGW_NOTIFICATION_SERVICE_KEY_HASHES"),
-            ) as NotificationKeyHashes,
+            ...(registryMode === "projection"
+              ? { mode: "projection" as const }
+              : {
+                  mode: "static" as const,
+                  keyHashes: JSON.parse(
+                    required(env, "JGW_NOTIFICATION_SERVICE_KEY_HASHES"),
+                  ) as NotificationKeyHashes,
+                }),
           },
         }
       : {}),

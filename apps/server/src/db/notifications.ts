@@ -116,7 +116,7 @@ const item = (row: Row): NotificationItem => ({
   createdAt: row.created_at.toISOString(),
   readAt: row.read_at?.toISOString() ?? null,
 });
-const visible = `n.tenant_id=$1 AND s.active AND n.required_role=ANY($4::text[]) AND n.created_at>clock_timestamp()-interval '30 days' AND ((n.target->'members') ? $2 OR (n.target->'usernames') ? $3 OR n.target->>'role'=ANY($4::text[]))`;
+const visible = `n.tenant_id=$1 AND s.active AND (s.projection_expires_at IS NULL OR s.projection_expires_at>clock_timestamp()) AND n.required_role=ANY($4::text[]) AND n.created_at>clock_timestamp()-interval '30 days' AND ((n.target->'members') ? $2 OR (n.target->'usernames') ? $3 OR n.target->>'role'=ANY($4::text[]))`;
 export class NotificationStore {
   constructor(
     private readonly pool: Pool,
@@ -146,6 +146,21 @@ export class NotificationStore {
       )
         throw new Error("Invalid private notification key configuration.");
     await this.tx(async (client) => {
+      await client.query(
+        "SELECT pg_advisory_xact_lock(hashtext('jgw-notification-projection'),hashtext($1))",
+        [this.tenant],
+      );
+      if (
+        (
+          await client.query(
+            "SELECT 1 FROM notification_projection_state WHERE tenant_id=$1",
+            [this.tenant],
+          )
+        ).rowCount
+      )
+        throw new Error(
+          "Notification registry is owned by the projection worker.",
+        );
       for (const service of ["j-approval", "j-talk", "j-mail"] as const) {
         const hashes = keys[service] ?? [];
         await client.query(
@@ -154,6 +169,16 @@ export class NotificationStore {
         );
       }
     });
+  }
+  async requireProjection(): Promise<void> {
+    const result = await this.pool.query<{ ready: boolean }>(
+      "SELECT count(*)=3 AND EXISTS(SELECT 1 FROM notification_projection_state WHERE tenant_id=$1) AS ready FROM notification_services WHERE tenant_id=$1 AND projection_expires_at IS NOT NULL",
+      [this.tenant],
+    );
+    if (!result.rows[0]?.ready)
+      throw new Error(
+        "Notification projection must be initialized by its control-plane owner.",
+      );
   }
   receive(
     raw: unknown,
@@ -170,7 +195,7 @@ export class NotificationStore {
     return this.tx(async (client) => {
       const source = (
         await client.query<{ key_hashes: string[]; active: boolean }>(
-          "SELECT key_hashes,active FROM notification_services WHERE tenant_id=$1 AND service=$2 FOR SHARE",
+          "SELECT CASE WHEN projection_expires_at IS NOT NULL AND previous_key_expires_at<=clock_timestamp() THEN key_hashes[1:1] ELSE key_hashes END AS key_hashes,active AND (projection_expires_at IS NULL OR projection_expires_at>clock_timestamp()) AS active FROM notification_services WHERE tenant_id=$1 AND service=$2 FOR SHARE",
           [this.tenant, input.service],
         )
       ).rows[0];

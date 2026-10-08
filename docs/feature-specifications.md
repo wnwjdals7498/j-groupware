@@ -111,6 +111,8 @@ G6 서버 API·원래 Bearer/서비스 키·대상 세션 종료·미배치 저�
 
 [수신·조회·SSE snapshot·키/retention·실제 복구 증거](cloud-notification-verification-2026-10-08.md)를 따른다. `GET /api/notifications`와 `POST /api/notifications/:id/read`는 현재 회원의 대상/role/tenant/30일 필터를 공유하며 SSE는 최신 목록 snapshot을 보낸다. 결재의 실제 업무 사건→송신→수신→목록/unread/SSE와 중단/ACK 실패/실제 lease 만료 복구를 검증했다. 구독 상태 자동 투영·운영 키 provisioning·알림 화면/Playwright·고객 VM 인수는 미완료다.
 
+[구독/키 투영의 후속 격리 검증](cloud-notification-projection-verification-2026-10-08.md)에서 읽기 전용 j-auth GET·설치기 key manifest·tenant별 동시성/세대·유효 시간·키 만료·자동 polling·compiled projection-mode 수신기를 추가했다. 운영 source/provisioning/설치기 실행에 연결하지 않았고 G18/G21 전체 인수와 GW-40의 부분 분류를 유지한다.
+
 ## G12 실제 메신저 연결의 검증 범위
 
 [실제 M1 인증과 BFF WSS 검증](cloud-messenger-auth-verification-2026-10-08.md)을 보존하고 [M5 PostgreSQL](cloud-messenger-postgres-verification-2026-10-08.md), [M2 BFF 업무 HTTP/client transport](cloud-messenger-bff-verification-2026-10-08.md) 증거를 추가했다. 고정9개 업무 route·쿠키/CSRF·메시지 재시도/tenant·WSS/읽음·단절 sync를 실제 Keycloak/PG로 검증했다. client registry 게시·정식 화면/VM·전체 제품군 인수는 미완료다.

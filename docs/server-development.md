@@ -1,6 +1,6 @@
 # 고객 BFF 개발·실행
 
-G1 → G3 → G4 → G5/G6/G15 서버와 G23 공통 호출 함수를 구현했다. `apps/server`는 고객 하나의 BFF이며, 운영 콘솔·제품별 업무 중계·정식 웹 화면은 후속 범위다. Node 22.18 이상, PostgreSQL 18.6, 기존 j-auth의 Keycloak 26.8.0을 사용한다. 고정 패키지 버전과 무결성은 `package-lock.json`이 기준이다.
+G1 → G3 → G4 → G5/G6/G15 서버와 G23 공통 호출 함수를 구현했다. `apps/server`는 고객 하나의 BFF이며 결재·메신저 업무 HTTP와 알림 수신/SSE도 연결했다. 운영 콘솔·메일/상담 업무 중계·정식 웹 화면은 후속 범위다. Node 22.18 이상, PostgreSQL 18.6, 기존 j-auth의 Keycloak 26.8.0을 사용한다. 고정 패키지 버전과 무결성은 `package-lock.json`이 기준이다.
 
 ## 설치와 실행
 
@@ -56,7 +56,7 @@ env·TLS·PG volume·JSON 결과는 `/workspace/.suite-runtime`에 둔다. 테�
 
 ## 하위 서비스 token exchange (G23)
 
-서버 controller는 `app.services.request(sessionCookie, serviceId, path, options)`를 사용한다. `JGW_SERVICE_MAIL_URL` 등 catalog 이름을 대문자/밑줄로 바꾼 env로 명시적인 loopback origin을 설정한다. 현재 제품별 controller는 아직 없으며 이 함수의 token을 브라우저에 보내지 않는다. 고정 목적지·단일 audience·PG cache·refresh/취소 계약과 실제 검증 범위는 [G23 기록](cloud-token-exchange-verification-2026-10-08.md)을 따른다.
+서버 controller는 `app.services.request(sessionCookie, serviceId, path, options)`를 사용한다. `JGW_SERVICE_MAIL_URL` 등 catalog 이름을 대문자/밑줄로 바꾼 env로 명시적인 loopback origin을 설정한다. 결재·메신저의 명시적 controller가 있으며 이 함수의 token을 브라우저에 보내지 않는다. 고정 목적지·단일 audience·PG cache·refresh/취소 계약과 실제 검증 범위는 [G23 기록](cloud-token-exchange-verification-2026-10-08.md)을 따른다.
 
 ## 회원 관리 BFF (G6 서버)
 
@@ -70,4 +70,8 @@ env·TLS·PG volume·JSON 결과는 `/workspace/.suite-runtime`에 둔다. 테�
 
 ## 실시간 연결 수명
 
-[WSS/SSE 경로·수명·검증](cloud-realtime-verification-2026-10-08.md)을 따른다. `JGW_SERVICE_MESSENGER_URL`은 고정 loopback origin이며 WSS는 실제 서비스 토큰을 붙인다. SSE는 현재 전송 채널만 제공한다. 실제 메신저 업무와 알림 저장/송신 인수는 후속이다.
+[WSS/SSE 경로·수명·검증](cloud-realtime-verification-2026-10-08.md)을 따른다. `JGW_SERVICE_MESSENGER_URL`은 고정 loopback origin이며 WSS는 실제 서비스 토큰을 붙인다. 후속 [메신저 BFF HTTP](cloud-messenger-bff-verification-2026-10-08.md)와 [알림 저장/수신/결재 송신](cloud-notification-verification-2026-10-08.md)으로 실제 업무를 검증했다. 정식 화면과 고객 VM/전체 인수는 별도다.
+
+## 알림 registry 투영의 명시적 모드
+
+[투영 소유권·manifest·source 유효 시간과 격리 검증](cloud-notification-projection-verification-2026-10-08.md)을 따른다. 기본 static 설정을 유지한다. 명시적으로 projection 모드를 쓰려면 private listener와 사전에 초기화한 tenant registry가 필요하고 static key env를 생략한다. 외부 installer/control-plane 소유자가 source reader와 worker를 실행하며 operator 자격·원문 notification key를 BFF에 넣지 않는다. 현재 운영 source·설치기·에이전트 배치는 구현/검증하지 않았다.

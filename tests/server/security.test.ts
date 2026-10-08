@@ -259,6 +259,13 @@ describe("BFF cryptographic and request boundaries", () => {
       JGW_TLS_KEY: "/tmp/unit.key",
     };
     expect(loadConfig(env).database.database).toBe("jgw_groupware");
+    expect(
+      loadConfig({
+        ...env,
+        JGW_INTERNAL_NOTIFICATIONS_PORT: "54246",
+        JGW_NOTIFICATION_REGISTRY_MODE: "projection",
+      }).notificationReceiver,
+    ).toEqual({ port: 54246, mode: "projection" });
     for (const invalid of [
       { JGW_TENANT: "operator" },
       { JGW_PUBLIC_ORIGIN: "https://gw.sample-b.jgw.test" },
@@ -267,6 +274,13 @@ describe("BFF cryptographic and request boundaries", () => {
       { JGW_DB_NAME: "jauth" },
       { JGW_PORT: "3001" },
       { JGW_TLS_KEY: "/workspace/j-groupware/private.key" },
+      { JGW_NOTIFICATION_REGISTRY_MODE: "unknown" },
+      { JGW_NOTIFICATION_REGISTRY_MODE: "projection" },
+      {
+        JGW_NOTIFICATION_REGISTRY_MODE: "projection",
+        JGW_INTERNAL_NOTIFICATIONS_PORT: "54246",
+        JGW_NOTIFICATION_SERVICE_KEY_HASHES: "{}",
+      },
     ])
       expect(() => loadConfig({ ...env, ...invalid })).toThrow();
   });

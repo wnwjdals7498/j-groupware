@@ -41,7 +41,9 @@ async function main() {
           "Internal notifications require a separate loopback port.",
         );
       const store = new NotificationStore(pool, config.tenant);
-      await store.configure(config.notificationReceiver.keyHashes);
+      if (config.notificationReceiver.mode === "static")
+        await store.configure(config.notificationReceiver.keyHashes);
+      else await store.requireProjection();
       const receiver = createNotificationReceiver(store);
       app.addHook("preClose", () => receiver.close());
       await receiver.listen({

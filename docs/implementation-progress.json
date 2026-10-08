@@ -12,7 +12,7 @@
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
-    "Messenger formal client UI/registry publication/file BFF, product-specific mail/talk relays, automatic subscription/key projection to notification registry and operator/installer console remain unimplemented",
+    "Messenger formal client UI/registry publication/file BFF, product-specific mail/talk relays, production installer/agent wiring of subscription/key projection and operator/installer console remain unimplemented",
     "Hyper-V/VM/customer-server and external Nginx deployment/installation acceptance not executed in this cloud test runtime"
   ],
   "features": [
@@ -889,12 +889,17 @@
         "G22"
       ],
       "implementation": "partial",
-      "verification": "actual_loopback_service_tenant_key_type_payload_dedup_and_inactive_refusal_pass; automatic_auth_subscription_projection_and_installer_key_provisioning_pending",
+      "verification": "actual_isolated_j_auth_subscription_GET_unsubscribe_resubscribe_PG_registry_hash_generation_overlap_expiry_fail_closed_multi_instance_rollback_poll_retry_compiled_projection_receiver_pass; production_installer_agent_key_provisioning_pending",
       "code": [
         "j-groupware/apps/server/src/notification-receiver.ts",
         "j-groupware/apps/server/src/db/notifications.ts",
         "j-groupware/tests/bff/notifications.integration.test.ts",
-        "j-groupware/docs/cloud-notification-verification-2026-10-08.md"
+        "j-groupware/docs/cloud-notification-verification-2026-10-08.md",
+        "j-groupware/apps/server/src/notification-projection.ts",
+        "j-groupware/deploy/migrations/007-notification-projection.sql",
+        "j-groupware/tests/bff/projection.integration.test.ts",
+        "j-groupware/tests/server/notification-projection.test.ts",
+        "j-groupware/docs/cloud-notification-projection-verification-2026-10-08.md"
       ]
     },
     {
@@ -2333,7 +2338,7 @@
       "code": []
     }
   ],
-  "verification_environment": "isolated cloud /workspace; real Keycloak/j-auth and dedicated j-groupware/j-approval PostgreSQL; messenger M1 verified against isolated SQLite only; company laptop restriction unchanged",
+  "verification_environment": "isolated cloud /workspace; real Keycloak/j-auth and dedicated j-groupware/j-approval/j-messenger PostgreSQL; messenger legacy SQLite preserved and tested; production subscription/key projection not activated; company laptop restriction unchanged",
   "verification_evidence": [
     "j-auth/docs/cloud-verification-2026-10-08.md",
     "j-auth/docs/cloud-provisioning-verification-2026-10-08.md",
@@ -2348,14 +2353,19 @@
     "j-approval/docs/cloud-notification-delivery-2026-10-08.md",
     "j-groupware/docs/cloud-notification-verification-2026-10-08.md",
     "j-messenger/docs/cloud-j-auth-verification-2026-10-08.md",
-    "j-groupware/docs/cloud-messenger-auth-verification-2026-10-08.md"
+    "j-groupware/docs/cloud-messenger-auth-verification-2026-10-08.md",
+    "j-groupware/docs/cloud-messenger-postgres-verification-2026-10-08.md",
+    "j-messenger/docs/cloud-postgres-verification-2026-10-08.md",
+    "j-groupware/docs/cloud-messenger-bff-verification-2026-10-08.md",
+    "j-messenger/docs/cloud-bff-client-verification-2026-10-08.md",
+    "j-groupware/docs/cloud-notification-projection-verification-2026-10-08.md"
   ],
   "pending_implementation": [
-    "Product-specific BFF business API relays using the verified G23 helper and actual downstream services",
+    "Remaining mail/talk/customer/web BFF business API relays using the verified G23 helper and actual downstream services",
     "G6/G15 formal member/organization/repair UI and Playwright; G16 formal approval UI and Playwright (actual BFF business API and snapshot already verified)",
     "G2/G9 canonical UI guidelines/sidebar/board UI; I2 formal theme/Playwright/brute-force acceptance",
-    "Messenger PostgreSQL/BFF HTTP/client UI and talk business WSS; real messenger auth/WSS relay and approval notification delivery/retry/SSE independently verified",
+    "Messenger formal UI/registry publication/file BFF and talk business WSS; actual messenger PG/BFF HTTP/client transport/WSS and approval notification delivery independently verified",
     "I5/G11 external Nginx, G18/G21 customer bootstrap/agent/VM acceptance and operator console",
-    "G22 formal notification UI/Playwright, G18/G21 automatic subscribed-service/key registry projection and customer VM acceptance"
+    "G22 formal notification UI/Playwright, G18/G21 production installer/agent subscription/key projection wiring and customer VM acceptance"
   ]
 }

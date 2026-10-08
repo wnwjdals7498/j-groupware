@@ -16,6 +16,7 @@ import { OidcClient } from "../../apps/server/src/oidc.js";
 import { createApp } from "../../apps/server/src/app.js";
 import { digest } from "../../apps/server/src/security.js";
 import type { ServiceEndpoints } from "../../apps/server/src/services.js";
+import { AuthSubscriptionReader } from "../../apps/server/src/notification-projection.js";
 
 export function required(name: string): string {
   const value = process.env[name];
@@ -637,6 +638,21 @@ export async function integrationRuntime(
           },
         );
       },
+      subscriptionSnapshot: async (
+        index: number,
+        signal: AbortSignal,
+        transport: typeof globalThis.fetch = fetch,
+      ) => {
+        const reader = new AuthSubscriptionReader({
+          origin: "https://jauth.jgw.test:54231",
+          credentials: async () => ({
+            bearer: operator,
+            serviceKey: required("JAUTH_CONSOLE_SERVICE_KEY"),
+          }),
+          fetch: transport,
+        });
+        return reader.read(fixtures[index]!.tenant, signal);
+      },
       set failRefresh(value: boolean) {
         failRefresh = value;
       },
@@ -645,7 +661,17 @@ export async function integrationRuntime(
         const envfile =
           required("JGW_TEST_ENV") + "." + fixture.tenant + ".server.env";
         const values = {
-          ...process.env,
+          ...Object.fromEntries(
+            Object.entries(process.env).filter(
+              ([name]) =>
+                !/^(JAUTH_|KC_)/.test(name) ||
+                [
+                  "JAUTH_PUBLIC_URL",
+                  "KC_PUBLIC_URL",
+                  "JAUTH_TLS_CERTIFICATE",
+                ].includes(name),
+            ),
+          ),
           JGW_TENANT: fixture.tenant,
           JGW_PUBLIC_ORIGIN: fixture.origin,
           JGW_CLIENT_SECRET: fixture.secrets.clientSecret,
@@ -705,6 +731,7 @@ export async function integrationRuntime(
             "notification_reads",
             "notifications",
             "notification_services",
+            "notification_projection_state",
             "login_flows",
             "logout_events",
             "board_posts",
