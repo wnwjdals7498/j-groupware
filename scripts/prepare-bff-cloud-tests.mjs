@@ -42,6 +42,7 @@ const env = {
   JGW_TLS_CERTIFICATE: runtime + "/tls/server.crt",
   JGW_TLS_KEY: runtime + "/tls/server.key",
   JAUTH_TEST_ENV: authEnv,
+  JAUTH_PUBLIC_URL: "https://jauth.jgw.test:54231",
 };
 await writeFile(
   runtime + "/integration.env",

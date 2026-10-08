@@ -17,6 +17,7 @@ async function main() {
       pool,
       config,
       serviceEndpoints: config.serviceEndpoints,
+      memberAuth: { origin: config.authOrigin, serviceKey: config.serviceKey },
       https: { cert, key, minVersion: "TLSv1.2" },
       logger: {
         level: "info",

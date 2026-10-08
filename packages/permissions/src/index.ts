@@ -17,6 +17,21 @@ export const ROUTES = {
   "GET /api/board/posts": { kind: "session", role: "board:read" },
   "GET /api/board/posts/:id": { kind: "session", role: "board:read" },
   "POST /api/board/posts": { kind: "session", role: "board:write" },
+  "GET /api/members": { kind: "session", role: "member:manage" },
+  "GET /api/members/grantable-roles": {
+    kind: "session",
+    role: "member:manage",
+  },
+  "POST /api/members": { kind: "session", role: "member:manage" },
+  "PUT /api/members/:id/roles/:role": {
+    kind: "session",
+    role: "member:manage",
+  },
+  "DELETE /api/members/:id/roles/:role": {
+    kind: "session",
+    role: "member:manage",
+  },
+  "DELETE /api/members/:id": { kind: "session", role: "member:manage" },
 } as const satisfies Record<string, Access>;
 
 export const MENUS = [

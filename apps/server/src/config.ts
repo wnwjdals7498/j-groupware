@@ -6,6 +6,7 @@ import { SERVICE_CATALOG } from "@j-auth/contracts";
 import type { TenantServiceId } from "@j-auth/contracts";
 import { serviceOrigin } from "./services.js";
 import type { ServiceEndpoints } from "./services.js";
+import { memberAuthOrigin } from "./members.js";
 
 export interface ServerConfig {
   readonly tenant: string;
@@ -17,6 +18,8 @@ export interface ServerConfig {
   readonly tlsKey: string;
   readonly database: PoolConfig;
   readonly serviceEndpoints: ServiceEndpoints;
+  readonly authOrigin: string;
+  readonly serviceKey: string;
 }
 const repository = fileURLToPath(new URL("../../../", import.meta.url));
 const required = (env: NodeJS.ProcessEnv, name: string): string => {
@@ -108,5 +111,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
     tlsKey: externalFile(required(env, "JGW_TLS_KEY")),
     database: loadDatabaseConfig(env),
     serviceEndpoints,
+    authOrigin: memberAuthOrigin(required(env, "JAUTH_PUBLIC_URL")),
+    serviceKey: required(env, "JGW_SERVICE_KEY"),
   };
 }

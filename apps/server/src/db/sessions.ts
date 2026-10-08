@@ -46,8 +46,12 @@ export class SessionStore {
   }
   async consumeLogin(flow: string | undefined, state: string) {
     if (!flow || !/^[A-Za-z0-9_-]{43}$/.test(state)) throw unauthenticated();
-    const result = await this.pool.query<{ nonce: string; verifier: string }>(
-      "DELETE FROM login_flows WHERE tenant_id=$1 AND flow_hash=$2 AND state_hash=$3 AND expires_at>now() RETURNING nonce,verifier",
+    const result = await this.pool.query<{
+      nonce: string;
+      verifier: string;
+      started_at: Date;
+    }>(
+      "DELETE FROM login_flows WHERE tenant_id=$1 AND flow_hash=$2 AND state_hash=$3 AND expires_at>now() RETURNING nonce,verifier,started_at",
       [this.tenant, digest(flow), digest(state)],
     );
     if (!result.rows[0]) throw unauthenticated();
@@ -57,6 +61,7 @@ export class SessionStore {
     tokens: { access_token: string; refresh_token: string },
     identity: LoginIdentity,
     nonce: string,
+    loginStarted: Date,
     previous?: string,
   ): Promise<string> {
     const session = randomToken(),
@@ -65,6 +70,10 @@ export class SessionStore {
     const ended: string[] = [];
     try {
       await client.query("BEGIN");
+      await client.query(
+        "SELECT pg_advisory_xact_lock(hashtextextended('jgw-member:' || $1 || ':' || $2,0))",
+        [this.tenant, identity.subject],
+      );
       await client.query(
         "SELECT pg_advisory_xact_lock(hashtextextended('jgw-sid:' || $1 || ':' || $2,0))",
         [this.tenant, identity.sid],
@@ -79,7 +88,8 @@ export class SessionStore {
       const created = await client.query(
         `INSERT INTO sessions(session_hash,tenant_id,subject,username,roles,sid,nonce,csrf_token,access_token,refresh_token,access_expires_at)
         SELECT $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11
-        WHERE NOT EXISTS(SELECT 1 FROM logout_events WHERE tenant_id=$2 AND sid=$6 AND expires_at>now())`,
+        WHERE NOT EXISTS(SELECT 1 FROM logout_events WHERE tenant_id=$2 AND sid=$6 AND expires_at>now())
+        AND NOT EXISTS(SELECT 1 FROM member_session_ends WHERE tenant_id=$2 AND subject=$3 AND ended_at >= $12 AND expires_at>now())`,
         [
           hash,
           this.tenant,
@@ -92,6 +102,7 @@ export class SessionStore {
           tokens.access_token,
           tokens.refresh_token,
           identity.expires,
+          loginStarted,
         ],
       );
       if (!created.rowCount) throw unauthenticated();
@@ -210,6 +221,37 @@ export class SessionStore {
       [this.tenant, digest(session)],
     );
     this.onEnd(removed.rows.map((row) => row.session_hash));
+  }
+  async endMember(subject: string): Promise<void> {
+    const client = await this.pool.connect();
+    let ended: string[] = [];
+    try {
+      await client.query("BEGIN");
+      await client.query(
+        "SELECT pg_advisory_xact_lock(hashtextextended('jgw-member:' || $1 || ':' || $2,0))",
+        [this.tenant, subject],
+      );
+      await client.query(
+        "DELETE FROM member_session_ends WHERE expires_at<=now()",
+      );
+      await client.query(
+        `INSERT INTO member_session_ends(tenant_id,subject,ended_at,expires_at) VALUES($1,$2,clock_timestamp(),clock_timestamp()+interval '8 hours')
+        ON CONFLICT(tenant_id,subject) DO UPDATE SET ended_at=EXCLUDED.ended_at,expires_at=EXCLUDED.expires_at`,
+        [this.tenant, subject],
+      );
+      const result = await client.query<{ session_hash: string }>(
+        "DELETE FROM sessions WHERE tenant_id=$1 AND subject=$2 RETURNING session_hash",
+        [this.tenant, subject],
+      );
+      ended = result.rows.map((row) => row.session_hash);
+      await client.query("COMMIT");
+    } catch (error) {
+      await client.query("ROLLBACK").catch(() => undefined);
+      throw error;
+    } finally {
+      client.release();
+    }
+    this.onEnd(ended);
   }
   async backchannel(token: string): Promise<void> {
     if (token.length > 16384)

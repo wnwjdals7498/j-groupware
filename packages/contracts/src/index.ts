@@ -33,3 +33,14 @@ export interface BoardList {
   readonly items: readonly BoardPost[];
   readonly nextCursor: string | null;
 }
+export type {
+  CreateMemberRequest,
+  MemberResponse,
+  MemberListResponse,
+} from "@j-auth/contracts";
+export interface GroupwareGrantableRoles {
+  readonly roles: readonly {
+    readonly name: string;
+    readonly implies: readonly string[];
+  }[];
+}

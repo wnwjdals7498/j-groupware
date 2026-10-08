@@ -9,6 +9,9 @@
       "import": "./dist/index.js"
     }
   },
+  "dependencies": {
+    "@j-auth/contracts": "0.1.0"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json"
   }

@@ -1,6 +1,6 @@
 # 고객 BFF 개발·실행
 
-G1 → G3 → G4 → G5의 서버 부분을 구현했다. `apps/server`는 고객 하나의 BFF이며, 운영 콘솔·서비스 중계·정식 웹 화면은 후속 범위다. Node 22.18 이상, PostgreSQL 18.6, 기존 j-auth의 Keycloak 26.8.0을 사용한다. 고정 패키지 버전과 무결성은 `package-lock.json`이 기준이다.
+G1 → G3 → G4 → G5/G6 서버와 G23 공통 호출 함수를 구현했다. `apps/server`는 고객 하나의 BFF이며, 운영 콘솔·제품별 업무 중계·정식 웹 화면은 후속 범위다. Node 22.18 이상, PostgreSQL 18.6, 기존 j-auth의 Keycloak 26.8.0을 사용한다. 고정 패키지 버전과 무결성은 `package-lock.json`이 기준이다.
 
 ## 설치와 실행
 
@@ -57,3 +57,7 @@ env·TLS·PG volume·JSON 결과는 `/workspace/.suite-runtime`에 둔다. 테�
 ## 하위 서비스 token exchange (G23)
 
 서버 controller는 `app.services.request(sessionCookie, serviceId, path, options)`를 사용한다. `JGW_SERVICE_MAIL_URL` 등 catalog 이름을 대문자/밑줄로 바꾼 env로 명시적인 loopback origin을 설정한다. 현재 제품별 controller는 아직 없으며 이 함수의 token을 브라우저에 보내지 않는다. 고정 목적지·단일 audience·PG cache·refresh/취소 계약과 실제 검증 범위는 [G23 기록](cloud-token-exchange-verification-2026-10-08.md)을 따른다.
+
+## 회원 관리 BFF (G6 서버)
+
+외부 env에 `JAUTH_PUBLIC_URL`과 해당 tenant `JGW_SERVICE_KEY`를 추가한다. 후속 [회원 API·검증 기록](cloud-member-bff-verification-2026-10-08.md)의 경로를 사용한다. 모든 경로에 `member:manage`, 변경에 Origin/CSRF가 필요하다. 초기 비밀번호는 관리자 지정 영구 값이며 응답·로그·미배치 저장에는 넣지 않는다. 취소·응답 유실 뒤 실제 목록을 확인하고, 부분 완료를 자동 재생성 성공으로 표시하지 않는다. 조직도 상세와 정식 회원 화면은 후속 범위다.

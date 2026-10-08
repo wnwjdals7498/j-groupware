@@ -12,6 +12,8 @@
 
 G23 공통 token exchange·PG cache·내부 호출 함수를 추가했다. [G23 실제 검증](cloud-token-exchange-verification-2026-10-08.md)의 전체 BFF 통합 23개를 제품별 업무 종단 인수와 구별한다.
 
+G6 회원 관리 BFF·대상 세션/cache 종료·미배치 최소 저장을 추가했다. [회원 BFF 기록](cloud-member-bff-verification-2026-10-08.md)의 전체 BFF 통합 32개·j-auth 회귀 61개가 통과했으며, 화면·조직도 상세·실제 WSS/SSE는 미완료다.
+
 공통 결정의 원본은 [architecture.md](architecture.md), 서비스별 결정의 원본은 각 저장소의 `decisions.md`다. 기존 결정을 바꾸는 내용은 확정된 요구사항으로 추가하지 않는다. 아래 명세의 세부 처리·인수 시험은 기존 결정을 구체화한 구현 기준이며, 미정 표의 항목은 담당 Item에서 확인한 뒤 contracts에 고정한다.
 
 | 서비스 | 기존 기능 목록 | 상세 명세 | 기능 수 | 담당 Item |

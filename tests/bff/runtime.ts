@@ -191,6 +191,11 @@ export async function integrationRuntime() {
       >;
       app: ReturnType<typeof createApp>;
       clientId: string;
+      memberAuth: {
+        origin: string;
+        serviceKey: string;
+        fetch: typeof globalThis.fetch;
+      };
     }[] = [];
     const closed: string[] = [];
     const logoutTokens: string[] = [];
@@ -202,6 +207,17 @@ export async function integrationRuntime() {
     let serviceTokenGate:
       { arrived: () => void; ready: Promise<void> } | undefined;
     const owned: string[] = [];
+    let memberResponseGate:
+      { arrived: () => void; ready: Promise<void> } | undefined;
+    let loginResponseGate:
+      { arrived: () => void; ready: Promise<void> } | undefined;
+    const memberCalls: {
+      method: string;
+      path: string;
+      authorizationHash: string;
+      serviceKeyHash: string;
+      cookie: boolean;
+    }[] = [];
     try {
       for (const [index, key] of [
         "JGW_TEST_TENANT_A",
@@ -307,6 +323,16 @@ export async function integrationRuntime() {
           const response = await fetch(input, init);
           if (
             init?.body instanceof URLSearchParams &&
+            init.body.get("grant_type") === "authorization_code" &&
+            loginResponseGate
+          ) {
+            const gate = loginResponseGate;
+            loginResponseGate = undefined;
+            gate.arrived();
+            await gate.ready;
+          }
+          if (
+            init?.body instanceof URLSearchParams &&
             init.body.get("grant_type") ===
               "urn:ietf:params:oauth:grant-type:token-exchange" &&
             serviceTokenGate
@@ -319,6 +345,36 @@ export async function integrationRuntime() {
           return response;
         };
         const oidc = new OidcClient(config, { fetch: transport });
+        const memberTransport: typeof globalThis.fetch = async (
+          input,
+          init,
+        ) => {
+          const headers = new Headers(init?.headers);
+          memberCalls.push({
+            method: init?.method ?? "GET",
+            path: new URL(String(input)).pathname,
+            authorizationHash: digest(headers.get("authorization") ?? ""),
+            serviceKeyHash: digest(headers.get("X-JGW-Service-Key") ?? ""),
+            cookie: headers.has("cookie"),
+          });
+          const response = await fetch(input, init);
+          if (
+            init?.method === "POST" &&
+            response.status === 201 &&
+            memberResponseGate
+          ) {
+            const gate = memberResponseGate;
+            memberResponseGate = undefined;
+            gate.arrived();
+            await gate.ready;
+          }
+          return response;
+        };
+        const memberAuth = {
+          origin: "https://jauth.jgw.test:54231",
+          serviceKey: secrets.serviceKey,
+          fetch: memberTransport,
+        };
         const [cert, keyMaterial] = await Promise.all([
           readFile(required("JGW_TLS_CERTIFICATE")),
           readFile(required("JGW_TLS_KEY")),
@@ -327,6 +383,7 @@ export async function integrationRuntime() {
           pool,
           config,
           oidc,
+          memberAuth,
           https: { cert, key: keyMaterial, minVersion: "TLSv1.2" },
           onSessionEnd: (hashes) => closed.push(...hashes),
         });
@@ -359,6 +416,7 @@ export async function integrationRuntime() {
           config,
           app,
           clientId: client.id,
+          memberAuth,
         });
       }
     } catch (error) {
@@ -406,6 +464,50 @@ export async function integrationRuntime() {
       fetch,
       fetchLoopback,
       fixtures,
+      memberCalls,
+      holdNextMemberResponse: () => {
+        let arrived!: () => void, release!: () => void;
+        const arrival = new Promise<void>((resolve) => {
+          arrived = resolve;
+        });
+        const ready = new Promise<void>((resolve) => {
+          release = resolve;
+        });
+        memberResponseGate = { arrived, ready };
+        return { arrival, release };
+      },
+      holdNextLoginResponse: () => {
+        let arrived!: () => void, release!: () => void;
+        const arrival = new Promise<void>((resolve) => {
+          arrived = resolve;
+        });
+        const ready = new Promise<void>((resolve) => {
+          release = resolve;
+        });
+        loginResponseGate = { arrived, ready };
+        return { arrival, release };
+      },
+      setBackchannel: async (index: number, enabled: boolean) => {
+        const fixture = fixtures[index]!;
+        const path = `/admin/realms/tenant-${fixture.tenant}/clients/${fixture.clientId}`;
+        const client = (await (await admin(path)).json()) as {
+          attributes: Record<string, string>;
+        };
+        const result = await admin(path, {
+          method: "PUT",
+          body: JSON.stringify({
+            ...client,
+            attributes: {
+              ...client.attributes,
+              "backchannel.logout.url": enabled
+                ? fixture.origin + "/auth/backchannel-logout"
+                : "",
+            },
+          }),
+        });
+        if (result.status !== 204)
+          throw new Error("Owned fixture backchannel configuration failed");
+      },
       admin,
       logs,
       secretValues,
@@ -482,6 +584,8 @@ export async function integrationRuntime() {
           JGW_TENANT: fixture.tenant,
           JGW_PUBLIC_ORIGIN: fixture.origin,
           JGW_CLIENT_SECRET: fixture.secrets.clientSecret,
+          JGW_SERVICE_KEY: fixture.secrets.serviceKey,
+          JAUTH_PUBLIC_URL: fixture.memberAuth.origin,
         };
         await writeFile(
           envfile,
@@ -519,6 +623,8 @@ export async function integrationRuntime() {
             "login_flows",
             "logout_events",
             "board_posts",
+            "unassigned_members",
+            "member_session_ends",
           ])
             await pool.query(`DELETE FROM ${table} WHERE tenant_id=$1`, [
               tenant,
@@ -626,9 +732,9 @@ export class Browser {
       headers: {
         Origin: this.origin,
         "x-csrf-token": me.csrfToken,
-        "Content-Type": "application/json",
+        ...(body === undefined ? {} : { "Content-Type": "application/json" }),
       },
-      body: JSON.stringify(body),
+      ...(body === undefined ? {} : { body: JSON.stringify(body) }),
     });
   }
 }

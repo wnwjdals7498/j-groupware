@@ -252,6 +252,8 @@ describe("BFF cryptographic and request boundaries", () => {
       JGW_PUBLIC_ORIGIN: config.origin,
       KC_PUBLIC_URL: config.keycloakOrigin,
       JGW_CLIENT_SECRET: "unit-client",
+      JAUTH_PUBLIC_URL: "https://jauth.jgw.test",
+      JGW_SERVICE_KEY: "unit-service-key",
       JGW_DB_PASSWORD: "unit-db",
       JGW_TLS_CERTIFICATE: "/tmp/unit.crt",
       JGW_TLS_KEY: "/tmp/unit.key",

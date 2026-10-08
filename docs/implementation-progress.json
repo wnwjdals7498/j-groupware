@@ -7,8 +7,8 @@
   "whole_suite_verified": false,
   "summary": {
     "implemented": 29,
-    "partial": 10,
-    "not_started": 133
+    "partial": 14,
+    "not_started": 129
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
@@ -337,11 +337,13 @@
         "I6"
       ],
       "implementation": "partial",
-      "verification": "actual_jauth_grant_revoke_keycloak_backchannel_target_bff_session_delete_pass; wss_sse_not_implemented",
+      "verification": "actual_jauth_grant_revoke_delete_and_bff_target_session_cache_end_pass; local_pending_callback_guard_pass; wss_sse_not_implemented",
       "code": [
         "j-auth/apps/server/src/keycloak/members.ts",
         "j-auth/tests/integration/members.test.ts",
-        "j-groupware/tests/bff/bff.integration.test.ts"
+        "j-groupware/tests/bff/bff.integration.test.ts",
+        "j-groupware/apps/server/src/members.ts",
+        "j-groupware/apps/server/src/db/sessions.ts"
       ]
     },
     {
@@ -633,9 +635,15 @@
       "items": [
         "G6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_bff_member_list_create_delete_original_bearer_tenant_service_key_csrf_foreign_target_duplicate_concurrent_creation_pass; confirmed_delete_local_failure_retry_recovery_pass; member_ui_playwright_pending",
+      "code": [
+        "j-groupware/apps/server/src/members.ts",
+        "j-groupware/apps/server/src/member-routes.ts",
+        "j-groupware/packages/permissions/src/index.ts",
+        "j-groupware/packages/contracts/src/index.ts",
+        "j-groupware/tests/bff/bff.integration.test.ts"
+      ]
     },
     {
       "id": "GW-14",
@@ -644,9 +652,14 @@
       "items": [
         "G6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_bff_grantable_catalog_implication_data_and_role_grant_revoke_effective_read_write_pass; checkbox_ui_not_implemented",
+      "code": [
+        "j-groupware/apps/server/src/members.ts",
+        "j-groupware/apps/server/src/member-routes.ts",
+        "j-groupware/packages/contracts/src/index.ts",
+        "j-groupware/tests/bff/bff.integration.test.ts"
+      ]
     },
     {
       "id": "GW-15",
@@ -655,9 +668,14 @@
       "items": [
         "G6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_bff_all_target_sessions_and_service_cache_end_pass; concurrent_grant_revoke_and_pending_callback_with_backchannel_disabled_pass; other_member_tenant_preserved; wss_sse_not_implemented",
+      "code": [
+        "j-groupware/apps/server/src/members.ts",
+        "j-groupware/apps/server/src/db/sessions.ts",
+        "j-groupware/deploy/migrations/003-member-workflows.sql",
+        "j-groupware/tests/bff/bff.integration.test.ts"
+      ]
     },
     {
       "id": "GW-20",
@@ -694,9 +712,13 @@
       "items": [
         "G15"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_new_bff_member_unassigned_registration_and_partial_write_failure_report_pass; department_tree_existing_member_manual_registration_and_repair_api_not_implemented",
+      "code": [
+        "j-groupware/apps/server/src/members.ts",
+        "j-groupware/deploy/migrations/003-member-workflows.sql",
+        "j-groupware/tests/bff/bff.integration.test.ts"
+      ]
     },
     {
       "id": "GW-23",
@@ -2119,11 +2141,12 @@
     "j-auth/docs/cloud-verification-2026-10-08.md",
     "j-auth/docs/cloud-provisioning-verification-2026-10-08.md",
     "j-groupware/docs/cloud-bff-verification-2026-10-08.md",
-    "j-groupware/docs/cloud-token-exchange-verification-2026-10-08.md"
+    "j-groupware/docs/cloud-token-exchange-verification-2026-10-08.md",
+    "j-groupware/docs/cloud-member-bff-verification-2026-10-08.md"
   ],
   "pending_implementation": [
     "Product-specific BFF business API relays using the verified G23 helper and actual downstream services",
-    "G6 member management BFF/UI and organization integration",
+    "G6 formal member UI/Playwright and G15 department tree/existing-member/manual organisation registration/partial-create repair API",
     "G2/G9 canonical UI guidelines/sidebar/board UI; I2 formal theme/Playwright/brute-force acceptance",
     "Actual WSS/SSE connection closure and other service end-to-end scenarios",
     "I5/G11 external Nginx, G18/G21 customer bootstrap/agent/VM acceptance and operator console"

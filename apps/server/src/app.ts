@@ -20,6 +20,9 @@ import { cookieValue, cookie, checkCsrf } from "./security.js";
 import { ServiceTokens } from "./service-tokens.js";
 import { ServiceClient } from "./services.js";
 import type { ServiceEndpoints } from "./services.js";
+import { Members } from "./members.js";
+import type { MemberAuth } from "./members.js";
+import { registerMemberRoutes } from "./member-routes.js";
 
 export function createApp(options: {
   pool: Pool;
@@ -33,6 +36,7 @@ export function createApp(options: {
   onSessionEnd?: (hashes: readonly string[]) => void;
   serviceEndpoints?: ServiceEndpoints;
   serviceFetch?: typeof globalThis.fetch;
+  memberAuth?: MemberAuth;
 }) {
   const app = Fastify({
     exposeHeadRoutes: false,
@@ -226,6 +230,7 @@ export function createApp(options: {
         result.tokens,
         result.identity,
         state.nonce,
+        state.started_at,
         cookieValue(request.headers.cookie, SESSION_POLICY.cookie),
       );
       reply.header("Set-Cookie", [
@@ -333,6 +338,16 @@ export function createApp(options: {
         .send(
           await board.create(identities.get(request)!.subject, request.body),
         ),
+  );
+  registerMemberRoutes(
+    app,
+    new Members(
+      options.pool,
+      options.config.tenant,
+      sessions,
+      options.memberAuth,
+    ),
+    (request) => identities.get(request)!,
   );
   const serviceTokens = new ServiceTokens(sessions, oidc);
   return Object.assign(app, {
