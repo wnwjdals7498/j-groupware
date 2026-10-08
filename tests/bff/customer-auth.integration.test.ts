@@ -1,10 +1,18 @@
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import { randomBytes, randomUUID, generateKeyPairSync } from "node:crypto";
-import { mkdtemp, writeFile, rm, readFile } from "node:fs/promises";
+import {
+  mkdtemp,
+  writeFile,
+  rm,
+  readFile,
+  chmod,
+  mkdir,
+} from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { once } from "node:events";
 import { spawn } from "node:child_process";
-import { createConnection } from "node:net";
+import { createConnection, createServer as createTcpServer } from "node:net";
+import type { Socket } from "node:net";
 import { request as httpsRequest } from "node:https";
 import { Pool } from "pg";
 import { createLocalJWKSet, jwtVerify, decodeJwt } from "jose";
@@ -18,6 +26,16 @@ import { digest } from "../../apps/server/src/security.js";
 import { PostgresServiceDatabase } from "../../deploy/agent/service-database.mjs";
 import { execute } from "../../deploy/gateway/gateway.mjs";
 import { createApp as createBffApp } from "../../apps/server/src/app.js";
+import { ProductEnvironment } from "../../deploy/agent/product-environment.mjs";
+import {
+  ProductReadiness,
+  ServiceInventory,
+} from "../../deploy/agent/product-readiness.mjs";
+import { ServiceStateFiles } from "../../deploy/agent/service-lifecycle.mjs";
+import { buildProductBundle } from "../../deploy/agent/build-product-bundle.mjs";
+import { BundleInstaller } from "../../deploy/agent/bundle-install.mjs";
+import { ServiceEnvironment } from "../../deploy/agent/service-environment.mjs";
+import { ProductGateway } from "../../deploy/agent/product-gateway.mjs";
 import { createApp } from "../../../j-customer-auth-db/apps/server/dist/app.js";
 import { GuestSigner } from "../../../j-customer-auth-db/apps/server/dist/security.js";
 import { PageCursor } from "../../../j-customer-auth-db/apps/server/dist/security.js";
@@ -149,7 +167,8 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
   beforeAll(async () => {
     if (process.env.JGW_TEST_RUNTIME !== "isolated-cloud")
       throw new Error("Explicit isolated runtime required; no skip.");
-    for (const port of [55070, 55071, 55072, 55073, 55076]) await free(port);
+    for (const port of [55070, 55071, 55072, 55073, 55076, 55078])
+      await free(port);
     root = await mkdtemp(tmpdir() + "/jcadb-");
     await writeFile(
       root + "/postgres.env",
@@ -227,6 +246,45 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
     }).privateKey.export({ type: "pkcs8", format: "pem" });
     await writeFile(root + "/signing.key", signingKey, { mode: 0o600 });
     const caFile = process.env.JAUTH_TLS_CERTIFICATE!;
+    await execute("openssl", [
+      "req",
+      "-new",
+      "-newkey",
+      "rsa:2048",
+      "-nodes",
+      "-keyout",
+      root + "/server.key",
+      "-out",
+      root + "/server.csr",
+      "-subj",
+      "/CN=Customer Fixture",
+    ]);
+    await chmod(root + "/server.key", 0o600);
+    await writeFile(
+      root + "/server.ext",
+      "basicConstraints=critical,CA:FALSE\nkeyUsage=critical,digitalSignature,keyEncipherment\nsubjectAltName=IP:127.0.0.1,DNS:localhost," +
+        rt.fixtures.map((f) => "DNS:" + new URL(f.origin).hostname).join(",") +
+        "\n",
+      { mode: 0o600 },
+    );
+    await execute("openssl", [
+      "x509",
+      "-req",
+      "-in",
+      root + "/server.csr",
+      "-CA",
+      caFile,
+      "-CAkey",
+      process.env.JAUTH_TLS_KEY!,
+      "-set_serial",
+      "0x" + randomBytes(16).toString("hex"),
+      "-out",
+      root + "/server.crt",
+      "-days",
+      "1",
+      "-extfile",
+      root + "/server.ext",
+    ]);
     for (const [index, fixture] of rt.fixtures.entries()) {
       const child = spawn(
         process.execPath,
@@ -244,8 +302,8 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
             JCADB_PORT: String(55071 + index),
             JCADB_DB_PORT: "55070",
             JCADB_DB_PASSWORD: dbPassword,
-            JCADB_TLS_CERTIFICATE: caFile,
-            JCADB_TLS_KEY: process.env.JAUTH_TLS_KEY!,
+            JCADB_TLS_CERTIFICATE: root + "/server.crt",
+            JCADB_TLS_KEY: root + "/server.key",
             JCADB_CA_CERTIFICATE: caFile,
             JCADB_GUEST_SIGNING_KEY: root + "/signing.key",
             JCADB_CURSOR_SIGNING_KEY: randomBytes(32).toString("base64url"),
@@ -510,6 +568,19 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
     expect(
       (await ownerBrowser.request("/api/customer-auth/guests?q=%00")).status,
     ).toBe(400);
+    for (const invalid of [
+      { name: 123 },
+      { loginId: 123456 },
+      { password: 123456789012 },
+    ])
+      expect(
+        (
+          await ownerBrowser.change("/api/customer-auth/guests", {
+            ...input,
+            ...invalid,
+          })
+        ).status,
+      ).toBe(400);
     const guestResponse = await ownerBrowser.change(
       "/api/customer-auth/guests",
       { ...input, loginId: "isolated-relay" },
@@ -547,6 +618,14 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
     ).toEqual(before);
   });
   it("issues and revokes BFF API keys once while refusing external login/write proxy routes", async () => {
+    for (const input of [
+      { name: 123, scopes: ["guest:read"] },
+      { name: "invalid", scopes: "guest:read" },
+    ])
+      expect(
+        (await writerBrowser.change("/api/customer-auth/api-keys", input))
+          .status,
+      ).toBe(400);
     const created = await writerBrowser.change("/api/customer-auth/api-keys", {
       name: "relay-site",
       scopes: ["guest:read"],
@@ -1221,6 +1300,529 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
     expect(
       (await request("/customer-auth/guests/" + second.id, readerToken)).status,
     ).toBe(404);
+  });
+  it("installs and boots the seventh cold bundle with real customer profile, persisted secrets, native Argon2 and TLS readiness", async () => {
+    const service = "j-customer-auth-db",
+      fixture = rt.fixtures[0]!;
+    const output = root + "/customer-auth.tar.gz",
+      base = {
+        npmConfig: "/workspace/.suite-runtime/j-groupware/registry/user.npmrc",
+        cache: "/workspace/.cloud-setup/cache/npm",
+        npmCli:
+          "/workspace/.cloud-setup/node22/lib/node_modules/npm/bin/npm-cli.js",
+      };
+    const bundle = await buildProductBundle({
+      ...base,
+      service,
+      sourceRoot: "/workspace/" + service,
+      output,
+    });
+    await mkdir(root + "/runtime", { mode: 0o755 });
+    await chmod(root + "/runtime", 0o755);
+    const installer = new BundleInstaller({ ...base, root: root + "/runtime" });
+    const installation = { service, archive: output, digest: bundle.sha256 };
+    expect((await installer.install(installation)).changed).toBe(true);
+    expect((await installer.install(installation)).changed).toBe(false);
+    expect(
+      await readFile(
+        root + "/runtime/" + service + "/packages/contracts/dist/index.js",
+      ),
+    ).toEqual(
+      await readFile(
+        "/workspace/j-groupware/node_modules/@j-customer-auth-db/contracts/dist/index.js",
+      ),
+    );
+    const profile = {
+      port: 55078,
+      certificate: root + "/server.crt",
+      key: root + "/server.key",
+      ca: process.env.JAUTH_TLS_CERTIFICATE!,
+      publicOrigin: fixture.origin,
+      guestSigningKey: root + "/signing.key",
+    };
+    const options = {
+      tenant: fixture.tenant,
+      databasePort: 55070,
+      keycloakOrigin: process.env.KC_PUBLIC_URL!,
+      profiles: { [service]: profile },
+    };
+    const adapter = new ProductEnvironment(options);
+    expect(
+      () =>
+        new ProductEnvironment({
+          ...options,
+          profiles: {
+            [service]: { ...profile, publicOrigin: rt.fixtures[1]!.origin },
+          },
+        }),
+    ).toThrow();
+    const environment = new ServiceEnvironment({
+      root: root + "/product-env",
+      backups: root + "/product-backups",
+      render: adapter.render.bind(adapter),
+      read: adapter.read.bind(adapter),
+    });
+    const secrets = await environment.prepare(service, () => ({
+      databasePassword: dbPassword,
+      notificationKey: randomBytes(32).toString("base64url"),
+      cursorSigningKey: randomBytes(32).toString("base64url"),
+    }));
+    expect(
+      await environment.prepare(service, () => {
+        throw new Error("Existing secrets must not be reissued.");
+      }),
+    ).toEqual(secrets);
+    rt.secretValues.add(secrets.cursorSigningKey!);
+    rt.secretValues.add(secrets.notificationKey);
+    // Isolated auth.jgw.test has no host DNS entry; this native-only test
+    // resolver is external to the cold bundle and adds no package fallback.
+    await writeFile(
+      root + "/test-hosts.mjs",
+      await readFile("tests/bff/resolve-customer-auth-test-hosts.mjs"),
+      { mode: 0o600 },
+    );
+    const child = spawn(
+      process.execPath,
+      ["--import", root + "/test-hosts.mjs", "apps/server/dist/main.js"],
+      {
+        cwd: root + "/runtime/" + service,
+        env: {
+          ...adapter.variables(service, secrets),
+          JGW_TEST_RUNTIME: "isolated-cloud",
+        },
+        shell: false,
+        stdio: ["ignore", "pipe", "pipe"],
+      },
+    );
+    children.push(child);
+    child.stdout?.on("data", (value) => logs.push(String(value)));
+    child.stderr?.on("data", (value) => logs.push(String(value)));
+    const readiness = new ProductReadiness({
+      environment: adapter,
+      timeout: 1000,
+    });
+    let ready = false;
+    for (let i = 0; i < 100; i++) {
+      if (child.exitCode !== null)
+        throw new Error("Cold customer process stopped before readiness.");
+      if (await readiness.probe(service)) {
+        ready = true;
+        break;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    expect(ready).toBe(true);
+    const wrongCa = new ProductEnvironment({
+      ...options,
+      profiles: {
+        [service]: { ...profile, ca: process.env.JGW_TLS_CERTIFICATE! },
+      },
+    });
+    expect(
+      await new ProductReadiness({ environment: wrongCa, timeout: 1000 }).probe(
+        service,
+      ),
+    ).toBe(false);
+    expect(
+      (
+        await request(
+          "/customer-auth/guests/" + first.id,
+          ownerToken,
+          undefined,
+          "GET",
+          55078,
+        )
+      ).status,
+    ).toBe(200);
+    const key = await newKey();
+    const login = await rt.fetchLoopback(
+      "https://127.0.0.1:55078/ext/customer-auth/v1/login",
+      {
+        method: "POST",
+        headers: {
+          "X-JCADB-API-Key": key.secret,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          loginId: first.loginId,
+          password: guestPassword,
+        }),
+      },
+    );
+    expect(login.status).toBe(200);
+    const jwt = (await login.json()) as GuestLoginResult;
+    rt.secretValues.add(jwt.accessToken);
+    expect(
+      (
+        await jwtVerify(jwt.accessToken, createLocalJWKSet(signer.jwks), {
+          issuer: fixture.origin + "/ext/customer-auth",
+          audience: "j-customer-auth-db-guest",
+          algorithms: ["RS256"],
+        })
+      ).payload.sub,
+    ).toBe(first.id);
+    const state = new ServiceStateFiles(root + "/inventory", fixture.tenant);
+    await state.write(service, { status: "active", phase: "active" });
+    const inventory = new ServiceInventory({
+      tenant: fixture.tenant,
+      state,
+      readiness,
+    });
+    expect(await inventory.read()).toEqual({
+      tenant: fixture.tenant,
+      installed: [service],
+      incomplete: [],
+    });
+    const exit = once(child, "exit");
+    child.kill("SIGTERM");
+    await exit;
+    expect(child.exitCode).toBe(0);
+    expect(await inventory.read()).toEqual({
+      tenant: fixture.tenant,
+      installed: [],
+      incomplete: [service],
+    });
+  }, 120000);
+  it("publishes actual customer HTTPS through Nginx and withdraws it while keeping the BFF management boundary", async () => {
+    const fixture = rt.fixtures[0]!,
+      gatewayRoot = root + "/gateway",
+      gatewayContainer = "jcadb-gateway-" + randomUUID().slice(0, 8),
+      image =
+        "nginx@sha256:9bf97bd7714f5e24c1ccd545ecb9eb5435cb6d109c97cebb15e7e455e0239edb",
+      sockets = new Set<Socket>();
+    for (const port of [54233, 55075, 55077]) await free(port);
+    await mkdir(gatewayRoot, { mode: 0o700 });
+    for (const [name, source] of [
+      ["certificate.pem", process.env.JGW_TLS_CERTIFICATE!],
+      ["key.pem", process.env.JGW_TLS_KEY!],
+    ])
+      await writeFile(gatewayRoot + "/" + name, await readFile(source!), {
+        mode: 0o600,
+      });
+    await writeFile(
+      gatewayRoot + "/upstream-ca.pem",
+      (await readFile(process.env.JAUTH_TLS_CERTIFICATE!, "utf8")) +
+        "\n" +
+        (await readFile(process.env.JGW_TLS_CERTIFICATE!, "utf8")),
+      { mode: 0o600 },
+    );
+    // The real BFF binds the isolated bridge address. This transparent TCP
+    // relay changes only its address; both Nginx TLS verification and member
+    // authentication still reach the actual BFF and customer server.
+    const relay = createTcpServer((client) => {
+      const upstream = createConnection({
+        host: process.env.JGW_TEST_BIND_IP!,
+        port: 54233,
+      });
+      for (const socket of [client, upstream]) {
+        sockets.add(socket);
+        socket.on("close", () => sockets.delete(socket));
+        socket.on("error", () => {
+          client.destroy();
+          upstream.destroy();
+        });
+      }
+      client.pipe(upstream).pipe(client);
+    });
+    let running = false;
+    const identity = ["--user", `${process.getuid!()}:${process.getgid!()}`],
+      dockerRun = [
+        "run",
+        "--network",
+        "host",
+        "--read-only",
+        ...identity,
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--mount",
+        `type=bind,source=${gatewayRoot},target=${gatewayRoot}`,
+        "--entrypoint",
+        "/usr/sbin/nginx",
+      ];
+    try {
+      await new Promise<void>((resolve, reject) => {
+        relay.once("error", reject);
+        relay.listen(55077, "127.0.0.1", resolve);
+      });
+      const state = new ServiceStateFiles(
+          root + "/gateway-state",
+          fixture.tenant,
+        ),
+        gateway = new ProductGateway({
+          root: gatewayRoot,
+          state,
+          profile: {
+            JGW_TENANT: fixture.tenant,
+            JGW_GATEWAY_ALLOWED_TENANTS: fixture.tenant,
+            JGW_GATEWAY_SERVICES: "",
+            JGW_GATEWAY_BIND: "127.0.0.1",
+            JGW_GATEWAY_HTTP_PORT: "55075",
+            JGW_GATEWAY_HTTPS_PORT: "54233",
+            JGW_PORT: "55077",
+            JCADB_INTERNAL_PORT: "55071",
+            JCADB_INTERNAL_PROTOCOL: "https",
+            JGW_TLS_CERTIFICATE: gatewayRoot + "/certificate.pem",
+            JGW_TLS_KEY: gatewayRoot + "/key.pem",
+            JGW_GATEWAY_UPSTREAM_CA: gatewayRoot + "/upstream-ca.pem",
+            JGW_EXT_RATE: "1000",
+            JGW_EXT_BURST: "1000",
+          },
+          commands: {
+            validate: () =>
+              execute(
+                "docker",
+                running
+                  ? [
+                      "exec",
+                      gatewayContainer,
+                      "nginx",
+                      "-t",
+                      "-c",
+                      gatewayRoot + "/nginx.conf",
+                    ]
+                  : [
+                      ...dockerRun,
+                      "--rm",
+                      image,
+                      "-t",
+                      "-c",
+                      gatewayRoot + "/nginx.conf",
+                    ],
+              ),
+            reload: async () => {
+              if (running)
+                return execute("docker", [
+                  "exec",
+                  gatewayContainer,
+                  "nginx",
+                  "-s",
+                  "reload",
+                  "-c",
+                  gatewayRoot + "/nginx.conf",
+                ]);
+              await execute("docker", [
+                ...dockerRun,
+                "-d",
+                "--name",
+                gatewayContainer,
+                image,
+                "-c",
+                gatewayRoot + "/nginx.conf",
+                "-g",
+                "daemon off;",
+              ]);
+              running = true;
+            },
+          },
+          substitute: (input, variables) =>
+            execute(
+              "docker",
+              [
+                "run",
+                "-i",
+                "--rm",
+                "--network",
+                "none",
+                "--read-only",
+                ...identity,
+                ...Object.entries(variables).flatMap(([key, value]) => [
+                  "--env",
+                  `${key}=${value}`,
+                ]),
+                "--entrypoint",
+                "/usr/bin/envsubst",
+                image,
+                Object.keys(variables)
+                  .map((key) => "$" + key)
+                  .join(" "),
+              ],
+              { input },
+            ),
+        });
+      expect(await gateway.set("j-customer-auth-db", true)).toEqual({
+        changed: true,
+        reloaded: true,
+      });
+      const browser = new Browser(rt.fetchLoopback, fixture.origin);
+      browser.cookies.set(
+        fixture.origin,
+        new Map(ownerBrowser.cookies.get(fixture.origin)!),
+      );
+      expect(
+        (await browser.request("/api/customer-auth/guests/" + first.id)).status,
+      ).toBe(200);
+      const keyResponse = await browser.change("/api/customer-auth/api-keys", {
+        name: "gateway-site",
+        scopes: ["guest:read"],
+      });
+      expect(keyResponse.status).toBe(201);
+      const key = (await keyResponse.json()) as IssuedApiKey;
+      rt.secretValues.add(key.secret);
+      const headers = {
+        "X-JCADB-API-Key": key.secret,
+        "Content-Type": "application/json",
+      };
+      const jwksResponse = await rt.fetchLoopback(
+        fixture.origin + "/ext/customer-auth/v1/jwks",
+      );
+      expect(jwksResponse.status).toBe(200);
+      const login = await rt.fetchLoopback(
+        fixture.origin + "/ext/customer-auth/v1/login",
+        {
+          method: "POST",
+          headers,
+          body: JSON.stringify({
+            loginId: first.loginId,
+            password: guestPassword,
+          }),
+        },
+      );
+      expect(login.status).toBe(200);
+      const jwt = (await login.json()) as GuestLoginResult;
+      rt.secretValues.add(jwt.accessToken);
+      expect(
+        (
+          await jwtVerify(
+            jwt.accessToken,
+            createLocalJWKSet(
+              (await jwksResponse.json()) as Parameters<
+                typeof createLocalJWKSet
+              >[0],
+            ),
+            {
+              issuer: fixture.origin + "/ext/customer-auth",
+              audience: "j-customer-auth-db-guest",
+              algorithms: ["RS256"],
+            },
+          )
+        ).payload.sub,
+      ).toBe(first.id);
+      expect(
+        (
+          await rt.fetchLoopback(
+            fixture.origin + "/ext/customer-auth/v1/guests",
+            { headers },
+          )
+        ).status,
+      ).toBe(200);
+      expect(
+        (
+          await rt.fetchLoopback(fixture.origin + "/customer-auth/guests", {
+            headers: { Authorization: "Bearer " + ownerToken },
+          })
+        ).status,
+      ).toBe(404);
+      expect(
+        (
+          await rt.fetchLoopback(
+            fixture.origin + "/ext/customer-auth/v1/guests",
+            { method: "POST", headers, body: "{}" },
+          )
+        ).status,
+      ).toBe(404);
+      expect(await gateway.set("j-customer-auth-db", false)).toEqual({
+        changed: true,
+        reloaded: true,
+      });
+      // Nginx drains the previous worker's established keepalive connection.
+      // Require the same actual client to observe withdrawal within a bound,
+      // in addition to ProductGateway's new-worker revision confirmation.
+      let withdrawn = false;
+      const deadline = Date.now() + 5000;
+      while (Date.now() < deadline) {
+        const response = await rt.fetchLoopback(
+          fixture.origin + "/ext/customer-auth/v1/guests",
+          { headers, signal: AbortSignal.timeout(1000) },
+        );
+        await response.body?.cancel();
+        if (response.status === 404) {
+          withdrawn = true;
+          break;
+        }
+        await new Promise((resolve) => setTimeout(resolve, 30));
+      }
+      expect(withdrawn).toBe(true);
+      expect(
+        (await browser.request("/api/customer-auth/guests/" + first.id)).status,
+      ).toBe(200);
+      for (const secret of [key.secret, jwt.accessToken, guestPassword])
+        expect(
+          await readFile(gatewayRoot + "/access.log", "utf8"),
+        ).not.toContain(secret);
+    } finally {
+      if (running) await execute("docker", ["rm", "-f", gatewayContainer]);
+      for (const socket of sockets) socket.destroy();
+      if (relay.listening)
+        await new Promise<void>((resolve) => relay.close(() => resolve()));
+    }
+  }, 120000);
+  it("loads the published contracts and customer endpoint in the actual compiled BFF", async () => {
+    const child = await rt.startCompiled();
+    try {
+      const fixture = rt.fixtures[0]!,
+        browser = new Browser(rt.fetchLoopback, fixture.origin);
+      browser.cookies.set(
+        fixture.origin,
+        new Map(ownerBrowser.cookies.get(fixture.origin)!),
+      );
+      const invalid = await browser.change("/api/customer-auth/guests", {
+        name: "compiled",
+        loginId: "compiled-relay",
+        password: 123456789012,
+      });
+      expect(invalid.status).toBe(400);
+      const created = await browser.change("/api/customer-auth/guests", {
+        name: "compiled",
+        loginId: "compiled-relay",
+        password: guestPassword,
+      });
+      expect(created.status).toBe(201);
+      const guest = (await created.json()) as Guest;
+      expect(
+        (await browser.request("/api/customer-auth/guests/" + guest.id)).status,
+      ).toBe(200);
+      expect(
+        (
+          await browser.change(
+            "/api/customer-auth/guests/" + guest.id,
+            { name: "updated" },
+            "PATCH",
+          )
+        ).status,
+      ).toBe(200);
+      const keyResponse = await browser.change("/api/customer-auth/api-keys", {
+        name: "compiled",
+        scopes: ["guest:read"],
+      });
+      expect(keyResponse.status).toBe(201);
+      const key = (await keyResponse.json()) as IssuedApiKey;
+      rt.secretValues.add(key.secret);
+      expect(
+        (
+          await browser.change(
+            "/api/customer-auth/api-keys/" + key.apiKey.id,
+            undefined,
+            "DELETE",
+          )
+        ).status,
+      ).toBe(200);
+      expect(
+        (await external("/ext/customer-auth/v1/guests", key.secret)).status,
+      ).toBe(401);
+      expect(
+        (
+          await browser.change(
+            "/api/customer-auth/guests/" + guest.id,
+            undefined,
+            "DELETE",
+          )
+        ).status,
+      ).toBe(204);
+    } finally {
+      await rt.stop(child);
+    }
   });
   it("reports actual DB outage separately and keeps compiled logs free of secrets", async () => {
     const key = await newKey();

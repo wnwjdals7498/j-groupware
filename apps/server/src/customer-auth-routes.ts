@@ -20,6 +20,22 @@ import { ApiError, unavailable } from "./errors.js";
 import { cookieValue } from "./security.js";
 import type { ServiceClient } from "./services.js";
 const empty = { type: "object", additionalProperties: false };
+// Check JSON types before the BFF's shared AJV coercion can change credentials.
+async function strictBody(request: FastifyRequest) {
+  const body = request.body;
+  if (
+    !body ||
+    typeof body !== "object" ||
+    Array.isArray(body) ||
+    Object.entries(body).some(([key, value]) =>
+      key === "scopes"
+        ? !Array.isArray(value) ||
+          value.some((scope) => typeof scope !== "string")
+        : typeof value !== "string",
+    )
+  )
+    throw new ApiError(400, "invalid_input", "Invalid customer request.");
+}
 const uuidPattern = /^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}(?![\s\S])/;
 const record = (value: unknown): Record<string, unknown> => {
   if (!value || typeof value !== "object" || Array.isArray(value))
@@ -204,6 +220,7 @@ export function registerCustomerAuthRoutes(
     "/api/customer-auth/guests",
     {
       bodyLimit: 16384,
+      preValidation: strictBody,
       schema: {
         querystring: empty,
         body: MANAGEMENT_SCHEMAS.guestInput,
@@ -230,6 +247,7 @@ export function registerCustomerAuthRoutes(
     "/api/customer-auth/guests/:id",
     {
       bodyLimit: 16384,
+      preValidation: strictBody,
       schema: {
         params: SCHEMAS.id,
         querystring: empty,
@@ -292,6 +310,7 @@ export function registerCustomerAuthRoutes(
     "/api/customer-auth/api-keys",
     {
       bodyLimit: 16384,
+      preValidation: strictBody,
       schema: {
         querystring: empty,
         body: MANAGEMENT_SCHEMAS.apiKeyInput,

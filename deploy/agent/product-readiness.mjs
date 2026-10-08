@@ -74,7 +74,9 @@ export class ProductReadiness {
               finish(
                 service === "j-messenger"
                   ? value?.data?.ready === true
-                  : value?.status === "ok",
+                  : service === "j-customer-auth-db"
+                    ? value?.ready === true
+                    : value?.status === "ok",
               );
             } catch {
               finish(false);
@@ -106,7 +108,7 @@ export class ServiceInventory {
   async read(signal) {
     const installed = [],
       incomplete = [];
-    for (const service of [...PRODUCT_SERVICES, "j-customer-auth-db"]) {
+    for (const service of PRODUCT_SERVICES) {
       signal?.throwIfAborted();
       const state = await this.state.read(service);
       if (!state || state.status === "removed") continue;

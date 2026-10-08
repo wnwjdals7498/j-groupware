@@ -27,7 +27,14 @@ const registry = "/workspace/.suite-runtime/j-groupware/registry/user.npmrc";
 const cache = "/workspace/.cloud-setup/cache/npm";
 const npmCli =
   "/workspace/.cloud-setup/node22/lib/node_modules/npm/bin/npm-cli.js";
-const services = ["j-approval", "j-messenger", "j-talk", "j-mail", "j-web"];
+const services = [
+  "j-approval",
+  "j-messenger",
+  "j-talk",
+  "j-mail",
+  "j-web",
+  "j-customer-auth-db",
+];
 const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
 before(async () => {
   if (process.env.JGW_AGENT_TEST_RUNTIME !== "isolated-cloud")
@@ -76,7 +83,7 @@ async function command(args, cwd) {
     });
   });
 }
-test("produces five allowlisted runtime archives with native metadata, pinned lockfiles and required migration/widget/helper assets", async () => {
+test("produces six optional product runtime archives with native metadata, pinned lockfiles and required migration/widget/helper assets", async () => {
   for (const service of services) {
     const output = root + "/" + service + ".tar.gz";
     const result = await buildProductBundle({
@@ -158,7 +165,7 @@ test("produces five allowlisted runtime archives with native metadata, pinned lo
     );
   }
 });
-test("cold npm ci resolves local contracts for all five products with lifecycle scripts disabled and no registry publication", async () => {
+test("cold npm ci resolves local contracts for all six optional products with lifecycle scripts disabled and no registry publication", async () => {
   for (const service of services) {
     const target = bundles.get(service);
     assert(target);
@@ -280,10 +287,9 @@ test("refuses unimplemented products, existing archive overwrite and symlinked s
     cache,
     npmCli,
   };
-  await assert.rejects(
-    buildProductBundle({ ...base, service: "j-customer-auth-db" }),
-    { code: "product_adapter_unbound" },
-  );
+  await assert.rejects(buildProductBundle({ ...base, service: "j-auth" }), {
+    code: "product_adapter_unbound",
+  });
   const bytes = await readFile(base.output);
   await assert.rejects(buildProductBundle({ ...base, service: "j-talk" }), {
     code: "EEXIST",

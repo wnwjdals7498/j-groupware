@@ -171,6 +171,24 @@ test("private service env preserves generated credentials across retry and remai
   await lifecycle.run("j-talk");
   assert(events.indexOf("ready") < events.indexOf("notification"));
   assert(events.indexOf("notification") < events.indexOf("gateway"));
+  await lifecycle.run("j-customer-auth-db");
+  const customerSecrets = JSON.parse(
+    await readFile(root + "/environment/j-customer-auth-db.env", "utf8"),
+  );
+  assert.match(customerSecrets.cursorSigningKey, /^[A-Za-z0-9_-]{43}$/);
+  await lifecycle.run("j-customer-auth-db");
+  assert.deepEqual(
+    JSON.parse(
+      await readFile(root + "/environment/j-customer-auth-db.env", "utf8"),
+    ),
+    customerSecrets,
+  );
+  for (const value of Object.values(customerSecrets))
+    assert(
+      !(
+        await readFile(root + "/state/j-customer-auth-db.json", "utf8")
+      ).includes(value),
+    );
   const file = root + "/environment/j-talk.env",
     bytes = await readFile(file);
   for (const key of Object.values(first))

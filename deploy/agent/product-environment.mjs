@@ -10,6 +10,7 @@ export const PRODUCT_SERVICES = Object.freeze([
   "j-talk",
   "j-mail",
   "j-web",
+  "j-customer-auth-db",
 ]);
 export const BUNDLE_SERVICES = Object.freeze([
   "j-groupware",
@@ -20,6 +21,7 @@ const prefixes = {
   "j-talk": "JT",
   "j-mail": "JML",
   "j-web": "JW",
+  "j-customer-auth-db": "JCADB",
 };
 const fail = () => {
   throw new ProvisionError("invalid_product_configuration");
@@ -29,7 +31,7 @@ const port = (value) => {
     fail();
   return value;
 };
-function origin(value, kind) {
+function origin(value, kind, tenant) {
   let url;
   try {
     url = new URL(value);
@@ -43,14 +45,16 @@ function origin(value, kind) {
     url.hash ||
     url.pathname !== "/" ||
     url.port === "3001" ||
-    (kind === "keycloak"
-      ? url.protocol !== "https:" ||
-        !/^[a-z0-9.-]+\.jgw\.test$/.test(url.hostname)
-      : url.hostname !== "127.0.0.1" ||
-        !url.port ||
-        (kind === "mailpit"
-          ? url.protocol !== "http:"
-          : !["http:", "https:"].includes(url.protocol)))
+    (kind === "customer"
+      ? url.protocol !== "https:" || url.hostname !== `gw.${tenant}.jgw.test`
+      : kind === "keycloak"
+        ? url.protocol !== "https:" ||
+          !/^[a-z0-9.-]+\.jgw\.test$/.test(url.hostname)
+        : url.hostname !== "127.0.0.1" ||
+          !url.port ||
+          (kind === "mailpit"
+            ? url.protocol !== "http:"
+            : !["http:", "https:"].includes(url.protocol)))
   )
     fail();
   return url.origin;
@@ -97,6 +101,8 @@ export class ProductEnvironment {
               "dataRoot",
               "mailpitOrigin",
               "customerAddress",
+              "publicOrigin",
+              "guestSigningKey",
             ].includes(key),
         )
       )
@@ -108,6 +114,16 @@ export class ProductEnvironment {
         ca: externalPath(value.ca),
       };
       ports.push(p.port);
+      if (service === "j-customer-auth-db") {
+        p.publicOrigin = origin(value.publicOrigin, "customer", tenant);
+        p.serverName = new URL(p.publicOrigin).hostname;
+        p.publicHost = new URL(p.publicOrigin).host;
+        p.guestSigningKey = externalPath(value.guestSigningKey);
+      } else if (
+        value.publicOrigin !== undefined ||
+        value.guestSigningKey !== undefined
+      )
+        fail();
       if (service === "j-messenger") p.dataRoot = externalPath(value.dataRoot);
       if (service === "j-mail")
         p.mailpitOrigin = origin(value.mailpitOrigin, "mailpit");
@@ -175,6 +191,20 @@ export class ProductEnvironment {
           JAP_NOTIFICATION_KEY: value.notificationKey,
         });
       if (service === "j-mail") variables.JML_MAILPIT_URL = p.mailpitOrigin;
+      if (service === "j-customer-auth-db") {
+        const cursorSigningKey = secret(value.cursorSigningKey);
+        if (
+          Buffer.from(cursorSigningKey, "base64url").toString("base64url") !==
+          cursorSigningKey
+        )
+          fail();
+        Object.assign(variables, {
+          JCADB_PUBLIC_ORIGIN: p.publicOrigin,
+          JCADB_CA_CERTIFICATE: p.ca,
+          JCADB_GUEST_SIGNING_KEY: p.guestSigningKey,
+          JCADB_CURSOR_SIGNING_KEY: cursorSigningKey,
+        });
+      }
       if (service === "j-web" && p.customerAddress)
         variables.JW_CUSTOMER_ADDRESS = p.customerAddress;
     }
@@ -200,8 +230,16 @@ export class ProductEnvironment {
     const value = {
       databasePassword: secret(password),
       notificationKey: secret(variables.JGW_PROVISION_NOTIFICATION_KEY),
-      ...(service === "j-messenger"
-        ? { cursorSigningKey: secret(variables.CURSOR_SIGNING_KEY) }
+      ...(["j-messenger", "j-customer-auth-db"].includes(service)
+        ? {
+            cursorSigningKey: secret(
+              variables[
+                service === "j-messenger"
+                  ? "CURSOR_SIGNING_KEY"
+                  : "JCADB_CURSOR_SIGNING_KEY"
+              ],
+            ),
+          }
         : {}),
     };
     // Exact comparison refuses duplicate keys, secret drift and an otherwise

@@ -58,7 +58,7 @@ export class ServiceEnvironment {
       !value ||
       !/^[A-Za-z0-9_-]{43}$/.test(value.databasePassword) ||
       !/^[A-Za-z0-9_-]{43}$/.test(value.notificationKey) ||
-      (service === "j-messenger" &&
+      (["j-messenger", "j-customer-auth-db"].includes(service) &&
         !/^[A-Za-z0-9_-]{43}$/.test(value.cursorSigningKey))
     )
       throw new ProvisionError("invalid_environment_secrets");

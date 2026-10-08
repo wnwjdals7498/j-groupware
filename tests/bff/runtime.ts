@@ -674,6 +674,10 @@ export async function integrationRuntime(
       },
       startCompiled: async () => {
         const fixture = fixtures[0]!;
+        const endpoints =
+          options.serviceEndpointsForTenant?.(fixture.tenant, 0) ??
+          options.serviceEndpoints ??
+          {};
         const envfile =
           required("JGW_TEST_ENV") + "." + fixture.tenant + ".server.env";
         const values = {
@@ -693,18 +697,14 @@ export async function integrationRuntime(
           JGW_CLIENT_SECRET: fixture.secrets.clientSecret,
           JGW_SERVICE_KEY: fixture.secrets.serviceKey,
           JAUTH_PUBLIC_URL: fixture.memberAuth.origin,
-          ...(options.serviceEndpoints?.["j-messenger"]
-            ? {
-                JGW_SERVICE_MESSENGER_URL:
-                  options.serviceEndpoints["j-messenger"],
-              }
-            : {}),
-          ...(options.serviceEndpoints?.["j-approval"]
-            ? {
-                JGW_SERVICE_APPROVAL_URL:
-                  options.serviceEndpoints["j-approval"],
-              }
-            : {}),
+          ...Object.fromEntries(
+            Object.entries(endpoints).map(([service, origin]) => [
+              "JGW_SERVICE_" +
+                service.slice(2).replaceAll("-", "_").toUpperCase() +
+                "_URL",
+              origin,
+            ]),
+          ),
         };
         await writeFile(
           envfile,

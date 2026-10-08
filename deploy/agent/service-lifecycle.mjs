@@ -145,7 +145,7 @@ export class ServiceLifecycle {
         const secrets = await this.environment.prepare(service, () => ({
           databasePassword: randomBytes(32).toString("base64url"),
           notificationKey: randomBytes(32).toString("base64url"),
-          ...(service === "j-messenger"
+          ...(["j-messenger", "j-customer-auth-db"].includes(service)
             ? { cursorSigningKey: randomBytes(32).toString("base64url") }
             : {}),
         }));
