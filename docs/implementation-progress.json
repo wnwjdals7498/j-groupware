@@ -6,9 +6,9 @@
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 59,
-    "partial": 16,
-    "not_started": 97
+    "implemented": 61,
+    "partial": 18,
+    "not_started": 93
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
@@ -1347,9 +1347,13 @@
       "items": [
         "E1"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_mailpit_smtp_volume_restart_node22_node24_6_pass; vm_acceptance_pending",
+      "code": [
+        "j-mail/deploy/mailpit-profile.mjs",
+        "j-mail/deploy/mailpit.compose.yaml",
+        "j-mail/tests/integration/foundation.integration.test.ts"
+      ]
     },
     {
       "id": "ML-02",
@@ -1358,9 +1362,13 @@
       "items": [
         "E2"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_internal_multi_recipient_accept_external_unregistered_suffix_subdomain_smtp_reject_pass",
+      "code": [
+        "j-mail/deploy/mailpit-profile.mjs",
+        "j-mail/deploy/mailpit.compose.yaml",
+        "j-mail/tests/integration/foundation.integration.test.ts"
+      ]
     },
     {
       "id": "ML-03",
@@ -1370,9 +1378,13 @@
         "E2",
         "E7"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "no_relay_network_none_capture_pass; customer_vm_egress_firewall_not_run",
+      "code": [
+        "j-mail/deploy/mailpit-profile.mjs",
+        "j-mail/deploy/mailpit.compose.yaml",
+        "j-mail/tests/integration/foundation.integration.test.ts"
+      ]
     },
     {
       "id": "ML-10",
@@ -1436,9 +1448,13 @@
       "items": [
         "E1"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "dedicated_pg_role_cross_db_denial_checksum_migration_pass; outbox_systemd_vm_pending",
+      "code": [
+        "j-mail/apps/server/src/db/migrate.ts",
+        "j-mail/deploy/migrations/001-mail-foundation.sql",
+        "j-mail/deploy/postgres-init.sh"
+      ]
     },
     {
       "id": "ML-31",
