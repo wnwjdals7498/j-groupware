@@ -13,8 +13,9 @@
     "test:integration": "npm run build && node scripts/run-bff-integration.mjs",
     "test:registry": "node --test tests/registry/registry.integration.test.mjs",
     "test:gateway": "node --test tests/gateway/gateway.integration.test.mjs",
-    "lint": "eslint apps packages tests/server tests/bff deploy/gateway tests/gateway",
-    "format:check": "prettier --check apps packages tests/server tests/bff deploy/gateway/*.mjs tests/gateway/*.mjs *.config.ts eslint.config.mjs scripts/run-bff-integration.mjs scripts/prepare-bff-cloud-tests.mjs scripts/wire-bff-cloud-backchannel.mjs",
+    "test:agent": "node --test tests/agent/reconciler.test.mjs",
+    "lint": "eslint apps packages tests/server tests/bff deploy/gateway tests/gateway deploy/agent tests/agent",
+    "format:check": "prettier --check apps packages tests/server tests/bff deploy/gateway/*.mjs tests/gateway/*.mjs deploy/agent/*.mjs tests/agent/*.mjs *.config.ts eslint.config.mjs scripts/run-bff-integration.mjs scripts/prepare-bff-cloud-tests.mjs scripts/wire-bff-cloud-backchannel.mjs",
     "start": "node apps/server/dist/main.js"
   },
   "devDependencies": {

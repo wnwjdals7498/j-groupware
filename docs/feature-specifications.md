@@ -115,6 +115,8 @@ G6 서버 API·원래 Bearer/서비스 키·대상 세션 종료·미배치 저�
 
 [G11 gateway 격리 검증](cloud-gateway-verification-2026-10-08.md)에서 GW-60/61/62 코드, 실제 Nginx whitelist envsubst·HTTPS/WSS·가입 경로·미가입 빈 위젯·요청/연결429·설정 복구·실제 reload 세대 관찰을 구현했다. Node22/24 각각13개와 실제 BFF 회귀114개가 통과했다. upstream 프로토콜 fixture를 실제 상담/손님 업무와 구별하고 운영/VM 배포 인수는 미완료다.
 
+[GW-66 독립 에이전트 검증](cloud-agent-verification-2026-10-08.md)에서 상태 비교·직렬 실행·파일 잠금·실패/관찰/보고·process-group 취소를 구현하고 Node22/24 각각14개와 전체 BFF114개를 확인했다. source/inventory/report는 내부 fixture 어댑터이며 콘솔 wire·운영 자격·G18 실제 설치·systemd 활성화는 연결하지 않았다. GW-66은 부분 구현, GW-T17/SU-T09는 미완료다.
+
 ## G12 실제 메신저 연결의 검증 범위
 
 [실제 M1 인증과 BFF WSS 검증](cloud-messenger-auth-verification-2026-10-08.md)을 보존하고 [M5 PostgreSQL](cloud-messenger-postgres-verification-2026-10-08.md), [M2 BFF 업무 HTTP/client transport](cloud-messenger-bff-verification-2026-10-08.md) 증거를 추가했다. 고정9개 업무 route·쿠키/CSRF·메시지 재시도/tenant·WSS/읽음·단절 sync를 실제 Keycloak/PG로 검증했다. client registry 게시·정식 화면/VM·전체 제품군 인수는 미완료다.

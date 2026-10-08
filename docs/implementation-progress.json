@@ -7,8 +7,8 @@
   "whole_suite_verified": false,
   "summary": {
     "implemented": 59,
-    "partial": 15,
-    "not_started": 98
+    "partial": 16,
+    "not_started": 97
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
@@ -1114,9 +1114,14 @@
       "items": [
         "G21"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "cloud_internal_reconciler_actual_fixture_files_and_processes_node22_node24_14_each_pass; cross_process_lock_idempotence_observation_failure_retry_cancellation_descendant_stop_pass; actual_bff_regression_114_pass; console_wire_auth_installer_probe_real_os_wiring_and_timer_activation_not_run",
+      "code": [
+        "j-groupware/deploy/agent/reconciler.mjs",
+        "j-groupware/deploy/agent/provision-command.mjs",
+        "j-groupware/deploy/agent/jgw-provision-agent.timer.example",
+        "j-groupware/tests/agent/reconciler.test.mjs"
+      ]
     },
     {
       "id": "GW-70",
@@ -2388,14 +2393,15 @@
     "j-groupware/docs/cloud-notification-projection-verification-2026-10-08.md",
     "j-messenger/docs/cloud-client-registry-verification-2026-10-08.md",
     "j-groupware/docs/cloud-client-registry-verification-2026-10-08.md",
-    "j-groupware/docs/cloud-gateway-verification-2026-10-08.md"
+    "j-groupware/docs/cloud-gateway-verification-2026-10-08.md",
+    "j-groupware/docs/cloud-agent-verification-2026-10-08.md"
   ],
   "pending_implementation": [
     "Remaining mail/talk/customer/web BFF business API relays using the verified G23 helper and actual downstream services",
     "G6/G15 formal member/organization/repair UI and Playwright; G16 formal approval UI and Playwright (actual BFF business API and snapshot already verified)",
     "G2/G9 canonical UI guidelines/sidebar/board UI; I2 formal theme/Playwright/brute-force acceptance",
     "Messenger formal UI/app product-path freezing/file BFF and talk business WSS; actual messenger PG/BFF HTTP/client transport/WSS and approval notification delivery independently verified",
-    "I5 auth external Nginx and G11 customer VM deployment acceptance (isolated customer gateway code/protocol verified), G18/G21 customer bootstrap/agent/VM acceptance and operator console",
+    "I5 auth external Nginx and G11 customer VM deployment acceptance (isolated customer gateway code/protocol verified), G18 actual customer bootstrap/install/remove and G21 console-auth/probe bindings, timer activation/VM acceptance (independent reconciler verified) and operator console",
     "G22 formal notification UI/Playwright, G18/G21 production installer/agent subscription/key projection wiring and customer VM acceptance"
   ]
 }

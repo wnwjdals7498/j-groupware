@@ -1,0 +1,12 @@
+# Inactive template only; the console/installer entrypoint is not yet bound.
+[Unit]
+Description=Reconcile j-groupware desired subscriptions every minute
+
+[Timer]
+OnBootSec=60s
+OnUnitActiveSec=60s
+AccuracySec=1s
+Unit=jgw-provision-agent.service
+
+[Install]
+WantedBy=timers.target
