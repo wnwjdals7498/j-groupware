@@ -1,8 +1,10 @@
 import { assertCustomerTenantId } from "@j-auth/contracts";
 import { X509Certificate, createHash, randomUUID } from "node:crypto";
+import { createReadStream, createWriteStream, constants } from "node:fs";
+import { Transform } from "node:stream";
+import { pipeline } from "node:stream/promises";
 import {
   mkdir,
-  readFile,
   writeFile,
   rename,
   rm,
@@ -127,11 +129,26 @@ export class BootstrapFiles {
           info.mode & 0o022
         )
           throw new ProvisionError("unsafe_bundle");
-        const bytes = await readFile(bundle.archive);
-        if (createHash("sha256").update(bytes).digest("hex") !== bundle.digest)
-          throw new ProvisionError("bundle_digest_mismatch");
         const destination = path.join(directory, bundle.service + ".tgz");
-        await writeFile(destination, bytes, { flag: "wx", mode: 0o600 });
+        const digest = createHash("sha256");
+        let count = 0;
+        await pipeline(
+          createReadStream(bundle.archive, {
+            flags: constants.O_RDONLY | constants.O_NOFOLLOW,
+          }),
+          new Transform({
+            transform(chunk, _encoding, done) {
+              count += chunk.length;
+              if (count > info.size || count > 1024 * 1024 * 1024)
+                return done(new ProvisionError("unsafe_bundle"));
+              digest.update(chunk);
+              done(null, chunk);
+            },
+          }),
+          createWriteStream(destination, { flags: "wx", mode: 0o600 }),
+        );
+        if (count !== info.size || digest.digest("hex") !== bundle.digest)
+          throw new ProvisionError("bundle_digest_mismatch");
         bundles.push({ service: bundle.service, digest: bundle.digest });
       }
       const env = {
