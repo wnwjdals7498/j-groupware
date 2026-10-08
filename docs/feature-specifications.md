@@ -106,3 +106,7 @@ G6 서버 API·원래 Bearer/서비스 키·대상 세션 종료·미배치 저�
 ## 확정 관문
 
 각 화면 route·중계 path·DTO·필드 길이·페이지 규칙은 G1·G3 및 서비스 contracts를 연결할 때 고정한다. 세션 쿠키/CSRF 이름과 callback 임시 상태 수명, 조직도 삭제 제약·결재 후보 중복 처리, 계약 상태값·에이전트 키 교체, 알림 대상·사건 키와 제한 단위는 [공통 미정 표](suite-feature-specifications.md)의 해당 관문에서 확정한다. 모바일 셸·고객 VM 생성 자동화·사양 자동화는 추가하지 않는다.
+
+## G22 backend 실제 배달 계약
+
+[수신·조회·SSE snapshot·키/retention·실제 복구 증거](cloud-notification-verification-2026-10-08.md)를 따른다. `GET /api/notifications`와 `POST /api/notifications/:id/read`는 현재 회원의 대상/role/tenant/30일 필터를 공유하며 SSE는 최신 목록 snapshot을 보낸다. 결재의 실제 업무 사건→송신→수신→목록/unread/SSE와 중단/ACK 실패/실제 lease 만료 복구를 검증했다. 구독 상태 자동 투영·운영 키 provisioning·알림 화면/Playwright·고객 VM 인수는 미완료다.

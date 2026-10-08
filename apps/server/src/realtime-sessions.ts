@@ -16,6 +16,11 @@ export class RealtimeSessions {
   private auditing = false;
   private stopped = false;
   private readonly connections = new Set<Connection>();
+  private readonly notificationSubscribers = new Set<() => void>();
+  onNotifications(callback: () => void): () => void {
+    this.notificationSubscribers.add(callback);
+    return () => this.notificationSubscribers.delete(callback);
+  }
   listenerPid: number | null = null;
   constructor(
     private readonly pool: Pool,
@@ -45,6 +50,18 @@ export class RealtimeSessions {
     client.on("error", lost);
     client.on("end", lost);
     client.on("notification", (notification: Notification) => {
+      if (notification.channel === "jgw_notifications") {
+        try {
+          const value = JSON.parse(notification.payload ?? "") as {
+            tenant?: unknown;
+          };
+          if (value.tenant === this.tenant)
+            for (const callback of this.notificationSubscribers) callback();
+        } catch {
+          /* Polling remains authoritative. */
+        }
+        return;
+      }
       if (notification.channel !== "jgw_session_ends") return;
       try {
         const value = JSON.parse(notification.payload ?? "") as {
@@ -63,6 +80,7 @@ export class RealtimeSessions {
     });
     try {
       await client.query("LISTEN jgw_session_ends");
+      await client.query("LISTEN jgw_notifications");
       const result = await client.query<{ pid: number }>(
         "SELECT pg_backend_pid() AS pid",
       );
@@ -167,6 +185,7 @@ export class RealtimeSessions {
     this.stopped = true;
     if (this.timer) clearInterval(this.timer);
     this.closeAll();
+    this.notificationSubscribers.clear();
     await this.starting?.catch(() => undefined);
     const client = this.client;
     this.client = undefined;

@@ -6,13 +6,13 @@
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 46,
+    "implemented": 50,
     "partial": 15,
-    "not_started": 111
+    "not_started": 107
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
-    "Product-specific downstream business relays, actual messenger j-auth/PostgreSQL integration, notification ingestion/delivery and operator console remain unimplemented",
+    "Actual messenger PostgreSQL/BFF integration, product-specific mail/talk relays, automatic subscription projection to notification registry and operator/installer console remain unimplemented",
     "Hyper-V/VM/customer-server and external Nginx deployment/installation acceptance not executed in this cloud test runtime"
   ],
   "features": [
@@ -882,9 +882,14 @@
       "items": [
         "G22"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_loopback_service_tenant_key_type_payload_dedup_and_inactive_refusal_pass; automatic_auth_subscription_projection_and_installer_key_provisioning_pending",
+      "code": [
+        "j-groupware/apps/server/src/notification-receiver.ts",
+        "j-groupware/apps/server/src/db/notifications.ts",
+        "j-groupware/tests/bff/notifications.integration.test.ts",
+        "j-groupware/docs/cloud-notification-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "GW-41",
@@ -893,9 +898,13 @@
       "items": [
         "G22"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_registered_type_service_role_link_and_unknown_type_rejection_pass; real_business_sender_verified_for_approval_only",
+      "code": [
+        "j-groupware/packages/permissions/src/notifications.ts",
+        "j-groupware/tests/bff/notifications.integration.test.ts",
+        "j-groupware/docs/cloud-notification-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "GW-42",
@@ -904,9 +913,15 @@
       "items": [
         "G22"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_pg_dedup_member_reads_visibility_unread_51_receipt_cursor_scope_30_day_purge_pass",
+      "code": [
+        "j-groupware/apps/server/src/db/notifications.ts",
+        "j-groupware/apps/server/src/notification-routes.ts",
+        "j-groupware/deploy/migrations/006-notifications.sql",
+        "j-groupware/tests/bff/notifications.integration.test.ts",
+        "j-groupware/docs/cloud-notification-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "GW-43",
@@ -915,14 +930,16 @@
       "items": [
         "G22"
       ],
-      "implementation": "partial",
-      "verification": "actual_sse_transport_session_closure_multi_instance_failure_expiry_pass; notification_ingestion_storage_filter_delivery_not_implemented",
+      "implementation": "implemented",
+      "verification": "actual_filtered_notification_snapshot_sse_receipt_session_role_revocation_and_reconciliation_pass; formal_UI_and_customer_VM_acceptance_pending",
       "code": [
         "j-groupware/apps/server/src/realtime-sessions.ts",
         "j-groupware/apps/server/src/realtime-routes.ts",
         "j-groupware/deploy/migrations/005-realtime-session-events.sql",
         "j-groupware/tests/bff/realtime.integration.test.ts",
-        "j-groupware/packages/permissions/src/index.ts"
+        "j-groupware/packages/permissions/src/index.ts",
+        "j-groupware/tests/bff/notifications.integration.test.ts",
+        "j-groupware/docs/cloud-notification-verification-2026-10-08.md"
       ]
     },
     {
@@ -932,9 +949,13 @@
       "items": [
         "G22"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_list_unread_and_idempotent_per_member_read_backend_pass; icon_click_navigation_formal_UI_Playwright_pending",
+      "code": [
+        "j-groupware/apps/server/src/notification-routes.ts",
+        "j-groupware/tests/bff/notifications.integration.test.ts",
+        "j-groupware/docs/cloud-notification-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "GW-50",
@@ -1691,12 +1712,17 @@
       "items": [
         "A9"
       ],
-      "implementation": "partial",
-      "verification": "cloud_transactional_outbox_turn_done_dedup_and_actual_failure_rollback_pass; sender_retry_and_actual_G22_receipt_not_implemented_or_run",
+      "implementation": "implemented",
+      "verification": "actual_turn_done_receipt_unread_sse_retry_after_receiver_down_ack_db_failure_dual_sender_and_SIGKILL_actual_lease_expiry_pass; VM_and_UI_acceptance_pending",
       "code": [
         "j-approval/apps/server/src/db/documents.ts",
         "j-approval/deploy/migrations/001-approval.sql",
-        "j-approval/tests/integration/approval.integration.test.ts"
+        "j-approval/tests/integration/approval.integration.test.ts",
+        "j-approval/apps/server/src/notification-sender.ts",
+        "j-approval/deploy/migrations/002-notification-delivery.sql",
+        "j-approval/docs/cloud-notification-delivery-2026-10-08.md",
+        "j-groupware/tests/bff/notifications.integration.test.ts",
+        "j-groupware/docs/cloud-notification-verification-2026-10-08.md"
       ]
     },
     {
@@ -2259,13 +2285,18 @@
     "j-groupware/docs/cloud-member-bff-verification-2026-10-08.md",
     "j-auth/docs/cloud-organization-member-read-2026-10-08.md",
     "j-groupware/docs/cloud-organization-verification-2026-10-08.md",
-    "j-groupware/docs/cloud-realtime-verification-2026-10-08.md"
+    "j-groupware/docs/cloud-realtime-verification-2026-10-08.md",
+    "j-groupware/docs/cloud-approval-bff-verification-2026-10-08.md",
+    "j-approval/docs/cloud-approval-verification-2026-10-08.md",
+    "j-approval/docs/cloud-notification-delivery-2026-10-08.md",
+    "j-groupware/docs/cloud-notification-verification-2026-10-08.md"
   ],
   "pending_implementation": [
     "Product-specific BFF business API relays using the verified G23 helper and actual downstream services",
-    "G6/G15 formal member/organization/repair UI and Playwright; G16 actual approval submission, snapshot and multistage business API",
+    "G6/G15 formal member/organization/repair UI and Playwright; G16 formal approval UI and Playwright (actual BFF business API and snapshot already verified)",
     "G2/G9 canonical UI guidelines/sidebar/board UI; I2 formal theme/Playwright/brute-force acceptance",
-    "Actual messenger/talk business WSS and notification SSE delivery end-to-end scenarios; connection lifecycle is independently verified",
-    "I5/G11 external Nginx, G18/G21 customer bootstrap/agent/VM acceptance and operator console"
+    "Actual messenger/talk business WSS and actual mail/talk notification senders; approval notification backend delivery/retry/SSE independently verified",
+    "I5/G11 external Nginx, G18/G21 customer bootstrap/agent/VM acceptance and operator console",
+    "G22 formal notification UI/Playwright, G18/G21 automatic subscribed-service/key registry projection and customer VM acceptance"
   ]
 }

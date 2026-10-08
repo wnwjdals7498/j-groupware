@@ -8,6 +8,7 @@ import type { ServiceEndpoints } from "./services.js";
 import { serviceOrigin } from "./services.js";
 import { cookieValue, digest } from "./security.js";
 import { ApiError, unavailable } from "./errors.js";
+import type { NotificationStore } from "./db/notifications.js";
 
 const MAX_BYTES = 1048576;
 const querystring = { type: "object", additionalProperties: false };
@@ -24,6 +25,7 @@ export function registerRealtimeRoutes(
   tokens: ServiceTokens,
   endpoints: ServiceEndpoints,
   origin: string,
+  notifications: NotificationStore,
 ): void {
   const source = endpoints["j-messenger"]
     ? new URL("/api/v1/events", serviceOrigin(endpoints["j-messenger"]))
@@ -133,12 +135,18 @@ export function registerRealtimeRoutes(
         request.headers.origin !== origin
       )
         throw new ApiError(403, "forbidden", "Unregistered origin.");
-      const resources: { timer?: ReturnType<typeof setInterval> } = {};
+      const resources: {
+        timer?: ReturnType<typeof setInterval>;
+        poll?: ReturnType<typeof setInterval>;
+        unsubscribe?: () => void;
+      } = {};
       let closed = false;
       const close = () => {
         if (closed) return;
         closed = true;
         if (resources.timer) clearInterval(resources.timer);
+        if (resources.poll) clearInterval(resources.poll);
+        resources.unsubscribe?.();
         release();
         reply.raw.end();
       };
@@ -149,6 +157,8 @@ export function registerRealtimeRoutes(
         () => {
           closed = true;
           if (resources.timer) clearInterval(resources.timer);
+          if (resources.poll) clearInterval(resources.poll);
+          resources.unsubscribe?.();
           if (reply.sent) reply.raw.end();
         },
       );
@@ -164,6 +174,45 @@ export function registerRealtimeRoutes(
         "X-Content-Type-Options": "nosniff",
       });
       reply.raw.write(": connected\n\n");
+      let updating = false,
+        pending = false,
+        last = "";
+      const update = () => {
+        pending = true;
+        if (updating || closed) return;
+        updating = true;
+        void (async () => {
+          while (pending && !closed) {
+            pending = false;
+            const snapshot = JSON.stringify(
+              await notifications.forSession(
+                digest(
+                  cookieValue(request.headers.cookie, SESSION_POLICY.cookie)!,
+                ),
+              ),
+            );
+            if (closed) break;
+            if (snapshot !== last) {
+              if (reply.raw.writableLength > 65536) {
+                close();
+                break;
+              }
+              last = snapshot;
+              reply.raw.write(
+                "event: notifications\ndata: " + snapshot + "\n\n",
+              );
+            }
+          }
+        })()
+          .catch(() => close())
+          .finally(() => {
+            updating = false;
+          });
+      };
+      resources.unsubscribe = hub.onNotifications(update);
+      resources.poll = setInterval(update, 1000);
+      resources.poll.unref();
+      update();
       resources.timer = setInterval(() => {
         if (reply.raw.writableLength > 65536) close();
         else reply.raw.write(": keepalive\n\n");
@@ -171,6 +220,8 @@ export function registerRealtimeRoutes(
       resources.timer.unref();
       reply.raw.once("close", () => {
         if (resources.timer) clearInterval(resources.timer);
+        if (resources.poll) clearInterval(resources.poll);
+        resources.unsubscribe?.();
         release();
         closed = true;
       });

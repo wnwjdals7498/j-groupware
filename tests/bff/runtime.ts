@@ -697,6 +697,9 @@ export async function integrationRuntime(
           );
           for (const table of [
             "sessions",
+            "notification_reads",
+            "notifications",
+            "notification_services",
             "login_flows",
             "logout_events",
             "board_posts",

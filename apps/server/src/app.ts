@@ -29,6 +29,8 @@ import websocket from "@fastify/websocket";
 import { RealtimeSessions } from "./realtime-sessions.js";
 import { registerRealtimeRoutes } from "./realtime-routes.js";
 import { registerApprovalRoutes } from "./approval-routes.js";
+import { NotificationStore } from "./db/notifications.js";
+import { registerNotificationRoutes } from "./notification-routes.js";
 
 export function createApp(options: {
   pool: Pool;
@@ -55,6 +57,10 @@ export function createApp(options: {
   });
   const oidc = options.oidc ?? new OidcClient(options.config);
   const realtime = new RealtimeSessions(options.pool, options.config.tenant);
+  const notifications = new NotificationStore(
+    options.pool,
+    options.config.tenant,
+  );
   const sessions = new SessionStore(
     options.pool,
     options.config.tenant,
@@ -362,6 +368,9 @@ export function createApp(options: {
     options.memberAuth,
   );
   registerMemberRoutes(app, members, (request) => identities.get(request)!);
+  registerNotificationRoutes(app, notifications, (request) =>
+    identities.get(request)!,
+  );
   registerOrganizationRoutes(
     app,
     new OrganizationStore(options.pool, options.config.tenant),
@@ -391,9 +400,30 @@ export function createApp(options: {
       serviceTokens,
       options.serviceEndpoints ?? {},
       options.config.origin,
+      notifications,
     ),
   );
   app.addHook("onReady", () => realtime.ready());
+  let purging = false;
+  const purge = () => {
+    if (purging) return;
+    purging = true;
+    void notifications
+      .purge()
+      .catch(() => undefined)
+      .finally(() => {
+        purging = false;
+      });
+  };
+  let purgeTimer: ReturnType<typeof setInterval> | undefined;
+  app.addHook("onReady", async () => {
+    await notifications.purge();
+    purgeTimer = setInterval(purge, 60000);
+    purgeTimer.unref();
+  });
+  app.addHook("preClose", async () => {
+    if (purgeTimer) clearInterval(purgeTimer);
+  });
   app.addHook("preClose", () => realtime.stop());
   return Object.assign(app, {
     realtime,

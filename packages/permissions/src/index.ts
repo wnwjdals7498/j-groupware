@@ -71,6 +71,8 @@ export const ROUTES = {
   },
   "GET /api/messenger/ws": { kind: "session", role: "messenger:use" },
   "GET /api/notifications/stream": { kind: "session" },
+  "GET /api/notifications": { kind: "session" },
+  "POST /api/notifications/:id/read": { kind: "session" },
   "POST /api/approval/documents": { kind: "session", role: "approval:use" },
   "GET /api/approval/documents": { kind: "session", role: "approval:use" },
   "GET /api/approval/documents/:id": { kind: "session", role: "approval:use" },

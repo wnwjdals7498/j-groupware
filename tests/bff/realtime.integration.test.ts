@@ -126,7 +126,9 @@ describe("actual WSS/SSE sockets and multi-instance session invalidation", () =>
     expect(response.headers.get("content-type")).toContain("text/event-stream");
     const reader = response.body!.getReader(),
       first = await reader.read();
-    expect(new TextDecoder().decode(first.value)).toBe(": connected\n\n");
+    expect(new TextDecoder().decode(first.value).split("\n\n")[0]).toBe(
+      ": connected",
+    );
     const ended = (async () => {
       while (!(await reader.read()).done) {
         /* drain keepalives */

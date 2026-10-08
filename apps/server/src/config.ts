@@ -7,6 +7,7 @@ import type { TenantServiceId } from "@j-auth/contracts";
 import { serviceOrigin } from "./services.js";
 import type { ServiceEndpoints } from "./services.js";
 import { memberAuthOrigin } from "./members.js";
+import type { NotificationKeyHashes } from "@j-groupware/permissions/notifications";
 
 export interface ServerConfig {
   readonly tenant: string;
@@ -20,6 +21,10 @@ export interface ServerConfig {
   readonly serviceEndpoints: ServiceEndpoints;
   readonly authOrigin: string;
   readonly serviceKey: string;
+  readonly notificationReceiver?: {
+    port: number;
+    keyHashes: NotificationKeyHashes;
+  };
 }
 const repository = fileURLToPath(new URL("../../../", import.meta.url));
 const required = (env: NodeJS.ProcessEnv, name: string): string => {
@@ -113,5 +118,15 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
     serviceEndpoints,
     authOrigin: memberAuthOrigin(required(env, "JAUTH_PUBLIC_URL")),
     serviceKey: required(env, "JGW_SERVICE_KEY"),
+    ...(env.JGW_INTERNAL_NOTIFICATIONS_PORT
+      ? {
+          notificationReceiver: {
+            port: port(env.JGW_INTERNAL_NOTIFICATIONS_PORT),
+            keyHashes: JSON.parse(
+              required(env, "JGW_NOTIFICATION_SERVICE_KEY_HASHES"),
+            ) as NotificationKeyHashes,
+          },
+        }
+      : {}),
   };
 }
