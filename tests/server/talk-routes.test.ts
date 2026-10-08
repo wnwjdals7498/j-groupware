@@ -64,4 +64,72 @@ describe("bounded talk downstream projection", () => {
         expect(String(error)).not.toContain("private-token");
       }
   });
+  it("bounds name lookup concurrency and cancels every other lookup on a failed page", async () => {
+    const ids = Array.from(
+        { length: 12 },
+        (_, index) =>
+          "00000000-0000-4000-8000-" + String(index + 1).padStart(12, "0"),
+      ),
+      app = Fastify({ exposeHeadRoutes: false }),
+      release: (() => void)[] = [];
+    let active = 0,
+      maximum = 0,
+      cancelled = 0,
+      calls = 0;
+    registerTalkRoutes(
+      app,
+      {
+        request: async (_session, service, _path, options) => {
+          if (service === "j-talk")
+            return new Response(
+              JSON.stringify({
+                items: ids.map((id) => ({
+                  id,
+                  status: "waiting",
+                  assignedMemberId: null,
+                  guestId: id,
+                  createdAt: "2026-10-08T00:00:00.000Z",
+                })),
+                next: null,
+              }),
+              { headers: { "Content-Type": "application/json" } },
+            );
+          calls++;
+          active++;
+          maximum = Math.max(maximum, active);
+          return new Promise<Response>((resolve, reject) => {
+            const signal = options!.signal!;
+            const abort = () => {
+              active--;
+              cancelled++;
+              reject(new Error("Owned lookup aborted."));
+            };
+            signal.addEventListener("abort", abort, { once: true });
+            release.push(() => {
+              signal.removeEventListener("abort", abort);
+              active--;
+              resolve(new Response("private upstream token", { status: 503 }));
+            });
+          });
+        },
+      },
+      () => true,
+    );
+    try {
+      const response = app.inject({ url: "/api/talk/rooms?limit=100" });
+      for (let i = 0; i < 100 && calls < 4; i++)
+        await new Promise<void>((resolve) => setImmediate(resolve));
+      expect(calls).toBe(4);
+      expect(maximum).toBe(4);
+      release[0]!();
+      const result = await response;
+      expect(result.statusCode).toBe(503);
+      expect(result.body).not.toContain("private upstream token");
+      expect(calls).toBe(4);
+      expect(active).toBe(0);
+      expect(cancelled).toBe(3);
+    } finally {
+      await app.close();
+    }
+  });
 });

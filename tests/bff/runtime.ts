@@ -96,6 +96,7 @@ export async function integrationRuntime(
   });
   const logs: string[] = [];
   const secretValues = new Set<string>();
+  const serviceCalls: { origin: string; path: string; method: string }[] = [];
   const children: ReturnType<typeof spawn>[] = [];
   const start = async (
     cwd: string,
@@ -456,7 +457,15 @@ export async function integrationRuntime(
                   options.serviceEndpoints!,
               }
             : {}),
-          serviceFetch: fetchLoopback,
+          serviceFetch: (input, init) => {
+            const url = new URL(String(input));
+            serviceCalls.push({
+              origin: url.origin,
+              path: url.pathname,
+              method: init?.method ?? "GET",
+            });
+            return fetchLoopback(input, init);
+          },
           https: { cert, key: keyMaterial, minVersion: "TLSv1.2" },
           onSessionEnd: (hashes) => closed.push(...hashes),
         });
@@ -621,6 +630,7 @@ export async function integrationRuntime(
           request.end();
         }),
       members,
+      serviceCalls,
       get refreshCount() {
         return refreshCount;
       },

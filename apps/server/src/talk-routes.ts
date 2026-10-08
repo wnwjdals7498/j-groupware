@@ -3,6 +3,10 @@ import { SESSION_POLICY } from "@j-groupware/contracts";
 import type { ServiceClient } from "./services.js";
 import { cookieValue } from "./security.js";
 import { ApiError, unavailable } from "./errors.js";
+import {
+  decodeCustomerAuthResponse,
+  decodeGuest,
+} from "./customer-auth-routes.js";
 const uuidPattern = "^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$";
 const uuid = { type: "string", pattern: uuidPattern };
 const empty = { type: "object", additionalProperties: false };
@@ -56,9 +60,10 @@ function room(value: unknown, summary = false) {
     status: status(row.status),
     assignedMemberId: nullableId(row.assignedMemberId),
   };
-  if (summary) return { ...base, createdAt: date(row.createdAt) };
   const guestId = row.guestId === null ? null : string(row.guestId, 128);
-  return { ...base, guestId };
+  return summary
+    ? { ...base, guestId, createdAt: date(row.createdAt) }
+    : { ...base, guestId };
 }
 function message(value: unknown) {
   const row = record(value),
@@ -71,11 +76,7 @@ function message(value: unknown) {
     createdAt: date(row.createdAt),
   };
 }
-function paged(
-  value: unknown,
-  limit: number,
-  map: (value: unknown) => unknown,
-) {
+function paged<T>(value: unknown, limit: number, map: (value: unknown) => T) {
   const row = record(value);
   if (!Array.isArray(row.items) || row.items.length > limit)
     throw unavailable();
@@ -130,9 +131,63 @@ export async function decodeTalkResponse<T>(
 export function registerTalkRoutes(
   app: FastifyInstance,
   services: Pick<ServiceClient, "request">,
+  canReadGuests: (request: FastifyRequest) => boolean = () => false,
 ) {
   const session = (r: FastifyRequest) =>
     cookieValue(r.headers.cookie, SESSION_POLICY.cookie);
+  async function guestNames<T extends { guestId: string | null }>(
+    request: FastifyRequest,
+    rooms: T[],
+  ): Promise<(T & { guestName?: string | null })[]> {
+    // Permission is checked before any lookup or customer-auth token exchange.
+    if (!canReadGuests(request)) return rooms;
+    const names = new Map<string, string | null>();
+    for (const room of rooms)
+      if (room.guestId !== null) names.set(id(room.guestId), null);
+    const ids = [...names.keys()],
+      controller = new AbortController(),
+      signal = AbortSignal.any([controller.signal, AbortSignal.timeout(10000)]);
+    let next = 0;
+    const workers = Array.from(
+      { length: Math.min(4, ids.length) },
+      async () => {
+        for (;;) {
+          signal.throwIfAborted();
+          const guestId = ids[next++];
+          if (guestId === undefined) return;
+          try {
+            const response = await services.request(
+              session(request),
+              "j-customer-auth-db",
+              "/customer-auth/guests/" + guestId,
+              { signal },
+            );
+            if (response.status === 404) {
+              await response.body?.cancel();
+              continue;
+            }
+            const guest = await decodeCustomerAuthResponse(
+              response,
+              200,
+              decodeGuest,
+            );
+            if (guest.id !== guestId) throw unavailable();
+            names.set(guestId, guest.name);
+          } catch (error) {
+            controller.abort();
+            throw error;
+          }
+        }
+      },
+    );
+    const outcomes = await Promise.allSettled(workers);
+    if (outcomes.some((outcome) => outcome.status === "rejected"))
+      throw unavailable();
+    return rooms.map((room) => ({
+      ...room,
+      guestName: room.guestId === null ? null : names.get(room.guestId)!,
+    }));
+  }
   const call = (
     r: FastifyRequest,
     path: string,
@@ -163,16 +218,19 @@ export function registerTalkRoutes(
       const q = new URLSearchParams({ limit: String(r.query.limit) });
       if (r.query.after) q.set("after", r.query.after);
       if (r.query.status) q.set("status", r.query.status);
-      return decodeTalkResponse(await call(r, "/talk/rooms?" + q), 200, (v) =>
-        paged(v, r.query.limit, (x) => room(x, true)),
+      const result = await decodeTalkResponse(
+        await call(r, "/talk/rooms?" + q),
+        200,
+        (v) => paged(v, r.query.limit, (x) => room(x, true)),
       );
+      return { ...result, items: await guestNames(r, result.items) };
     },
   );
   app.get<{ Params: { id: string } }>(
     "/api/talk/rooms/:id",
     { schema: { params, querystring: empty } },
-    async (r) =>
-      decodeTalkResponse(
+    async (r) => {
+      const result = await decodeTalkResponse(
         await call(r, "/talk/rooms/" + r.params.id),
         200,
         (v) => {
@@ -180,7 +238,9 @@ export function registerTalkRoutes(
           if (value.id !== r.params.id) throw unavailable();
           return value;
         },
-      ),
+      );
+      return (await guestNames(r, [result]))[0];
+    },
   );
   app.get<{
     Params: { id: string };

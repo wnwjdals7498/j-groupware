@@ -395,7 +395,9 @@ export function createApp(options: {
   );
   registerMessengerRoutes(app, services, (request) => identities.get(request)!);
   registerMailRoutes(app, services);
-  registerTalkRoutes(app, services);
+  registerTalkRoutes(app, services, (request) =>
+    identities.get(request)!.roles.includes("guest:read"),
+  );
   registerCustomerAuthRoutes(app, services);
   app.register(websocket, {
     options: { maxPayload: 1048576, perMessageDeflate: false },

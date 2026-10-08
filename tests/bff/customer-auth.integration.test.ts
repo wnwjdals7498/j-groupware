@@ -41,6 +41,8 @@ import { GuestSigner } from "../../../j-customer-auth-db/apps/server/dist/securi
 import { PageCursor } from "../../../j-customer-auth-db/apps/server/dist/security.js";
 import { CustomerStore } from "../../../j-customer-auth-db/apps/server/dist/store.js";
 import { migrate } from "../../../j-customer-auth-db/apps/server/dist/db/migrate.js";
+import { createApp as createTalkApp } from "../../../j-talk/apps/server/dist/app.js";
+import { migrate as migrateTalk } from "../../../j-talk/apps/server/dist/db/migrate.js";
 import type {
   Guest,
   IssuedApiKey,
@@ -52,7 +54,8 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
     root: string,
     admin: Pool,
     pool: Pool,
-    db: PostgresServiceDatabase;
+    db: PostgresServiceDatabase,
+    talkPool: Pool;
   let ownerToken: string,
     readerToken: string,
     deniedToken: string,
@@ -66,13 +69,16 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
     readerBrowser: Browser,
     deniedBrowser: Browser,
     writerBrowser: Browser,
-    foreignBrowser: Browser;
+    foreignBrowser: Browser,
+    talkOnlyBrowser: Browser;
   let malformedMode = "extra";
   const container = "jcadb-integration-" + randomUUID().slice(0, 8),
     password = randomBytes(32).toString("base64url"),
     guestPassword = "permanent-guest-fixture-7498",
-    dbPassword = randomBytes(32).toString("base64url");
+    dbPassword = randomBytes(32).toString("base64url"),
+    talkDbPassword = randomBytes(32).toString("base64url");
   const children: ReturnType<typeof spawn>[] = [],
+    customerEnvironments: NodeJS.ProcessEnv[] = [],
     logs: string[] = [],
     servers: FastifyInstance[] = [];
   let containerOwned = false;
@@ -167,7 +173,7 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
   beforeAll(async () => {
     if (process.env.JGW_TEST_RUNTIME !== "isolated-cloud")
       throw new Error("Explicit isolated runtime required; no skip.");
-    for (const port of [55070, 55071, 55072, 55073, 55076, 55078])
+    for (const port of [55070, 55071, 55072, 55073, 55076, 55078, 55080, 55081])
       await free(port);
     root = await mkdtemp(tmpdir() + "/jcadb-");
     await writeFile(
@@ -212,14 +218,18 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
     rt = await integrationRuntime({
       serviceEndpointsForTenant: (_tenant, index) => ({
         "j-customer-auth-db": `https://127.0.0.1:${55071 + index}`,
+        "j-talk": `https://127.0.0.1:${55080 + index}`,
       }),
     });
     rt.secretValues.add(guestPassword);
     rt.secretValues.add(dbPassword);
-    for (const [index] of rt.fixtures.entries())
+    rt.secretValues.add(talkDbPassword);
+    for (const [index] of rt.fixtures.entries()) {
       expect((await rt.subscribe(index, "j-customer-auth-db")).status).toBe(
         200,
       );
+      expect((await rt.subscribe(index, "j-talk")).status).toBe(200);
+    }
     db = new PostgresServiceDatabase({
       admin,
       tenant: rt.fixtures[0]!.tenant,
@@ -228,6 +238,18 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
     });
     await db.prepareBase();
     await db.ensure("j-customer-auth-db", dbPassword);
+    await db.ensure("j-talk", talkDbPassword);
+    talkPool = new Pool({
+      host: "127.0.0.1",
+      port: 55070,
+      database: "jgw_talk",
+      user: "jgw_talk",
+      password: talkDbPassword,
+      connectionTimeoutMillis: 1000,
+      statement_timeout: 5000,
+    });
+    talkPool.on("error", () => {});
+    await migrateTalk(talkPool);
     pool = new Pool({
       host: "127.0.0.1",
       port: 55070,
@@ -286,32 +308,47 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
       root + "/server.ext",
     ]);
     for (const [index, fixture] of rt.fixtures.entries()) {
-      const child = spawn(
-        process.execPath,
-        [
-          "--import",
-          "./tests/bff/resolve-customer-auth-test-hosts.mjs",
-          "../j-customer-auth-db/apps/server/dist/main.js",
-        ],
-        {
-          cwd: "/workspace/j-groupware",
-          env: {
-            ...process.env,
-            JCADB_TENANT: fixture.tenant,
-            JCADB_PUBLIC_ORIGIN: fixture.origin,
-            JCADB_PORT: String(55071 + index),
-            JCADB_DB_PORT: "55070",
-            JCADB_DB_PASSWORD: dbPassword,
-            JCADB_TLS_CERTIFICATE: root + "/server.crt",
-            JCADB_TLS_KEY: root + "/server.key",
-            JCADB_CA_CERTIFICATE: caFile,
-            JCADB_GUEST_SIGNING_KEY: root + "/signing.key",
-            JCADB_CURSOR_SIGNING_KEY: randomBytes(32).toString("base64url"),
-          },
-          stdio: ["ignore", "pipe", "pipe"],
-          shell: false,
+      const talk = createTalkApp({
+        pool: talkPool,
+        tenant: fixture.tenant,
+        keycloakOrigin: process.env.KC_PUBLIC_URL!,
+        fetch: rt.fetch,
+        https: {
+          cert: await readFile(root + "/server.crt"),
+          key: await readFile(root + "/server.key"),
+          minVersion: "TLSv1.2",
         },
-      );
+      });
+      servers.push(talk);
+      await talk.listen({ host: "127.0.0.1", port: 55080 + index });
+      const customerEnv = {
+          ...process.env,
+          JCADB_TENANT: fixture.tenant,
+          JCADB_PUBLIC_ORIGIN: fixture.origin,
+          JCADB_PORT: String(55071 + index),
+          JCADB_DB_PORT: "55070",
+          JCADB_DB_PASSWORD: dbPassword,
+          JCADB_TLS_CERTIFICATE: root + "/server.crt",
+          JCADB_TLS_KEY: root + "/server.key",
+          JCADB_CA_CERTIFICATE: caFile,
+          JCADB_GUEST_SIGNING_KEY: root + "/signing.key",
+          JCADB_CURSOR_SIGNING_KEY: randomBytes(32).toString("base64url"),
+        },
+        child = spawn(
+          process.execPath,
+          [
+            "--import",
+            "./tests/bff/resolve-customer-auth-test-hosts.mjs",
+            "../j-customer-auth-db/apps/server/dist/main.js",
+          ],
+          {
+            cwd: "/workspace/j-groupware",
+            env: customerEnv,
+            stdio: ["ignore", "pipe", "pipe"],
+            shell: false,
+          },
+        );
+      customerEnvironments.push(customerEnv);
       children.push(child);
       child.stdout?.on("data", (b) => logs.push(String(b)));
       child.stderr?.on("data", (b) => logs.push(String(b)));
@@ -358,9 +395,10 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
     bffToken = own.source;
     foreignToken = (await token(foreign, 1)).value;
     for (const [name, roles] of [
-      ["guest-reader", ["guest:read"]],
+      ["guest-reader", ["guest:read", "talk:read"]],
       ["guest-denied", []],
       ["guest-writer", ["guest:write"]],
+      ["talk-only", ["talk:read"]],
     ] as const) {
       const memberPassword = randomBytes(24).toString("base64url");
       rt.secretValues.add(memberPassword);
@@ -382,7 +420,8 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
       } else if (name === "guest-denied") {
         deniedToken = value;
         deniedBrowser = browser;
-      } else writerBrowser = browser;
+      } else if (name === "guest-writer") writerBrowser = browser;
+      else talkOnlyBrowser = browser;
     }
     signer = await GuestSigner.create(signingKey, rt.fixtures[0]!.origin);
     const [cert, key] = await Promise.all([
@@ -439,6 +478,7 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
       }
     for (const server of servers) await server.close();
     await pool?.end();
+    await talkPool?.end();
     await admin?.end();
     await rt?.close();
     if (containerOwned)
@@ -794,6 +834,180 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
       row.checksum,
     ]);
     await migrate(pool);
+  });
+  it("composes room names through real customer-auth only with guest:read and deduplicates page lookups", async () => {
+    const fixture = rt.fixtures[0]!,
+      created = await ownerBrowser.change("/api/customer-auth/guests", {
+        name: "상담 손님",
+        loginId: "talk-name-fixture",
+        contact: "private contact",
+        password: guestPassword,
+      }),
+      foreignCreated = await foreignBrowser.change(
+        "/api/customer-auth/guests",
+        {
+          name: "다른 고객 손님",
+          loginId: "foreign-talk-name",
+          password: guestPassword,
+        },
+      );
+    expect(created.status).toBe(201);
+    expect(foreignCreated.status).toBe(201);
+    const guest = (await created.json()) as Guest,
+      foreignGuest = (await foreignCreated.json()) as Guest,
+      guests = [guest.id, guest.id, null, foreignGuest.id],
+      rooms: string[] = [];
+    try {
+      for (const guestId of guests) {
+        const visitor = randomUUID(),
+          room = randomUUID();
+        await talkPool.query(
+          "INSERT INTO visitors(tenant_id,id,guest_id) VALUES ($1,$2,$3)",
+          [fixture.tenant, visitor, guestId],
+        );
+        await talkPool.query(
+          "INSERT INTO rooms(tenant_id,id,visitor_id) VALUES ($1,$2,$3)",
+          [fixture.tenant, room, visitor],
+        );
+        rooms.push(room);
+      }
+      const before = rt.serviceCalls.length,
+        response = await readerBrowser.request(
+          "/api/talk/rooms?status=waiting&limit=100",
+        );
+      expect(response.status).toBe(200);
+      const page = (await response.json()) as {
+        items: {
+          id: string;
+          guestId: string | null;
+          guestName: string | null;
+        }[];
+      };
+      expect(page.items).toHaveLength(4);
+      for (const [index, room] of rooms.entries())
+        expect(page.items.find((item) => item.id === room)).toMatchObject({
+          guestId: guests[index],
+          guestName: index < 2 ? guest.name : null,
+        });
+      const lookups = rt.serviceCalls
+        .slice(before)
+        .filter((call) => call.path.startsWith("/customer-auth/guests/"));
+      expect(lookups.map((call) => call.path).sort()).toEqual(
+        [guest.id, foreignGuest.id]
+          .map((id) => "/customer-auth/guests/" + id)
+          .sort(),
+      );
+      const detail = await readerBrowser.request("/api/talk/rooms/" + rooms[0]);
+      expect(detail.status).toBe(200);
+      expect(await detail.json()).toEqual({
+        id: rooms[0],
+        status: "waiting",
+        assignedMemberId: null,
+        guestId: guest.id,
+        guestName: guest.name,
+      });
+      const noRoleStart = rt.serviceCalls.length;
+      for (const path of [
+        "/api/talk/rooms?limit=100",
+        "/api/talk/rooms/" + rooms[0],
+      ]) {
+        const result = await talkOnlyBrowser.request(path);
+        expect(result.status).toBe(200);
+        const text = await result.text();
+        expect(text).toContain(guest.id);
+        expect(text).not.toContain("guestName");
+        expect(text).not.toContain(guest.name);
+        expect(text).not.toContain(guest.contact);
+      }
+      expect(
+        rt.serviceCalls
+          .slice(noRoleStart)
+          .filter((call) => call.path.startsWith("/customer-auth/")),
+      ).toEqual([]);
+      const cookie = talkOnlyBrowser.cookies
+        .get(new URL(fixture.origin).origin)!
+        .get(SESSION_POLICY.cookie)!;
+      expect(
+        (
+          await rt.pool.query(
+            "SELECT 1 FROM service_tokens WHERE tenant_id=$1 AND session_hash=$2 AND service_id='j-customer-auth-db'",
+            [fixture.tenant, digest(cookie)],
+          )
+        ).rowCount,
+      ).toBe(0);
+      expect((await deniedBrowser.request("/api/talk/rooms")).status).toBe(403);
+      expect(
+        (await foreignBrowser.request("/api/talk/rooms/" + rooms[0])).status,
+      ).toBe(404);
+      expect(
+        (
+          await ownerBrowser.change(
+            "/api/customer-auth/guests/" + guest.id,
+            undefined,
+            "DELETE",
+          )
+        ).status,
+      ).toBe(204);
+      const stale = await readerBrowser.request("/api/talk/rooms/" + rooms[0]);
+      expect(stale.status).toBe(200);
+      expect(await stale.json()).toMatchObject({
+        guestId: guest.id,
+        guestName: null,
+      });
+    } finally {
+      await talkPool.query("DELETE FROM rooms WHERE tenant_id=$1", [
+        fixture.tenant,
+      ]);
+      await talkPool.query("DELETE FROM visitors WHERE tenant_id=$1", [
+        fixture.tenant,
+      ]);
+      await ownerBrowser.change(
+        "/api/customer-auth/guests/" + guest.id,
+        undefined,
+        "DELETE",
+      );
+      await foreignBrowser.change(
+        "/api/customer-auth/guests/" + foreignGuest.id,
+        undefined,
+        "DELETE",
+      );
+    }
+  });
+  it("rejects non-UUID stored guest identifiers before lookup while preserving identifier-only access", async () => {
+    const fixture = rt.fixtures[0]!,
+      visitor = randomUUID(),
+      room = randomUUID();
+    await talkPool.query(
+      "INSERT INTO visitors(tenant_id,id,guest_id) VALUES ($1,$2,$3)",
+      [fixture.tenant, visitor, "../api-keys?private=fixture"],
+    );
+    await talkPool.query(
+      "INSERT INTO rooms(tenant_id,id,visitor_id) VALUES ($1,$2,$3)",
+      [fixture.tenant, room, visitor],
+    );
+    try {
+      const before = rt.serviceCalls.length,
+        deniedLookup = await readerBrowser.request("/api/talk/rooms/" + room);
+      expect(deniedLookup.status).toBe(503);
+      expect(await deniedLookup.text()).not.toContain("private=fixture");
+      expect(
+        (await talkOnlyBrowser.request("/api/talk/rooms/" + room)).status,
+      ).toBe(200);
+      expect(
+        rt.serviceCalls
+          .slice(before)
+          .filter((call) => call.path.startsWith("/customer-auth/")),
+      ).toEqual([]);
+    } finally {
+      await talkPool.query("DELETE FROM rooms WHERE tenant_id=$1 AND id=$2", [
+        fixture.tenant,
+        room,
+      ]);
+      await talkPool.query(
+        "DELETE FROM visitors WHERE tenant_id=$1 AND id=$2",
+        [fixture.tenant, visitor],
+      );
+    }
   });
   it("performs actual CRUD, literal search and signed pagination without password disclosure", async () => {
     for (const [index, loginId] of ["guest.7498", "second.7498"].entries()) {
@@ -1822,6 +2036,79 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
       ).toBe(204);
     } finally {
       await rt.stop(child);
+    }
+  });
+  it("fails name composition on actual customer-auth outage while keeping identifier-only Talk available", async () => {
+    const fixture = rt.fixtures[0]!,
+      visitor = randomUUID(),
+      room = randomUUID(),
+      guestId = randomUUID(),
+      primary = children[0]!;
+    await talkPool.query(
+      "INSERT INTO visitors(tenant_id,id,guest_id) VALUES ($1,$2,$3)",
+      [fixture.tenant, visitor, guestId],
+    );
+    await talkPool.query(
+      "INSERT INTO rooms(tenant_id,id,visitor_id) VALUES ($1,$2,$3)",
+      [fixture.tenant, room, visitor],
+    );
+    const closed = once(primary, "close");
+    primary.kill("SIGTERM");
+    const stopTimer = setTimeout(() => primary.kill("SIGKILL"), 5000);
+    stopTimer.unref();
+    await closed;
+    clearTimeout(stopTimer);
+    try {
+      const failed = await readerBrowser.request("/api/talk/rooms/" + room);
+      expect(failed.status).toBe(503);
+      expect(await failed.text()).not.toContain(guestId);
+      const available = await talkOnlyBrowser.request(
+        "/api/talk/rooms/" + room,
+      );
+      expect(available.status).toBe(200);
+      expect(await available.json()).toEqual({
+        id: room,
+        status: "waiting",
+        assignedMemberId: null,
+        guestId,
+      });
+    } finally {
+      await free(55071);
+      const restarted = spawn(process.execPath, primary.spawnargs.slice(1), {
+        cwd: "/workspace/j-groupware",
+        env: customerEnvironments[0],
+        stdio: ["ignore", "pipe", "pipe"],
+        shell: false,
+      });
+      children.push(restarted);
+      restarted.stdout?.on("data", (b) => logs.push(String(b)));
+      restarted.stderr?.on("data", (b) => logs.push(String(b)));
+      let ready = false;
+      for (let i = 0; i < 100; i++) {
+        if (restarted.exitCode !== null)
+          throw new Error("Owned customer fixture restart failed.");
+        try {
+          const result = await rt.fetchLoopback(
+            "https://127.0.0.1:55071/health/ready",
+            { signal: AbortSignal.timeout(300) },
+          );
+          ready = result.ok;
+          await result.body?.cancel();
+          if (ready) break;
+        } catch {
+          /* bounded actual startup */
+        }
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      }
+      expect(ready).toBe(true);
+      await talkPool.query("DELETE FROM rooms WHERE tenant_id=$1 AND id=$2", [
+        fixture.tenant,
+        room,
+      ]);
+      await talkPool.query(
+        "DELETE FROM visitors WHERE tenant_id=$1 AND id=$2",
+        [fixture.tenant, visitor],
+      );
     }
   });
   it("reports actual DB outage separately and keeps compiled logs free of secrets", async () => {
