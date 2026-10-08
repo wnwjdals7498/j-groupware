@@ -1,0 +1,16 @@
+{
+  "name": "@j-groupware/registry-tools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "scripts": {
+    "registry:up": "node ./scripts/compose.mjs up",
+    "registry:down": "node ./scripts/compose.mjs down"
+  },
+  "dependencies": {
+    "verdaccio": "6.10.5"
+  }
+}

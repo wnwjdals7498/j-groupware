@@ -1,0 +1,61 @@
+storage: /verdaccio/runtime/storage
+
+web:
+  title: j-groupware local registry
+
+auth:
+  htpasswd:
+    file: /verdaccio/runtime/htpasswd
+    max_users: 1
+
+uplinks:
+  npmjs:
+    url: https://registry.npmjs.org/
+
+packages:
+  # Local scopes do not proxy. Only unmatched package names use npmjs below.
+  # The unpublish group contains a colon, rejected by built-in htpasswd usernames.
+  '@j-auth/*':
+    access: $all
+    publish: $authenticated
+    unpublish: '__registry_unpublish_disabled__:deny'
+
+  '@j-groupware/*':
+    access: $all
+    publish: $authenticated
+    unpublish: '__registry_unpublish_disabled__:deny'
+
+  '@j-messenger/*':
+    access: $all
+    publish: $authenticated
+    unpublish: '__registry_unpublish_disabled__:deny'
+
+  '@j-customer-auth-db/*':
+    access: $all
+    publish: $authenticated
+    unpublish: '__registry_unpublish_disabled__:deny'
+
+  '@j-mail/*':
+    access: $all
+    publish: $authenticated
+    unpublish: '__registry_unpublish_disabled__:deny'
+
+  '@j-approval/*':
+    access: $all
+    publish: $authenticated
+    unpublish: '__registry_unpublish_disabled__:deny'
+
+  '@j-talk/*':
+    access: $all
+    publish: $authenticated
+    unpublish: '__registry_unpublish_disabled__:deny'
+
+  '@j-web/*':
+    access: $all
+    publish: $authenticated
+    unpublish: '__registry_unpublish_disabled__:deny'
+
+  '**':
+    access: $all
+    unpublish: '__registry_unpublish_disabled__:deny'
+    proxy: npmjs

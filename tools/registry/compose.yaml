@@ -1,0 +1,18 @@
+services:
+  verdaccio:
+    image: verdaccio/verdaccio:6.10.5
+    environment:
+      VERDACCIO_PORT: "4873"
+    ports:
+      - "127.0.0.1:${VERDACCIO_HOST_PORT:-4873}:4873"
+    volumes:
+      - type: bind
+        source: ${VERDACCIO_RUNTIME_DIR:-../../../.suite-runtime/verdaccio}
+        target: /verdaccio/runtime
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ./config.yaml
+        target: /verdaccio/conf/config.yaml
+        read_only: true
+    restart: unless-stopped
