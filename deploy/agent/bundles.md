@@ -39,9 +39,15 @@ unit 활성화는 실제 설치 환경에서 별도로 수행해야 한다. Nati
 `readPreparedBootstrap`와 `BaseEnvironment`는 봉인된 marker·CA fingerprint와
 정확한 env 형식을 확인하고 BFF의 실제 환경 변수로 변환한다. agent key와
 콘솔 자격은 BFF env에 넣지 않는다. 기본 BFF 준비 상태는 loopback에 접속하되
-등록된 Host/SNI와 외부 인증서를 검증한다. 현재 source의 private CA/TLS 키를
-systemd 서비스 사용자에게 전달할 OS credential/권한 준비는 후속 구현이며,
-단일 클라우드 실행 사용자 검사를 실제 고객 계정 설치 성공으로 취급하지 않는다.
+등록된 Host/SNI와 외부 인증서를 검증한다. 기본 번들에 `tls-credentials.mjs`와
+`launch-service.mjs`가 포함된다. root 전용 source에서 서비스별 immutable
+credential을 준비하고, unit의 고정 LoadCredential과 non-root launcher가
+실제 TLS·CA·손님 JWT 키 경로를 연결한다. launcher는 새 Node 프로세스로
+같은 PID를 유지해 CA trust를 시작 시 읽는다. Node22.18/24.19의 실제
+격리 컨테이너에서 전용 계정의 자기 키 읽기·다른 계정/CA private key 거부와
+HTTPS trust를 확인했다. 실제 systemd PID1 전달과 고객 계정 설치는 미실행이다.
+customer-auth 서버의 별도 cold npm ci/import는 통과했지만, customer-auth를
+이 여섯 서비스 bundle/profile/gateway에 연결하는 작업은 아직 남아 있다.
 
 실행 인터페이스:
 

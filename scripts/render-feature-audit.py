@@ -41,7 +41,7 @@ lines += ['## 실제 검증 범위', '',
           audit['verification_summary'], '',
           '작업 브랜치의 마지막 소스 커밋:', '']
 lines += ['- ' + key + ': `' + audit['current_progress'][key] + '`'
-          for key in ['web_source_commit', 'agent_source_commit', 'talk_source_commit', 'console_source_commit', 'talk_bff_source_commit', 'bundle_source_commit', 'bootstrap_source_commit', 'teardown_source_commit', 'notification_worker_source_commit']]
+          for key in ['web_source_commit', 'agent_source_commit', 'talk_source_commit', 'console_source_commit', 'talk_bff_source_commit', 'bundle_source_commit', 'bootstrap_source_commit', 'teardown_source_commit', 'notification_worker_source_commit', 'customer_auth_source_commit', 'customer_auth_test_source_commit', 'tls_credentials_source_commit', 'tls_credentials_test_source_commit']]
 lines += ['', '재생성: `python3 scripts/render-feature-audit.py`. JSON·진행표·baseline·분류·ready 집계가 서로 맞아야 생성한다.', '']
 (repo / 'docs/cloud-remaining-feature-audit-2026-10-08.md').write_text('\n'.join(lines))
 print(json.dumps({'features': len(features), 'remaining': len(remaining), 'summary': dict(counts)}, ensure_ascii=False))

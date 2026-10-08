@@ -2,15 +2,15 @@
 
 기존 명세/결정과 실제 소스·실행 증거 대조. 각 기능의 첫 미완료 단계 기준이며 구현 완료·제품 인수 완료를 뜻하지 않는다. 기술 계약과 선행 서비스는 구현자가 계속할 수 있는 작업이며 사용자/외부 환경 차단으로 취급하지 않는다.
 
-현재 소스 기준: 구현 94, 부분 30, 미착수 48 / 총 172. 남은 78개. 전체 통합 인수: 미완료.
+현재 소스 기준: 구현 108, 부분 31, 미착수 33 / 총 172. 남은 64개. 전체 통합 인수: 미완료.
 
-초기 ready 분류의 독립 소스 작업은 모두 처리했고 이번에는 service/contract 작업도 연결했다. ready=0은 기술 작업 소진을 뜻하지 않는다. customer-auth backend, 설치 entrypoint/storage/cleanup/알림 등록 등 안전한 독립 구현은 계속 가능하며 T2·E8·H7·정식 UI·실제 VM 인수는 별도 경계다.
+ready=0은 기술 작업 소진을 뜻하지 않는다. 고객 인증 backend와 서비스별 TLS 전용 계정 source/컨테이너 검증을 완료했고, 고객 인증 BFF/bundle/profile/gateway·contracts 소비, 설치 entrypoint·Messenger/Mailpit storage/cleanup 등 독립 연결 작업은 계속 가능하다. T2·E8·H7·정식 UI·실제 VM 인수는 별도 경계다.
 
 | 분류 | 남은 수 |
 |---|---:|
 | 구현 가능 | 0 |
-| 기술 계약 확정 선행 | 15 |
-| 서비스 구현 선행 | 28 |
+| 기술 계약 확정 선행 | 10 |
+| 서비스 구현 선행 | 19 |
 | UI 기준 선행 | 15 |
 | 제품 정책 결정 필요 | 11 |
 | 외부 VM 인수 | 9 |
@@ -39,10 +39,10 @@
 | GW-40 | j-groupware | 알림 수신 API | 서비스 구현 선행 | partial | 전용 계정의 CA/TLS credential 전달과 전체 bootstrap/installer/agent 실행 진입점을 연결하고, 남은 제품 저장소/정리와 production notification 자격 갱신·토폴로지를 구현한다. 실제 systemd/timer와 고객 VM 활성화는 별도 인수한다. |
 | GW-44 | j-groupware | 알림 화면 | UI 기준 선행 | partial | 정식 UI와 기존 알림 계약을 연결한다. |
 | GW-51 | j-groupware | 고객 목록·계약 상태 | 기술 계약 확정 선행 | partial | 업무 계약 상태값·전이 기준을 확인한 뒤 기존 고객 DTO/PG 저장과 연결한다. |
-| GW-63 | j-groupware | 부트스트랩 | 서비스 구현 선행 | partial | 전용 계정의 CA/TLS credential 전달과 전체 bootstrap/installer/agent 실행 진입점을 연결하고, 남은 제품 저장소/정리와 production notification 자격 갱신·토폴로지를 구현한다. 실제 systemd/timer와 고객 VM 활성화는 별도 인수한다. |
-| GW-64 | j-groupware | 서비스 설치 | 서비스 구현 선행 | partial | 전용 계정의 CA/TLS credential 전달과 전체 bootstrap/installer/agent 실행 진입점을 연결하고, 남은 제품 저장소/정리와 production notification 자격 갱신·토폴로지를 구현한다. 실제 systemd/timer와 고객 VM 활성화는 별도 인수한다. |
-| GW-65 | j-groupware | 서비스 해지 | 서비스 구현 선행 | partial | 전용 계정의 CA/TLS credential 전달과 전체 bootstrap/installer/agent 실행 진입점을 연결하고, 남은 제품 저장소/정리와 production notification 자격 갱신·토폴로지를 구현한다. 실제 systemd/timer와 고객 VM 활성화는 별도 인수한다. |
-| GW-66 | j-groupware | 프로비저닝 에이전트 | 서비스 구현 선행 | partial | 전용 계정의 CA/TLS credential 전달과 전체 bootstrap/installer/agent 실행 진입점을 연결하고, 남은 제품 저장소/정리와 production notification 자격 갱신·토폴로지를 구현한다. 실제 systemd/timer와 고객 VM 활성화는 별도 인수한다. |
+| GW-63 | j-groupware | 부트스트랩 | 서비스 구현 선행 | partial | 전체 installer/agent entrypoint와 고객 인증 bundle/profile/gateway, Messenger/Mailpit storage cleanup 연결; 실제 systemd credential/VM/timer 인수는 별도 |
+| GW-64 | j-groupware | 서비스 설치 | 서비스 구현 선행 | partial | 전체 installer/agent entrypoint와 고객 인증 bundle/profile/gateway, Messenger/Mailpit storage cleanup 연결; 실제 systemd credential/VM/timer 인수는 별도 |
+| GW-65 | j-groupware | 서비스 해지 | 서비스 구현 선행 | partial | 전체 installer/agent entrypoint와 고객 인증 bundle/profile/gateway, Messenger/Mailpit storage cleanup 연결; 실제 systemd credential/VM/timer 인수는 별도 |
+| GW-66 | j-groupware | 프로비저닝 에이전트 | 서비스 구현 선행 | partial | 전체 installer/agent entrypoint와 고객 인증 bundle/profile/gateway, Messenger/Mailpit storage cleanup 연결; 실제 systemd credential/VM/timer 인수는 별도 |
 | GW-71 | j-groupware | UI 기준 | UI 기준 선행 | not_started | 추가 질의를 반복하지 않고 기존 응답을 기다린다. |
 | GW-73 | j-groupware | VM 검증·측정 | 외부 VM 인수 | not_started | 설치자 연결 후 지정 VM에서 통합 인수한다. |
 | MS-07 | j-messenger | UI 토큰 적용 | UI 기준 선행 | not_started | 확정된 groupware UI token을 통합 client 화면에 적용한다. |
@@ -51,22 +51,8 @@
 | ML-20 | j-mail | 새 메일 알림 | 제품 정책 결정 필요 | not_started | 아래 E8 선택 후 기존 알림 계약에 맞춰 수신·outbox·재시도를 구현한다. |
 | ML-30 | j-mail | 저장소 골격·DB | 서비스 구현 선행 | partial | E8 결정 후 outbox를 구현하고 installer 연결·VM 인수를 분리한다. |
 | ML-32 | j-mail | 고객 서버 검증 | 외부 VM 인수 | not_started | E8 결정과 설치 연결 후 지정 VM에서 검증한다. |
-| CA-01 | j-customer-auth-db | 손님 목록·조회 | 서비스 구현 선행 | not_started | C1/C2 이후 tenant 강제 목록·조회와 실제 PG/JWT 검증을 구현한다. |
-| CA-02 | j-customer-auth-db | 손님 등록 | 서비스 구현 선행 | not_started | C1/C2 이후 등록·중복·비밀번호 원문 비노출을 검증한다. |
-| CA-03 | j-customer-auth-db | 손님 수정·삭제 | 서비스 구현 선행 | not_started | C1/C2 이후 수정·삭제·권한·tenant 경계를 구현한다. |
-| CA-04 | j-customer-auth-db | 권한·tenant 검사 | 서비스 구현 선행 | not_started | C1/C2 후 guest:read/write 및 foreign-tenant 거절을 실제 검증한다. |
-| CA-10 | j-customer-auth-db | API 키 발급 | 서비스 구현 선행 | not_started | hashed secret·guest scopes·원문 1회 표시를 구현한다. |
-| CA-11 | j-customer-auth-db | API 키 목록 | 서비스 구현 선행 | not_started | tenant별 키 metadata만 목록으로 제공하고 원문을 재조회하지 않는다. |
-| CA-12 | j-customer-auth-db | API 키 회수 | 서비스 구현 선행 | not_started | 키 회수 후 다음 실제 공개 요청부터 인증 거절을 검증한다. |
-| CA-20 | j-customer-auth-db | 손님 목록 조회 | 서비스 구현 선행 | not_started | 공개 손님 read-only 목록·tenant·scope·회수 경계를 구현한다. |
-| CA-21 | j-customer-auth-db | 손님 쓰기 | 기술 계약 확정 선행 | not_started | C2/C5에서 guest:write 스코프 포함 규칙만 정의하고 외부 쓰기 route는 이후 범위로 남긴다. |
-| CA-22 | j-customer-auth-db | 손님 로그인 | 기술 계약 확정 선행 | not_started | C2 계약 후 C3/C5 기반 로그인·서명 검증을 실제 시험한다. |
-| CA-23 | j-customer-auth-db | JWKS 공개 | 기술 계약 확정 선행 | not_started | C2 계약과 일치하는 공개 JWKS 및 JWT 검증을 구현한다. |
-| CA-24 | j-customer-auth-db | 로그인 시도 제한 | 기술 계약 확정 선행 | not_started | C2 제한값·429 계약을 고정하고 실제 누적/차단을 시험한다. |
-| CA-25 | j-customer-auth-db | OpenAPI 문서 | 기술 계약 확정 선행 | not_started | C2 DTO로 외부 API만 문서화하고 인증 스코프와 일치시킨다. |
-| CA-30 | j-customer-auth-db | 저장소 골격·DB | 서비스 구현 선행 | not_started | 전용 jgw_customer_auth DB와 server/contracts·migration부터 구현한다. |
-| CA-31 | j-customer-auth-db | contracts | 기술 계약 확정 선행 | not_started | 기존 명세 범위 안에서 contracts와 immutable registry 소비를 구현한다. |
-| CA-32 | j-customer-auth-db | 고객 서버 검증 | 외부 VM 인수 | not_started | C1~C6 구현 후 지정 VM에서 C8을 실행한다. |
+| CA-31 | j-customer-auth-db | contracts | 기술 계약 확정 선행 | partial | 동일 contracts의 immutable registry 게시/소비를 검증하고 G13 BFF·사이트 서버 예제에 연결한다. |
+| CA-32 | j-customer-auth-db | 고객 서버 검증 | 외부 VM 인수 | not_started | BFF/gateway/bundle 연결 뒤 지정 VM에서 화면→사이트 서버 로그인→외부 조회와 백업을 실행한다. |
 | AP-32 | j-approval | 고객 서버 검증 | 외부 VM 인수 | not_started | 지정 VM에서 systemd·HTTPS·결재 화면 흐름을 확인한다. |
 | TK-02 | j-talk | FAB·대화창 | 서비스 구현 선행 | partial | visitor producer와 실제 텍스트 대화 UI를 연결하고 브라우저에서 격리를 검증한다. |
 | TK-03 | j-talk | 표시 조건 | 서비스 구현 선행 | partial | 실제 동작/허용/가입 capability를 연결하고 표시·비표시 각각을 브라우저에서 검증한다. |
@@ -116,18 +102,22 @@ FS-U07의 현 최소 범위를 유지: webhook 수신 전 누락 허용, 수신�
 
 ## 실제 검증 범위
 
-[기본 부트스트랩·안전 설치·알림 worker 증거](cloud-bootstrap-worker-verification-2026-10-08.md): 전체 BFF158, safe unpack19, 기본 cold BFF4, 실제 PG6, worker6, agent core20·제품5·기존 제품 cold 번들4는 Node22/24 각각 통과했다. root check76와 build/type/lint/format도 통과했다. 기존 Nginx15·Web cleanup2 등의 통과 기록은 보존한다. 초기 전체 검사에서 수신기 재시작1 실패는 단독13과 전체158 재실행에서 재현되지 않았고 실패 로그를 보존했다. 실제 systemd/customer VM·browser·전체 제품군 인수는 미완료다.
+[고객 인증·서비스 계정 TLS 증거](cloud-customer-auth-tls-verification-2026-10-08.md): 실제 auth/member/PG의 고객 인증9와 전체 BFF167(신규9 포함), TLS 전용계정3, safe unpack19, agent core20은 Node22/24 각각 exit0·skip0이다. 고객 인증 check7 각 버전, Node24 root check76와 build/type/lint/format도 통과했다. 기존 실제 PG6·product5·cold 제품4·Nginx15·Web cleanup2는 과거 기록으로 보존한다. 직접 Vitest 실행의 JGW_TEST_ENV 누락과 중단 뒤 자기 auth fixture의 포트 점유, 병행 unpack의 ENOSPC 실패를 보존하고 공식 runner·순차 실행으로 재검증했다. 이전 별도 receiver startup 실패 원인은 아직 미확정이다. 실제 systemd PID1 전달·VM·browser·전체 인수는 미완료다.
 
 작업 브랜치의 마지막 소스 커밋:
 
 - web_source_commit: `13861dd835362992f6ba0ee8bd237e30db8ca0ba`
-- agent_source_commit: `ea24dd34636bcfebbf89ec26d87c79831a577ece`
+- agent_source_commit: `64b1d89702e4641f34ed6b24ee7b6254c270b81d`
 - talk_source_commit: `a022105102ffe680cf040b4d57f6f46e1d54d804`
 - console_source_commit: `998a48abe1e66f2aefd88d28fa6adda07627107c`
 - talk_bff_source_commit: `bc949abd081477cac26e3c41a4e0311bd377c091`
-- bundle_source_commit: `ea24dd34636bcfebbf89ec26d87c79831a577ece`
+- bundle_source_commit: `64b1d89702e4641f34ed6b24ee7b6254c270b81d`
 - bootstrap_source_commit: `aa2a2f13e88fa1e6959ccb08c276434a8e7c831f`
 - teardown_source_commit: `e00000f9f2d0b8f2f7ec1ecaac5c12dce41deaa5`
 - notification_worker_source_commit: `ea24dd34636bcfebbf89ec26d87c79831a577ece`
+- customer_auth_source_commit: `4692b36db98c2cb2043cb76514bc350256ccaaf7`
+- customer_auth_test_source_commit: `93816d75b358e731267ce126ba3b10eaa76e2ebd`
+- tls_credentials_source_commit: `64b1d89702e4641f34ed6b24ee7b6254c270b81d`
+- tls_credentials_test_source_commit: `66e41b2070ed2aa7c0efcb5e684891b3926db0b6`
 
 재생성: `python3 scripts/render-feature-audit.py`. JSON·진행표·baseline·분류·ready 집계가 서로 맞아야 생성한다.

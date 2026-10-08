@@ -49,14 +49,36 @@ backup preservation of manual uploads, unchanged gateway and repeated cleanup.
 Its runtime image is Node22.18; both Node22/24 test orchestrators pass two tests.
 It refuses non-Web services, non-root execution and unsafe helper ownership.
 `ProductCleanup` retains the already-backed-up PostgreSQL data and compiled
-bundle for Approval/Talk, whose servers have no separate persistent file store.
+bundle for Approval/Talk/customer-auth, whose servers have no separate persistent file store.
 Web delegates to the fixed helper; Messenger file storage, Mailpit storage and
-customer-auth cleanup require dedicated adapters and currently fail closed.
+their dedicated cleanup adapters currently fail closed. Customer-auth signing
+keys and prepared credentials remain preserved; no private material is purged.
 Web OS/storage installation remains pending.
 
 `NativeSystemdPlatform` renders fixed entrypoints, dedicated nologin users and
 private env files. Root-owned bundle ancestry, metadata/lockfile digest and the
 dependency-install completion marker are checked.
+`NativeTlsCredentials` stages immutable, root-owned mode-600 certificate/key/CA
+files under a mode-700 `<environmentRoot>/<service>.credentials` directory.
+It checks the leaf/key match, direct CA signature, validity, exact private-file
+ownership and the independent customer-auth RSA signing key. CA private keys,
+CA certificates used as leaves and TLS/CA keys reused for guest JWTs are refused.
+Existing different or tampered credentials fail for review; automatic rotation
+and deletion are not implemented. Source `.env` paths stay root-private.
+Units use fixed `LoadCredential` entries. The non-root launcher accepts only its
+unit's fixed `/run/credentials/jgw-<service>.service` directory, substitutes the
+actual product variable names and removes loader hooks. It calls Linux Node's
+[`process.execve`](https://nodejs.org/docs/latest-v22.x/api/process.html#processexecvefile-args-env)
+to start a fresh process with `NODE_EXTRA_CA_CERTS` and retain the unit PID.
+This API is experimental; the supported Node22.18/24.19 binaries were both
+actually exercised. Unit startup removes the original root-only CA variable
+before initializing the launcher. Dedicated account UID/GID zero is refused.
+The isolated container tests use actual nologin users and private credential
+permissions: a service reads its own files but cannot read another service's
+files or the root CA key. They construct the systemd credential layout and
+prove fresh-process HTTPS CA trust; actual systemd PID1 delivery/activation and
+customer account installation remain unexecuted. See the
+[customer-auth/TLS report](../../docs/cloud-customer-auth-tls-verification-2026-10-08.md).
 Readiness and stop also refuse a unit whose fixed content or ownership differs;
 an absent unit is accepted on teardown only after an actual systemctl property
 query confirms not-found/inactive with no fragment. Loaded foreign fragments,
@@ -120,8 +142,9 @@ BundleInstaller performs strict bounded USTAR extraction, digest/inventory/lock
 validation, scripts-disabled npm ci and exclusive destination publication.
 BaseEnvironment decodes sealed bootstrap files and emits exact BFF variables;
 it excludes the console agent key. Actual cold BFF tests run as the existing
-isolated cloud user; OS CA/TLS credential access for dedicated service users
-and the complete bootstrap/installer entrypoint remain pending.
+isolated cloud user. Dedicated-account CA/TLS source and isolated container
+permissions are now verified; actual systemd credential delivery and the
+complete bootstrap/installer entrypoint remain pending.
 
 Run `JGW_AGENT_TEST_RUNTIME=isolated-cloud npm run test:agent` and
 `npm run test:agent:database`. The database test needs Docker, unused loopback
@@ -129,3 +152,8 @@ Run `JGW_AGENT_TEST_RUNTIME=isolated-cloud npm run test:agent` and
 sandbox set TMPDIR to an external private directory owned by the running user;
 the sandbox's uid-65534 shared /tmp is deliberately rejected by private-file
 guards. No port 3001 is used. Fixtures remove only their own random container.
+`JGW_AGENT_TEST_RUNTIME=isolated-cloud npm run test:agent:tls` runs the dedicated
+service-account credential fixture. It needs the already-built isolated
+`jweb-isolated-hosting:20261008` Docker image; it registers no host account or
+unit and publishes no host port. Run large Docker/cold fixtures sequentially
+when the workspace has limited free disk.

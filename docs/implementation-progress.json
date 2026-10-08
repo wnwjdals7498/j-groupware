@@ -6,13 +6,13 @@
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 94,
-    "partial": 30,
-    "not_started": 48
+    "implemented": 108,
+    "partial": 31,
+    "not_started": 33
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal UI and Playwright acceptance pending",
-    "Remaining technical work includes customer-auth DB/member/API-key backend, visitor/WSS under T2, full base bootstrap and installer/agent entrypoint, OS privilege and dedicated service-user CA/TLS access, product storage/Messenger/Mailpit/customer cleanup, production notification credential renewal/topology and operating timer activation; these are not environment-wide blockers",
+    "Remaining technical work includes customer-auth BFF relay/bundle/profile/gateway and registry consumption, visitor/WSS under T2, full installer/agent entrypoint, actual systemd service-user credential delivery, product storage/Messenger/Mailpit cleanup, production notification credential renewal/topology and operating timer activation; these are not environment-wide blockers",
     "Actual customer VM/20GB data disk/systemd/firewall/OS CA trust and external deployment acceptance not executed in the cloud fixture runtime",
     "Mail E8 needs FS-U07 pre-webhook loss criteria and full SMTP envelope recipient preservation contract; no outbox/ingress recovery policy invented"
   ],
@@ -929,7 +929,7 @@
         "G22"
       ],
       "implementation": "partial",
-      "verification": "actual_notification_registry_projection13_and_worker6_each_Node22_Node24_with_real_auth_PG_private_receiver_pass; external_short_lived_credentials_one_shot_CLI_expiry_inactive_same_generation_recovery_pass; full_BFF158_each_exit0_skip0; production_credential_renewal_topology_worker_timer_and_all_source_product_acceptance_pending",
+      "verification": "actual_notification_registry_projection13_and_worker6_each_Node22_Node24_with_real_auth_PG_private_receiver_pass; external_short_lived_credentials_one_shot_CLI_expiry_inactive_same_generation_recovery_pass; full_BFF167_each_exit0_skip0; production_credential_renewal_topology_worker_timer_and_all_source_product_acceptance_pending; previous_initial_receiver_start_failure_cause_unresolved",
       "code": [
         "j-groupware/apps/server/src/notification-receiver.ts",
         "j-groupware/apps/server/src/db/notifications.ts",
@@ -1160,7 +1160,7 @@
         "G18"
       ],
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF158_each_exit0_skip0; safe_unpack19_each_with_base_Talk_cold_npm_ci_runtime_worker_import_hash_permissions_idempotence_adversarial_tar14_failure_cancellation_pass; actual_base_bootstrap_BFF4_each_sealed_env_real_Keycloak_login_PG_board_tenant_CSRF_Host_logout_pass; actual_PG18_DB6_each_dump_restore_NOLOGIN_preDB_role_only_failure_teardown_foreign_allocation_and_changed_snapshot_guard_pass; agent_core20_and_product5_and_product_cold_bundle4_each_pass; notification_worker6_each_actual_auth_PG_receiver_expiry_recovery_one_shot_CLI_and_inactive_unit_timer_syntax_pass; root_check76_build_type_lint_format_pass; native_absent_unit_protocol_source_only_customer_systemd_not_run; full_base_bootstrap_privilege_setup_service_account_CA_TLS_access_product_storage_Messenger_Mailpit_customer_cleanup_full_installer_agent_entrypoint_production_notification_credential_renewal_topology_timer_activation_customer_VM_and_whole_suite_acceptance_pending",
+      "verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending",
       "code": [
         "j-groupware/deploy/agent/bootstrap-files.mjs",
         "j-groupware/deploy/agent/service-database.mjs",
@@ -1194,7 +1194,11 @@
         "j-groupware/deploy/agent/jgw-notification-refresh.timer.example",
         "j-groupware/tests/agent/unpack.integration.test.mjs",
         "j-groupware/tests/bff/bootstrap.integration.test.ts",
-        "j-groupware/tests/bff/notification-worker.integration.test.ts"
+        "j-groupware/tests/bff/notification-worker.integration.test.ts",
+        "j-groupware/deploy/agent/tls-credentials.mjs",
+        "j-groupware/deploy/agent/launch-service.mjs",
+        "j-groupware/tests/agent/tls-credentials.integration.test.mjs",
+        "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md"
       ]
     },
     {
@@ -1205,7 +1209,7 @@
         "G18"
       ],
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF158_each_exit0_skip0; safe_unpack19_each_with_base_Talk_cold_npm_ci_runtime_worker_import_hash_permissions_idempotence_adversarial_tar14_failure_cancellation_pass; actual_base_bootstrap_BFF4_each_sealed_env_real_Keycloak_login_PG_board_tenant_CSRF_Host_logout_pass; actual_PG18_DB6_each_dump_restore_NOLOGIN_preDB_role_only_failure_teardown_foreign_allocation_and_changed_snapshot_guard_pass; agent_core20_and_product5_and_product_cold_bundle4_each_pass; notification_worker6_each_actual_auth_PG_receiver_expiry_recovery_one_shot_CLI_and_inactive_unit_timer_syntax_pass; root_check76_build_type_lint_format_pass; native_absent_unit_protocol_source_only_customer_systemd_not_run; full_base_bootstrap_privilege_setup_service_account_CA_TLS_access_product_storage_Messenger_Mailpit_customer_cleanup_full_installer_agent_entrypoint_production_notification_credential_renewal_topology_timer_activation_customer_VM_and_whole_suite_acceptance_pending",
+      "verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending",
       "code": [
         "j-groupware/deploy/agent/bootstrap-files.mjs",
         "j-groupware/deploy/agent/service-database.mjs",
@@ -1239,7 +1243,11 @@
         "j-groupware/deploy/agent/jgw-notification-refresh.timer.example",
         "j-groupware/tests/agent/unpack.integration.test.mjs",
         "j-groupware/tests/bff/bootstrap.integration.test.ts",
-        "j-groupware/tests/bff/notification-worker.integration.test.ts"
+        "j-groupware/tests/bff/notification-worker.integration.test.ts",
+        "j-groupware/deploy/agent/tls-credentials.mjs",
+        "j-groupware/deploy/agent/launch-service.mjs",
+        "j-groupware/tests/agent/tls-credentials.integration.test.mjs",
+        "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md"
       ]
     },
     {
@@ -1250,7 +1258,7 @@
         "G18"
       ],
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF158_each_exit0_skip0; safe_unpack19_each_with_base_Talk_cold_npm_ci_runtime_worker_import_hash_permissions_idempotence_adversarial_tar14_failure_cancellation_pass; actual_base_bootstrap_BFF4_each_sealed_env_real_Keycloak_login_PG_board_tenant_CSRF_Host_logout_pass; actual_PG18_DB6_each_dump_restore_NOLOGIN_preDB_role_only_failure_teardown_foreign_allocation_and_changed_snapshot_guard_pass; agent_core20_and_product5_and_product_cold_bundle4_each_pass; notification_worker6_each_actual_auth_PG_receiver_expiry_recovery_one_shot_CLI_and_inactive_unit_timer_syntax_pass; root_check76_build_type_lint_format_pass; native_absent_unit_protocol_source_only_customer_systemd_not_run; full_base_bootstrap_privilege_setup_service_account_CA_TLS_access_product_storage_Messenger_Mailpit_customer_cleanup_full_installer_agent_entrypoint_production_notification_credential_renewal_topology_timer_activation_customer_VM_and_whole_suite_acceptance_pending",
+      "verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending",
       "code": [
         "j-groupware/deploy/agent/bootstrap-files.mjs",
         "j-groupware/deploy/agent/service-database.mjs",
@@ -1284,7 +1292,11 @@
         "j-groupware/deploy/agent/jgw-notification-refresh.timer.example",
         "j-groupware/tests/agent/unpack.integration.test.mjs",
         "j-groupware/tests/bff/bootstrap.integration.test.ts",
-        "j-groupware/tests/bff/notification-worker.integration.test.ts"
+        "j-groupware/tests/bff/notification-worker.integration.test.ts",
+        "j-groupware/deploy/agent/tls-credentials.mjs",
+        "j-groupware/deploy/agent/launch-service.mjs",
+        "j-groupware/tests/agent/tls-credentials.integration.test.mjs",
+        "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md"
       ]
     },
     {
@@ -1295,7 +1307,7 @@
         "G21"
       ],
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF158_each_exit0_skip0; safe_unpack19_each_with_base_Talk_cold_npm_ci_runtime_worker_import_hash_permissions_idempotence_adversarial_tar14_failure_cancellation_pass; actual_base_bootstrap_BFF4_each_sealed_env_real_Keycloak_login_PG_board_tenant_CSRF_Host_logout_pass; actual_PG18_DB6_each_dump_restore_NOLOGIN_preDB_role_only_failure_teardown_foreign_allocation_and_changed_snapshot_guard_pass; agent_core20_and_product5_and_product_cold_bundle4_each_pass; notification_worker6_each_actual_auth_PG_receiver_expiry_recovery_one_shot_CLI_and_inactive_unit_timer_syntax_pass; root_check76_build_type_lint_format_pass; native_absent_unit_protocol_source_only_customer_systemd_not_run; full_base_bootstrap_privilege_setup_service_account_CA_TLS_access_product_storage_Messenger_Mailpit_customer_cleanup_full_installer_agent_entrypoint_production_notification_credential_renewal_topology_timer_activation_customer_VM_and_whole_suite_acceptance_pending",
+      "verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending",
       "code": [
         "j-groupware/deploy/agent/reconciler.mjs",
         "j-groupware/deploy/agent/provision-command.mjs",
@@ -1325,7 +1337,11 @@
         "j-groupware/deploy/agent/jgw-notification-refresh.timer.example",
         "j-groupware/tests/agent/unpack.integration.test.mjs",
         "j-groupware/tests/bff/bootstrap.integration.test.ts",
-        "j-groupware/tests/bff/notification-worker.integration.test.ts"
+        "j-groupware/tests/bff/notification-worker.integration.test.ts",
+        "j-groupware/deploy/agent/tls-credentials.mjs",
+        "j-groupware/deploy/agent/launch-service.mjs",
+        "j-groupware/tests/agent/tls-credentials.integration.test.mjs",
+        "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md"
       ]
     },
     {
@@ -1727,9 +1743,16 @@
       "items": [
         "C3"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; tenant_UUID_keyset_literal_search_query_bound_HMAC_cursor_DTO_whitelist_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "code": [
+        "j-customer-auth-db/apps/server/src/app.ts",
+        "j-customer-auth-db/apps/server/src/store.ts",
+        "j-customer-auth-db/apps/server/src/security.ts",
+        "j-customer-auth-db/packages/contracts/src/index.ts",
+        "j-groupware/tests/bff/customer-auth.integration.test.ts",
+        "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "CA-02",
@@ -1738,9 +1761,16 @@
       "items": [
         "C3"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; member_write_required_unique_login_ID_Argon2id_19456KiB_t2_p1_random_salt_no_plaintext_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "code": [
+        "j-customer-auth-db/apps/server/src/app.ts",
+        "j-customer-auth-db/apps/server/src/store.ts",
+        "j-customer-auth-db/apps/server/src/security.ts",
+        "j-customer-auth-db/packages/contracts/src/index.ts",
+        "j-groupware/tests/bff/customer-auth.integration.test.ts",
+        "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "CA-03",
@@ -1749,9 +1779,16 @@
       "items": [
         "C3"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; tenant_member_scoped_patch_delete_unknown_fields_rejected_password_reset_not_exposed_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "code": [
+        "j-customer-auth-db/apps/server/src/app.ts",
+        "j-customer-auth-db/apps/server/src/store.ts",
+        "j-customer-auth-db/apps/server/src/security.ts",
+        "j-customer-auth-db/packages/contracts/src/index.ts",
+        "j-groupware/tests/bff/customer-auth.integration.test.ts",
+        "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "CA-04",
@@ -1760,9 +1797,16 @@
       "items": [
         "C3"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; exact_single_aud_issuer_azp_sid_actual_member_roles_tenant_default_deny_cookie_wrong_signature_JWKS503_no_DB_mutation_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "code": [
+        "j-customer-auth-db/apps/server/src/app.ts",
+        "j-customer-auth-db/apps/server/src/store.ts",
+        "j-customer-auth-db/apps/server/src/security.ts",
+        "j-customer-auth-db/packages/contracts/src/index.ts",
+        "j-groupware/tests/bff/customer-auth.integration.test.ts",
+        "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "CA-10",
@@ -1771,9 +1815,16 @@
       "items": [
         "C5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; 256bit_random_API_key_return_once_SHA256_only_storage_known_scope_validation_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "code": [
+        "j-customer-auth-db/apps/server/src/app.ts",
+        "j-customer-auth-db/apps/server/src/store.ts",
+        "j-customer-auth-db/apps/server/src/security.ts",
+        "j-customer-auth-db/packages/contracts/src/index.ts",
+        "j-groupware/tests/bff/customer-auth.integration.test.ts",
+        "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "CA-11",
@@ -1782,9 +1833,16 @@
       "items": [
         "C5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; member_write_scoped_metadata_only_no_secret_or_hash_in_list_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "code": [
+        "j-customer-auth-db/apps/server/src/app.ts",
+        "j-customer-auth-db/apps/server/src/store.ts",
+        "j-customer-auth-db/apps/server/src/security.ts",
+        "j-customer-auth-db/packages/contracts/src/index.ts",
+        "j-groupware/tests/bff/customer-auth.integration.test.ts",
+        "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "CA-12",
@@ -1793,9 +1851,16 @@
       "items": [
         "C5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; tenant_soft_revocation_idempotence_actual_PG_auth_lock_serializes_revoke_then_new_auth_denied_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "code": [
+        "j-customer-auth-db/apps/server/src/app.ts",
+        "j-customer-auth-db/apps/server/src/store.ts",
+        "j-customer-auth-db/apps/server/src/security.ts",
+        "j-customer-auth-db/packages/contracts/src/index.ts",
+        "j-groupware/tests/bff/customer-auth.integration.test.ts",
+        "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "CA-20",
@@ -1804,9 +1869,16 @@
       "items": [
         "C5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; API_key_scoped_external_guest_list_member_guest_Bearer_and_Cookie_substitution_denied_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "code": [
+        "j-customer-auth-db/apps/server/src/app.ts",
+        "j-customer-auth-db/apps/server/src/store.ts",
+        "j-customer-auth-db/apps/server/src/security.ts",
+        "j-customer-auth-db/packages/contracts/src/index.ts",
+        "j-groupware/tests/bff/customer-auth.integration.test.ts",
+        "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "CA-21",
@@ -1815,9 +1887,16 @@
       "items": [
         "C5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; first_scope_contract_only_guest_write_defined_and_external_CRUD_routes_absent_pass; future_external_write_implementation_not_claimed; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "code": [
+        "j-customer-auth-db/apps/server/src/app.ts",
+        "j-customer-auth-db/apps/server/src/store.ts",
+        "j-customer-auth-db/apps/server/src/security.ts",
+        "j-customer-auth-db/packages/contracts/src/index.ts",
+        "j-groupware/tests/bff/customer-auth.integration.test.ts",
+        "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "CA-22",
@@ -1826,9 +1905,16 @@
       "items": [
         "C4"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; site_server_API_key_login_independent_RS256_guest_JWT_300sec_same_missing_wrong_password401_DB503_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "code": [
+        "j-customer-auth-db/apps/server/src/app.ts",
+        "j-customer-auth-db/apps/server/src/store.ts",
+        "j-customer-auth-db/apps/server/src/security.ts",
+        "j-customer-auth-db/packages/contracts/src/index.ts",
+        "j-groupware/tests/bff/customer-auth.integration.test.ts",
+        "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "CA-23",
@@ -1837,9 +1923,16 @@
       "items": [
         "C4"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; public_JWKS_kid_SPki_digest_no_private_material_actual_signature_expiry_wrong_signature_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "code": [
+        "j-customer-auth-db/apps/server/src/app.ts",
+        "j-customer-auth-db/apps/server/src/store.ts",
+        "j-customer-auth-db/apps/server/src/security.ts",
+        "j-customer-auth-db/packages/contracts/src/index.ts",
+        "j-groupware/tests/bff/customer-auth.integration.test.ts",
+        "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "CA-24",
@@ -1848,9 +1941,16 @@
       "items": [
         "C4"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; persistent_PG_peer_IP60_per60sec_login_ID10_per300sec_counts_commit_on401_429_survive_restart_forwarded_spoof_ignored_pass; unit_Argon2_concurrency4_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "code": [
+        "j-customer-auth-db/apps/server/src/app.ts",
+        "j-customer-auth-db/apps/server/src/store.ts",
+        "j-customer-auth-db/apps/server/src/security.ts",
+        "j-customer-auth-db/packages/contracts/src/index.ts",
+        "j-groupware/tests/bff/customer-auth.integration.test.ts",
+        "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "CA-25",
@@ -1859,9 +1959,16 @@
       "items": [
         "C5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; actual_Fastify_external_schema_OpenAPI_security_path_response_match_internal_health_and_secrets_hidden_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "code": [
+        "j-customer-auth-db/apps/server/src/app.ts",
+        "j-customer-auth-db/apps/server/src/store.ts",
+        "j-customer-auth-db/apps/server/src/security.ts",
+        "j-customer-auth-db/packages/contracts/src/index.ts",
+        "j-groupware/tests/bff/customer-auth.integration.test.ts",
+        "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "CA-30",
@@ -1870,9 +1977,18 @@
       "items": [
         "C1"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; dedicated_non_superuser_jgw_customer_auth_role_DB_migrations_checksum_drift_and_cross_DB42501_with_valid_password_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "code": [
+        "j-customer-auth-db/apps/server/src/app.ts",
+        "j-customer-auth-db/apps/server/src/store.ts",
+        "j-customer-auth-db/apps/server/src/security.ts",
+        "j-customer-auth-db/packages/contracts/src/index.ts",
+        "j-groupware/tests/bff/customer-auth.integration.test.ts",
+        "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md",
+        "j-customer-auth-db/apps/server/src/db/migrate.ts",
+        "j-customer-auth-db/deploy/migrations/001-customer-auth.sql"
+      ]
     },
     {
       "id": "CA-31",
@@ -1881,9 +1997,14 @@
       "items": [
         "C2"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_Node22_18_Node24_19_customer_auth_check7_each_build_types_lint_format_and_actual_API9_each_pass; local_workspace_contracts_build_and_cold_npm_ci_omitdev_scripts_disabled_native_Argon2_and_server_import_pass; immutable_registry_publication_and_external_consumers_binding_not_run",
+      "code": [
+        "j-customer-auth-db/packages/contracts/src/index.ts",
+        "j-customer-auth-db/docs/api-contract.md",
+        "j-customer-auth-db/scripts/run-integration.mjs",
+        "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md"
+      ]
     },
     {
       "id": "CA-32",
@@ -2862,7 +2983,7 @@
       "code": []
     }
   ],
-  "verification_environment": "isolated cloud /workspace; real Keycloak/j-auth and dedicated j-groupware/j-approval/j-messenger PostgreSQL; messenger legacy SQLite preserved and tested; production subscription/key projection not activated; company laptop restriction unchanged; isolated official nginx gateway protocol fixtures tested on Node22/24 without host installation",
+  "verification_environment": "isolated cloud /workspace; real Keycloak/j-auth and dedicated j-groupware/j-approval/j-messenger PostgreSQL; messenger legacy SQLite preserved and tested; production subscription/key projection not activated; company laptop restriction unchanged; isolated official nginx gateway protocol fixtures tested on Node22/24 without host installation; actual dedicated customer-auth PG/member APIs and service-user TLS permission/fresh-process trust in isolated containers verified; no cloud-host OS account or trust changes",
   "verification_evidence": [
     "j-auth/docs/cloud-verification-2026-10-08.md",
     "j-auth/docs/cloud-provisioning-verification-2026-10-08.md",
@@ -2893,14 +3014,15 @@
     "j-groupware/docs/cloud-connected-implementation-2026-10-08.md",
     "j-web/docs/cloud-hosting-implementation-2026-10-08.md",
     "j-talk/docs/cloud-member-room-widget-2026-10-08.md",
-    "j-groupware/docs/cloud-bootstrap-worker-verification-2026-10-08.md"
+    "j-groupware/docs/cloud-bootstrap-worker-verification-2026-10-08.md",
+    "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md"
   ],
   "pending_implementation": [
     "Remaining mail/talk/customer/web BFF business API relays using the verified G23 helper and actual downstream services",
     "G6/G15 formal member/organization/repair UI and Playwright; G16 formal approval UI and Playwright (actual BFF business API and snapshot already verified)",
     "G2/G9 canonical UI guidelines/sidebar/board UI; I2 formal theme/Playwright/brute-force acceptance",
     "Messenger formal UI/app product-path freezing and talk business WSS; actual messenger PG/BFF HTTP/client transport/WSS and approval notification delivery independently verified",
-    "G18 complete customer bootstrap/OS privilege/CA-TLS service-user preparation and installer/agent entrypoint; product storage and Messenger/Mailpit/customer cleanup; G21 production notification credentials/renewal/topology and operating timer/customer VM acceptance; actual safe unpack, cold base BFF, incomplete PG allocation teardown and explicit worker CLI independently verified",
+    "G18 complete bootstrap/installer/agent entrypoint, actual systemd credential delivery, customer-auth bundle/profile/gateway and Messenger/Mailpit storage cleanup; G21 production notification renewal/topology and operating timer/customer VM acceptance. Customer-auth backend, TLS dedicated-user container permissions, cold safe unpack and worker CLI independently verified",
     "G22 formal notification UI/Playwright and all product notification delivery acceptance; production source credential renewal/topology and worker/timer activation remain separate from verified short-lived credential file binding and explicit CLI",
     "Per-feature remaining audit: docs/cloud-remaining-feature-audit-2026-10-08.json; technical contracts and service predecessors remain implementable; E8/visitor ownership/template manual-file replacement choices and existing UI guideline answer remain gates"
   ]
