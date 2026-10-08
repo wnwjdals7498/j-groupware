@@ -70,6 +70,33 @@ export const ROUTES = {
     role: "approval:use",
   },
   "GET /api/messenger/ws": { kind: "session", role: "messenger:use" },
+  "GET /api/messenger/api/v1/me": { kind: "session", role: "messenger:use" },
+  "GET /api/messenger/api/v1/users": { kind: "session", role: "messenger:use" },
+  "GET /api/messenger/api/v1/conversations": {
+    kind: "session",
+    role: "messenger:use",
+  },
+  "POST /api/messenger/api/v1/conversations": {
+    kind: "session",
+    role: "messenger:use",
+  },
+  "GET /api/messenger/api/v1/conversations/:id/messages": {
+    kind: "session",
+    role: "messenger:use",
+  },
+  "POST /api/messenger/api/v1/conversations/:id/messages": {
+    kind: "session",
+    role: "messenger:use",
+  },
+  "GET /api/messenger/api/v1/conversations/:id/read": {
+    kind: "session",
+    role: "messenger:use",
+  },
+  "PUT /api/messenger/api/v1/conversations/:id/read": {
+    kind: "session",
+    role: "messenger:use",
+  },
+  "GET /api/messenger/api/v1/sync": { kind: "session", role: "messenger:use" },
   "GET /api/notifications/stream": { kind: "session" },
   "GET /api/notifications": { kind: "session" },
   "POST /api/notifications/:id/read": { kind: "session" },

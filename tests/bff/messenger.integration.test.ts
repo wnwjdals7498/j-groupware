@@ -17,6 +17,7 @@ import {
 import { OidcClient } from "../../apps/server/src/oidc.js";
 import { digest } from "../../apps/server/src/security.js";
 import { createApplication } from "../../../j-messenger/apps/server/dist/bootstrap/application.js";
+import { createGroupwareMessengerClient } from "../../../j-messenger/packages/client-core/dist/index.js";
 import { loadConfig } from "../../../j-messenger/apps/server/dist/platform/config/index.js";
 
 describe("actual messenger j-auth HTTP/WSS + BFF relay with selected storage", () => {
@@ -75,6 +76,7 @@ describe("actual messenger j-auth HTTP/WSS + BFF relay with selected storage", (
         PORT: String(54250 + index),
         PUBLIC_ORIGIN: origins[index]!,
         AUTH_MODE: "j-auth",
+        FEATURE_RECEIPTS: "true",
         JAUTH_TENANT: rt.fixtures[index]!.tenant,
         KC_PUBLIC_URL: rt.fixtures[index]!.config.keycloakOrigin,
         DB_PATH: root + "/messenger.sqlite",
@@ -463,6 +465,229 @@ describe("actual messenger j-auth HTTP/WSS + BFF relay with selected storage", (
     ] as Array<[string, string, Record<string, string>, number]>) {
       const stream = direct(token, 0, query, headers);
       expect(await stream.opened).toBe(status);
+    }
+  });
+  it("serves cookie-only BFF snapshots and refuses role/CSRF/extra target controls", async () => {
+    const prefix = "/api/messenger/api/v1";
+    for (const [browser, status] of [
+      [new Browser(rt.fetch, browsers[0]!.origin), 401],
+      [noRole, 403],
+    ] as const) {
+      const response = await browser.request(prefix + "/me");
+      expect(response.status).toBe(status);
+      const value = (await response.json()) as {
+        error: { code: string; requestId: string };
+      };
+      expect(value.error.code).toBe(
+        status === 401 ? "unauthorized" : "forbidden",
+      );
+      expect(value.error.requestId).toMatch(/^[0-9a-f-]{36}$/);
+    }
+    const response = await browsers[0]!.request(prefix + "/me", {
+      headers: { Authorization: "Bearer untrusted" },
+    });
+    expect(response.status).toBe(200);
+    expect(response.headers.get("set-cookie")).toBeNull();
+    const body = (await response.json()) as {
+      data: { id: string; enabledFeatures: Record<string, boolean> };
+    };
+    expect(body.data.id).toBe(me[0]!.id);
+    expect(body.data.enabledFeatures).toMatchObject({
+      receipts: true,
+      files: false,
+      nativeSessions: false,
+    });
+    for (const path of [
+      "/me?token=secret",
+      "/users?serverId=other",
+      "/conversations?audience=j-mail",
+      "/sync?after=x&url=https://outside.test",
+    ]) {
+      expect((await browsers[0]!.request(prefix + path)).status).toBe(400);
+    }
+    const input = {
+      kind: "group",
+      memberIds: [me[0]!.id],
+      clientRequestId: randomUUID(),
+    };
+    const before = (await apps[0]!.db
+      .prepare("SELECT count(*) AS n FROM conversations")
+      .get()) as { n: bigint };
+    const denied = await browsers[0]!.request(prefix + "/conversations", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: browsers[0]!.origin,
+      },
+      body: JSON.stringify(input),
+    });
+    expect(denied.status).toBe(403);
+    const csrf = (await browsers[0]!.me()).csrfToken;
+    expect(
+      (
+        await browsers[0]!.request(prefix + "/conversations", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Origin: "https://outside.test",
+            "x-csrf-token": csrf,
+          },
+          body: JSON.stringify(input),
+        })
+      ).status,
+    ).toBe(403);
+    expect(
+      (await apps[0]!.db
+        .prepare("SELECT count(*) AS n FROM conversations")
+        .get()) as { n: bigint },
+    ).toEqual(before);
+    const users = await browsers[0]!.request(prefix + "/users?limit=1");
+    expect(users.status).toBe(200);
+    const page = (await users.json()) as {
+      data: unknown[];
+      page: { nextCursor: string | null };
+    };
+    expect(page.data).toHaveLength(1);
+    expect(typeof page.page.nextCursor).toBe("string");
+    expect(
+      (
+        await browsers[0]!.request(
+          prefix +
+            "/users?cursor=" +
+            encodeURIComponent(page.page.nextCursor!) +
+            "&limit=1",
+        )
+      ).status,
+    ).toBe(200);
+  });
+  it("uses the real BFF client for create/send/retry, relay/offline sync, receipts and tenant refusal", async () => {
+    const csrf = (await browsers[0]!.me()).csrfToken;
+    const client = createGroupwareMessengerClient({
+      origin: browsers[0]!.origin,
+      csrfToken: () => csrf,
+      fetch: (input, init) =>
+        browsers[0]!.request(String(input), {
+          ...init,
+          headers: Object.fromEntries(
+            new Headers({
+              ...Object.fromEntries(new Headers(init?.headers)),
+              Origin: browsers[0]!.origin,
+            }),
+          ),
+        }),
+    });
+    try {
+      expect((await client.getMe()).id).toBe(me[0]!.id);
+      const secondMe = (await (
+        await second.request("/api/messenger/api/v1/me")
+      ).json()) as { data: { id: string } };
+      const conv = await client.createConversation({
+        kind: "group",
+        memberIds: [secondMe.data.id],
+        title: "BFF 실제 HTTP",
+      });
+      expect(
+        (await client.listConversations()).data.map((row) => row.id),
+      ).toContain(conv.id);
+      const stream = relayed(second);
+      expect(await stream.opened).toBe(101);
+      const ready = await stream.next();
+      expect(ready.type).toBe("ready");
+      const prefix = `/api/messenger/api/v1/conversations/${conv.id}`;
+      const input = {
+        clientMessageId: randomUUID(),
+        text: "BFF 실제 POST와 WSS",
+      };
+      const sent = await browsers[0]!.change(prefix + "/messages", input);
+      expect(sent.status).toBe(201);
+      const value = (await sent.json()) as { data: { id: string } };
+      expect((await stream.next()).type).toBe("message.created.v1");
+      const retry = await browsers[0]!.change(prefix + "/messages", input);
+      expect(retry.status).toBe(200);
+      expect(((await retry.json()) as typeof value).data.id).toBe(
+        value.data.id,
+      );
+      expect(
+        (
+          await browsers[0]!.change(prefix + "/messages", {
+            ...input,
+            text: "변경",
+          })
+        ).status,
+      ).toBe(409);
+      expect((await browsers[1]!.request(prefix + "/messages")).status).toBe(
+        404,
+      );
+      await expect(
+        client.listMessages("9223372036854775808"),
+      ).rejects.toMatchObject({ code: "bad_request" });
+      for (const text of [" ", "😀".repeat(2001), "\ud800"])
+        expect(
+          (
+            await browsers[0]!.change(prefix + "/messages", {
+              clientMessageId: randomUUID(),
+              text,
+            })
+          ).status,
+        ).toBe(400);
+      expect(
+        (
+          await browsers[0]!.change(prefix + "/messages", {
+            clientMessageId: randomUUID(),
+            text: "파일",
+            fileIds: [randomUUID()],
+          })
+        ).status,
+      ).toBe(400);
+      expect(
+        (await client.listMessages(conv.id)).data.map((row) => row.id),
+      ).toContain(value.data.id);
+      expect(
+        (
+          await second.change(
+            prefix + "/read",
+            { lastReadMessageId: value.data.id },
+            "PUT",
+          )
+        ).status,
+      ).toBe(200);
+      expect((await stream.next()).type).toBe("receipt.updated.v1");
+      const read = await second.request(prefix + "/read");
+      expect(read.status).toBe(200);
+      expect(JSON.stringify(await read.json())).toContain(value.data.id);
+      stream.socket.close();
+      await stream.ended;
+      const offline = await browsers[0]!.change(prefix + "/messages", {
+        clientMessageId: randomUUID(),
+        text: "BFF 단절 복구",
+      });
+      expect(offline.status).toBe(201);
+      const sync = await second.request(
+        "/api/messenger/api/v1/sync?after=" +
+          encodeURIComponent(ready.cursor as string),
+      );
+      expect(sync.status).toBe(200);
+      const synced = JSON.stringify(await sync.json());
+      expect(synced).toContain("BFF 단절 복구");
+      expect(synced).toContain("receipt.updated.v1");
+    } finally {
+      client.dispose();
+    }
+  });
+  it("returns a bounded native unavailable envelope for an actual downstream outage without ending the BFF session", async () => {
+    await apps[0]!.close();
+    try {
+      const response = await browsers[0]!.request("/api/messenger/api/v1/me");
+      expect(response.status).toBe(503);
+      expect(response.headers.get("set-cookie")).toBeNull();
+      const value = (await response.json()) as {
+        error: { code: string; requestId: string };
+      };
+      expect(value.error.code).toBe("unavailable");
+      expect(JSON.stringify(value)).not.toContain("127.0.0.1");
+      expect((await browsers[0]!.request("/api/me")).status).toBe(200);
+    } finally {
+      apps[0] = await boot(0);
     }
   });
   it("relays a real messenger ready frame through BFF and ends the relay on actual logout", async () => {

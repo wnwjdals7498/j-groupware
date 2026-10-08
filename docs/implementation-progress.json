@@ -6,13 +6,13 @@
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 54,
+    "implemented": 55,
     "partial": 15,
-    "not_started": 103
+    "not_started": 102
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
-    "Messenger BFF business HTTP/client UI, product-specific mail/talk relays, automatic subscription/key projection to notification registry and operator/installer console remain unimplemented",
+    "Messenger formal client UI/registry publication/file BFF, product-specific mail/talk relays, automatic subscription/key projection to notification registry and operator/installer console remain unimplemented",
     "Hyper-V/VM/customer-server and external Nginx deployment/installation acceptance not executed in this cloud test runtime"
   ],
   "features": [
@@ -774,7 +774,7 @@
         "G12"
       ],
       "implementation": "partial",
-      "verification": "actual_compiled_messenger_j_auth_PostgreSQL_HTTP_WSS_relay_logout_role_revocation_dedup_cursor_sync_pass; BFF_business_HTTP_client_UI_VM_pending",
+      "verification": "actual_Keycloak_PG_BFF_HTTP9_public_client_cookie_CSRF_dedup_conflict_tenant404_WSS_receipts_cursor_outage_logout_role_revocation_pass; formal_UI_registry_file_BFF_VM_pending",
       "code": [
         "j-groupware/apps/server/src/realtime-sessions.ts",
         "j-groupware/apps/server/src/realtime-routes.ts",
@@ -783,7 +783,10 @@
         "j-groupware/packages/permissions/src/index.ts",
         "j-groupware/tests/bff/messenger.integration.test.ts",
         "j-groupware/docs/cloud-messenger-auth-verification-2026-10-08.md",
-        "j-groupware/docs/cloud-messenger-postgres-verification-2026-10-08.md"
+        "j-groupware/docs/cloud-messenger-postgres-verification-2026-10-08.md",
+        "j-groupware/apps/server/src/messenger-routes.ts",
+        "j-groupware/tests/server/messenger.test.ts",
+        "j-groupware/docs/cloud-messenger-bff-verification-2026-10-08.md"
       ]
     },
     {
@@ -1257,9 +1260,15 @@
       "items": [
         "M2"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "public_client_HTTP_WSS_BFF_addresses_cookie_fresh_CSRF_no_bearer_unit17_and_actual_Keycloak_PG_BFF14_pass; registry_install_UI_and_VM_acceptance_pending",
+      "code": [
+        "j-messenger/packages/client-core/src/index.ts",
+        "j-messenger/packages/client-core/test/client.test.ts",
+        "j-messenger/docs/cloud-bff-client-verification-2026-10-08.md",
+        "j-groupware/apps/server/src/messenger-routes.ts",
+        "j-groupware/tests/bff/messenger.integration.test.ts"
+      ]
     },
     {
       "id": "MS-07",

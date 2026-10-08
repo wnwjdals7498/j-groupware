@@ -113,4 +113,4 @@ G6 서버 API·원래 Bearer/서비스 키·대상 세션 종료·미배치 저�
 
 ## G12 실제 메신저 연결의 검증 범위
 
-[실제 M1 인증과 BFF WSS 검증](cloud-messenger-auth-verification-2026-10-08.md)에서 실제 서비스 ready frame·logout/role 회수 종료를 확인했다. 두 회원 메시지/중복/cursor 복구는 직접 서비스 HTTP와 격리 SQLite로 확인했다. BFF 업무 HTTP, PostgreSQL M5, client 패키지와 정식 화면/VM 인수는 미완료다.
+[실제 M1 인증과 BFF WSS 검증](cloud-messenger-auth-verification-2026-10-08.md)을 보존하고 [M5 PostgreSQL](cloud-messenger-postgres-verification-2026-10-08.md), [M2 BFF 업무 HTTP/client transport](cloud-messenger-bff-verification-2026-10-08.md) 증거를 추가했다. 고정9개 업무 route·쿠키/CSRF·메시지 재시도/tenant·WSS/읽음·단절 sync를 실제 Keycloak/PG로 검증했다. client registry 게시·정식 화면/VM·전체 제품군 인수는 미완료다.

@@ -29,6 +29,7 @@ import websocket from "@fastify/websocket";
 import { RealtimeSessions } from "./realtime-sessions.js";
 import { registerRealtimeRoutes } from "./realtime-routes.js";
 import { registerApprovalRoutes } from "./approval-routes.js";
+import { registerMessengerRoutes } from "./messenger-routes.js";
 import { NotificationStore } from "./db/notifications.js";
 import { registerNotificationRoutes } from "./notification-routes.js";
 
@@ -389,6 +390,7 @@ export function createApp(options: {
     new OrganizationStore(options.pool, options.config.tenant),
     (request) => identities.get(request)!,
   );
+  registerMessengerRoutes(app, services, (request) => identities.get(request)!);
   app.register(websocket, {
     options: { maxPayload: 1048576, perMessageDeflate: false },
     errorHandler: (_error, socket) => socket.terminate(),

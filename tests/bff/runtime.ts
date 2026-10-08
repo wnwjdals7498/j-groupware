@@ -80,7 +80,12 @@ export async function integrationRuntime(
   const logs: string[] = [];
   const secretValues = new Set<string>();
   const children: ReturnType<typeof spawn>[] = [];
-  const start = async (cwd: string, args: string[], url: string) => {
+  const start = async (
+    cwd: string,
+    args: string[],
+    url: string,
+    env: NodeJS.ProcessEnv = process.env,
+  ) => {
     const occupied = await new Promise<boolean>((resolve) => {
       const socket = createConnection({
         host: "127.0.0.1",
@@ -102,6 +107,7 @@ export async function integrationRuntime(
       cwd,
       stdio: ["ignore", "pipe", "pipe"],
       shell: false,
+      env,
     });
     child.stdout?.on("data", (b: Buffer) => logs.push(b.toString()));
     child.stderr?.on("data", (b: Buffer) => logs.push(b.toString()));
@@ -636,10 +642,8 @@ export async function integrationRuntime(
       },
       startCompiled: async () => {
         const fixture = fixtures[0]!;
-        const envfile = required("JGW_TEST_ENV").replace(
-          /integration\.env$/,
-          "server.env",
-        );
+        const envfile =
+          required("JGW_TEST_ENV") + "." + fixture.tenant + ".server.env";
         const values = {
           ...process.env,
           JGW_TENANT: fixture.tenant,
@@ -681,6 +685,7 @@ export async function integrationRuntime(
             "apps/server/dist/main.js",
           ],
           fixture.origin + "/health/ready",
+          values,
         );
       },
       stop,
