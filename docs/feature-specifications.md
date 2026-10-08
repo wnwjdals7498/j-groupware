@@ -72,7 +72,7 @@
 | GW-66 | G21 | 1분 timer→목표/실제 비교→직렬 설치·해지·보고 | 동일 상태 무변경, 잠금·재시도·오류 보고 | GW-T17 |
 | GW-70 | G1 | workspaces·도구·PG·migration·HTTPS/env 골격 | 버전·포트 고정, 3001 금지·비밀 Git 제외 | GW-T18 |
 | GW-71 | G2·G9 | UI 토큰/레이아웃→표·폼·모달·빈상태·오류 | packages/ui와 문서 일치·메신저 CSS 변수 일치 | GW-T18 |
-| GW-72 | X1 | 공유 contracts/client 게시·정확 버전 설치 | 배포 방식 미정 FS-U01, 선택 후 실제 게시/설치 | GW-T18 |
+| GW-72 | X1 | 공유 contracts/client 게시·정확 버전 설치 | Verdaccio 6.10.5·인증 게시·버전 불변, Compose 실기동은 현재 기기에서 미검증 | GW-T18 |
 | GW-73 | G10 | control/customer VM2대→G8·중계·자원 측정 | 인증·설치 선행, VM 실측과 추정 사양 구분 | GW-T19 |
 
 ## 인수 시험

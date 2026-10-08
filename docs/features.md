@@ -95,7 +95,7 @@ j-groupware는 기본 서비스로, 고객 서버의 웹 화면 전체와 하위
 | --- | --- | --- | --- | --- |
 | GW-70 | 저장소 골격 | workspaces, 도구, Compose PostgreSQL, node-pg-migrate, 로컬 HTTPS, `.npmrc` | 결정 6, S11 | G1 |
 | GW-71 | UI 기준 | `ui-guidelines.md` 토큰·레이아웃·컴포넌트, `packages/ui` | 결정 5 | G2·G9 |
-| GW-72 | 패키지 레지스트리 | 제품군 공유 패키지 게시·설치 수단(방식 재검토 중) | S10 | X1 |
+| GW-72 | 패키지 레지스트리 | 제품군 공유 패키지 게시·설치 수단(Verdaccio 원안, 6.10.5 고정) | S10 | X1 |
 | GW-73 | VM 검증·측정 | VM 2대, `gw.` 중계, VM 대상 G8, 메모리·CPU 측정 | S13·S15 | G10 |
 
 ## 9. 범위 밖·backlog
