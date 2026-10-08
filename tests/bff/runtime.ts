@@ -14,6 +14,7 @@ import { migrate } from "../../apps/server/src/db/migrate.js";
 import { OidcClient } from "../../apps/server/src/oidc.js";
 import { createApp } from "../../apps/server/src/app.js";
 import { digest } from "../../apps/server/src/security.js";
+import type { ServiceEndpoints } from "../../apps/server/src/services.js";
 
 export function required(name: string): string {
   const value = process.env[name];
@@ -21,7 +22,9 @@ export function required(name: string): string {
     throw new Error(`Integration requires ${name}; tests are not skipped.`);
   return value;
 }
-export async function integrationRuntime() {
+export async function integrationRuntime(
+  options: { serviceEndpoints?: ServiceEndpoints } = {},
+) {
   if (
     required("JGW_TEST_RUNTIME") !== "isolated-cloud" ||
     required("JAUTH_TEST_RUNTIME") !== "isolated-cloud"
@@ -397,6 +400,9 @@ export async function integrationRuntime() {
           config,
           oidc,
           memberAuth,
+          ...(options.serviceEndpoints
+            ? { serviceEndpoints: options.serviceEndpoints }
+            : {}),
           https: { cert, key: keyMaterial, minVersion: "TLSv1.2" },
           onSessionEnd: (hashes) => closed.push(...hashes),
         });
@@ -610,6 +616,12 @@ export async function integrationRuntime() {
           JGW_CLIENT_SECRET: fixture.secrets.clientSecret,
           JGW_SERVICE_KEY: fixture.secrets.serviceKey,
           JAUTH_PUBLIC_URL: fixture.memberAuth.origin,
+          ...(options.serviceEndpoints?.["j-messenger"]
+            ? {
+                JGW_SERVICE_MESSENGER_URL:
+                  options.serviceEndpoints["j-messenger"],
+              }
+            : {}),
         };
         await writeFile(
           envfile,

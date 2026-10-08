@@ -23,7 +23,7 @@ node --env-file=/external/runtime/server.env apps/server/dist/main.js
 
 갱신은 PG 세션 행 잠금으로 직렬화한다. 실제 refresh 거절은 세션을 삭제하고 401, 통신·JWKS 장애는 503이다. 요청 전에 발생한 통신 실패는 rollback 후 재시도가 가능하다. Keycloak이 refresh를 이미 소비한 뒤 응답이 유실되면 결과를 확정할 수 없고, 후속 재시도에서 재로그인이 필요할 수 있다. 이를 성공·완전 복구로 간주하지 않는다.
 
-`POST /auth/logout`은 CSRF 검사 뒤 로컬 세션을 지우고 RP logout URL로 303을 보낸다. 브라우저 JWT 노출을 피하기 위해 `client_id`와 등록된 redirect를 사용하므로 Keycloak의 로그아웃 확인 화면을 거친다. 실제 확인 POST와 refresh 거절을 통합 시험했다. backchannel은 서명·issuer·audience·iat·jti·sid·events와 nonce 부재를 검사한다. 같은 jti 재전송은 200으로 무변경 처리하며, tenant/sid에 맞는 세션만 삭제한다. sid tombstone과 생성/삭제 advisory lock으로 종료된 sid의 세션 재생성을 막는다. 세션 종료 hook은 준비했지만 실제 WSS·SSE 중계는 아직 없다.
+`POST /auth/logout`은 CSRF 검사 뒤 로컬 세션을 지우고 RP logout URL로 303을 보낸다. 브라우저 JWT 노출을 피하기 위해 `client_id`와 등록된 redirect를 사용하므로 Keycloak의 로그아웃 확인 화면을 거친다. 실제 확인 POST와 refresh 거절을 통합 시험했다. backchannel은 서명·issuer·audience·iat·jti·sid·events와 nonce 부재를 검사한다. 같은 jti 재전송은 200으로 무변경 처리하며, tenant/sid에 맞는 세션만 삭제한다. sid tombstone과 생성/삭제 advisory lock으로 종료된 sid의 세션 재생성을 막는다. 세션 종료 hook·PG NOTIFY와 실제 WSS/SSE 연결 종료는 [후속 실시간 기록](cloud-realtime-verification-2026-10-08.md)을 따른다.
 
 ## 권한과 게시판
 
@@ -67,3 +67,7 @@ env·TLS·PG volume·JSON 결과는 `/workspace/.suite-runtime`에 둔다. 테�
 [API·저장·동시성 계약과 실제 검증](cloud-organization-verification-2026-10-08.md)을 따른다. `004-organization.sql`은 기존 미배치 데이터를 보존하고 부서·직책·소속을 전용 DB에 둔다. 조직도 편집은 `org:manage`, 후보·결재선은 `approval:use`, 회원 생성 부분 실패의 등록 복구는 `member:manage`다. j-auth `1a8c09e933ab6de6fc953592ddda8cd9015620b9`의 tenant 단건 읽기 API가 선행이다. 설치된 `@j-auth/contracts@0.1.0`의 기존 member 경로와 기본 응답 필드를 재사용하며 새 의존성·패키지 게시가 필요하지 않다.
 
 부서·직책·소속 변경에는 조회 응답의 `revision`을 보낸다. 409이면 다시 읽고 수정 의도를 확인한다. 반복 등록은 기존 배치를 보존하고, 삭제 중 늦은 조회 결과는 재등록하지 않는다. 결재 후보 검증은 로컬 등록 계정만 사용한다. 정식 조직도/복구 화면과 실제 j-approval 상신은 후속 범위다.
+
+## 실시간 연결 수명
+
+[WSS/SSE 경로·수명·검증](cloud-realtime-verification-2026-10-08.md)을 따른다. `JGW_SERVICE_MESSENGER_URL`은 고정 loopback origin이며 WSS는 실제 서비스 토큰을 붙인다. SSE는 현재 전송 채널만 제공한다. 실제 메신저 업무와 알림 저장/송신 인수는 후속이다.

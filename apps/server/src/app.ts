@@ -25,6 +25,9 @@ import type { MemberAuth } from "./members.js";
 import { registerMemberRoutes } from "./member-routes.js";
 import { OrganizationStore } from "./db/organization.js";
 import { registerOrganizationRoutes } from "./organization-routes.js";
+import websocket from "@fastify/websocket";
+import { RealtimeSessions } from "./realtime-sessions.js";
+import { registerRealtimeRoutes } from "./realtime-routes.js";
 
 export function createApp(options: {
   pool: Pool;
@@ -50,11 +53,15 @@ export function createApp(options: {
     logController: new LogController({ disableRequestLogging: true }),
   });
   const oidc = options.oidc ?? new OidcClient(options.config);
+  const realtime = new RealtimeSessions(options.pool, options.config.tenant);
   const sessions = new SessionStore(
     options.pool,
     options.config.tenant,
     oidc,
-    options.onSessionEnd,
+    (hashes) => {
+      realtime.end(hashes);
+      options.onSessionEnd?.(hashes);
+    },
   );
   const board = new BoardStore(options.pool, options.config.tenant);
   const identities = new WeakMap<FastifyRequest, SessionRow>();
@@ -80,6 +87,11 @@ export function createApp(options: {
       new URL(options.config.origin).host
     )
       throw new ApiError(400, "invalid_input", "Unregistered host.");
+    if (
+      request.headers.upgrade?.toLowerCase() === "websocket" &&
+      request.routeOptions.url !== "/api/messenger/ws"
+    )
+      throw new ApiError(400, "invalid_input", "Unregistered websocket path.");
   });
   app.addHook("onRoute", (route) => {
     const methods = Array.isArray(route.method) ? route.method : [route.method];
@@ -157,6 +169,7 @@ export function createApp(options: {
   );
   app.get("/health/ready", async () => {
     await options.pool.query("SELECT 1");
+    await realtime.ready();
     return { status: "ok" };
   });
   app.get(
@@ -355,7 +368,23 @@ export function createApp(options: {
     (request) => identities.get(request)!,
   );
   const serviceTokens = new ServiceTokens(sessions, oidc);
+  app.register(websocket, {
+    options: { maxPayload: 1048576, perMessageDeflate: false },
+    errorHandler: (_error, socket) => socket.terminate(),
+  });
+  app.register(async (scope) =>
+    registerRealtimeRoutes(
+      scope,
+      realtime,
+      serviceTokens,
+      options.serviceEndpoints ?? {},
+      options.config.origin,
+    ),
+  );
+  app.addHook("onReady", () => realtime.ready());
+  app.addHook("preClose", () => realtime.stop());
   return Object.assign(app, {
+    realtime,
     serviceTokens,
     services: new ServiceClient(
       serviceTokens,

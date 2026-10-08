@@ -12,4 +12,6 @@ G23의 서비스별 token exchange·세션 cache·공통 내부 호출 함수도
 
 회원 관리 BFF의 실제 j-auth 연결·권한 변경 후 세션 정리·미배치 저장은 [후속 검증 기록](docs/cloud-member-bff-verification-2026-10-08.md)을 따른다. 정식 화면과 전체 인수는 아직 미완료다.
 
-조직도 서버의 부서·직책·소속 편집, 기존 회원 등록·부분 생성 복구, 기본 결재선·로컬 후보 검증은 [G15 구현·실제 검증](docs/cloud-organization-verification-2026-10-08.md)을 따른다. 조직도 화면·실제 결재 업무·WSS/SSE는 후속 범위다.
+조직도 서버의 부서·직책·소속 편집, 기존 회원 등록·부분 생성 복구, 기본 결재선·로컬 후보 검증은 [G15 구현·실제 검증](docs/cloud-organization-verification-2026-10-08.md)을 따른다. 조직도 화면·실제 결재 업무는 후속 범위다.
+
+실제 WSS/SSE 연결의 다중 인스턴스 종료·세션 폐기·장애 처리는 [실시간 검증 기록](docs/cloud-realtime-verification-2026-10-08.md)을 따른다. 하위 peer 전송 검사를 실제 메신저 업무 인수로 표시하지 않으며 알림 수신/저장/필터는 후속이다.

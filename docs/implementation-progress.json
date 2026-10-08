@@ -6,13 +6,13 @@
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 31,
-    "partial": 14,
-    "not_started": 127
+    "implemented": 34,
+    "partial": 13,
+    "not_started": 125
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
-    "WSS/SSE relay and actual connection closure, product-specific downstream business API relays, operator console and other service integration are not implemented",
+    "Product-specific downstream business relays, actual messenger j-auth/PostgreSQL integration, notification ingestion/delivery and operator console remain unimplemented",
     "Hyper-V/VM/customer-server and external Nginx deployment/installation acceptance not executed in this cloud test runtime"
   ],
   "features": [
@@ -525,13 +525,17 @@
       "items": [
         "G3"
       ],
-      "implementation": "partial",
-      "verification": "actual_local_csrf_logout_and_keycloak_rp_confirmation_refresh_rejection_pass; session_end_hook_pass; wss_sse_not_implemented",
+      "implementation": "implemented",
+      "verification": "actual_local_csrf_logout_and_keycloak_rp_confirmation_refresh_rejection_pass; session_end_hook_pass; actual_wss_sse_closure_on_two_bff_instances_logout_role_revoke_backchannel_disposal_expiry_pg_listener_loss_pass; messenger_peer_is_transport_probe_business_acceptance_pending",
       "code": [
         "j-groupware/apps/server/src/app.ts",
         "j-groupware/apps/server/src/db/sessions.ts",
         "j-groupware/apps/server/src/oidc.ts",
-        "j-groupware/tests/bff/bff.integration.test.ts"
+        "j-groupware/tests/bff/bff.integration.test.ts",
+        "j-groupware/apps/server/src/realtime-sessions.ts",
+        "j-groupware/apps/server/src/realtime-routes.ts",
+        "j-groupware/deploy/migrations/005-realtime-session-events.sql",
+        "j-groupware/tests/bff/realtime.integration.test.ts"
       ]
     },
     {
@@ -541,13 +545,17 @@
       "items": [
         "G3"
       ],
-      "implementation": "partial",
-      "verification": "actual_keycloak_backchannel_target_session_delete_pass; signed_replay_other_tenant_bad_signature_pass; wss_sse_not_implemented",
+      "implementation": "implemented",
+      "verification": "actual_keycloak_backchannel_target_session_delete_pass; signed_replay_other_tenant_bad_signature_pass; actual_wss_sse_closure_on_two_bff_instances_logout_role_revoke_backchannel_disposal_expiry_pg_listener_loss_pass; messenger_peer_is_transport_probe_business_acceptance_pending",
       "code": [
         "j-groupware/apps/server/src/oidc.ts",
         "j-groupware/apps/server/src/db/sessions.ts",
         "j-groupware/apps/server/src/app.ts",
-        "j-groupware/tests/bff/bff.integration.test.ts"
+        "j-groupware/tests/bff/bff.integration.test.ts",
+        "j-groupware/apps/server/src/realtime-sessions.ts",
+        "j-groupware/apps/server/src/realtime-routes.ts",
+        "j-groupware/deploy/migrations/005-realtime-session-events.sql",
+        "j-groupware/tests/bff/realtime.integration.test.ts"
       ]
     },
     {
@@ -673,13 +681,17 @@
       "items": [
         "G6"
       ],
-      "implementation": "partial",
-      "verification": "actual_bff_all_target_sessions_and_service_cache_end_pass; concurrent_grant_revoke_and_pending_callback_with_backchannel_disabled_pass; other_member_tenant_preserved; wss_sse_not_implemented",
+      "implementation": "implemented",
+      "verification": "actual_bff_all_target_sessions_and_service_cache_end_pass; concurrent_grant_revoke_and_pending_callback_with_backchannel_disabled_pass; other_member_tenant_preserved; actual_wss_sse_closure_on_two_bff_instances_logout_role_revoke_backchannel_disposal_expiry_pg_listener_loss_pass; messenger_peer_is_transport_probe_business_acceptance_pending",
       "code": [
         "j-groupware/apps/server/src/members.ts",
         "j-groupware/apps/server/src/db/sessions.ts",
         "j-groupware/deploy/migrations/003-member-workflows.sql",
-        "j-groupware/tests/bff/bff.integration.test.ts"
+        "j-groupware/tests/bff/bff.integration.test.ts",
+        "j-groupware/apps/server/src/realtime-sessions.ts",
+        "j-groupware/apps/server/src/realtime-routes.ts",
+        "j-groupware/deploy/migrations/005-realtime-session-events.sql",
+        "j-groupware/tests/bff/realtime.integration.test.ts"
       ]
     },
     {
@@ -761,9 +773,15 @@
       "items": [
         "G12"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_tls_wss_transport_single_audience_token_refresh_origin_tenant_session_closure_pass_using_protocol_peer; actual_messenger_http_business_auth_pg_integration_client_ui_pending",
+      "code": [
+        "j-groupware/apps/server/src/realtime-sessions.ts",
+        "j-groupware/apps/server/src/realtime-routes.ts",
+        "j-groupware/deploy/migrations/005-realtime-session-events.sql",
+        "j-groupware/tests/bff/realtime.integration.test.ts",
+        "j-groupware/packages/permissions/src/index.ts"
+      ]
     },
     {
       "id": "GW-31",
@@ -893,9 +911,15 @@
       "items": [
         "G22"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_sse_transport_session_closure_multi_instance_failure_expiry_pass; notification_ingestion_storage_filter_delivery_not_implemented",
+      "code": [
+        "j-groupware/apps/server/src/realtime-sessions.ts",
+        "j-groupware/apps/server/src/realtime-routes.ts",
+        "j-groupware/deploy/migrations/005-realtime-session-events.sql",
+        "j-groupware/tests/bff/realtime.integration.test.ts",
+        "j-groupware/packages/permissions/src/index.ts"
+      ]
     },
     {
       "id": "GW-44",
@@ -2167,13 +2191,14 @@
     "j-groupware/docs/cloud-token-exchange-verification-2026-10-08.md",
     "j-groupware/docs/cloud-member-bff-verification-2026-10-08.md",
     "j-auth/docs/cloud-organization-member-read-2026-10-08.md",
-    "j-groupware/docs/cloud-organization-verification-2026-10-08.md"
+    "j-groupware/docs/cloud-organization-verification-2026-10-08.md",
+    "j-groupware/docs/cloud-realtime-verification-2026-10-08.md"
   ],
   "pending_implementation": [
     "Product-specific BFF business API relays using the verified G23 helper and actual downstream services",
     "G6/G15 formal member/organization/repair UI and Playwright; G16 actual approval submission, snapshot and multistage business API",
     "G2/G9 canonical UI guidelines/sidebar/board UI; I2 formal theme/Playwright/brute-force acceptance",
-    "Actual WSS/SSE connection closure and other service end-to-end scenarios",
+    "Actual messenger/talk business WSS and notification SSE delivery end-to-end scenarios; connection lifecycle is independently verified",
     "I5/G11 external Nginx, G18/G21 customer bootstrap/agent/VM acceptance and operator console"
   ]
 }

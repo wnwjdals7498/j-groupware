@@ -112,3 +112,5 @@ DB 변경과 outbox 적재는 같은 서비스 트랜잭션에 넣고, 외부 �
 | [OWASP 비밀번호 저장](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html) | 손님 argon2id 파라미터와 구현 패키지는 C3에서 공식 근거와 함께 고정한다. |
 
 문서 검사는 `python scripts/verify-feature-specifications.py`로 수행한다. 기본은 이 저장소와 형제 서비스 저장소의 문서를 검사하며, 다른 배치에서는 `--workspace-root`로 제품군 루트를 지정한다.
+
+실시간 후속 서버의 WSS/SSE 연결 수명과 다중 인스턴스 종료는 [검증 기록](cloud-realtime-verification-2026-10-08.md)을 따른다. 실제 메신저 업무·알림 센터 인수와 전송 규약 시험을 구별하며 전체 인수 미완료를 유지한다.

@@ -7,12 +7,14 @@
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
+    "@fastify/websocket": "11.3.1",
     "@j-auth/contracts": "0.1.0",
     "@j-auth/token-verifier": "0.1.0",
     "@j-groupware/contracts": "0.1.0",
     "@j-groupware/permissions": "0.1.0",
     "fastify": "5.12.5",
+    "jose": "6.2.12",
     "pg": "8.23.1",
-    "jose": "6.2.12"
+    "ws": "8.22.0"
   }
 }

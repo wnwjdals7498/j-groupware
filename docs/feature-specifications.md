@@ -2,7 +2,7 @@
 
 작성일: 2026-10-08. 상태: **고객 BFF·권한·게시판·회원·조직도 서버 구현, 전체 인수 시험 미완료**. [기능 목록](features.md), [결정](decisions.md), [제품군 명세 기준](suite-feature-specifications.md)을 따른다. 고객 BFF·모든 서비스 화면, control plane 콘솔, 설치·gateway·알림을 담당한다. 실제 실행 범위는 [검증 기록](cloud-bff-verification-2026-10-08.md)에 구별한다.
 
-서버 contracts는 flow 5분, `__Host-jgw-session`/`__Host-jgw-login`, 변경 시 `x-csrf-token`과 정확한 Origin, 목록 50개, 제목 200자·본문 20,000자·전체 body 64 KiB로 고정했다. G23 공통 token exchange·cache·내부 호출 함수는 구현했다([검증](cloud-token-exchange-verification-2026-10-08.md)). 정식 UI·WSS/SSE·제품별 업무 중계는 아직 없다. RP logout은 client_id 기반 Keycloak 확인 화면을 거친다. [개발 안내](server-development.md)를 따른다.
+서버 contracts는 flow 5분, `__Host-jgw-session`/`__Host-jgw-login`, 변경 시 `x-csrf-token`과 정확한 Origin, 목록 50개, 제목 200자·본문 20,000자·전체 body 64 KiB로 고정했다. G23 공통 token exchange·cache·내부 호출 함수는 구현했다([검증](cloud-token-exchange-verification-2026-10-08.md)). [WSS/SSE 전송·세션 종료](cloud-realtime-verification-2026-10-08.md)를 구현했고 정식 UI·실제 메신저 업무 중계·알림 저장/송신은 후속이다. RP logout은 client_id 기반 Keycloak 확인 화면을 거친다. [개발 안내](server-development.md)를 따른다.
 
 G6 서버 API·원래 Bearer/서비스 키·대상 세션 종료·미배치 저장의 실제 범위는 [회원 BFF 검증](cloud-member-bff-verification-2026-10-08.md)을 따른다. 정식 회원 화면은 미완료다. G15의 부서·직책·소속 편집, 기존 회원 등록·부분 생성 복구, 기본/커스텀 결재선 API는 [조직도 검증 기록](cloud-organization-verification-2026-10-08.md)을 따른다. GW-T07의 실제 j-approval N단계 업무와 조직도 화면은 아직 미완료다.
 
