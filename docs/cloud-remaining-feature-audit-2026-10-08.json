@@ -21,9 +21,9 @@
   },
   "summary": {
     "ready": 0,
-    "contract": 10,
-    "service": 19,
-    "ui": 15,
+    "contract": 9,
+    "service": 17,
+    "ui": 17,
     "policy": 11,
     "vm": 9,
     "excluded": 0
@@ -299,25 +299,23 @@
       "service": "j-groupware",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "service",
-      "classification_label": "서비스 구현 선행",
-      "external_or_user_gate": false,
-      "additional_dependencies": [
-        "ui"
-      ],
-      "reason": "손님 CRUD backend가 아직 docs-only다. UI 기준도 별도로 필요하다.",
-      "next_step": "C1/C2/C3 backend 후 기존 BFF 인증 패턴으로 relay·화면을 연결한다.",
+      "classification": "ui",
+      "classification_label": "UI 기준 선행",
+      "external_or_user_gate": true,
+      "additional_dependencies": [],
+      "reason": "계약 게시·실제 BFF/compiled 중계와 cold CA·gateway는 검증했고 정식 화면만 남았다.",
+      "next_step": "기존 UI 질의 응답 후 손님/키 화면과 Playwright 인수를 구현한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
         "j-groupware/docs/suite-feature-specifications.md"
       ],
-      "implemented_in_this_batch": false,
+      "implemented_in_this_batch": true,
       "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
-      "implementation": "not_started",
-      "verification": "not_run"
+      "current_implementation": "partial",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
+      "implementation": "partial",
+      "verification": "actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved"
     },
     {
       "id": "GW-33",
@@ -325,25 +323,23 @@
       "service": "j-groupware",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "service",
-      "classification_label": "서비스 구현 선행",
-      "external_or_user_gate": false,
-      "additional_dependencies": [
-        "ui"
-      ],
-      "reason": "손님 API 키 backend가 아직 없으며 UI 기준도 필요하다.",
-      "next_step": "C5 backend·one-time secret 계약 후 BFF와 화면을 연결한다.",
+      "classification": "ui",
+      "classification_label": "UI 기준 선행",
+      "external_or_user_gate": true,
+      "additional_dependencies": [],
+      "reason": "계약 게시·실제 BFF/compiled 중계와 cold CA·gateway는 검증했고 정식 화면만 남았다.",
+      "next_step": "기존 UI 질의 응답 후 손님/키 화면과 Playwright 인수를 구현한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
         "j-groupware/docs/suite-feature-specifications.md"
       ],
-      "implemented_in_this_batch": false,
+      "implemented_in_this_batch": true,
       "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
-      "implementation": "not_started",
-      "verification": "not_run"
+      "current_implementation": "partial",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
+      "implementation": "partial",
+      "verification": "actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved"
     },
     {
       "id": "GW-34",
@@ -482,7 +478,7 @@
       "external_or_user_gate": false,
       "additional_dependencies": [],
       "reason": "기본 BFF 봉인 설정·안전 unpack/cold 기동, 생성 실패 단계별 PG 해지, Approval/Talk 데이터 보존 cleanup, 짧은 수명 외부 자격/실제 알림 worker CLI를 검증했다. 전용 서비스 계정 CA/TLS·제품 storage/Messenger/Mailpit/customer cleanup·전체 bootstrap/installer entrypoint·운영 자격 갱신/토폴로지·timer와 고객 VM 인수는 남았다.",
-      "next_step": "전용 계정의 CA/TLS credential 전달과 전체 bootstrap/installer/agent 실행 진입점을 연결하고, 남은 제품 저장소/정리와 production notification 자격 갱신·토폴로지를 구현한다. 실제 systemd/timer와 고객 VM 활성화는 별도 인수한다.",
+      "next_step": "전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage cleanup 및 production notification 자격 갱신/토폴로지; 실제 systemd credential/VM/timer는 별도 인수. 고객 인증 bundle/profile/gateway는 검증 완료.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
@@ -491,9 +487,9 @@
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_notification_registry_projection13_and_worker6_each_Node22_Node24_with_real_auth_PG_private_receiver_pass; external_short_lived_credentials_one_shot_CLI_expiry_inactive_same_generation_recovery_pass; full_BFF167_each_exit0_skip0; production_credential_renewal_topology_worker_timer_and_all_source_product_acceptance_pending; previous_initial_receiver_start_failure_cause_unresolved",
+      "current_verification": "actual_notification_registry_projection13_and_worker6_each_Node22_Node24_with_real_auth_PG_private_receiver_pass; external_short_lived_credentials_one_shot_CLI_expiry_inactive_same_generation_recovery_pass; full_BFF167_each_exit0_skip0; production_credential_renewal_topology_worker_timer_and_all_source_product_acceptance_pending; previous_initial_receiver_start_failure_cause_unresolved; customer_auth_seventh_cold_bundle_profile_persisted_cursor_secret_actual_readiness_and_real_Nginx_pass; full_installer_agent_entrypoint_Messenger_Mailpit_storage_and_actual_systemd_VM_timer_pending",
       "implementation": "partial",
-      "verification": "actual_notification_registry_projection13_and_worker6_each_Node22_Node24_with_real_auth_PG_private_receiver_pass; external_short_lived_credentials_one_shot_CLI_expiry_inactive_same_generation_recovery_pass; full_BFF167_each_exit0_skip0; production_credential_renewal_topology_worker_timer_and_all_source_product_acceptance_pending; previous_initial_receiver_start_failure_cause_unresolved"
+      "verification": "actual_notification_registry_projection13_and_worker6_each_Node22_Node24_with_real_auth_PG_private_receiver_pass; external_short_lived_credentials_one_shot_CLI_expiry_inactive_same_generation_recovery_pass; full_BFF167_each_exit0_skip0; production_credential_renewal_topology_worker_timer_and_all_source_product_acceptance_pending; previous_initial_receiver_start_failure_cause_unresolved; customer_auth_seventh_cold_bundle_profile_persisted_cursor_secret_actual_readiness_and_real_Nginx_pass; full_installer_agent_entrypoint_Messenger_Mailpit_storage_and_actual_systemd_VM_timer_pending"
     },
     {
       "id": "GW-44",
@@ -557,7 +553,7 @@
         "GW-54"
       ],
       "reason": "기본 BFF 봉인 설정·안전 unpack/cold 기동, 생성 실패 단계별 PG 해지, Approval/Talk 데이터 보존 cleanup, 짧은 수명 외부 자격/실제 알림 worker CLI를 검증했다. 전용 서비스 계정 CA/TLS·제품 storage/Messenger/Mailpit/customer cleanup·전체 bootstrap/installer entrypoint·운영 자격 갱신/토폴로지·timer와 고객 VM 인수는 남았다.",
-      "next_step": "전체 installer/agent entrypoint와 고객 인증 bundle/profile/gateway, Messenger/Mailpit storage cleanup 연결; 실제 systemd credential/VM/timer 인수는 별도",
+      "next_step": "전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage cleanup 및 production notification 자격 갱신/토폴로지; 실제 systemd credential/VM/timer는 별도 인수. 고객 인증 bundle/profile/gateway는 검증 완료.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
@@ -566,9 +562,9 @@
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending; customer_auth_seventh_cold_bundle_profile_persisted_cursor_secret_actual_readiness_and_real_Nginx_pass; full_installer_agent_entrypoint_Messenger_Mailpit_storage_and_actual_systemd_VM_timer_pending",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending"
+      "verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending; customer_auth_seventh_cold_bundle_profile_persisted_cursor_secret_actual_readiness_and_real_Nginx_pass; full_installer_agent_entrypoint_Messenger_Mailpit_storage_and_actual_systemd_VM_timer_pending"
     },
     {
       "id": "GW-64",
@@ -586,7 +582,7 @@
         "TK-40"
       ],
       "reason": "기본 BFF 봉인 설정·안전 unpack/cold 기동, 생성 실패 단계별 PG 해지, Approval/Talk 데이터 보존 cleanup, 짧은 수명 외부 자격/실제 알림 worker CLI를 검증했다. 전용 서비스 계정 CA/TLS·제품 storage/Messenger/Mailpit/customer cleanup·전체 bootstrap/installer entrypoint·운영 자격 갱신/토폴로지·timer와 고객 VM 인수는 남았다.",
-      "next_step": "전체 installer/agent entrypoint와 고객 인증 bundle/profile/gateway, Messenger/Mailpit storage cleanup 연결; 실제 systemd credential/VM/timer 인수는 별도",
+      "next_step": "전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage cleanup 및 production notification 자격 갱신/토폴로지; 실제 systemd credential/VM/timer는 별도 인수. 고객 인증 bundle/profile/gateway는 검증 완료.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
@@ -595,9 +591,9 @@
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending; customer_auth_seventh_cold_bundle_profile_persisted_cursor_secret_actual_readiness_and_real_Nginx_pass; full_installer_agent_entrypoint_Messenger_Mailpit_storage_and_actual_systemd_VM_timer_pending",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending"
+      "verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending; customer_auth_seventh_cold_bundle_profile_persisted_cursor_secret_actual_readiness_and_real_Nginx_pass; full_installer_agent_entrypoint_Messenger_Mailpit_storage_and_actual_systemd_VM_timer_pending"
     },
     {
       "id": "GW-65",
@@ -613,7 +609,7 @@
         "WB-25"
       ],
       "reason": "기본 BFF 봉인 설정·안전 unpack/cold 기동, 생성 실패 단계별 PG 해지, Approval/Talk 데이터 보존 cleanup, 짧은 수명 외부 자격/실제 알림 worker CLI를 검증했다. 전용 서비스 계정 CA/TLS·제품 storage/Messenger/Mailpit/customer cleanup·전체 bootstrap/installer entrypoint·운영 자격 갱신/토폴로지·timer와 고객 VM 인수는 남았다.",
-      "next_step": "전체 installer/agent entrypoint와 고객 인증 bundle/profile/gateway, Messenger/Mailpit storage cleanup 연결; 실제 systemd credential/VM/timer 인수는 별도",
+      "next_step": "전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage cleanup 및 production notification 자격 갱신/토폴로지; 실제 systemd credential/VM/timer는 별도 인수. 고객 인증 bundle/profile/gateway는 검증 완료.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
@@ -637,7 +633,7 @@
       "external_or_user_gate": false,
       "additional_dependencies": [],
       "reason": "기본 BFF 봉인 설정·안전 unpack/cold 기동, 생성 실패 단계별 PG 해지, Approval/Talk 데이터 보존 cleanup, 짧은 수명 외부 자격/실제 알림 worker CLI를 검증했다. 전용 서비스 계정 CA/TLS·제품 storage/Messenger/Mailpit/customer cleanup·전체 bootstrap/installer entrypoint·운영 자격 갱신/토폴로지·timer와 고객 VM 인수는 남았다.",
-      "next_step": "전체 installer/agent entrypoint와 고객 인증 bundle/profile/gateway, Messenger/Mailpit storage cleanup 연결; 실제 systemd credential/VM/timer 인수는 별도",
+      "next_step": "전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage cleanup 및 production notification 자격 갱신/토폴로지; 실제 systemd credential/VM/timer는 별도 인수. 고객 인증 bundle/profile/gateway는 검증 완료.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
@@ -646,9 +642,9 @@
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending; customer_auth_seventh_cold_bundle_profile_persisted_cursor_secret_actual_readiness_and_real_Nginx_pass; full_installer_agent_entrypoint_Messenger_Mailpit_storage_and_actual_systemd_VM_timer_pending",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending"
+      "verification": "actual_Node22_18_Node24_19_full_BFF167_each_exit0_skip0; customer_auth9_each_actual_member_auth_PG_backend_pass_included_in167; TLS_credentials3_each_actual_isolated_root_nologin_accounts_private_own_service_files_foreign_and_CA_private_key_denial_fresh_Node_same_PID_HTTPS_trust_pass; safe_unpack19_each_base_Talk_actual_cold_npm_ci_TLS_launcher_inert_import_hash_permissions_idempotence_adversarial_tar_failure_cancellation_pass; agent_core20_each_LoadCredential_unit_syntax_and_customer_auth_PG_retention_descriptor_pass; root_check76_build_type_lint_format_pass; previous_actual_PG6_product5_product_cold_bundle4_and_base_BFF4_worker6_each_proof_retained_not_rerun_here; actual_systemd_PID1_credential_delivery_account_install_full_installer_entrypoint_customer_auth_bundle_profile_gateway_remaining_Messenger_Mailpit_storage_cleanup_production_notification_renewal_topology_timer_customer_VM_and_whole_suite_acceptance_pending; customer_auth_seventh_cold_bundle_profile_persisted_cursor_secret_actual_readiness_and_real_Nginx_pass; full_installer_agent_entrypoint_Messenger_Mailpit_storage_and_actual_systemd_VM_timer_pending"
     },
     {
       "id": "GW-71",
@@ -844,30 +840,6 @@
       "current_verification": "not_run",
       "implementation": "not_started",
       "verification": "not_run"
-    },
-    {
-      "id": "CA-31",
-      "name": "contracts",
-      "service": "j-customer-auth-db",
-      "baseline_implementation": "not_started",
-      "baseline_verification": "not_run",
-      "classification": "contract",
-      "classification_label": "기술 계약 확정 선행",
-      "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "C2 DTO/규칙과 실제 backend·local contracts 설치는 구현했다. registry 게시와 소비 서비스 연결은 아직 실행하지 않았다.",
-      "next_step": "동일 contracts의 immutable registry 게시/소비를 검증하고 G13 BFF·사이트 서버 예제에 연결한다.",
-      "sources": [
-        "j-groupware/docs/implementation-progress.json",
-        "j-customer-auth-db/docs/decisions.md",
-        "j-customer-auth-db/docs/feature-specifications.md"
-      ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false,
-      "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_customer_auth_check7_each_build_types_lint_format_and_actual_API9_each_pass; local_workspace_contracts_build_and_cold_npm_ci_omitdev_scripts_disabled_native_Argon2_and_server_import_pass; immutable_registry_publication_and_external_consumers_binding_not_run",
-      "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_customer_auth_check7_each_build_types_lint_format_and_actual_API9_each_pass; local_workspace_contracts_build_and_cold_npm_ci_omitdev_scripts_disabled_native_Argon2_and_server_import_pass; immutable_registry_publication_and_external_consumers_binding_not_run"
     },
     {
       "id": "CA-32",
@@ -1626,31 +1598,33 @@
     "실제 외부 인수 실행 시 격리 VM 대상과 권한"
   ],
   "next_independent_batches": [
-    "고객 인증 contracts 소비→G13 BFF 회원 관리 relay→고객 인증 일곱 번째 bundle/profile/gateway→GW-35 권한별 손님 이름 조합",
-    "GW-63/64/65/66: 전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage cleanup·actual systemd credential delivery 및 production notification 자격 갱신/토폴로지; 실제 VM/timer 활성화는 별도",
-    "GW-35: 손님 이름 권한별 조합; visitor/WSS 전달은 T2 정책 경계와 분리",
-    "AU-50: 결정 19의 실제 Nginx 인증 control-plane allowlist",
-    "기존 정식 UI 기준 도착 후 콘솔·상담·서비스 화면과 browser 인수"
+    "GW-63/64/65/66: 전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage preparation/cleanup; 실제 root/account/CA/TLS 시험은 격리 컨테이너만, 실제 systemd/VM/timer 인수는 별도",
+    "GW-35: 확정된 guest 조회 계약을 사용한 권한별 손님 이름 조합; visitor/WSS는 미정 T2 정책을 먼저 채택하지 않음",
+    "production notification 자격 갱신/토폴로지와 운영 allowlist 연결",
+    "기존 정식 UI 질의 응답 후 콘솔·손님/키·상담·서비스 화면과 browser 인수"
   ],
   "current_progress": {
-    "implemented": 108,
-    "partial": 31,
-    "not_started": 33,
+    "implemented": 109,
+    "partial": 32,
+    "not_started": 31,
     "total": 172,
-    "remaining": 64,
+    "remaining": 63,
     "web_source_commit": "13861dd835362992f6ba0ee8bd237e30db8ca0ba",
     "talk_source_commit": "a022105102ffe680cf040b4d57f6f46e1d54d804",
-    "agent_source_commit": "64b1d89702e4641f34ed6b24ee7b6254c270b81d",
+    "agent_source_commit": "b15b53bb32942eee832413729940af02c1950edf",
     "console_source_commit": "998a48abe1e66f2aefd88d28fa6adda07627107c",
     "talk_bff_source_commit": "bc949abd081477cac26e3c41a4e0311bd377c091",
-    "bundle_source_commit": "64b1d89702e4641f34ed6b24ee7b6254c270b81d",
+    "bundle_source_commit": "b15b53bb32942eee832413729940af02c1950edf",
     "bootstrap_source_commit": "aa2a2f13e88fa1e6959ccb08c276434a8e7c831f",
     "teardown_source_commit": "e00000f9f2d0b8f2f7ec1ecaac5c12dce41deaa5",
     "notification_worker_source_commit": "ea24dd34636bcfebbf89ec26d87c79831a577ece",
-    "customer_auth_source_commit": "4692b36db98c2cb2043cb76514bc350256ccaaf7",
-    "customer_auth_test_source_commit": "93816d75b358e731267ce126ba3b10eaa76e2ebd",
+    "customer_auth_source_commit": "6cbfdc8b4ec6b104f9cf6cc0e96eb73d7229db35",
+    "customer_auth_test_source_commit": "b15b53bb32942eee832413729940af02c1950edf",
     "tls_credentials_source_commit": "64b1d89702e4641f34ed6b24ee7b6254c270b81d",
-    "tls_credentials_test_source_commit": "66e41b2070ed2aa7c0efcb5e684891b3926db0b6"
+    "tls_credentials_test_source_commit": "66e41b2070ed2aa7c0efcb5e684891b3926db0b6",
+    "customer_auth_contracts_source_commit": "6cbfdc8b4ec6b104f9cf6cc0e96eb73d7229db35",
+    "customer_auth_bff_source_commit": "4acce86650d3ccc8f0e8f5f6bb68558e4a455739",
+    "customer_auth_bundle_gateway_source_commit": "b15b53bb32942eee832413729940af02c1950edf"
   },
   "completed_since_baseline": [
     {
@@ -1674,7 +1648,9 @@
       "acceptance_complete": false,
       "implementation": "implemented",
       "verification": "actual_realm_rest_300_1800_28800_refresh_revoke_reuse0_jwt_ttl300_refresh_rotation_replay_reject_node22_node24; actual_bff_backchannel_wss_sse_end_full125_pass_node24; long_duration_idle_max_wait_not_run",
-      "baseline_implemented_in_this_batch": false
+      "baseline_implemented_in_this_batch": false,
+      "current_implementation": "implemented",
+      "current_verification": "actual_realm_rest_300_1800_28800_refresh_revoke_reuse0_jwt_ttl300_refresh_rotation_replay_reject_node22_node24; actual_bff_backchannel_wss_sse_end_full125_pass_node24; long_duration_idle_max_wait_not_run"
     },
     {
       "id": "AU-11",
@@ -1697,7 +1673,9 @@
       "acceptance_complete": false,
       "implementation": "implemented",
       "verification": "actual_fresh_verdaccio_compose_publish_auth_contracts0.1_cold_consumer_dist_bytes_sha512_lock_integrity_duplicate_unpublish_deny_pass_node22_node24",
-      "baseline_implemented_in_this_batch": false
+      "baseline_implemented_in_this_batch": false,
+      "current_implementation": "implemented",
+      "current_verification": "actual_fresh_verdaccio_compose_publish_auth_contracts0.1_cold_consumer_dist_bytes_sha512_lock_integrity_duplicate_unpublish_deny_pass_node22_node24"
     },
     {
       "id": "AU-25",
@@ -1720,7 +1698,9 @@
       "acceptance_complete": false,
       "implementation": "implemented",
       "verification": "actual_members_role_revoke_delete_keycloak_session_end_and_partial_failure503_pass_node22_node24; bff_all_transports_session_end_full125_pass_node24",
-      "baseline_implemented_in_this_batch": false
+      "baseline_implemented_in_this_batch": false,
+      "current_implementation": "implemented",
+      "current_verification": "actual_members_role_revoke_delete_keycloak_session_end_and_partial_failure503_pass_node22_node24; bff_all_transports_session_end_full125_pass_node24"
     },
     {
       "id": "AU-50",
@@ -1743,7 +1723,9 @@
       "acceptance_complete": false,
       "implementation": "implemented",
       "verification": "actual_nginx_tls_path_allowlist_upstream_auth_and_rate_limit429_no_credentials_log_4_pass_node22_node24; production_hostname_browser_vm_not_run",
-      "baseline_implemented_in_this_batch": false
+      "baseline_implemented_in_this_batch": false,
+      "current_implementation": "implemented",
+      "current_verification": "actual_nginx_tls_path_allowlist_upstream_auth_and_rate_limit429_no_credentials_log_4_pass_node22_node24; production_hostname_browser_vm_not_run"
     },
     {
       "id": "GW-72",
@@ -1766,7 +1748,9 @@
       "acceptance_complete": false,
       "implementation": "implemented",
       "verification": "actual_product_compose_nonroot_loopback_fresh_registry_publish_consume_immutable_acl_pass_node22_node24; prior_acl_backup_pass",
-      "baseline_implemented_in_this_batch": false
+      "baseline_implemented_in_this_batch": false,
+      "current_implementation": "implemented",
+      "current_verification": "actual_product_compose_nonroot_loopback_fresh_registry_publish_consume_immutable_acl_pass_node22_node24; prior_acl_backup_pass"
     },
     {
       "id": "MS-08",
@@ -1789,7 +1773,9 @@
       "acceptance_complete": false,
       "implementation": "implemented",
       "verification": "actual_suite_server_contracts_build_archive_2_pass_node22_node24; cold_install130_packages_auth_verifier0.1_lock_integrity_match; installed_artifact_static_ui404_ready200_both_nodes; existing_full_check_and_actual_pg21_pass_node24; native_build_operating_install_vm_not_run",
-      "baseline_implemented_in_this_batch": false
+      "baseline_implemented_in_this_batch": false,
+      "current_implementation": "implemented",
+      "current_verification": "actual_suite_server_contracts_build_archive_2_pass_node22_node24; cold_install130_packages_auth_verifier0.1_lock_integrity_match; installed_artifact_static_ui404_ready200_both_nodes; existing_full_check_and_actual_pg21_pass_node24; native_build_operating_install_vm_not_run"
     },
     {
       "id": "GW-50",
@@ -1812,7 +1798,9 @@
       "acceptance_complete": false,
       "implementation": "implemented",
       "verification": "actual_operator_code_pkce_nonce_state_separate_console_db_cookie_customer_denial_csrf_refresh_lock_real_backchannel_compiled_https_sigterm_8_pass_node22_node24; full_customer_bff133_pass_node24; formal_ui_gateway_vm_not_run",
-      "baseline_implemented_in_this_batch": true
+      "baseline_implemented_in_this_batch": true,
+      "current_implementation": "implemented",
+      "current_verification": "actual_operator_code_pkce_nonce_state_separate_console_db_cookie_customer_denial_csrf_refresh_lock_real_backchannel_compiled_https_sigterm_8_pass_node22_node24; full_customer_bff133_pass_node24; formal_ui_gateway_vm_not_run"
     },
     {
       "id": "TK-25",
@@ -1835,7 +1823,9 @@
       "acceptance_complete": false,
       "implementation": "implemented",
       "verification": "actual_db_origin_crud_pagination_exact_origin_invalid_wildcard_path_alias_tenant_isolation_role_and_failure_pass_node22_node24",
-      "baseline_implemented_in_this_batch": true
+      "baseline_implemented_in_this_batch": true,
+      "current_implementation": "implemented",
+      "current_verification": "actual_db_origin_crud_pagination_exact_origin_invalid_wildcard_path_alias_tenant_isolation_role_and_failure_pass_node22_node24"
     },
     {
       "id": "TK-26",
@@ -1858,7 +1848,9 @@
       "acceptance_complete": false,
       "implementation": "implemented",
       "verification": "actual_db_widget_key_one_time_response_current_previous24h_boundary_hmac_signature_constant_time_invalid_anonymous_foreign_tenant_atomic_concurrent_rotation_pass_node22_node24",
-      "baseline_implemented_in_this_batch": true
+      "baseline_implemented_in_this_batch": true,
+      "current_implementation": "implemented",
+      "current_verification": "actual_db_widget_key_one_time_response_current_previous24h_boundary_hmac_signature_constant_time_invalid_anonymous_foreign_tenant_atomic_concurrent_rotation_pass_node22_node24"
     },
     {
       "id": "WB-30",
@@ -1881,7 +1873,9 @@
       "acceptance_complete": false,
       "implementation": "implemented",
       "verification": "actual_dedicated_jgw_web_nonsuperuser_tenant_tables_migration_checksum_conflict_rollback_cross_db_connection_denied_https_read_and_real_db_restart_pass_node22_node24",
-      "baseline_implemented_in_this_batch": true
+      "baseline_implemented_in_this_batch": true,
+      "current_implementation": "implemented",
+      "current_verification": "actual_dedicated_jgw_web_nonsuperuser_tenant_tables_migration_checksum_conflict_rollback_cross_db_connection_denied_https_read_and_real_db_restart_pass_node22_node24"
     },
     {
       "id": "WB-03",
@@ -1903,7 +1897,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "implementation": "implemented",
-      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "current_implementation": "implemented",
+      "current_verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
     },
     {
       "id": "WB-04",
@@ -1925,7 +1921,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "implementation": "implemented",
-      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "current_implementation": "implemented",
+      "current_verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
     },
     {
       "id": "WB-05",
@@ -1947,7 +1945,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "implementation": "implemented",
-      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "current_implementation": "implemented",
+      "current_verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
     },
     {
       "id": "WB-06",
@@ -1969,7 +1969,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "implementation": "implemented",
-      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "current_implementation": "implemented",
+      "current_verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
     },
     {
       "id": "WB-07",
@@ -1998,7 +2000,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "implementation": "implemented",
-      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "current_implementation": "implemented",
+      "current_verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
     },
     {
       "id": "WB-20",
@@ -2024,7 +2028,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "implementation": "implemented",
-      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "current_implementation": "implemented",
+      "current_verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
     },
     {
       "id": "WB-21",
@@ -2046,7 +2052,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "implementation": "implemented",
-      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "current_implementation": "implemented",
+      "current_verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
     },
     {
       "id": "WB-22",
@@ -2068,7 +2076,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "implementation": "implemented",
-      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "current_implementation": "implemented",
+      "current_verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
     },
     {
       "id": "WB-23",
@@ -2090,7 +2100,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "implementation": "implemented",
-      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "current_implementation": "implemented",
+      "current_verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
     },
     {
       "id": "WB-24",
@@ -2121,7 +2133,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "implementation": "implemented",
-      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "current_implementation": "implemented",
+      "current_verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
     },
     {
       "id": "WB-25",
@@ -2143,7 +2157,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "implementation": "implemented",
-      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "current_implementation": "implemented",
+      "current_verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
     },
     {
       "id": "WB-32",
@@ -2165,7 +2181,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "implementation": "implemented",
-      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "current_implementation": "implemented",
+      "current_verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run"
     },
     {
       "id": "TK-01",
@@ -2191,8 +2209,8 @@
       ],
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
+      "current_implementation": "implemented",
+      "current_verification": "actual_Vite8_3_4_library_single_embedded_CSS_widget_min_js_1199_bytes_gzip_default733_bytes; actual_https_fixed_v1_cache300_sha256_ETag_304_each_node22_node24_in_14_pass_exit0_skip0; built_script_no_DOM_when_visitor_transport_unavailable; actual_browser_chat_UI_visitor_producer_WSS_not_run",
       "implementation": "implemented",
       "verification": "actual_Vite8_3_4_library_single_embedded_CSS_widget_min_js_1199_bytes_gzip_default733_bytes; actual_https_fixed_v1_cache300_sha256_ETag_304_each_node22_node24_in_14_pass_exit0_skip0; built_script_no_DOM_when_visitor_transport_unavailable; actual_browser_chat_UI_visitor_producer_WSS_not_run"
     },
@@ -2215,8 +2233,8 @@
       ],
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
+      "current_implementation": "implemented",
+      "current_verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
       "implementation": "implemented",
       "verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run"
     },
@@ -2248,8 +2266,8 @@
       ],
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
-      "current_implementation": "partial",
-      "current_verification": "actual_server_local_contracts_dedicated_jgw_talk_nonsuperuser_migration_tenant_checksum_cross_db_denied_and_https_pass_node22_node24; widget_workspace_full_visitor_room_contract_registry_publish_not_implemented",
+      "current_implementation": "implemented",
+      "current_verification": "actual_server_widget_local_contracts_dedicated_jgw_talk_nonsuperuser_tenant_FK_migrations_checksum_42501_cross_DB_https_14_each_node22_node24_exit0_skip0; full_visitor_WSS_contract_registry_TK41_and_full_acceptance_not_run",
       "implementation": "implemented",
       "verification": "actual_server_widget_local_contracts_dedicated_jgw_talk_nonsuperuser_tenant_FK_migrations_checksum_42501_cross_DB_https_14_each_node22_node24_exit0_skip0; full_visitor_WSS_contract_registry_TK41_and_full_acceptance_not_run"
     },
@@ -2349,9 +2367,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "implemented",
-      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; tenant_UUID_keyset_literal_search_query_bound_HMAC_cursor_DTO_whitelist_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; tenant_UUID_keyset_literal_search_query_bound_HMAC_cursor_DTO_whitelist_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
       "implementation": "implemented",
-      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; tenant_UUID_keyset_literal_search_query_bound_HMAC_cursor_DTO_whitelist_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run"
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; tenant_UUID_keyset_literal_search_query_bound_HMAC_cursor_DTO_whitelist_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved"
     },
     {
       "id": "CA-02",
@@ -2373,9 +2391,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "implemented",
-      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; member_write_required_unique_login_ID_Argon2id_19456KiB_t2_p1_random_salt_no_plaintext_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; member_write_required_unique_login_ID_Argon2id_19456KiB_t2_p1_random_salt_no_plaintext_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
       "implementation": "implemented",
-      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; member_write_required_unique_login_ID_Argon2id_19456KiB_t2_p1_random_salt_no_plaintext_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run"
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; member_write_required_unique_login_ID_Argon2id_19456KiB_t2_p1_random_salt_no_plaintext_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved"
     },
     {
       "id": "CA-03",
@@ -2397,9 +2415,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "implemented",
-      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; tenant_member_scoped_patch_delete_unknown_fields_rejected_password_reset_not_exposed_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; tenant_member_scoped_patch_delete_unknown_fields_rejected_password_reset_not_exposed_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
       "implementation": "implemented",
-      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; tenant_member_scoped_patch_delete_unknown_fields_rejected_password_reset_not_exposed_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run"
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; tenant_member_scoped_patch_delete_unknown_fields_rejected_password_reset_not_exposed_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved"
     },
     {
       "id": "CA-04",
@@ -2421,9 +2439,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "implemented",
-      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; exact_single_aud_issuer_azp_sid_actual_member_roles_tenant_default_deny_cookie_wrong_signature_JWKS503_no_DB_mutation_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; exact_single_aud_issuer_azp_sid_actual_member_roles_tenant_default_deny_cookie_wrong_signature_JWKS503_no_DB_mutation_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
       "implementation": "implemented",
-      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; exact_single_aud_issuer_azp_sid_actual_member_roles_tenant_default_deny_cookie_wrong_signature_JWKS503_no_DB_mutation_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run"
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; exact_single_aud_issuer_azp_sid_actual_member_roles_tenant_default_deny_cookie_wrong_signature_JWKS503_no_DB_mutation_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved"
     },
     {
       "id": "CA-10",
@@ -2445,9 +2463,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "implemented",
-      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; 256bit_random_API_key_return_once_SHA256_only_storage_known_scope_validation_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; 256bit_random_API_key_return_once_SHA256_only_storage_known_scope_validation_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
       "implementation": "implemented",
-      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; 256bit_random_API_key_return_once_SHA256_only_storage_known_scope_validation_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run"
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; 256bit_random_API_key_return_once_SHA256_only_storage_known_scope_validation_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved"
     },
     {
       "id": "CA-11",
@@ -2469,9 +2487,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "implemented",
-      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; member_write_scoped_metadata_only_no_secret_or_hash_in_list_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; member_write_scoped_metadata_only_no_secret_or_hash_in_list_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
       "implementation": "implemented",
-      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; member_write_scoped_metadata_only_no_secret_or_hash_in_list_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run"
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; member_write_scoped_metadata_only_no_secret_or_hash_in_list_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved"
     },
     {
       "id": "CA-12",
@@ -2493,9 +2511,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "implemented",
-      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; tenant_soft_revocation_idempotence_actual_PG_auth_lock_serializes_revoke_then_new_auth_denied_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; tenant_soft_revocation_idempotence_actual_PG_auth_lock_serializes_revoke_then_new_auth_denied_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
       "implementation": "implemented",
-      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; tenant_soft_revocation_idempotence_actual_PG_auth_lock_serializes_revoke_then_new_auth_denied_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run"
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; tenant_soft_revocation_idempotence_actual_PG_auth_lock_serializes_revoke_then_new_auth_denied_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved"
     },
     {
       "id": "CA-20",
@@ -2517,9 +2535,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "implemented",
-      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; API_key_scoped_external_guest_list_member_guest_Bearer_and_Cookie_substitution_denied_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; API_key_scoped_external_guest_list_member_guest_Bearer_and_Cookie_substitution_denied_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
       "implementation": "implemented",
-      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; API_key_scoped_external_guest_list_member_guest_Bearer_and_Cookie_substitution_denied_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run"
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; API_key_scoped_external_guest_list_member_guest_Bearer_and_Cookie_substitution_denied_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved"
     },
     {
       "id": "CA-21",
@@ -2543,9 +2561,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "implemented",
-      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; first_scope_contract_only_guest_write_defined_and_external_CRUD_routes_absent_pass; future_external_write_implementation_not_claimed; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; first_scope_contract_only_guest_write_defined_and_external_CRUD_routes_absent_pass; future_external_write_implementation_not_claimed; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
       "implementation": "implemented",
-      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; first_scope_contract_only_guest_write_defined_and_external_CRUD_routes_absent_pass; future_external_write_implementation_not_claimed; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run"
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; first_scope_contract_only_guest_write_defined_and_external_CRUD_routes_absent_pass; future_external_write_implementation_not_claimed; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved"
     },
     {
       "id": "CA-22",
@@ -2567,9 +2585,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "implemented",
-      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; site_server_API_key_login_independent_RS256_guest_JWT_300sec_same_missing_wrong_password401_DB503_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; site_server_API_key_login_independent_RS256_guest_JWT_300sec_same_missing_wrong_password401_DB503_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
       "implementation": "implemented",
-      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; site_server_API_key_login_independent_RS256_guest_JWT_300sec_same_missing_wrong_password401_DB503_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run"
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; site_server_API_key_login_independent_RS256_guest_JWT_300sec_same_missing_wrong_password401_DB503_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved"
     },
     {
       "id": "CA-23",
@@ -2591,9 +2609,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "implemented",
-      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; public_JWKS_kid_SPki_digest_no_private_material_actual_signature_expiry_wrong_signature_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; public_JWKS_kid_SPki_digest_no_private_material_actual_signature_expiry_wrong_signature_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
       "implementation": "implemented",
-      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; public_JWKS_kid_SPki_digest_no_private_material_actual_signature_expiry_wrong_signature_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run"
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; public_JWKS_kid_SPki_digest_no_private_material_actual_signature_expiry_wrong_signature_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved"
     },
     {
       "id": "CA-24",
@@ -2615,9 +2633,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "implemented",
-      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; persistent_PG_peer_IP60_per60sec_login_ID10_per300sec_counts_commit_on401_429_survive_restart_forwarded_spoof_ignored_pass; unit_Argon2_concurrency4_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; persistent_PG_peer_IP60_per60sec_login_ID10_per300sec_counts_commit_on401_429_survive_restart_forwarded_spoof_ignored_pass; unit_Argon2_concurrency4_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
       "implementation": "implemented",
-      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; persistent_PG_peer_IP60_per60sec_login_ID10_per300sec_counts_commit_on401_429_survive_restart_forwarded_spoof_ignored_pass; unit_Argon2_concurrency4_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run"
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; persistent_PG_peer_IP60_per60sec_login_ID10_per300sec_counts_commit_on401_429_survive_restart_forwarded_spoof_ignored_pass; unit_Argon2_concurrency4_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved"
     },
     {
       "id": "CA-25",
@@ -2639,9 +2657,9 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "implemented",
-      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; actual_Fastify_external_schema_OpenAPI_security_path_response_match_internal_health_and_secrets_hidden_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; actual_Fastify_external_schema_OpenAPI_security_path_response_match_internal_health_and_secrets_hidden_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
       "implementation": "implemented",
-      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; actual_Fastify_external_schema_OpenAPI_security_path_response_match_internal_health_and_secrets_hidden_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run"
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; actual_Fastify_external_schema_OpenAPI_security_path_response_match_internal_health_and_secrets_hidden_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved"
     },
     {
       "id": "CA-30",
@@ -2663,9 +2681,33 @@
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "implemented",
-      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; dedicated_non_superuser_jgw_customer_auth_role_DB_migrations_checksum_drift_and_cross_DB42501_with_valid_password_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run",
+      "current_verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; dedicated_non_superuser_jgw_customer_auth_role_DB_migrations_checksum_drift_and_cross_DB42501_with_valid_password_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
       "implementation": "implemented",
-      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; dedicated_non_superuser_jgw_customer_auth_role_DB_migrations_checksum_drift_and_cross_DB42501_with_valid_password_pass; UI_BFF_relay_gateway_bundle_customer_VM_and_whole_suite_acceptance_not_run"
+      "verification": "actual_customer_auth9_each_Node22_18_Node24_19_exit0_skip0_with_real_j_auth_Keycloak_member_exchange_and_isolated_PG18_6; dedicated_non_superuser_jgw_customer_auth_role_DB_migrations_checksum_drift_and_cross_DB42501_with_valid_password_pass; formal_UI_customer_VM_and_whole_suite_acceptance_pending; actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved"
+    },
+    {
+      "id": "CA-31",
+      "name": "contracts",
+      "service": "j-customer-auth-db",
+      "baseline_implementation": "not_started",
+      "baseline_verification": "not_run",
+      "classification": "contract",
+      "classification_label": "기술 계약 확정 선행",
+      "external_or_user_gate": false,
+      "additional_dependencies": [],
+      "reason": "C2 DTO/규칙과 실제 backend·local contracts 설치는 구현했다. registry 게시와 소비 서비스 연결은 아직 실행하지 않았다.",
+      "next_step": "immutable contracts 게시·exact registry 소비·공유 DTO/실제 BFF 연결 완료; 정식 UI·운영 배포·고객 VM 인수는 별도",
+      "sources": [
+        "j-groupware/docs/implementation-progress.json",
+        "j-customer-auth-db/docs/decisions.md",
+        "j-customer-auth-db/docs/feature-specifications.md"
+      ],
+      "implemented_in_this_batch": true,
+      "acceptance_complete": false,
+      "current_implementation": "implemented",
+      "current_verification": "immutable_loopback_private_registry_contracts0_1_0_publish_and_duplicate_rejection_pass; exact_BFF_server_dependency_lock_integrity_registry_install_and_cold_CA_contract_JS_byte_equality_pass; shared_management_schemas_consumed_by_server_and_actual_BFF_and_compiled_BFF_pass; operating_registry_deployment_formal_UI_customer_VM_and_whole_suite_acceptance_pending",
+      "implementation": "implemented",
+      "verification": "immutable_loopback_private_registry_contracts0_1_0_publish_and_duplicate_rejection_pass; exact_BFF_server_dependency_lock_integrity_registry_install_and_cold_CA_contract_JS_byte_equality_pass; shared_management_schemas_consumed_by_server_and_actual_BFF_and_compiled_BFF_pass; operating_registry_deployment_formal_UI_customer_VM_and_whole_suite_acceptance_pending"
     }
   ],
   "checkpoints": [
@@ -2712,6 +2754,6 @@
     ],
     "reclassification_does_not_mean_complete": true
   },
-  "continueable_work_note": "ready=0은 기술 작업 소진을 뜻하지 않는다. 고객 인증 backend와 서비스별 TLS 전용 계정 source/컨테이너 검증을 완료했고, 고객 인증 BFF/bundle/profile/gateway·contracts 소비, 설치 entrypoint·Messenger/Mailpit storage/cleanup 등 독립 연결 작업은 계속 가능하다. T2·E8·H7·정식 UI·실제 VM 인수는 별도 경계다.",
-  "verification_summary": "[고객 인증·서비스 계정 TLS 증거](cloud-customer-auth-tls-verification-2026-10-08.md): 실제 auth/member/PG의 고객 인증9와 전체 BFF167(신규9 포함), TLS 전용계정3, safe unpack19, agent core20은 Node22/24 각각 exit0·skip0이다. 고객 인증 check7 각 버전, Node24 root check76와 build/type/lint/format도 통과했다. 기존 실제 PG6·product5·cold 제품4·Nginx15·Web cleanup2는 과거 기록으로 보존한다. 직접 Vitest 실행의 JGW_TEST_ENV 누락과 중단 뒤 자기 auth fixture의 포트 점유, 병행 unpack의 ENOSPC 실패를 보존하고 공식 runner·순차 실행으로 재검증했다. 이전 별도 receiver startup 실패 원인은 아직 미확정이다. 실제 systemd PID1 전달·VM·browser·전체 인수는 미완료다."
+  "continueable_work_note": "ready=0은 기술 작업 소진을 뜻하지 않는다. 고객 인증 backend·immutable contracts 소비·G13 BFF/compiled 중계·일곱 번째 cold bundle/profile/readiness·실제 gateway를 연결했다. 전체 installer/agent entrypoint·Messenger/Mailpit storage cleanup·권한별 손님 이름과 production notification 자격 갱신/토폴로지 등 독립 작업은 계속 가능하다. T2·E8·H7·정식 UI·실제 VM 인수는 별도 경계다.",
+  "verification_summary": "[고객 인증 연결 증거](cloud-customer-relay-bundle-verification-2026-10-08.md): Node22/24 전체 BFF174 각각 pass(신규 고객 인증16 포함), 중간 연결15 각각 pass, agent20 각각 exit0·skip0, 고객 인증 check7/통합9 각각 pass, Node24 root check76와 최종 type/lint/format 통과. Node24 전체 회귀는 환경 starting→ready 재연결로 이전 tool session의 exit 조회가 사라졌으나 최종13 files/174 passed 로그는 보존했다. 이전 TLS3·unpack19·PG6·product5·Nginx15·Web cleanup2 증거는 별도 과거 기록이다. 원인 미확정 이전 receiver startup 실패와 이번 fixture/umask/DNS/keepalive 실패 로그를 보존했다. 정식 UI·실제 systemd PID1·VM·전체 인수는 미완료다. 여섯 선택 제품 cold archive/lock/npm ci/config import와 Talk/Web 실제 부팅의 4개 검사도 두 Node 각각 exit0·skip0이며 고객 인증 실제 cold 전체 부팅은 BFF 고객 인증16에 포함돼 있다."
 }

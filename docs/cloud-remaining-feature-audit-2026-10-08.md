@@ -2,16 +2,16 @@
 
 기존 명세/결정과 실제 소스·실행 증거 대조. 각 기능의 첫 미완료 단계 기준이며 구현 완료·제품 인수 완료를 뜻하지 않는다. 기술 계약과 선행 서비스는 구현자가 계속할 수 있는 작업이며 사용자/외부 환경 차단으로 취급하지 않는다.
 
-현재 소스 기준: 구현 108, 부분 31, 미착수 33 / 총 172. 남은 64개. 전체 통합 인수: 미완료.
+현재 소스 기준: 구현 109, 부분 32, 미착수 31 / 총 172. 남은 63개. 전체 통합 인수: 미완료.
 
-ready=0은 기술 작업 소진을 뜻하지 않는다. 고객 인증 backend와 서비스별 TLS 전용 계정 source/컨테이너 검증을 완료했고, 고객 인증 BFF/bundle/profile/gateway·contracts 소비, 설치 entrypoint·Messenger/Mailpit storage/cleanup 등 독립 연결 작업은 계속 가능하다. T2·E8·H7·정식 UI·실제 VM 인수는 별도 경계다.
+ready=0은 기술 작업 소진을 뜻하지 않는다. 고객 인증 backend·immutable contracts 소비·G13 BFF/compiled 중계·일곱 번째 cold bundle/profile/readiness·실제 gateway를 연결했다. 전체 installer/agent entrypoint·Messenger/Mailpit storage cleanup·권한별 손님 이름과 production notification 자격 갱신/토폴로지 등 독립 작업은 계속 가능하다. T2·E8·H7·정식 UI·실제 VM 인수는 별도 경계다.
 
 | 분류 | 남은 수 |
 |---|---:|
 | 구현 가능 | 0 |
-| 기술 계약 확정 선행 | 10 |
-| 서비스 구현 선행 | 19 |
-| UI 기준 선행 | 15 |
+| 기술 계약 확정 선행 | 9 |
+| 서비스 구현 선행 | 17 |
+| UI 기준 선행 | 17 |
 | 제품 정책 결정 필요 | 11 |
 | 외부 VM 인수 | 9 |
 | 현재 최소 범위 제외 | 0 |
@@ -29,20 +29,20 @@ ready=0은 기술 작업 소진을 뜻하지 않는다. 고객 인증 backend와
 | GW-21 | j-groupware | 조직도 편집 | UI 기준 선행 | partial | 기존 조직도 API로 편집 화면과 충돌 안내를 구현한다. |
 | GW-30 | j-groupware | 메신저 화면 | UI 기준 선행 | partial | 설치된 공개 client 패키지로 정식 메신저 화면을 연결한다. |
 | GW-31 | j-groupware | 메일 화면 | UI 기준 선행 | partial | 기존 read 계약으로 화면·sandbox·Playwright를 구현한다. |
-| GW-32 | j-groupware | 손님 관리 화면 | 서비스 구현 선행 | not_started | C1/C2/C3 backend 후 기존 BFF 인증 패턴으로 relay·화면을 연결한다. |
-| GW-33 | j-groupware | API 키 화면 | 서비스 구현 선행 | not_started | C5 backend·one-time secret 계약 후 BFF와 화면을 연결한다. |
+| GW-32 | j-groupware | 손님 관리 화면 | UI 기준 선행 | partial | 기존 UI 질의 응답 후 손님/키 화면과 Playwright 인수를 구현한다. |
+| GW-33 | j-groupware | API 키 화면 | UI 기준 선행 | partial | 기존 UI 질의 응답 후 손님/키 화면과 Playwright 인수를 구현한다. |
 | GW-34 | j-groupware | 결재 화면 | UI 기준 선행 | partial | 기존 결재 계약으로 상신·승인·반려 화면을 구현한다. |
 | GW-35 | j-groupware | 상담 화면 | 서비스 구현 선행 | partial | customer-auth 손님 조회와 권한별 이름 조합을 연결하고 T2 정책 및 UI 기준 아래 실제 상담 전달을 구현한다. |
 | GW-36 | j-groupware | 상담 설정 | UI 기준 선행 | partial | 정식 UI 기준 아래 상담 설정 화면을 연결하고 확정된 visitor 서명 계약을 예제로 제공한다. |
 | GW-37 | j-groupware | 웹 관리 화면 | 서비스 구현 선행 | not_started | web DB·인증·helper·계약부터 구현한 뒤 BFF·화면을 연결한다. |
 | GW-38 | j-groupware | 배포 후 허용 출처 등록 | 서비스 구현 선행 | not_started | 각 backend 완성 후 성공/후속 origin 실패를 분리한 BFF 연결을 구현한다. |
-| GW-40 | j-groupware | 알림 수신 API | 서비스 구현 선행 | partial | 전용 계정의 CA/TLS credential 전달과 전체 bootstrap/installer/agent 실행 진입점을 연결하고, 남은 제품 저장소/정리와 production notification 자격 갱신·토폴로지를 구현한다. 실제 systemd/timer와 고객 VM 활성화는 별도 인수한다. |
+| GW-40 | j-groupware | 알림 수신 API | 서비스 구현 선행 | partial | 전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage cleanup 및 production notification 자격 갱신/토폴로지; 실제 systemd credential/VM/timer는 별도 인수. 고객 인증 bundle/profile/gateway는 검증 완료. |
 | GW-44 | j-groupware | 알림 화면 | UI 기준 선행 | partial | 정식 UI와 기존 알림 계약을 연결한다. |
 | GW-51 | j-groupware | 고객 목록·계약 상태 | 기술 계약 확정 선행 | partial | 업무 계약 상태값·전이 기준을 확인한 뒤 기존 고객 DTO/PG 저장과 연결한다. |
-| GW-63 | j-groupware | 부트스트랩 | 서비스 구현 선행 | partial | 전체 installer/agent entrypoint와 고객 인증 bundle/profile/gateway, Messenger/Mailpit storage cleanup 연결; 실제 systemd credential/VM/timer 인수는 별도 |
-| GW-64 | j-groupware | 서비스 설치 | 서비스 구현 선행 | partial | 전체 installer/agent entrypoint와 고객 인증 bundle/profile/gateway, Messenger/Mailpit storage cleanup 연결; 실제 systemd credential/VM/timer 인수는 별도 |
-| GW-65 | j-groupware | 서비스 해지 | 서비스 구현 선행 | partial | 전체 installer/agent entrypoint와 고객 인증 bundle/profile/gateway, Messenger/Mailpit storage cleanup 연결; 실제 systemd credential/VM/timer 인수는 별도 |
-| GW-66 | j-groupware | 프로비저닝 에이전트 | 서비스 구현 선행 | partial | 전체 installer/agent entrypoint와 고객 인증 bundle/profile/gateway, Messenger/Mailpit storage cleanup 연결; 실제 systemd credential/VM/timer 인수는 별도 |
+| GW-63 | j-groupware | 부트스트랩 | 서비스 구현 선행 | partial | 전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage cleanup 및 production notification 자격 갱신/토폴로지; 실제 systemd credential/VM/timer는 별도 인수. 고객 인증 bundle/profile/gateway는 검증 완료. |
+| GW-64 | j-groupware | 서비스 설치 | 서비스 구현 선행 | partial | 전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage cleanup 및 production notification 자격 갱신/토폴로지; 실제 systemd credential/VM/timer는 별도 인수. 고객 인증 bundle/profile/gateway는 검증 완료. |
+| GW-65 | j-groupware | 서비스 해지 | 서비스 구현 선행 | partial | 전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage cleanup 및 production notification 자격 갱신/토폴로지; 실제 systemd credential/VM/timer는 별도 인수. 고객 인증 bundle/profile/gateway는 검증 완료. |
+| GW-66 | j-groupware | 프로비저닝 에이전트 | 서비스 구현 선행 | partial | 전체 bootstrap/installer/agent entrypoint·Messenger/Mailpit storage cleanup 및 production notification 자격 갱신/토폴로지; 실제 systemd credential/VM/timer는 별도 인수. 고객 인증 bundle/profile/gateway는 검증 완료. |
 | GW-71 | j-groupware | UI 기준 | UI 기준 선행 | not_started | 추가 질의를 반복하지 않고 기존 응답을 기다린다. |
 | GW-73 | j-groupware | VM 검증·측정 | 외부 VM 인수 | not_started | 설치자 연결 후 지정 VM에서 통합 인수한다. |
 | MS-07 | j-messenger | UI 토큰 적용 | UI 기준 선행 | not_started | 확정된 groupware UI token을 통합 client 화면에 적용한다. |
@@ -51,7 +51,6 @@ ready=0은 기술 작업 소진을 뜻하지 않는다. 고객 인증 backend와
 | ML-20 | j-mail | 새 메일 알림 | 제품 정책 결정 필요 | not_started | 아래 E8 선택 후 기존 알림 계약에 맞춰 수신·outbox·재시도를 구현한다. |
 | ML-30 | j-mail | 저장소 골격·DB | 서비스 구현 선행 | partial | E8 결정 후 outbox를 구현하고 installer 연결·VM 인수를 분리한다. |
 | ML-32 | j-mail | 고객 서버 검증 | 외부 VM 인수 | not_started | E8 결정과 설치 연결 후 지정 VM에서 검증한다. |
-| CA-31 | j-customer-auth-db | contracts | 기술 계약 확정 선행 | partial | 동일 contracts의 immutable registry 게시/소비를 검증하고 G13 BFF·사이트 서버 예제에 연결한다. |
 | CA-32 | j-customer-auth-db | 고객 서버 검증 | 외부 VM 인수 | not_started | BFF/gateway/bundle 연결 뒤 지정 VM에서 화면→사이트 서버 로그인→외부 조회와 백업을 실행한다. |
 | AP-32 | j-approval | 고객 서버 검증 | 외부 VM 인수 | not_started | 지정 VM에서 systemd·HTTPS·결재 화면 흐름을 확인한다. |
 | TK-02 | j-talk | FAB·대화창 | 서비스 구현 선행 | partial | visitor producer와 실제 텍스트 대화 UI를 연결하고 브라우저에서 격리를 검증한다. |
@@ -102,21 +101,21 @@ FS-U07의 현 최소 범위를 유지: webhook 수신 전 누락 허용, 수신�
 
 ## 실제 검증 범위
 
-[고객 인증·서비스 계정 TLS 증거](cloud-customer-auth-tls-verification-2026-10-08.md): 실제 auth/member/PG의 고객 인증9와 전체 BFF167(신규9 포함), TLS 전용계정3, safe unpack19, agent core20은 Node22/24 각각 exit0·skip0이다. 고객 인증 check7 각 버전, Node24 root check76와 build/type/lint/format도 통과했다. 기존 실제 PG6·product5·cold 제품4·Nginx15·Web cleanup2는 과거 기록으로 보존한다. 직접 Vitest 실행의 JGW_TEST_ENV 누락과 중단 뒤 자기 auth fixture의 포트 점유, 병행 unpack의 ENOSPC 실패를 보존하고 공식 runner·순차 실행으로 재검증했다. 이전 별도 receiver startup 실패 원인은 아직 미확정이다. 실제 systemd PID1 전달·VM·browser·전체 인수는 미완료다.
+[고객 인증 연결 증거](cloud-customer-relay-bundle-verification-2026-10-08.md): Node22/24 전체 BFF174 각각 pass(신규 고객 인증16 포함), 중간 연결15 각각 pass, agent20 각각 exit0·skip0, 고객 인증 check7/통합9 각각 pass, Node24 root check76와 최종 type/lint/format 통과. Node24 전체 회귀는 환경 starting→ready 재연결로 이전 tool session의 exit 조회가 사라졌으나 최종13 files/174 passed 로그는 보존했다. 이전 TLS3·unpack19·PG6·product5·Nginx15·Web cleanup2 증거는 별도 과거 기록이다. 원인 미확정 이전 receiver startup 실패와 이번 fixture/umask/DNS/keepalive 실패 로그를 보존했다. 정식 UI·실제 systemd PID1·VM·전체 인수는 미완료다. 여섯 선택 제품 cold archive/lock/npm ci/config import와 Talk/Web 실제 부팅의 4개 검사도 두 Node 각각 exit0·skip0이며 고객 인증 실제 cold 전체 부팅은 BFF 고객 인증16에 포함돼 있다.
 
 작업 브랜치의 마지막 소스 커밋:
 
 - web_source_commit: `13861dd835362992f6ba0ee8bd237e30db8ca0ba`
-- agent_source_commit: `64b1d89702e4641f34ed6b24ee7b6254c270b81d`
+- agent_source_commit: `b15b53bb32942eee832413729940af02c1950edf`
 - talk_source_commit: `a022105102ffe680cf040b4d57f6f46e1d54d804`
 - console_source_commit: `998a48abe1e66f2aefd88d28fa6adda07627107c`
 - talk_bff_source_commit: `bc949abd081477cac26e3c41a4e0311bd377c091`
-- bundle_source_commit: `64b1d89702e4641f34ed6b24ee7b6254c270b81d`
+- bundle_source_commit: `b15b53bb32942eee832413729940af02c1950edf`
 - bootstrap_source_commit: `aa2a2f13e88fa1e6959ccb08c276434a8e7c831f`
 - teardown_source_commit: `e00000f9f2d0b8f2f7ec1ecaac5c12dce41deaa5`
 - notification_worker_source_commit: `ea24dd34636bcfebbf89ec26d87c79831a577ece`
-- customer_auth_source_commit: `4692b36db98c2cb2043cb76514bc350256ccaaf7`
-- customer_auth_test_source_commit: `93816d75b358e731267ce126ba3b10eaa76e2ebd`
+- customer_auth_source_commit: `6cbfdc8b4ec6b104f9cf6cc0e96eb73d7229db35`
+- customer_auth_test_source_commit: `b15b53bb32942eee832413729940af02c1950edf`
 - tls_credentials_source_commit: `64b1d89702e4641f34ed6b24ee7b6254c270b81d`
 - tls_credentials_test_source_commit: `66e41b2070ed2aa7c0efcb5e684891b3926db0b6`
 

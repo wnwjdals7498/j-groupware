@@ -97,9 +97,10 @@ failure ordering and read-only systemd unit syntax. Lifecycle ordering uses
 explicit test ports, not fake claims of installed services.
 
 `ProductEnvironment` renders exact env names consumed by the compiled approval,
-Messenger, Talk, Mail and Web config loaders. It fixes each DB/role, loopback
+Messenger, Talk, Mail, Web and customer-auth config loaders. It fixes each DB/role, loopback
 ports, tenant and TLS paths, retains private notification keys, and generates
-an independent Messenger cursor signing key. Existing env must exactly match
+independent Messenger and customer-auth cursor signing keys. Customer-auth fixes
+the tenant HTTPS public origin and independent guest signing key path. Existing env must exactly match
 the trusted profile; unknown variables, duplicate overrides or profile drift
 are refused rather than silently changing persisted credentials.
 
@@ -109,8 +110,10 @@ requires both durable active state and a successful probe for `installed`.
 Failed/in-progress/unready allocations remain `incomplete`; reconciliation
 repairs desired partial installs and removes undesired partial allocations.
 The console preserves this distinction and refuses contradictory or falsely
-synchronized reports. Customer-auth DB has no compiled product adapter yet;
-an active record for that product fails closed instead of inventing readiness.
+synchronized reports. Customer-auth's actual `{ready:true}` HTTPS shape is
+verified; missing profiles still fail closed. The latest fixture installs its
+cold archive, preserves secrets on retry and observes a stopped active process
+as incomplete, without adding duplicate inventory entries.
 
 `ProductGateway` derives published optional services from durable active state
 and the current lifecycle action. It uses the existing actual-worker Nginx
@@ -119,8 +122,7 @@ native commands use a fixed minimal environment, without inherited loader hooks.
 
 Earlier Node 22.18/24.19 checkpoint coverage: preparation/reconciliation 20 each, five
 product tests each (including real compiled Talk/Web with their isolated PGs),
-15 actual Nginx tests each, whole BFF regression 148 each and root check
-76. Customer VM, notification worker activation, remaining product storage/cleanup and timer
+15 actual Nginx tests each, whole BFF regression 148 each and root check 76. Customer VM, notification worker activation, remaining product storage/cleanup and timer
 activation remain separate unexecuted work. Product tests require the external
 isolated Talk/Web/auth env files and their built artifacts; they never skip a
 missing prerequisite or access port 3001.
@@ -145,6 +147,12 @@ it excludes the console agent key. Actual cold BFF tests run as the existing
 isolated cloud user. Dedicated-account CA/TLS source and isolated container
 permissions are now verified; actual systemd credential delivery and the
 complete bootstrap/installer entrypoint remain pending.
+
+The [customer relay/bundle report](../../docs/cloud-customer-relay-bundle-verification-2026-10-08.md)
+adds exact registry contracts consumption, actual customer guest/key BFF relay,
+the seventh cold bundle/profile/readiness and real HTTPS Nginx activation and
+withdrawal. Full BFF regression passes 174 tests per Node version. This does not
+activate customer systemd, timers, accounts or operating CA trust.
 
 Run `JGW_AGENT_TEST_RUNTIME=isolated-cloud npm run test:agent` and
 `npm run test:agent:database`. The database test needs Docker, unused loopback

@@ -1,8 +1,8 @@
 # 제품별 내부 실행 번들
 
 `build-product-bundle.mjs`는 이미 빌드된 groupware BFF, approval, Messenger,
-Talk, Mail, Web의 내부 서버와 로컬 패키지를 포장한다. customer-auth는 아직
-대상이 아니며 준비되지 않은 서비스는 거부한다. 기본 BFF에는 contracts,
+Talk, Mail, Web, customer-auth의 일곱 내부 서버와 로컬 패키지를 포장한다.
+등록되지 않은 서비스는 거부한다. 기본 BFF에는 contracts,
 permissions, bff-auth와 설치/gateway 모듈을 함께 넣는다.
 
 입력은 해당 제품 이름의 실제 체크아웃, 외부 출력 `.tar.gz`, 외부 mode-600
@@ -46,8 +46,11 @@ credential을 준비하고, unit의 고정 LoadCredential과 non-root launcher�
 같은 PID를 유지해 CA trust를 시작 시 읽는다. Node22.18/24.19의 실제
 격리 컨테이너에서 전용 계정의 자기 키 읽기·다른 계정/CA private key 거부와
 HTTPS trust를 확인했다. 실제 systemd PID1 전달과 고객 계정 설치는 미실행이다.
-customer-auth 서버의 별도 cold npm ci/import는 통과했지만, customer-auth를
-이 여섯 서비스 bundle/profile/gateway에 연결하는 작업은 아직 남아 있다.
+customer-auth도 새 archive의 실제 설치·재시도·cold main 부팅, 전용 PG,
+native Argon2·독립 guest JWT/JWKS·TLS readiness와 실제 Nginx 연결을 통과했다.
+registry의 0.1.0 공용 contracts를 BFF exact dependency로 소비하고 cold CA의
+contracts JS와 바이트 일치도 확인했다. [최신 연결 증거](../../docs/cloud-customer-relay-bundle-verification-2026-10-08.md)를
+따른다. 정식 UI·전체 installer entrypoint·고객 VM 인수는 미완료다.
 
 실행 인터페이스:
 
@@ -61,7 +64,7 @@ node deploy/agent/build-product-bundle.mjs j-talk /checkout/j-talk /external/art
 검사: `JGW_AGENT_TEST_RUNTIME=isolated-cloud npm run test:agent:bundles`와
 `npm run test:agent:unpack`; 기본 cold BFF는 BFF 통합 검사에 포함된다.
 이 클라우드에서는 TMPDIR를 실행 사용자 소유의 외부 private 디렉터리로 설정한다.
-Node22.18/24.19 각각 4개 실제 검사에서 다섯 제품 archive/lockfile을 생성하고,
+Node22.18/24.19 각각 4개 실제 검사에서 여섯 선택 제품 archive/lockfile을 생성하고,
 저장소 node_modules 없이 `npm ci --omit=dev --ignore-scripts`를 실행했다.
 압축 해제한 Talk/Web은 각자의 실제 격리 PostgreSQL에 연결되어 TLS 준비 상태를
 통과했고 Talk의 packaged widget도 정확한 파일 바이트를 제공했다.
