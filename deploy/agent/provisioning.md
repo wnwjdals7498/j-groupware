@@ -95,13 +95,20 @@ and the current lifecycle action. It uses the existing actual-worker Nginx
 activation/rollback path and leaves j-web-owned configuration intact. Privileged
 native commands use a fixed minimal environment, without inherited loader hooks.
 
-Executed Node 22.18/24.19 coverage: preparation/reconciliation 20 each, five
+Earlier Node 22.18/24.19 checkpoint coverage: preparation/reconciliation 20 each, five
 product tests each (including real compiled Talk/Web with their isolated PGs),
 15 actual Nginx tests each, whole BFF regression 148 each and root check
 76. Customer VM, notification worker activation, remaining product storage/cleanup and timer
 activation remain separate unexecuted work. Product tests require the external
 isolated Talk/Web/auth env files and their built artifacts; they never skip a
 missing prerequisite or access port 3001.
+
+The [latest bootstrap/worker report](../../docs/cloud-bootstrap-worker-verification-2026-10-08.md)
+records full BFF158, safe unpack19, base cold BFF4, actual PG6 and explicit
+notification worker6 on each Node version, plus the unchanged source status and
+separate unexecuted customer/OS acceptance. An initial compiled-receiver startup
+failure did not recur in the standalone projection/full reruns; its failed log
+and unresolved cause are preserved.
 
 The [internal bundle producer](bundles.md) now supplies the fixed metadata,
 compiled server/contracts, migrations and product assets required by native

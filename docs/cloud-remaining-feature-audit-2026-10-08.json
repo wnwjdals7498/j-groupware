@@ -481,8 +481,8 @@
       "classification_label": "서비스 구현 선행",
       "external_or_user_gate": false,
       "additional_dependencies": [],
-      "reason": "알림 receiver·구독 갱신·교체 겹침은 검증됐고 production installer key provisioning 연결이 없다.",
-      "next_step": "완성된 installer 인증·key provisioning 경계로 실제 가입 연결을 구현한다.",
+      "reason": "기본 BFF 봉인 설정·안전 unpack/cold 기동, 생성 실패 단계별 PG 해지, Approval/Talk 데이터 보존 cleanup, 짧은 수명 외부 자격/실제 알림 worker CLI를 검증했다. 전용 서비스 계정 CA/TLS·제품 storage/Messenger/Mailpit/customer cleanup·전체 bootstrap/installer entrypoint·운영 자격 갱신/토폴로지·timer와 고객 VM 인수는 남았다.",
+      "next_step": "전용 계정의 CA/TLS credential 전달과 전체 bootstrap/installer/agent 실행 진입점을 연결하고, 남은 제품 저장소/정리와 production notification 자격 갱신·토폴로지를 구현한다. 실제 systemd/timer와 고객 VM 활성화는 별도 인수한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
@@ -491,9 +491,9 @@
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_isolated_j_auth_subscription_GET_unsubscribe_resubscribe_PG_registry_hash_generation_overlap_expiry_fail_closed_multi_instance_rollback_poll_retry_compiled_projection_receiver_pass; production_installer_agent_key_provisioning_pending",
+      "current_verification": "actual_notification_registry_projection13_and_worker6_each_Node22_Node24_with_real_auth_PG_private_receiver_pass; external_short_lived_credentials_one_shot_CLI_expiry_inactive_same_generation_recovery_pass; full_BFF158_each_exit0_skip0; production_credential_renewal_topology_worker_timer_and_all_source_product_acceptance_pending",
       "implementation": "partial",
-      "verification": "actual_isolated_j_auth_subscription_GET_unsubscribe_resubscribe_PG_registry_hash_generation_overlap_expiry_fail_closed_multi_instance_rollback_poll_retry_compiled_projection_receiver_pass; production_installer_agent_key_provisioning_pending"
+      "verification": "actual_notification_registry_projection13_and_worker6_each_Node22_Node24_with_real_auth_PG_private_receiver_pass; external_short_lived_credentials_one_shot_CLI_expiry_inactive_same_generation_recovery_pass; full_BFF158_each_exit0_skip0; production_credential_renewal_topology_worker_timer_and_all_source_product_acceptance_pending"
     },
     {
       "id": "GW-44",
@@ -556,8 +556,8 @@
         "GW-52",
         "GW-54"
       ],
-      "reason": "콘솔·env·실제 TLS/Nginx·부분 조정·cold bundle·알림 hash manifest와 Web root cleanup을 검증했다. base bootstrap/안전 unpack·제품 storage/비Web cleanup·생성 전 실패 teardown·실제 source 자격/주기 worker·CLI/timer와 고객 VM 인수는 남았다.",
-      "next_step": "기존 adapters를 CLI/agent entrypoint로 연결하고 base bootstrap·권한 설치·단계별 teardown·비Web cleanup 및 알림 worker source를 격리 검증한다. 고객 VM 활성화는 별도 인수한다.",
+      "reason": "기본 BFF 봉인 설정·안전 unpack/cold 기동, 생성 실패 단계별 PG 해지, Approval/Talk 데이터 보존 cleanup, 짧은 수명 외부 자격/실제 알림 worker CLI를 검증했다. 전용 서비스 계정 CA/TLS·제품 storage/Messenger/Mailpit/customer cleanup·전체 bootstrap/installer entrypoint·운영 자격 갱신/토폴로지·timer와 고객 VM 인수는 남았다.",
+      "next_step": "전용 계정의 CA/TLS credential 전달과 전체 bootstrap/installer/agent 실행 진입점을 연결하고, 남은 제품 저장소/정리와 production notification 자격 갱신·토폴로지를 구현한다. 실제 systemd/timer와 고객 VM 활성화는 별도 인수한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
@@ -566,9 +566,9 @@
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF158_each_exit0_skip0; safe_unpack19_each_with_base_Talk_cold_npm_ci_runtime_worker_import_hash_permissions_idempotence_adversarial_tar14_failure_cancellation_pass; actual_base_bootstrap_BFF4_each_sealed_env_real_Keycloak_login_PG_board_tenant_CSRF_Host_logout_pass; actual_PG18_DB6_each_dump_restore_NOLOGIN_preDB_role_only_failure_teardown_foreign_allocation_and_changed_snapshot_guard_pass; agent_core20_and_product5_and_product_cold_bundle4_each_pass; notification_worker6_each_actual_auth_PG_receiver_expiry_recovery_one_shot_CLI_and_inactive_unit_timer_syntax_pass; root_check76_build_type_lint_format_pass; native_absent_unit_protocol_source_only_customer_systemd_not_run; full_base_bootstrap_privilege_setup_service_account_CA_TLS_access_product_storage_Messenger_Mailpit_customer_cleanup_full_installer_agent_entrypoint_production_notification_credential_renewal_topology_timer_activation_customer_VM_and_whole_suite_acceptance_pending",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run"
+      "verification": "actual_Node22_18_Node24_19_full_BFF158_each_exit0_skip0; safe_unpack19_each_with_base_Talk_cold_npm_ci_runtime_worker_import_hash_permissions_idempotence_adversarial_tar14_failure_cancellation_pass; actual_base_bootstrap_BFF4_each_sealed_env_real_Keycloak_login_PG_board_tenant_CSRF_Host_logout_pass; actual_PG18_DB6_each_dump_restore_NOLOGIN_preDB_role_only_failure_teardown_foreign_allocation_and_changed_snapshot_guard_pass; agent_core20_and_product5_and_product_cold_bundle4_each_pass; notification_worker6_each_actual_auth_PG_receiver_expiry_recovery_one_shot_CLI_and_inactive_unit_timer_syntax_pass; root_check76_build_type_lint_format_pass; native_absent_unit_protocol_source_only_customer_systemd_not_run; full_base_bootstrap_privilege_setup_service_account_CA_TLS_access_product_storage_Messenger_Mailpit_customer_cleanup_full_installer_agent_entrypoint_production_notification_credential_renewal_topology_timer_activation_customer_VM_and_whole_suite_acceptance_pending"
     },
     {
       "id": "GW-64",
@@ -585,8 +585,8 @@
         "WB-20",
         "TK-40"
       ],
-      "reason": "콘솔·env·실제 TLS/Nginx·부분 조정·cold bundle·알림 hash manifest와 Web root cleanup을 검증했다. base bootstrap/안전 unpack·제품 storage/비Web cleanup·생성 전 실패 teardown·실제 source 자격/주기 worker·CLI/timer와 고객 VM 인수는 남았다.",
-      "next_step": "기존 adapters를 CLI/agent entrypoint로 연결하고 base bootstrap·권한 설치·단계별 teardown·비Web cleanup 및 알림 worker source를 격리 검증한다. 고객 VM 활성화는 별도 인수한다.",
+      "reason": "기본 BFF 봉인 설정·안전 unpack/cold 기동, 생성 실패 단계별 PG 해지, Approval/Talk 데이터 보존 cleanup, 짧은 수명 외부 자격/실제 알림 worker CLI를 검증했다. 전용 서비스 계정 CA/TLS·제품 storage/Messenger/Mailpit/customer cleanup·전체 bootstrap/installer entrypoint·운영 자격 갱신/토폴로지·timer와 고객 VM 인수는 남았다.",
+      "next_step": "전용 계정의 CA/TLS credential 전달과 전체 bootstrap/installer/agent 실행 진입점을 연결하고, 남은 제품 저장소/정리와 production notification 자격 갱신·토폴로지를 구현한다. 실제 systemd/timer와 고객 VM 활성화는 별도 인수한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
@@ -595,9 +595,9 @@
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF158_each_exit0_skip0; safe_unpack19_each_with_base_Talk_cold_npm_ci_runtime_worker_import_hash_permissions_idempotence_adversarial_tar14_failure_cancellation_pass; actual_base_bootstrap_BFF4_each_sealed_env_real_Keycloak_login_PG_board_tenant_CSRF_Host_logout_pass; actual_PG18_DB6_each_dump_restore_NOLOGIN_preDB_role_only_failure_teardown_foreign_allocation_and_changed_snapshot_guard_pass; agent_core20_and_product5_and_product_cold_bundle4_each_pass; notification_worker6_each_actual_auth_PG_receiver_expiry_recovery_one_shot_CLI_and_inactive_unit_timer_syntax_pass; root_check76_build_type_lint_format_pass; native_absent_unit_protocol_source_only_customer_systemd_not_run; full_base_bootstrap_privilege_setup_service_account_CA_TLS_access_product_storage_Messenger_Mailpit_customer_cleanup_full_installer_agent_entrypoint_production_notification_credential_renewal_topology_timer_activation_customer_VM_and_whole_suite_acceptance_pending",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run"
+      "verification": "actual_Node22_18_Node24_19_full_BFF158_each_exit0_skip0; safe_unpack19_each_with_base_Talk_cold_npm_ci_runtime_worker_import_hash_permissions_idempotence_adversarial_tar14_failure_cancellation_pass; actual_base_bootstrap_BFF4_each_sealed_env_real_Keycloak_login_PG_board_tenant_CSRF_Host_logout_pass; actual_PG18_DB6_each_dump_restore_NOLOGIN_preDB_role_only_failure_teardown_foreign_allocation_and_changed_snapshot_guard_pass; agent_core20_and_product5_and_product_cold_bundle4_each_pass; notification_worker6_each_actual_auth_PG_receiver_expiry_recovery_one_shot_CLI_and_inactive_unit_timer_syntax_pass; root_check76_build_type_lint_format_pass; native_absent_unit_protocol_source_only_customer_systemd_not_run; full_base_bootstrap_privilege_setup_service_account_CA_TLS_access_product_storage_Messenger_Mailpit_customer_cleanup_full_installer_agent_entrypoint_production_notification_credential_renewal_topology_timer_activation_customer_VM_and_whole_suite_acceptance_pending"
     },
     {
       "id": "GW-65",
@@ -612,8 +612,8 @@
         "GW-64",
         "WB-25"
       ],
-      "reason": "콘솔·env·실제 TLS/Nginx·부분 조정·cold bundle·알림 hash manifest와 Web root cleanup을 검증했다. base bootstrap/안전 unpack·제품 storage/비Web cleanup·생성 전 실패 teardown·실제 source 자격/주기 worker·CLI/timer와 고객 VM 인수는 남았다.",
-      "next_step": "기존 adapters를 CLI/agent entrypoint로 연결하고 base bootstrap·권한 설치·단계별 teardown·비Web cleanup 및 알림 worker source를 격리 검증한다. 고객 VM 활성화는 별도 인수한다.",
+      "reason": "기본 BFF 봉인 설정·안전 unpack/cold 기동, 생성 실패 단계별 PG 해지, Approval/Talk 데이터 보존 cleanup, 짧은 수명 외부 자격/실제 알림 worker CLI를 검증했다. 전용 서비스 계정 CA/TLS·제품 storage/Messenger/Mailpit/customer cleanup·전체 bootstrap/installer entrypoint·운영 자격 갱신/토폴로지·timer와 고객 VM 인수는 남았다.",
+      "next_step": "전용 계정의 CA/TLS credential 전달과 전체 bootstrap/installer/agent 실행 진입점을 연결하고, 남은 제품 저장소/정리와 production notification 자격 갱신·토폴로지를 구현한다. 실제 systemd/timer와 고객 VM 활성화는 별도 인수한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
@@ -622,9 +622,9 @@
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF158_each_exit0_skip0; safe_unpack19_each_with_base_Talk_cold_npm_ci_runtime_worker_import_hash_permissions_idempotence_adversarial_tar14_failure_cancellation_pass; actual_base_bootstrap_BFF4_each_sealed_env_real_Keycloak_login_PG_board_tenant_CSRF_Host_logout_pass; actual_PG18_DB6_each_dump_restore_NOLOGIN_preDB_role_only_failure_teardown_foreign_allocation_and_changed_snapshot_guard_pass; agent_core20_and_product5_and_product_cold_bundle4_each_pass; notification_worker6_each_actual_auth_PG_receiver_expiry_recovery_one_shot_CLI_and_inactive_unit_timer_syntax_pass; root_check76_build_type_lint_format_pass; native_absent_unit_protocol_source_only_customer_systemd_not_run; full_base_bootstrap_privilege_setup_service_account_CA_TLS_access_product_storage_Messenger_Mailpit_customer_cleanup_full_installer_agent_entrypoint_production_notification_credential_renewal_topology_timer_activation_customer_VM_and_whole_suite_acceptance_pending",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run"
+      "verification": "actual_Node22_18_Node24_19_full_BFF158_each_exit0_skip0; safe_unpack19_each_with_base_Talk_cold_npm_ci_runtime_worker_import_hash_permissions_idempotence_adversarial_tar14_failure_cancellation_pass; actual_base_bootstrap_BFF4_each_sealed_env_real_Keycloak_login_PG_board_tenant_CSRF_Host_logout_pass; actual_PG18_DB6_each_dump_restore_NOLOGIN_preDB_role_only_failure_teardown_foreign_allocation_and_changed_snapshot_guard_pass; agent_core20_and_product5_and_product_cold_bundle4_each_pass; notification_worker6_each_actual_auth_PG_receiver_expiry_recovery_one_shot_CLI_and_inactive_unit_timer_syntax_pass; root_check76_build_type_lint_format_pass; native_absent_unit_protocol_source_only_customer_systemd_not_run; full_base_bootstrap_privilege_setup_service_account_CA_TLS_access_product_storage_Messenger_Mailpit_customer_cleanup_full_installer_agent_entrypoint_production_notification_credential_renewal_topology_timer_activation_customer_VM_and_whole_suite_acceptance_pending"
     },
     {
       "id": "GW-66",
@@ -636,8 +636,8 @@
       "classification_label": "서비스 구현 선행",
       "external_or_user_gate": false,
       "additional_dependencies": [],
-      "reason": "콘솔·env·실제 TLS/Nginx·부분 조정·cold bundle·알림 hash manifest와 Web root cleanup을 검증했다. base bootstrap/안전 unpack·제품 storage/비Web cleanup·생성 전 실패 teardown·실제 source 자격/주기 worker·CLI/timer와 고객 VM 인수는 남았다.",
-      "next_step": "기존 adapters를 CLI/agent entrypoint로 연결하고 base bootstrap·권한 설치·단계별 teardown·비Web cleanup 및 알림 worker source를 격리 검증한다. 고객 VM 활성화는 별도 인수한다.",
+      "reason": "기본 BFF 봉인 설정·안전 unpack/cold 기동, 생성 실패 단계별 PG 해지, Approval/Talk 데이터 보존 cleanup, 짧은 수명 외부 자격/실제 알림 worker CLI를 검증했다. 전용 서비스 계정 CA/TLS·제품 storage/Messenger/Mailpit/customer cleanup·전체 bootstrap/installer entrypoint·운영 자격 갱신/토폴로지·timer와 고객 VM 인수는 남았다.",
+      "next_step": "전용 계정의 CA/TLS credential 전달과 전체 bootstrap/installer/agent 실행 진입점을 연결하고, 남은 제품 저장소/정리와 production notification 자격 갱신·토폴로지를 구현한다. 실제 systemd/timer와 고객 VM 활성화는 별도 인수한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
@@ -646,9 +646,9 @@
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF158_each_exit0_skip0; safe_unpack19_each_with_base_Talk_cold_npm_ci_runtime_worker_import_hash_permissions_idempotence_adversarial_tar14_failure_cancellation_pass; actual_base_bootstrap_BFF4_each_sealed_env_real_Keycloak_login_PG_board_tenant_CSRF_Host_logout_pass; actual_PG18_DB6_each_dump_restore_NOLOGIN_preDB_role_only_failure_teardown_foreign_allocation_and_changed_snapshot_guard_pass; agent_core20_and_product5_and_product_cold_bundle4_each_pass; notification_worker6_each_actual_auth_PG_receiver_expiry_recovery_one_shot_CLI_and_inactive_unit_timer_syntax_pass; root_check76_build_type_lint_format_pass; native_absent_unit_protocol_source_only_customer_systemd_not_run; full_base_bootstrap_privilege_setup_service_account_CA_TLS_access_product_storage_Messenger_Mailpit_customer_cleanup_full_installer_agent_entrypoint_production_notification_credential_renewal_topology_timer_activation_customer_VM_and_whole_suite_acceptance_pending",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run"
+      "verification": "actual_Node22_18_Node24_19_full_BFF158_each_exit0_skip0; safe_unpack19_each_with_base_Talk_cold_npm_ci_runtime_worker_import_hash_permissions_idempotence_adversarial_tar14_failure_cancellation_pass; actual_base_bootstrap_BFF4_each_sealed_env_real_Keycloak_login_PG_board_tenant_CSRF_Host_logout_pass; actual_PG18_DB6_each_dump_restore_NOLOGIN_preDB_role_only_failure_teardown_foreign_allocation_and_changed_snapshot_guard_pass; agent_core20_and_product5_and_product_cold_bundle4_each_pass; notification_worker6_each_actual_auth_PG_receiver_expiry_recovery_one_shot_CLI_and_inactive_unit_timer_syntax_pass; root_check76_build_type_lint_format_pass; native_absent_unit_protocol_source_only_customer_systemd_not_run; full_base_bootstrap_privilege_setup_service_account_CA_TLS_access_product_storage_Messenger_Mailpit_customer_cleanup_full_installer_agent_entrypoint_production_notification_credential_renewal_topology_timer_activation_customer_VM_and_whole_suite_acceptance_pending"
     },
     {
       "id": "GW-71",
@@ -1965,7 +1965,7 @@
   ],
   "next_independent_batches": [
     "CA-30→CA-31→CA-04/01/02/03→CA-10/11/12/20: 손님 DB·contracts·member API·hashed API key",
-    "GW-63/64/65/66: 제품 storage/비Web cleanup·생성 전 실패 teardown·알림 source/worker·기본 bootstrap/OS entrypoint·safe extraction과 timer wiring; 실제 VM 활성화는 별도",
+    "GW-63/64/65/66: 전용 서비스 계정 CA/TLS credential·전체 bootstrap/OS installer/agent entrypoint·제품 storage와 Messenger/Mailpit/customer cleanup·production notification 자격 갱신/토폴로지; 실제 timer/VM 활성화는 별도",
     "GW-35: 손님 이름 권한별 조합; visitor/WSS 전달은 T2 정책 경계와 분리",
     "AU-50: 결정 19의 실제 Nginx 인증 control-plane allowlist",
     "기존 정식 UI 기준 도착 후 콘솔·상담·서비스 화면과 browser 인수"
@@ -1978,10 +1978,13 @@
     "remaining": 78,
     "web_source_commit": "13861dd835362992f6ba0ee8bd237e30db8ca0ba",
     "talk_source_commit": "a022105102ffe680cf040b4d57f6f46e1d54d804",
-    "agent_source_commit": "2b960e2b33a045499b66c9b48b832e22c18793d3",
+    "agent_source_commit": "ea24dd34636bcfebbf89ec26d87c79831a577ece",
     "console_source_commit": "998a48abe1e66f2aefd88d28fa6adda07627107c",
     "talk_bff_source_commit": "bc949abd081477cac26e3c41a4e0311bd377c091",
-    "bundle_source_commit": "a6816a1bd1051b35a4d81a3248897dd2aaa41b10"
+    "bundle_source_commit": "ea24dd34636bcfebbf89ec26d87c79831a577ece",
+    "bootstrap_source_commit": "aa2a2f13e88fa1e6959ccb08c276434a8e7c831f",
+    "teardown_source_commit": "e00000f9f2d0b8f2f7ec1ecaac5c12dce41deaa5",
+    "notification_worker_source_commit": "ea24dd34636bcfebbf89ec26d87c79831a577ece"
   },
   "completed_since_baseline": [
     {
@@ -2706,5 +2709,5 @@
     "reclassification_does_not_mean_complete": true
   },
   "continueable_work_note": "초기 ready 분류의 독립 소스 작업은 모두 처리했고 이번에는 service/contract 작업도 연결했다. ready=0은 기술 작업 소진을 뜻하지 않는다. customer-auth backend, 설치 entrypoint/storage/cleanup/알림 등록 등 안전한 독립 구현은 계속 가능하며 T2·E8·H7·정식 UI·실제 VM 인수는 별도 경계다.",
-  "verification_summary": "[콘솔·상담 BFF·설치 제품 연결 증거](cloud-console-installer-verification-2026-10-08.md): 전체 BFF 148개, agent 준비/조정 20개·제품 5개·cold 번들 4개·Nginx 15개·실제 PG 3개·Web 해지 2개는 Node22/24 각각 통과했다. 전체 check의 76개·build/type/lint/format도 통과했다. 이전 Web HTTP11/hosting4·Talk14·agent PG3의 통과 기록은 유지한다. 고객 VM·실제 visitor 상담·브라우저·전체 제품군 인수는 미완료다."
+  "verification_summary": "[기본 부트스트랩·안전 설치·알림 worker 증거](cloud-bootstrap-worker-verification-2026-10-08.md): 전체 BFF158, safe unpack19, 기본 cold BFF4, 실제 PG6, worker6, agent core20·제품5·기존 제품 cold 번들4는 Node22/24 각각 통과했다. root check76와 build/type/lint/format도 통과했다. 기존 Nginx15·Web cleanup2 등의 통과 기록은 보존한다. 초기 전체 검사에서 수신기 재시작1 실패는 단독13과 전체158 재실행에서 재현되지 않았고 실패 로그를 보존했다. 실제 systemd/customer VM·browser·전체 제품군 인수는 미완료다."
 }

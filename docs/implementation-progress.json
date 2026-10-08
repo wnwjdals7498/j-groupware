@@ -12,7 +12,7 @@
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal UI and Playwright acceptance pending",
-    "Remaining technical work includes customer-auth DB/member/API-key backend, visitor/WSS delivery under T2 policy, base bootstrap and installer entrypoint, notification registration, service storage/cleanup, safe extraction/privilege setup and timer wiring; these are not environment-wide blockers",
+    "Remaining technical work includes customer-auth DB/member/API-key backend, visitor/WSS under T2, full base bootstrap and installer/agent entrypoint, OS privilege and dedicated service-user CA/TLS access, product storage/Messenger/Mailpit/customer cleanup, production notification credential renewal/topology and operating timer activation; these are not environment-wide blockers",
     "Actual customer VM/20GB data disk/systemd/firewall/OS CA trust and external deployment acceptance not executed in the cloud fixture runtime",
     "Mail E8 needs FS-U07 pre-webhook loss criteria and full SMTP envelope recipient preservation contract; no outbox/ingress recovery policy invented"
   ],
@@ -929,7 +929,7 @@
         "G22"
       ],
       "implementation": "partial",
-      "verification": "actual_isolated_j_auth_subscription_GET_unsubscribe_resubscribe_PG_registry_hash_generation_overlap_expiry_fail_closed_multi_instance_rollback_poll_retry_compiled_projection_receiver_pass; production_installer_agent_key_provisioning_pending",
+      "verification": "actual_notification_registry_projection13_and_worker6_each_Node22_Node24_with_real_auth_PG_private_receiver_pass; external_short_lived_credentials_one_shot_CLI_expiry_inactive_same_generation_recovery_pass; full_BFF158_each_exit0_skip0; production_credential_renewal_topology_worker_timer_and_all_source_product_acceptance_pending",
       "code": [
         "j-groupware/apps/server/src/notification-receiver.ts",
         "j-groupware/apps/server/src/db/notifications.ts",
@@ -939,7 +939,12 @@
         "j-groupware/deploy/migrations/007-notification-projection.sql",
         "j-groupware/tests/bff/projection.integration.test.ts",
         "j-groupware/tests/server/notification-projection.test.ts",
-        "j-groupware/docs/cloud-notification-projection-verification-2026-10-08.md"
+        "j-groupware/docs/cloud-notification-projection-verification-2026-10-08.md",
+        "j-groupware/deploy/agent/control-files.mjs",
+        "j-groupware/deploy/agent/subscription-credentials.mjs",
+        "j-groupware/deploy/agent/notification-worker.mjs",
+        "j-groupware/deploy/agent/notification-worker.md",
+        "j-groupware/tests/bff/notification-worker.integration.test.ts"
       ]
     },
     {
@@ -1155,7 +1160,7 @@
         "G18"
       ],
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run",
+      "verification": "actual_Node22_18_Node24_19_full_BFF158_each_exit0_skip0; safe_unpack19_each_with_base_Talk_cold_npm_ci_runtime_worker_import_hash_permissions_idempotence_adversarial_tar14_failure_cancellation_pass; actual_base_bootstrap_BFF4_each_sealed_env_real_Keycloak_login_PG_board_tenant_CSRF_Host_logout_pass; actual_PG18_DB6_each_dump_restore_NOLOGIN_preDB_role_only_failure_teardown_foreign_allocation_and_changed_snapshot_guard_pass; agent_core20_and_product5_and_product_cold_bundle4_each_pass; notification_worker6_each_actual_auth_PG_receiver_expiry_recovery_one_shot_CLI_and_inactive_unit_timer_syntax_pass; root_check76_build_type_lint_format_pass; native_absent_unit_protocol_source_only_customer_systemd_not_run; full_base_bootstrap_privilege_setup_service_account_CA_TLS_access_product_storage_Messenger_Mailpit_customer_cleanup_full_installer_agent_entrypoint_production_notification_credential_renewal_topology_timer_activation_customer_VM_and_whole_suite_acceptance_pending",
       "code": [
         "j-groupware/deploy/agent/bootstrap-files.mjs",
         "j-groupware/deploy/agent/service-database.mjs",
@@ -1177,7 +1182,19 @@
         "j-groupware/deploy/agent/web-cleanup.mjs",
         "j-groupware/deploy/agent/provision-error.mjs",
         "j-groupware/tests/agent/web-cleanup.integration.test.mjs",
-        "j-groupware/tests/bff/projection.integration.test.ts"
+        "j-groupware/tests/bff/projection.integration.test.ts",
+        "j-groupware/deploy/agent/base-environment.mjs",
+        "j-groupware/deploy/agent/bundle-install.mjs",
+        "j-groupware/deploy/agent/product-cleanup.mjs",
+        "j-groupware/deploy/agent/control-files.mjs",
+        "j-groupware/deploy/agent/subscription-credentials.mjs",
+        "j-groupware/deploy/agent/notification-worker.mjs",
+        "j-groupware/deploy/agent/notification-worker.md",
+        "j-groupware/deploy/agent/jgw-notification-refresh.service.example",
+        "j-groupware/deploy/agent/jgw-notification-refresh.timer.example",
+        "j-groupware/tests/agent/unpack.integration.test.mjs",
+        "j-groupware/tests/bff/bootstrap.integration.test.ts",
+        "j-groupware/tests/bff/notification-worker.integration.test.ts"
       ]
     },
     {
@@ -1188,7 +1205,7 @@
         "G18"
       ],
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run",
+      "verification": "actual_Node22_18_Node24_19_full_BFF158_each_exit0_skip0; safe_unpack19_each_with_base_Talk_cold_npm_ci_runtime_worker_import_hash_permissions_idempotence_adversarial_tar14_failure_cancellation_pass; actual_base_bootstrap_BFF4_each_sealed_env_real_Keycloak_login_PG_board_tenant_CSRF_Host_logout_pass; actual_PG18_DB6_each_dump_restore_NOLOGIN_preDB_role_only_failure_teardown_foreign_allocation_and_changed_snapshot_guard_pass; agent_core20_and_product5_and_product_cold_bundle4_each_pass; notification_worker6_each_actual_auth_PG_receiver_expiry_recovery_one_shot_CLI_and_inactive_unit_timer_syntax_pass; root_check76_build_type_lint_format_pass; native_absent_unit_protocol_source_only_customer_systemd_not_run; full_base_bootstrap_privilege_setup_service_account_CA_TLS_access_product_storage_Messenger_Mailpit_customer_cleanup_full_installer_agent_entrypoint_production_notification_credential_renewal_topology_timer_activation_customer_VM_and_whole_suite_acceptance_pending",
       "code": [
         "j-groupware/deploy/agent/bootstrap-files.mjs",
         "j-groupware/deploy/agent/service-database.mjs",
@@ -1210,7 +1227,19 @@
         "j-groupware/deploy/agent/web-cleanup.mjs",
         "j-groupware/deploy/agent/provision-error.mjs",
         "j-groupware/tests/agent/web-cleanup.integration.test.mjs",
-        "j-groupware/tests/bff/projection.integration.test.ts"
+        "j-groupware/tests/bff/projection.integration.test.ts",
+        "j-groupware/deploy/agent/base-environment.mjs",
+        "j-groupware/deploy/agent/bundle-install.mjs",
+        "j-groupware/deploy/agent/product-cleanup.mjs",
+        "j-groupware/deploy/agent/control-files.mjs",
+        "j-groupware/deploy/agent/subscription-credentials.mjs",
+        "j-groupware/deploy/agent/notification-worker.mjs",
+        "j-groupware/deploy/agent/notification-worker.md",
+        "j-groupware/deploy/agent/jgw-notification-refresh.service.example",
+        "j-groupware/deploy/agent/jgw-notification-refresh.timer.example",
+        "j-groupware/tests/agent/unpack.integration.test.mjs",
+        "j-groupware/tests/bff/bootstrap.integration.test.ts",
+        "j-groupware/tests/bff/notification-worker.integration.test.ts"
       ]
     },
     {
@@ -1221,7 +1250,7 @@
         "G18"
       ],
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run",
+      "verification": "actual_Node22_18_Node24_19_full_BFF158_each_exit0_skip0; safe_unpack19_each_with_base_Talk_cold_npm_ci_runtime_worker_import_hash_permissions_idempotence_adversarial_tar14_failure_cancellation_pass; actual_base_bootstrap_BFF4_each_sealed_env_real_Keycloak_login_PG_board_tenant_CSRF_Host_logout_pass; actual_PG18_DB6_each_dump_restore_NOLOGIN_preDB_role_only_failure_teardown_foreign_allocation_and_changed_snapshot_guard_pass; agent_core20_and_product5_and_product_cold_bundle4_each_pass; notification_worker6_each_actual_auth_PG_receiver_expiry_recovery_one_shot_CLI_and_inactive_unit_timer_syntax_pass; root_check76_build_type_lint_format_pass; native_absent_unit_protocol_source_only_customer_systemd_not_run; full_base_bootstrap_privilege_setup_service_account_CA_TLS_access_product_storage_Messenger_Mailpit_customer_cleanup_full_installer_agent_entrypoint_production_notification_credential_renewal_topology_timer_activation_customer_VM_and_whole_suite_acceptance_pending",
       "code": [
         "j-groupware/deploy/agent/bootstrap-files.mjs",
         "j-groupware/deploy/agent/service-database.mjs",
@@ -1243,7 +1272,19 @@
         "j-groupware/deploy/agent/web-cleanup.mjs",
         "j-groupware/deploy/agent/provision-error.mjs",
         "j-groupware/tests/agent/web-cleanup.integration.test.mjs",
-        "j-groupware/tests/bff/projection.integration.test.ts"
+        "j-groupware/tests/bff/projection.integration.test.ts",
+        "j-groupware/deploy/agent/base-environment.mjs",
+        "j-groupware/deploy/agent/bundle-install.mjs",
+        "j-groupware/deploy/agent/product-cleanup.mjs",
+        "j-groupware/deploy/agent/control-files.mjs",
+        "j-groupware/deploy/agent/subscription-credentials.mjs",
+        "j-groupware/deploy/agent/notification-worker.mjs",
+        "j-groupware/deploy/agent/notification-worker.md",
+        "j-groupware/deploy/agent/jgw-notification-refresh.service.example",
+        "j-groupware/deploy/agent/jgw-notification-refresh.timer.example",
+        "j-groupware/tests/agent/unpack.integration.test.mjs",
+        "j-groupware/tests/bff/bootstrap.integration.test.ts",
+        "j-groupware/tests/bff/notification-worker.integration.test.ts"
       ]
     },
     {
@@ -1254,7 +1295,7 @@
         "G21"
       ],
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_agent20_products5_cold_bundles4_Nginx15_PG_DB_dump_restore_NOLOGIN3_each_exit0_skip0; Web_cleanup2_each_orchestrator_with_Node22_root_image; actual_notification_projection13_with_installer_manifest_and_full_BFF148_each; durable_key_hash_generation_retry_remove_pass; exact_product_env_compiled_config_and_Talk_Web_TLS_PG_probe_cold_boot_widget_pass; native_unit_ownership_content_guard_source_and_readonly_syntax_only; remaining_product_storage_nonWeb_cleanup_phase_aware_preDB_preunit_teardown_base_bootstrap_safe_unpack_privilege_setup_notification_worker_credentials_and_activation_full_entrypoint_timer_customer_VM_and_complete_install_remove_acceptance_not_run",
+      "verification": "actual_Node22_18_Node24_19_full_BFF158_each_exit0_skip0; safe_unpack19_each_with_base_Talk_cold_npm_ci_runtime_worker_import_hash_permissions_idempotence_adversarial_tar14_failure_cancellation_pass; actual_base_bootstrap_BFF4_each_sealed_env_real_Keycloak_login_PG_board_tenant_CSRF_Host_logout_pass; actual_PG18_DB6_each_dump_restore_NOLOGIN_preDB_role_only_failure_teardown_foreign_allocation_and_changed_snapshot_guard_pass; agent_core20_and_product5_and_product_cold_bundle4_each_pass; notification_worker6_each_actual_auth_PG_receiver_expiry_recovery_one_shot_CLI_and_inactive_unit_timer_syntax_pass; root_check76_build_type_lint_format_pass; native_absent_unit_protocol_source_only_customer_systemd_not_run; full_base_bootstrap_privilege_setup_service_account_CA_TLS_access_product_storage_Messenger_Mailpit_customer_cleanup_full_installer_agent_entrypoint_production_notification_credential_renewal_topology_timer_activation_customer_VM_and_whole_suite_acceptance_pending",
       "code": [
         "j-groupware/deploy/agent/reconciler.mjs",
         "j-groupware/deploy/agent/provision-command.mjs",
@@ -1272,7 +1313,19 @@
         "j-groupware/deploy/agent/web-cleanup.mjs",
         "j-groupware/deploy/agent/provision-error.mjs",
         "j-groupware/tests/agent/web-cleanup.integration.test.mjs",
-        "j-groupware/tests/bff/projection.integration.test.ts"
+        "j-groupware/tests/bff/projection.integration.test.ts",
+        "j-groupware/deploy/agent/base-environment.mjs",
+        "j-groupware/deploy/agent/bundle-install.mjs",
+        "j-groupware/deploy/agent/product-cleanup.mjs",
+        "j-groupware/deploy/agent/control-files.mjs",
+        "j-groupware/deploy/agent/subscription-credentials.mjs",
+        "j-groupware/deploy/agent/notification-worker.mjs",
+        "j-groupware/deploy/agent/notification-worker.md",
+        "j-groupware/deploy/agent/jgw-notification-refresh.service.example",
+        "j-groupware/deploy/agent/jgw-notification-refresh.timer.example",
+        "j-groupware/tests/agent/unpack.integration.test.mjs",
+        "j-groupware/tests/bff/bootstrap.integration.test.ts",
+        "j-groupware/tests/bff/notification-worker.integration.test.ts"
       ]
     },
     {
@@ -2839,15 +2892,16 @@
     "j-messenger/docs/cloud-postgres-recovery-verification-2026-10-08.md",
     "j-groupware/docs/cloud-connected-implementation-2026-10-08.md",
     "j-web/docs/cloud-hosting-implementation-2026-10-08.md",
-    "j-talk/docs/cloud-member-room-widget-2026-10-08.md"
+    "j-talk/docs/cloud-member-room-widget-2026-10-08.md",
+    "j-groupware/docs/cloud-bootstrap-worker-verification-2026-10-08.md"
   ],
   "pending_implementation": [
     "Remaining mail/talk/customer/web BFF business API relays using the verified G23 helper and actual downstream services",
     "G6/G15 formal member/organization/repair UI and Playwright; G16 formal approval UI and Playwright (actual BFF business API and snapshot already verified)",
     "G2/G9 canonical UI guidelines/sidebar/board UI; I2 formal theme/Playwright/brute-force acceptance",
     "Messenger formal UI/app product-path freezing and talk business WSS; actual messenger PG/BFF HTTP/client transport/WSS and approval notification delivery independently verified",
-    "I5 auth external Nginx and G11 customer VM deployment acceptance (isolated customer gateway code/protocol verified), G18 actual customer bootstrap/install/remove and G21 console-auth/probe bindings, timer activation/VM acceptance (independent reconciler verified) and operator console",
-    "G22 formal notification UI/Playwright, G18/G21 production installer/agent subscription/key projection wiring and customer VM acceptance",
+    "G18 complete customer bootstrap/OS privilege/CA-TLS service-user preparation and installer/agent entrypoint; product storage and Messenger/Mailpit/customer cleanup; G21 production notification credentials/renewal/topology and operating timer/customer VM acceptance; actual safe unpack, cold base BFF, incomplete PG allocation teardown and explicit worker CLI independently verified",
+    "G22 formal notification UI/Playwright and all product notification delivery acceptance; production source credential renewal/topology and worker/timer activation remain separate from verified short-lived credential file binding and explicit CLI",
     "Per-feature remaining audit: docs/cloud-remaining-feature-audit-2026-10-08.json; technical contracts and service predecessors remain implementable; E8/visitor ownership/template manual-file replacement choices and existing UI guideline answer remain gates"
   ]
 }

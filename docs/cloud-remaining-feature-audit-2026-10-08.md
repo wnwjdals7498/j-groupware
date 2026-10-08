@@ -36,13 +36,13 @@
 | GW-36 | j-groupware | 상담 설정 | UI 기준 선행 | partial | 정식 UI 기준 아래 상담 설정 화면을 연결하고 확정된 visitor 서명 계약을 예제로 제공한다. |
 | GW-37 | j-groupware | 웹 관리 화면 | 서비스 구현 선행 | not_started | web DB·인증·helper·계약부터 구현한 뒤 BFF·화면을 연결한다. |
 | GW-38 | j-groupware | 배포 후 허용 출처 등록 | 서비스 구현 선행 | not_started | 각 backend 완성 후 성공/후속 origin 실패를 분리한 BFF 연결을 구현한다. |
-| GW-40 | j-groupware | 알림 수신 API | 서비스 구현 선행 | partial | 완성된 installer 인증·key provisioning 경계로 실제 가입 연결을 구현한다. |
+| GW-40 | j-groupware | 알림 수신 API | 서비스 구현 선행 | partial | 전용 계정의 CA/TLS credential 전달과 전체 bootstrap/installer/agent 실행 진입점을 연결하고, 남은 제품 저장소/정리와 production notification 자격 갱신·토폴로지를 구현한다. 실제 systemd/timer와 고객 VM 활성화는 별도 인수한다. |
 | GW-44 | j-groupware | 알림 화면 | UI 기준 선행 | partial | 정식 UI와 기존 알림 계약을 연결한다. |
 | GW-51 | j-groupware | 고객 목록·계약 상태 | 기술 계약 확정 선행 | partial | 업무 계약 상태값·전이 기준을 확인한 뒤 기존 고객 DTO/PG 저장과 연결한다. |
-| GW-63 | j-groupware | 부트스트랩 | 서비스 구현 선행 | partial | 기존 adapters를 CLI/agent entrypoint로 연결하고 base bootstrap·권한 설치·단계별 teardown·비Web cleanup 및 알림 worker source를 격리 검증한다. 고객 VM 활성화는 별도 인수한다. |
-| GW-64 | j-groupware | 서비스 설치 | 서비스 구현 선행 | partial | 기존 adapters를 CLI/agent entrypoint로 연결하고 base bootstrap·권한 설치·단계별 teardown·비Web cleanup 및 알림 worker source를 격리 검증한다. 고객 VM 활성화는 별도 인수한다. |
-| GW-65 | j-groupware | 서비스 해지 | 서비스 구현 선행 | partial | 기존 adapters를 CLI/agent entrypoint로 연결하고 base bootstrap·권한 설치·단계별 teardown·비Web cleanup 및 알림 worker source를 격리 검증한다. 고객 VM 활성화는 별도 인수한다. |
-| GW-66 | j-groupware | 프로비저닝 에이전트 | 서비스 구현 선행 | partial | 기존 adapters를 CLI/agent entrypoint로 연결하고 base bootstrap·권한 설치·단계별 teardown·비Web cleanup 및 알림 worker source를 격리 검증한다. 고객 VM 활성화는 별도 인수한다. |
+| GW-63 | j-groupware | 부트스트랩 | 서비스 구현 선행 | partial | 전용 계정의 CA/TLS credential 전달과 전체 bootstrap/installer/agent 실행 진입점을 연결하고, 남은 제품 저장소/정리와 production notification 자격 갱신·토폴로지를 구현한다. 실제 systemd/timer와 고객 VM 활성화는 별도 인수한다. |
+| GW-64 | j-groupware | 서비스 설치 | 서비스 구현 선행 | partial | 전용 계정의 CA/TLS credential 전달과 전체 bootstrap/installer/agent 실행 진입점을 연결하고, 남은 제품 저장소/정리와 production notification 자격 갱신·토폴로지를 구현한다. 실제 systemd/timer와 고객 VM 활성화는 별도 인수한다. |
+| GW-65 | j-groupware | 서비스 해지 | 서비스 구현 선행 | partial | 전용 계정의 CA/TLS credential 전달과 전체 bootstrap/installer/agent 실행 진입점을 연결하고, 남은 제품 저장소/정리와 production notification 자격 갱신·토폴로지를 구현한다. 실제 systemd/timer와 고객 VM 활성화는 별도 인수한다. |
+| GW-66 | j-groupware | 프로비저닝 에이전트 | 서비스 구현 선행 | partial | 전용 계정의 CA/TLS credential 전달과 전체 bootstrap/installer/agent 실행 진입점을 연결하고, 남은 제품 저장소/정리와 production notification 자격 갱신·토폴로지를 구현한다. 실제 systemd/timer와 고객 VM 활성화는 별도 인수한다. |
 | GW-71 | j-groupware | UI 기준 | UI 기준 선행 | not_started | 추가 질의를 반복하지 않고 기존 응답을 기다린다. |
 | GW-73 | j-groupware | VM 검증·측정 | 외부 VM 인수 | not_started | 설치자 연결 후 지정 VM에서 통합 인수한다. |
 | MS-07 | j-messenger | UI 토큰 적용 | UI 기준 선행 | not_started | 확정된 groupware UI token을 통합 client 화면에 적용한다. |
@@ -116,15 +116,18 @@ FS-U07의 현 최소 범위를 유지: webhook 수신 전 누락 허용, 수신�
 
 ## 실제 검증 범위
 
-[콘솔·상담 BFF·설치 제품 연결 증거](cloud-console-installer-verification-2026-10-08.md): 전체 BFF 148개, agent 준비/조정 20개·제품 5개·cold 번들 4개·Nginx 15개·실제 PG 3개·Web 해지 2개는 Node22/24 각각 통과했다. 전체 check의 76개·build/type/lint/format도 통과했다. 이전 Web HTTP11/hosting4·Talk14·agent PG3의 통과 기록은 유지한다. 고객 VM·실제 visitor 상담·브라우저·전체 제품군 인수는 미완료다.
+[기본 부트스트랩·안전 설치·알림 worker 증거](cloud-bootstrap-worker-verification-2026-10-08.md): 전체 BFF158, safe unpack19, 기본 cold BFF4, 실제 PG6, worker6, agent core20·제품5·기존 제품 cold 번들4는 Node22/24 각각 통과했다. root check76와 build/type/lint/format도 통과했다. 기존 Nginx15·Web cleanup2 등의 통과 기록은 보존한다. 초기 전체 검사에서 수신기 재시작1 실패는 단독13과 전체158 재실행에서 재현되지 않았고 실패 로그를 보존했다. 실제 systemd/customer VM·browser·전체 제품군 인수는 미완료다.
 
 작업 브랜치의 마지막 소스 커밋:
 
 - web_source_commit: `13861dd835362992f6ba0ee8bd237e30db8ca0ba`
-- agent_source_commit: `2b960e2b33a045499b66c9b48b832e22c18793d3`
+- agent_source_commit: `ea24dd34636bcfebbf89ec26d87c79831a577ece`
 - talk_source_commit: `a022105102ffe680cf040b4d57f6f46e1d54d804`
 - console_source_commit: `998a48abe1e66f2aefd88d28fa6adda07627107c`
 - talk_bff_source_commit: `bc949abd081477cac26e3c41a4e0311bd377c091`
-- bundle_source_commit: `a6816a1bd1051b35a4d81a3248897dd2aaa41b10`
+- bundle_source_commit: `ea24dd34636bcfebbf89ec26d87c79831a577ece`
+- bootstrap_source_commit: `aa2a2f13e88fa1e6959ccb08c276434a8e7c831f`
+- teardown_source_commit: `e00000f9f2d0b8f2f7ec1ecaac5c12dce41deaa5`
+- notification_worker_source_commit: `ea24dd34636bcfebbf89ec26d87c79831a577ece`
 
 재생성: `python3 scripts/render-feature-audit.py`. JSON·진행표·baseline·분류·ready 집계가 서로 맞아야 생성한다.
