@@ -552,6 +552,23 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
       ).status,
     ).toBe(400);
     expect(
+      (await request("/customer-auth/guests?q=%00", readerToken)).status,
+    ).toBe(400);
+    expect(
+      (
+        await request(
+          "/customer-auth/guests",
+          ownerToken,
+          {
+            name: "invalid",
+            loginId: "invalid.7498\n",
+            password: guestPassword,
+          },
+          "POST",
+        )
+      ).status,
+    ).toBe(400);
+    expect(
       (await pool.query("SELECT count(*)::int AS count FROM guests")).rows[0],
     ).toEqual(before);
     const unavailable = await faultApp.inject({
