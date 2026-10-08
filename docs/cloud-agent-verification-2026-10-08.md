@@ -31,3 +31,7 @@ fixture 설치·보고는 실제 파일을 바꾸지만 실제 콘솔/서비스 
 | UI | canonical `docs/ui-guidelines.md` 없음, 정식 화면/Playwright는 기존 대기 상태 |
 
 그래서 GW-66은 **partial**이고 GW-T17/SU-T09를 통과로 표시하지 않는다. 전체 제품군 verified도 false다. 생산 자격 발급·운영 등록/배포·지속 권한 확대·외부 이메일/SMS/제3자 송신은 보류했다. 회사 노트북 설치, PR·main 병합은 실행하지 않았다.
+
+## 후속 G18 구현
+
+[연결 구현·검증](cloud-connected-implementation-2026-10-08.md)에서 bootstrap 비밀 파일·archive 준비, 실제 서비스 DB/role·dump/restore/NOLOGIN, 단계별 설치/해지 복구 및 native unit 렌더러를 추가했다. `test:agent`는 기존14+새4로 Node22/24 각각18개, 실제 DB는 각각3개 통과했다. 제품별 wiring과 실제 VM 활성화는 여전히 미완료다. 위 표의14/65/114는 당시 실행 결과이며 후속18/74/133과 구분한다.

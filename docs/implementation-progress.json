@@ -6,13 +6,13 @@
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 88,
-    "partial": 18,
-    "not_started": 66
+    "implemented": 91,
+    "partial": 27,
+    "not_started": 54
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal login theme/sidebar/board UI and Playwright acceptance pending",
-    "Messenger formal client UI, guest/talk room and web hosting product relays, formal mail UI, customer/subscription/agent console producer APIs, installer wiring and formal console UI remain incomplete; operator console login backend is cloud verified",
+    "Product BFF relays, visitor/WSS delivery, console bootstrap/agent producers and G18 installer product wiring remain implementer work; existing formal UI and actual external VM acceptance are separate gates",
     "Hyper-V/VM/customer-server and external Nginx deployment/installation acceptance not executed in this cloud test runtime",
     "Mail E8 needs FS-U07 pre-webhook loss criteria and full SMTP envelope recipient preservation contract; no outbox/ingress recovery policy invented"
   ],
@@ -1119,9 +1119,18 @@
       "items": [
         "G18"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_node22_18_node24_19_preparation_and_reconcile_18_each_exit0_skip0; actual_PG18_service_DB_pg_dump_restore_NOLOGIN_and_other_DB_preservation_3_each_exit0_skip0; systemd_syntax_only; console_producers_service_bundles_product_env_readiness_notification_gateway_cleanup_bindings_host_install_CA_trust_timer_and_VM_acceptance_not_run",
+      "code": [
+        "j-groupware/deploy/agent/bootstrap-files.mjs",
+        "j-groupware/deploy/agent/service-database.mjs",
+        "j-groupware/deploy/agent/service-environment.mjs",
+        "j-groupware/deploy/agent/service-lifecycle.mjs",
+        "j-groupware/deploy/agent/native-platform.mjs",
+        "j-groupware/tests/agent/preparation.test.mjs",
+        "j-groupware/tests/agent/database.integration.test.mjs",
+        "j-groupware/deploy/agent/provisioning.md"
+      ]
     },
     {
       "id": "GW-64",
@@ -1130,9 +1139,18 @@
       "items": [
         "G18"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_node22_18_node24_19_preparation_and_reconcile_18_each_exit0_skip0; actual_PG18_service_DB_pg_dump_restore_NOLOGIN_and_other_DB_preservation_3_each_exit0_skip0; systemd_syntax_only; console_producers_service_bundles_product_env_readiness_notification_gateway_cleanup_bindings_host_install_CA_trust_timer_and_VM_acceptance_not_run",
+      "code": [
+        "j-groupware/deploy/agent/bootstrap-files.mjs",
+        "j-groupware/deploy/agent/service-database.mjs",
+        "j-groupware/deploy/agent/service-environment.mjs",
+        "j-groupware/deploy/agent/service-lifecycle.mjs",
+        "j-groupware/deploy/agent/native-platform.mjs",
+        "j-groupware/tests/agent/preparation.test.mjs",
+        "j-groupware/tests/agent/database.integration.test.mjs",
+        "j-groupware/deploy/agent/provisioning.md"
+      ]
     },
     {
       "id": "GW-65",
@@ -1141,9 +1159,18 @@
       "items": [
         "G18"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_node22_18_node24_19_preparation_and_reconcile_18_each_exit0_skip0; actual_PG18_service_DB_pg_dump_restore_NOLOGIN_and_other_DB_preservation_3_each_exit0_skip0; systemd_syntax_only; console_producers_service_bundles_product_env_readiness_notification_gateway_cleanup_bindings_host_install_CA_trust_timer_and_VM_acceptance_not_run",
+      "code": [
+        "j-groupware/deploy/agent/bootstrap-files.mjs",
+        "j-groupware/deploy/agent/service-database.mjs",
+        "j-groupware/deploy/agent/service-environment.mjs",
+        "j-groupware/deploy/agent/service-lifecycle.mjs",
+        "j-groupware/deploy/agent/native-platform.mjs",
+        "j-groupware/tests/agent/preparation.test.mjs",
+        "j-groupware/tests/agent/database.integration.test.mjs",
+        "j-groupware/deploy/agent/provisioning.md"
+      ]
     },
     {
       "id": "GW-66",
@@ -1959,9 +1986,16 @@
       "items": [
         "T6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_Vite8_3_4_library_single_embedded_CSS_widget_min_js_1199_bytes_gzip_default733_bytes; actual_https_fixed_v1_cache300_sha256_ETag_304_each_node22_node24_in_14_pass_exit0_skip0; built_script_no_DOM_when_visitor_transport_unavailable; actual_browser_chat_UI_visitor_producer_WSS_not_run",
+      "code": [
+        "j-talk/apps/widget/vite.config.ts",
+        "j-talk/apps/widget/src/main.ts",
+        "j-talk/apps/widget/src/style.css",
+        "j-talk/apps/server/src/widget.ts",
+        "j-talk/tests/integration/rooms.integration.test.ts",
+        "j-talk/docs/cloud-member-room-widget-2026-10-08.md"
+      ]
     },
     {
       "id": "TK-02",
@@ -1970,9 +2004,16 @@
       "items": [
         "T6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_Vite8_3_4_library_single_embedded_CSS_widget_min_js_1199_bytes_gzip_default733_bytes; actual_https_fixed_v1_cache300_sha256_ETag_304_each_node22_node24_in_14_pass_exit0_skip0; built_script_no_DOM_when_visitor_transport_unavailable; actual_browser_chat_UI_visitor_producer_WSS_not_run",
+      "code": [
+        "j-talk/apps/widget/vite.config.ts",
+        "j-talk/apps/widget/src/main.ts",
+        "j-talk/apps/widget/src/style.css",
+        "j-talk/apps/server/src/widget.ts",
+        "j-talk/tests/integration/rooms.integration.test.ts",
+        "j-talk/docs/cloud-member-room-widget-2026-10-08.md"
+      ]
     },
     {
       "id": "TK-03",
@@ -1981,9 +2022,16 @@
       "items": [
         "T6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_Vite8_3_4_library_single_embedded_CSS_widget_min_js_1199_bytes_gzip_default733_bytes; actual_https_fixed_v1_cache300_sha256_ETag_304_each_node22_node24_in_14_pass_exit0_skip0; built_script_no_DOM_when_visitor_transport_unavailable; actual_browser_chat_UI_visitor_producer_WSS_not_run",
+      "code": [
+        "j-talk/apps/widget/vite.config.ts",
+        "j-talk/apps/widget/src/main.ts",
+        "j-talk/apps/widget/src/style.css",
+        "j-talk/apps/server/src/widget.ts",
+        "j-talk/tests/integration/rooms.integration.test.ts",
+        "j-talk/docs/cloud-member-room-widget-2026-10-08.md"
+      ]
     },
     {
       "id": "TK-04",
@@ -2096,9 +2144,15 @@
       "items": [
         "T5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
+      "code": [
+        "j-talk/apps/server/src/rooms.ts",
+        "j-talk/apps/server/src/app.ts",
+        "j-talk/deploy/migrations/002-member-rooms.sql",
+        "j-talk/tests/integration/rooms.integration.test.ts",
+        "j-talk/docs/cloud-member-room-widget-2026-10-08.md"
+      ]
     },
     {
       "id": "TK-20",
@@ -2107,9 +2161,15 @@
       "items": [
         "T5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
+      "code": [
+        "j-talk/apps/server/src/rooms.ts",
+        "j-talk/apps/server/src/app.ts",
+        "j-talk/deploy/migrations/002-member-rooms.sql",
+        "j-talk/tests/integration/rooms.integration.test.ts",
+        "j-talk/docs/cloud-member-room-widget-2026-10-08.md"
+      ]
     },
     {
       "id": "TK-21",
@@ -2118,9 +2178,15 @@
       "items": [
         "T5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
+      "code": [
+        "j-talk/apps/server/src/rooms.ts",
+        "j-talk/apps/server/src/app.ts",
+        "j-talk/deploy/migrations/002-member-rooms.sql",
+        "j-talk/tests/integration/rooms.integration.test.ts",
+        "j-talk/docs/cloud-member-room-widget-2026-10-08.md"
+      ]
     },
     {
       "id": "TK-22",
@@ -2129,9 +2195,15 @@
       "items": [
         "T5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
+      "code": [
+        "j-talk/apps/server/src/rooms.ts",
+        "j-talk/apps/server/src/app.ts",
+        "j-talk/deploy/migrations/002-member-rooms.sql",
+        "j-talk/tests/integration/rooms.integration.test.ts",
+        "j-talk/docs/cloud-member-room-widget-2026-10-08.md"
+      ]
     },
     {
       "id": "TK-23",
@@ -2140,9 +2212,15 @@
       "items": [
         "T5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
+      "code": [
+        "j-talk/apps/server/src/rooms.ts",
+        "j-talk/apps/server/src/app.ts",
+        "j-talk/deploy/migrations/002-member-rooms.sql",
+        "j-talk/tests/integration/rooms.integration.test.ts",
+        "j-talk/docs/cloud-member-room-widget-2026-10-08.md"
+      ]
     },
     {
       "id": "TK-24",
@@ -2151,9 +2229,15 @@
       "items": [
         "T5"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
+      "code": [
+        "j-talk/apps/server/src/rooms.ts",
+        "j-talk/apps/server/src/app.ts",
+        "j-talk/deploy/migrations/002-member-rooms.sql",
+        "j-talk/tests/integration/rooms.integration.test.ts",
+        "j-talk/docs/cloud-member-room-widget-2026-10-08.md"
+      ]
     },
     {
       "id": "TK-25",
@@ -2220,14 +2304,23 @@
       "items": [
         "T1"
       ],
-      "implementation": "partial",
-      "verification": "actual_server_local_contracts_dedicated_jgw_talk_nonsuperuser_migration_tenant_checksum_cross_db_denied_and_https_pass_node22_node24; widget_workspace_full_visitor_room_contract_registry_publish_not_implemented",
+      "implementation": "implemented",
+      "verification": "actual_server_widget_local_contracts_dedicated_jgw_talk_nonsuperuser_tenant_FK_migrations_checksum_42501_cross_DB_https_14_each_node22_node24_exit0_skip0; full_visitor_WSS_contract_registry_TK41_and_full_acceptance_not_run",
       "code": [
         "j-talk/apps/server/src/main.ts",
         "j-talk/apps/server/src/db/migrate.ts",
         "j-talk/deploy/migrations/001-settings.sql",
         "j-talk/packages/contracts/src/index.ts",
-        "j-talk/docs/cloud-settings-verification-2026-10-08.md"
+        "j-talk/docs/cloud-settings-verification-2026-10-08.md",
+        "j-talk/apps/server/src/rooms.ts",
+        "j-talk/apps/server/src/app.ts",
+        "j-talk/deploy/migrations/002-member-rooms.sql",
+        "j-talk/tests/integration/rooms.integration.test.ts",
+        "j-talk/docs/cloud-member-room-widget-2026-10-08.md",
+        "j-talk/apps/widget/vite.config.ts",
+        "j-talk/apps/widget/src/main.ts",
+        "j-talk/apps/widget/src/style.css",
+        "j-talk/apps/server/src/widget.ts"
       ]
     },
     {
@@ -2656,7 +2749,10 @@
     "j-groupware/docs/cloud-agent-verification-2026-10-08.md",
     "j-groupware/docs/cloud-messenger-files-verification-2026-10-08.md",
     "j-groupware/docs/cloud-remaining-feature-audit-2026-10-08.json",
-    "j-messenger/docs/cloud-postgres-recovery-verification-2026-10-08.md"
+    "j-messenger/docs/cloud-postgres-recovery-verification-2026-10-08.md",
+    "j-groupware/docs/cloud-connected-implementation-2026-10-08.md",
+    "j-web/docs/cloud-hosting-implementation-2026-10-08.md",
+    "j-talk/docs/cloud-member-room-widget-2026-10-08.md"
   ],
   "pending_implementation": [
     "Remaining mail/talk/customer/web BFF business API relays using the verified G23 helper and actual downstream services",
