@@ -15,7 +15,7 @@ import {
 import { createReadStream } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { PRODUCT_SERVICES } from "./product-environment.mjs";
+import { BUNDLE_SERVICES } from "./product-environment.mjs";
 import { ProvisionError } from "./service-database.mjs";
 import { externalPath } from "../gateway/gateway.mjs";
 import { privateDirectory } from "./private-files.mjs";
@@ -107,7 +107,7 @@ export async function buildProductBundle({
   npmCli,
   registryOrigin = "http://127.0.0.1:4873",
 }) {
-  if (!PRODUCT_SERVICES.includes(service))
+  if (!BUNDLE_SERVICES.includes(service))
     throw new ProvisionError("product_adapter_unbound");
   const registry = new URL(registryOrigin);
   if (
@@ -203,10 +203,27 @@ export async function buildProductBundle({
     );
     if (server.dependencies[contractName] !== contracts.version)
       throw new ProvisionError("bundle_contract_mismatch");
-    for (const [workspace, value] of [
+    const workspaces = [
       ["apps/server", server],
       ["packages/contracts", contracts],
-    ]) {
+    ];
+    if (service === "j-groupware")
+      for (const name of ["permissions", "bff-auth"])
+        workspaces.push([
+          "packages/" + name,
+          await runtimePackage(
+            sourceRoot + "/packages/" + name,
+            "@j-groupware/" + name,
+          ),
+        ]);
+    const local = new Map(
+      workspaces.map(([, value]) => [value.name, value.version]),
+    );
+    for (const [, value] of workspaces)
+      for (const [name, version] of Object.entries(value.dependencies))
+        if (local.has(name) && local.get(name) !== version)
+          throw new ProvisionError("bundle_contract_mismatch");
+    for (const [workspace, value] of workspaces) {
       await tree(workspace + "/dist", "compiled");
       await writeFile(
         stage + "/" + workspace + "/package.json",
@@ -241,6 +258,35 @@ export async function buildProductBundle({
       ])
         await copy(name);
     }
+    if (service === "j-groupware") {
+      for (const name of [
+        "bootstrap-files",
+        "base-environment",
+        "console-client",
+        "native-platform",
+        "notification-manifest",
+        "private-files",
+        "product-environment",
+        "product-gateway",
+        "product-readiness",
+        "provision-command",
+        "provision-error",
+        "reconciler",
+        "service-database",
+        "service-environment",
+        "service-lifecycle",
+        "web-cleanup",
+        "bundle-install",
+      ])
+        await copy("deploy/agent/" + name + ".mjs");
+      for (const name of [
+        "gateway.mjs",
+        "nginx.conf.template",
+        "gw.conf.template",
+        "snippets/tls.conf",
+      ])
+        await copy("deploy/gateway/" + name);
+    }
     await writeFile(
       stage + "/package.json",
       JSON.stringify(
@@ -249,7 +295,7 @@ export async function buildProductBundle({
           private: true,
           type: "module",
           engines: { node: ">=22.18.0" },
-          workspaces: ["apps/server", "packages/contracts"],
+          workspaces: workspaces.map(([name]) => name),
         },
         null,
         2,
@@ -311,10 +357,15 @@ export async function buildProductBundle({
       flag: "wx",
       mode: 0o644,
     });
-    await run("/usr/bin/tar", ["-czf", archive, "-C", stage, "."], temporary, {
-      PATH: "/usr/bin:/bin",
-      LANG: "C.UTF-8",
-    });
+    await run(
+      "/usr/bin/tar",
+      ["--format=ustar", "-czf", archive, "-C", stage, "."],
+      temporary,
+      {
+        PATH: "/usr/bin:/bin",
+        LANG: "C.UTF-8",
+      },
+    );
     await link(archive, output);
     return {
       service,

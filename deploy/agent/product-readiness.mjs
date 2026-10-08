@@ -45,6 +45,9 @@ export class ProductReadiness {
           agent: false,
           minVersion: "TLSv1.2",
           rejectUnauthorized: true,
+          ...(p.serverName
+            ? { servername: p.serverName, headers: { Host: p.publicHost } }
+            : {}),
         },
         (response) => {
           if (

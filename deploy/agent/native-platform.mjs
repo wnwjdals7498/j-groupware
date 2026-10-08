@@ -73,6 +73,27 @@ export class NativeSystemdPlatform {
     if ((await lstat(metadataFile)).size > 8192)
       throw new ProvisionError("unsafe_bundle");
     const metadata = JSON.parse(await readFile(metadataFile, "utf8"));
+    const installMarker = path.join(root, ".jgw-install.json"),
+      lockFile = path.join(root, "package-lock.json");
+    await protectedPath(installMarker, "file");
+    await protectedPath(lockFile, "file");
+    if (
+      (await lstat(installMarker)).size > 8192 ||
+      (await lstat(lockFile)).size > 4 * 1024 * 1024
+    )
+      throw new ProvisionError("unsafe_bundle");
+    const installed = JSON.parse(await readFile(installMarker, "utf8"));
+    if (
+      installed.service !== service ||
+      installed.phase !== "ready" ||
+      !/^[a-f0-9]{64}$/.test(installed.archiveSha256) ||
+      installed.packageLockSha256 !== metadata.packageLockSha256 ||
+      installed.packageLockSha256 !==
+        createHash("sha256")
+          .update(await readFile(lockFile))
+          .digest("hex")
+    )
+      throw new ProvisionError("bundle_not_ready");
     if (
       metadata.service !== service ||
       metadata.profile !== "suite-internal" ||

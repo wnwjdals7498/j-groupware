@@ -11,6 +11,10 @@ export const PRODUCT_SERVICES = Object.freeze([
   "j-mail",
   "j-web",
 ]);
+export const BUNDLE_SERVICES = Object.freeze([
+  "j-groupware",
+  ...PRODUCT_SERVICES,
+]);
 const prefixes = {
   "j-approval": "JAP",
   "j-talk": "JT",

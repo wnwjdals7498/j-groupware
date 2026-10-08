@@ -43,7 +43,8 @@ It refuses non-Web services, non-root execution and unsafe helper ownership.
 Other product cleanup adapters and Web OS/storage installation remain pending.
 
 `NativeSystemdPlatform` renders fixed entrypoints, dedicated nologin users and
-private env files. Root-owned bundle ancestry and metadata digest are checked.
+private env files. Root-owned bundle ancestry, metadata/lockfile digest and the
+dependency-install completion marker are checked.
 Readiness and stop also refuse a unit whose fixed content or ownership differs;
 an install failing before a managed unit/DB exists still requires phase-aware
 teardown work rather than treating an incomplete allocation as fully removed.
@@ -91,7 +92,14 @@ The [internal bundle producer](bundles.md) now supplies the fixed metadata,
 compiled server/contracts, migrations and product assets required by native
 preflight. Five products pass cold dependency installation; actual extracted
 Talk/Web boot and widget bytes are tested. This does not install bundles,
-helper privileges, units, OS trust or a timer on the cloud/customer host.
+helper privileges, units, OS trust or a timer on the cloud/customer host. The
+base BFF bundle now includes its four runtime workspaces and deploy adapters.
+BundleInstaller performs strict bounded USTAR extraction, digest/inventory/lock
+validation, scripts-disabled npm ci and exclusive destination publication.
+BaseEnvironment decodes sealed bootstrap files and emits exact BFF variables;
+it excludes the console agent key. Actual cold BFF tests run as the existing
+isolated cloud user; OS CA/TLS credential access for dedicated service users
+and the complete bootstrap/installer entrypoint remain pending.
 
 Run `JGW_AGENT_TEST_RUNTIME=isolated-cloud npm run test:agent` and
 `npm run test:agent:database`. The database test needs Docker, unused loopback
