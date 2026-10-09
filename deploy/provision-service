@@ -1,0 +1,10 @@
+#!/usr/bin/node
+import { runProvisionServiceCli } from "/opt/jgw/bundles/j-groupware/deploy/agent/provision-service.mjs";
+import { ProvisionError } from "/opt/jgw/bundles/j-groupware/deploy/agent/provision-error.mjs";
+runProvisionServiceCli().catch((error) => {
+  process.stderr.write(
+    (error instanceof ProvisionError ? error.code : "installer_run_failed") +
+      "\n",
+  );
+  process.exitCode = 1;
+});

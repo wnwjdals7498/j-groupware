@@ -8,7 +8,11 @@ The [explicit one-shot provision agent](provision-agent.md) connects sealed
 bootstrap credentials, product profiles, tenant locking, fixed installer argv,
 actual TLS inventory and accepted console reporting. Its CLI is verified against
 real isolated console/PG/Talk processes with a private fixture installer.
-The native installer and operating system activation remain separate work.
+The [fixed native CA/Messenger installer composition](native-installer.md) and
+owned Messenger/Mailpit storage preparation/snapshots are implemented. Its
+control/factory and wrapper guards are exercised in isolated containers. Complete
+base bootstrap, remaining product bindings and actual systemd host activation
+remain separate work.
 
 `BootstrapFiles` validates the tenant, exact HTTPS origins, currently valid CA,
 fixed service names and archive SHA256 before sealing credentials in external
@@ -56,8 +60,13 @@ Its runtime image is Node22.18; both Node22/24 test orchestrators pass two tests
 It refuses non-Web services, non-root execution and unsafe helper ownership.
 `ProductCleanup` retains the already-backed-up PostgreSQL data and compiled
 bundle for Approval/Talk/customer-auth, whose servers have no separate persistent file store.
-Web delegates to the fixed helper; Messenger file storage, Mailpit storage and
-their dedicated cleanup adapters currently fail closed. Customer-auth signing
+Web delegates to the fixed helper. ProductStorage prepares fixed owned storage,
+refuses active or restarted writers, makes hash-verified private PG/file snapshots
+and retains data for Messenger/Mailpit. MailpitPlatform owns only the fixed tenant
+capture container. Unbound adapters and foreign storage fail before allocation
+or service stop. Filesystem/PG/Mailpit byte restoration is verified; Messenger
+public-module semantic restore, operating Mail bindings and OS account removal
+remain pending. Customer-auth signing
 keys and prepared credentials remain preserved; no private material is purged.
 Web OS/storage installation remains pending.
 

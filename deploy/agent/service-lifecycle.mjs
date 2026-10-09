@@ -129,11 +129,17 @@ export class ServiceLifecycle {
       };
       if (kind === "install") {
         if (
+          ["j-messenger", "j-mail"].includes(service) &&
+          (!this.cleanup.preflight || !this.cleanup.prepare)
+        )
+          throw new ProvisionError("storage_adapter_unbound");
+        if (
           state.status === "removed" ||
           (state.status === "failed" && state.action === "remove")
         )
           throw new ProvisionError("removed_database_requires_review");
         await this.platform.preflight(service);
+        await this.cleanup.preflight?.(service);
         if (
           ["j-approval", "j-talk", "j-mail"].includes(service) &&
           !this.notifications?.register
@@ -155,6 +161,13 @@ export class ServiceLifecycle {
         phase = "unit";
         await record("installing");
         await this.platform.install(service);
+        if (["j-messenger", "j-mail"].includes(service)) {
+          if (!this.cleanup.prepare)
+            throw new ProvisionError("storage_adapter_unbound");
+          phase = "storage";
+          await record("installing");
+          await this.cleanup.prepare(service);
+        }
         phase = "start";
         await record("installing");
         await this.platform.start(service);
@@ -173,6 +186,11 @@ export class ServiceLifecycle {
       }
       if (state.status === "removed")
         return { tenant: this.tenant, service, status: "removed" };
+      if (
+        ["j-messenger", "j-mail"].includes(service) &&
+        !this.cleanup.preflight
+      )
+        throw new ProvisionError("storage_adapter_unbound");
       if (
         ["j-approval", "j-talk", "j-mail"].includes(service) &&
         !this.notifications?.remove
@@ -193,6 +211,7 @@ export class ServiceLifecycle {
         role: allocation.role,
         database: allocation.database,
       };
+      await this.cleanup.preflight?.(service);
       phase = "stop";
       await record("removing");
       await this.platform.stop(service, { allowMissing: true });
@@ -211,7 +230,13 @@ export class ServiceLifecycle {
       });
       phase = "cleanup";
       await record("removing");
-      await this.cleanup.run(service);
+      const cleaned = await this.cleanup.run(service, {
+        databaseBackup: state.backup,
+      });
+      if (cleaned?.storageBackup) {
+        state.storageBackup = cleaned.storageBackup;
+        await record("removing");
+      }
       if (["j-approval", "j-talk", "j-mail"].includes(service)) {
         phase = "notification_remove";
         await record("removing");
@@ -230,6 +255,7 @@ export class ServiceLifecycle {
         service,
         status: "removed",
         backup: state.backup,
+        ...(state.storageBackup ? { storageBackup: state.storageBackup } : {}),
       };
     } catch (error) {
       const code =

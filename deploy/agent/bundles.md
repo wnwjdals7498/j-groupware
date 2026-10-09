@@ -79,3 +79,5 @@ Approval/Mail/Messenger는 cold 의존성 설치와 compiled config import까지
 로그인, PostgreSQL 게시판, 다른 tenant의 접근 거부, CSRF/Host/로그아웃을 확인한다.
 이 세 제품의 cold 전체 기동, 고객 VM·20GB 디스크·systemd·CA 신뢰와
 전체 제품군 인수 시험은 미실행이다. 검사 archive와 임시 cold 디렉터리는 정리된다.
+
+기본 번들은 [고정 네이티브 진입점](native-installer.md)과 storage/Mailpit owner를 포함한다. 해제 후 wrapper만 0755로 복원하며 재시도의 권한 변조를 거절한다. 실제 OS 설치 완료를 뜻하지 않는다.

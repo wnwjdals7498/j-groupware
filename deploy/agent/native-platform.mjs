@@ -272,7 +272,44 @@ export class NativeSystemdPlatform {
     )
       throw new ProvisionError("unit_conflict");
     await run("/usr/bin/systemctl", ["disable", "--now", this.unit(service)]);
+    if (!(await this.stopped(service)))
+      throw new ProvisionError("unit_not_stopped");
     return { unit: "stopped" };
+  }
+  async stopped(service) {
+    if (process.getuid() !== 0) throw new ProvisionError("root_required");
+    await protectedPath(this.unitRoot, "directory");
+    let present = true;
+    try {
+      await this.preparedUnit(service);
+    } catch (error) {
+      if (error.code !== "ENOENT") throw error;
+      present = false;
+    }
+    const observation = parseUnitObservation(
+      await run("/usr/bin/systemctl", [
+        "show",
+        this.unit(service),
+        "--all",
+        "--no-pager",
+        "--property=LoadState,FragmentPath,ActiveState",
+      ]),
+    );
+    if (!present) {
+      if (
+        observation.LoadState === "not-found" &&
+        observation.FragmentPath === "" &&
+        observation.ActiveState === "inactive"
+      )
+        return true;
+      throw new ProvisionError("unit_conflict");
+    }
+    if (
+      observation.LoadState !== "loaded" ||
+      observation.FragmentPath !== path.join(this.unitRoot, this.unit(service))
+    )
+      throw new ProvisionError("unit_conflict");
+    return ["inactive", "failed"].includes(observation.ActiveState);
   }
 }
 export function parseUnitObservation(text) {

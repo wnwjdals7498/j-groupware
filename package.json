@@ -28,7 +28,8 @@
     "lint": "eslint apps packages tests/server tests/bff deploy/gateway tests/gateway deploy/agent tests/agent",
     "format:check": "prettier --check apps packages tests/server tests/bff deploy/gateway/*.mjs tests/gateway/*.mjs deploy/agent/*.mjs tests/agent/*.mjs *.config.ts eslint.config.mjs scripts/run-bff-integration.mjs scripts/prepare-bff-cloud-tests.mjs scripts/wire-bff-cloud-backchannel.mjs",
     "start": "node apps/server/dist/main.js",
-    "test:registry:compose": "node --test tests/registry/compose.integration.test.mjs"
+    "test:registry:compose": "node --test tests/registry/compose.integration.test.mjs",
+    "test:agent:storage": "node --test tests/agent/storage.integration.test.mjs"
   },
   "devDependencies": {
     "@j-messenger/client-core": "0.2.0",

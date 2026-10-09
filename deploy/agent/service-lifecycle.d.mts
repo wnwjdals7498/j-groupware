@@ -40,7 +40,19 @@ export class ServiceLifecycle {
       register(service: string, key: string): Promise<unknown>;
       remove(service: string): Promise<unknown>;
     };
-    cleanup: { run(service: string): Promise<unknown> };
+    cleanup: {
+      preflight?(service: string): Promise<unknown>;
+      prepare?(service: string): Promise<unknown>;
+      run(
+        service: string,
+        context?: { databaseBackup?: string },
+      ): Promise<
+        | {
+            storageBackup?: string;
+          }
+        | unknown
+      >;
+    };
     environment: import("./service-environment.mjs").ServiceEnvironment;
   });
   run(
@@ -51,5 +63,6 @@ export class ServiceLifecycle {
     service: string;
     status: "active" | "removed";
     backup?: string;
+    storageBackup?: string;
   }>;
 }

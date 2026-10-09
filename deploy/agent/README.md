@@ -30,3 +30,5 @@ JGW_AGENT_TEST_RUNTIME=isolated-cloud npm run test:agent
 ```
 
 Node22/24에서 준비·조정 20개, 제품 5개, cold 번들 4개씩 통과했다. 별도 실제 PG 검사와 Nginx 검사, 콘솔/전체 BFF의 실행 범위는 [제품 연결](provisioning.md)을 따른다. marker가 없으면 실패하며 skip하지 않는다. 조정 프로세스 검사 자체는 임시 파일만 바꾸는 fixture 설치기를 사용한다. 실제 고객 VM/systemd·운영 등록·메일/SMS/외부 송신 인수는 미실행이다.
+
+네이티브 진입점·저장소 및 미완료 경계: [native-installer.md](native-installer.md).

@@ -216,6 +216,64 @@ test("private service env preserves generated credentials across retry and remai
   assert(!events.includes("cleanup"));
   await lstat(root + "/environment/j-web.env");
 });
+test("unbound or foreign storage fails before database allocation or service stop", async () => {
+  const events = [];
+  const state = new ServiceStateFiles(
+    root + "/storage-guard-state",
+    "agent-fixture",
+  );
+  const call = async () => events.push("mutation");
+  const environment = new ServiceEnvironment({
+    root: root + "/storage-guard-env",
+    backups: root + "/storage-guard-backups",
+    render: (_service, value) => JSON.stringify(value),
+    read: (_service, text) => JSON.parse(text),
+  });
+  const ports = {
+    tenant: "agent-fixture",
+    state,
+    environment,
+    database: {
+      ensure: call,
+      inspect: async () => ({ role: true, database: true }),
+      dump: call,
+      disable: call,
+    },
+    platform: {
+      preflight: call,
+      install: call,
+      start: call,
+      ready: call,
+      stop: call,
+    },
+    gateway: { set: call },
+  };
+  const unbound = new ServiceLifecycle({ ...ports, cleanup: { run: call } });
+  await assert.rejects(unbound.run("j-messenger"), {
+    code: "storage_adapter_unbound",
+  });
+  await assert.rejects(unbound.run("j-messenger", "remove"), {
+    code: "storage_adapter_unbound",
+  });
+  assert.deepEqual(events, []);
+  const foreign = new ServiceLifecycle({
+    ...ports,
+    cleanup: {
+      preflight: async () => {
+        throw Object.assign(new Error("unmanaged_product_storage"), {
+          code: "unmanaged_product_storage",
+        });
+      },
+      prepare: call,
+      run: call,
+    },
+  });
+  await assert.rejects(foreign.run("j-messenger", "remove"));
+  assert.deepEqual(events, []);
+  await assert.rejects(lstat(root + "/storage-guard-env/j-messenger.env"), {
+    code: "ENOENT",
+  });
+});
 test("native units carry fixed entrypoints, separate users and web helper privilege; host activation is refused", async () => {
   const bundleRoot = root + "/bundles",
     environmentRoot = root + "/environment";

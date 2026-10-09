@@ -273,9 +273,12 @@ export async function buildProductBundle({
         "product-environment",
         "product-gateway",
         "product-cleanup",
+        "product-storage",
+        "mailpit-platform",
         "product-readiness",
         "provision-command",
         "provision-agent",
+        "provision-service",
         "provision-error",
         "reconciler",
         "service-database",
@@ -286,6 +289,7 @@ export async function buildProductBundle({
         "bundle-install",
       ])
         await copy("deploy/agent/" + name + ".mjs");
+      await copy("deploy/provision-service");
       for (const name of [
         "gateway.mjs",
         "nginx.conf.template",
