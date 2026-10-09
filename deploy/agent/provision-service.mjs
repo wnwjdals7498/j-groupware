@@ -22,6 +22,7 @@ import {
   execute,
 } from "../gateway/gateway.mjs";
 import { ProvisionError } from "./provision-error.mjs";
+import { BaseBootstrap } from "./base-bootstrap.mjs";
 
 const fail = (code = "invalid_installer_control") => {
   throw new ProvisionError(code);
@@ -298,6 +299,51 @@ export function createProvisionServiceRuntime({
     environment: serviceEnvironment,
   });
   return {
+    createBaseBootstrap(baseEnvironment, bundles) {
+      const gatewayConfig = loadGatewayProfile(gatewayProfile);
+      const expectedOrigin = `https://gw.${tenant}.jgw.test${gatewayConfig.httpsPort === 443 ? "" : ":" + gatewayConfig.httpsPort}`;
+      if (
+        baseEnvironment?.bootstrap?.tenant !== tenant ||
+        baseEnvironment.databasePort !== environment.databasePort ||
+        baseEnvironment.port !== gatewayConfig.bffPort ||
+        baseEnvironment.publicOrigin !== expectedOrigin
+      )
+        fail("invalid_base_configuration");
+      const baseReadiness = new ProductReadiness({
+        environment: baseEnvironment,
+      });
+      const basePlatform = new NativeSystemdPlatform({
+        bundleRoot: roots.bundleRoot,
+        environmentRoot: roots.environmentRoot,
+        unitRoot: roots.unitRoot,
+        ready: (service) => baseReadiness.probe(service),
+      });
+      return new BaseBootstrap({
+        bootstrap,
+        bundles,
+        state,
+        lock: new DirectoryLock(roots.lockRoot),
+        database,
+        environment: new ServiceEnvironment({
+          root: roots.environmentRoot,
+          backups: roots.databaseBackupRoot,
+          render: (service, value) => baseEnvironment.render(service, value),
+          read: (service, text) => baseEnvironment.read(service, text),
+        }),
+        platform: basePlatform,
+        gateway,
+        preflight: async () => {
+          for (const binary of [
+            "/usr/lib/postgresql/18/bin/pg_dump",
+            "/usr/sbin/nginx",
+            "/usr/bin/systemctl",
+          ])
+            await protectedStoragePath(binary, false);
+          await protectedStoragePath(roots.bundleRoot, true);
+          await protectedStoragePath(roots.unitRoot, true);
+        },
+      });
+    },
     async run(service, kind = "install") {
       bound(service);
       if (!["install", "remove"].includes(kind)) fail("invalid_action");

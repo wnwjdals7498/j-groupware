@@ -16,4 +16,5 @@ export class ProductGateway {
     service: string,
     enabled: boolean,
   ): Promise<{ changed: boolean; reloaded: boolean }>;
+  initialize(): Promise<{ changed: boolean; reloaded: boolean }>;
 }

@@ -18,7 +18,7 @@
     "test:integration": "npm run build && node scripts/run-bff-integration.mjs",
     "test:registry": "node --test tests/registry/registry.integration.test.mjs",
     "test:gateway": "node --test tests/gateway/gateway.integration.test.mjs",
-    "test:agent": "node --test tests/agent/reconciler.test.mjs tests/agent/preparation.test.mjs",
+    "test:agent": "node --test tests/agent/reconciler.test.mjs tests/agent/preparation.test.mjs tests/agent/base-bootstrap.test.mjs",
     "test:agent:database": "node --test tests/agent/database.integration.test.mjs",
     "test:agent:products": "node --test tests/agent/products.integration.test.mjs",
     "test:agent:bundles": "node --test tests/agent/bundles.integration.test.mjs",

@@ -43,6 +43,11 @@ private state/backup 경로와 분리한다. 이미 검증·해제된 root 소�
 완료하는 전체 설치기가 아니다. 현재 CLI 검증은 inert 조합과 거절 경계다.
 실제 systemd PID1에서 CA/Messenger 설치·해지 전체 흐름은 미실행이다.
 
+[기본 bootstrap 연결](../../docs/cloud-base-bootstrap-composition-2026-10-09.md)은
+별도 고정 private control에서 봉인 번들·기본 PG·BFF env·native platform과
+gateway를 연결한다. 동일 control/state/lock/PG를 CA/Messenger와 공유하며
+성공은 `base_ready`다. OS package/trust/timer 설치나 전체 GW-63 완료를 뜻하지 않는다.
+
 ## 저장소 준비·해지
 
 ProductStorage는 root 소유 allocation 루트와 고정 서비스 계정의 mode-700

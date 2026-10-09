@@ -49,4 +49,16 @@ export class ProductGateway {
     // failure and preserves j-web's files. The lifecycle records active later.
     return applyGateway(this.root, files, this.commands);
   }
+  async initialize() {
+    const installed = [];
+    for (const candidate of optional)
+      if ((await this.state.read(candidate))?.status === "active")
+        installed.push(candidate);
+    const files = await renderGateway(
+      { ...this.profile, JGW_GATEWAY_SERVICES: installed.join(",") },
+      this.root,
+      this.substitute,
+    );
+    return applyGateway(this.root, files, this.commands);
+  }
 }

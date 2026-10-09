@@ -26,6 +26,11 @@ import {
   createProvisionServiceRuntime,
   parseProvisionServiceArguments,
 } from "../../deploy/agent/provision-service.mjs";
+import {
+  loadBootstrapRuntimeControl,
+  createBootstrapRuntime,
+  runBootstrapCli,
+} from "../../deploy/agent/bootstrap-runtime.mjs";
 const [mode, base, tenant, smtpText, httpText] = process.argv.slice(2);
 const smtp = Number(smtpText),
   http = Number(httpText);
@@ -494,6 +499,52 @@ if (mode === "prepare") {
   });
   await json(gatewayProfileFile, configuredGateway);
   const config = await loadProvisionServiceControl(controlFile);
+  const baseProfileFile = base + "/control/base-profile.json",
+    bundleInstallFile = base + "/control/bundle-install.json",
+    bootstrapControlFile = base + "/control/bootstrap-control.json";
+  await json(baseProfileFile, {
+    port: Number(configuredGateway.JGW_PORT),
+    publicOrigin: `https://gw.${tenant}.jgw.test`,
+    authApiOrigin: "https://jauth.jgw.test:55012",
+    certificate: configuredGateway.JGW_GATEWAY_UPSTREAM_CA,
+    key: configuredGateway.JGW_TLS_KEY,
+  });
+  await writeFile(
+    base + "/control/npmrc",
+    "registry=http://127.0.0.1:4873/\n",
+    { mode: 0o600 },
+  );
+  await writeFile(
+    base + "/control/npm-cli.js",
+    "// inert fixture for private control validation only\n",
+    { mode: 0o644 },
+  );
+  await json(bundleInstallFile, {
+    npmConfig: base + "/control/npmrc",
+    cache: base + "/npm-cache",
+    npmCli: base + "/control/npm-cli.js",
+  });
+  await json(bootstrapControlFile, {
+    installerControlFile: controlFile,
+    baseProfileFile,
+    bundleInstallFile,
+  });
+  const bootstrapConfig =
+    await loadBootstrapRuntimeControl(bootstrapControlFile);
+  const baseRuntime = createBootstrapRuntime(bootstrapConfig);
+  await baseRuntime.close();
+  await assert.rejects(runBootstrapCli(["--config", bootstrapControlFile]), {
+    code: "invalid_bootstrap_arguments",
+  });
+  await json(bootstrapControlFile, {
+    installerControlFile: controlFile,
+    baseProfileFile,
+    bundleInstallFile,
+    enableTimer: true,
+  });
+  await assert.rejects(loadBootstrapRuntimeControl(bootstrapControlFile), {
+    code: "invalid_bootstrap_control",
+  });
   const runtime = createProvisionServiceRuntime(config);
   try {
     for (const service of ["j-talk", "j-mail", "j-approval"])

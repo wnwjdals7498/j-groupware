@@ -262,6 +262,8 @@ export async function buildProductBundle({
       for (const name of [
         "bootstrap-files",
         "base-environment",
+        "base-bootstrap",
+        "bootstrap-runtime",
         "console-client",
         "control-files",
         "native-platform",
