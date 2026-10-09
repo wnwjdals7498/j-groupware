@@ -24,7 +24,7 @@ Web 배포 후 Origin 등록은 회원 현재 `talk:write`가 있을 때만 수�
 
 ## 실행 결과와 환경 한계
 
-Auth 통합 74개, Mail 통합 19개, Talk 통합 24개, Web PG/HTTPS 15개와 hosting journal 5개가 Node 22.18.0/24.19.0에서 각각 통과했다. 각 모듈 전체 `check`, Messenger client-react 13개와 공통 UI unit·실제 Chromium도 실행했다. Groupware 전체 BFF는 두 런타임 모두 15개 파일·196개 시험·실패/skip 0·exit 0이다. 최종 로그는 `task25-gwa-bff-final-r3-node22.log/.exit`와 `task25-gwa-bff-final24.log/.exit`다.
+Auth 통합 74개, Mail 통합 19개, Talk 최종 통합 25개, Web PG/HTTPS 15개와 hosting journal 5개가 Node 22.18.0/24.19.0에서 각각 통과했다. 각 모듈 전체 `check`, Messenger client-react 13개와 공통 UI unit·실제 Chromium도 실행했다. Groupware 전체 BFF는 두 런타임 모두 15개 파일·196개 시험·실패/skip 0·exit 0이다. 최종 로그는 `task25-gwa-bff-final-r3-node22.log/.exit`와 `task25-gwa-bff-final24.log/.exit`다.
 
 Talk/Web 계약 0.2.1의 새 registry 소비자는 두 런타임 모두 source pack SHA-512와 불변 게시 integrity 일치·정확 버전 설치를 확인했다. Messenger 소비자는 client-react 0.2.2의 공개 타입·브라우저 build·CSS 토큰·React 단일 인스턴스와 중복 게시 거절도 확인했다. 최종 로그는 `task25-talk-registry-final22/24`, `task25-web-registry-final22/24`, `task25-ms-registry-owned-final22/24`의 `.log/.exit`이며 모두 exit 0이다.
 
@@ -33,6 +33,10 @@ Groupware 최종 `check`는 Node 22/24에서 각 서버 unit 83개·UI unit 3개
 초기 BFF 실행에서 `/tmp`의 sandbox UID 65534가 private-file ancestry 검사에 걸렸다. 보안 검사를 변경하지 않고 앱 fixture를 UID 1000 소유 workspace 임시 경로로 돌렸다. 다음 실행은 customer-auth cold bundle의 ENOSPC와 Messenger 1GiB reserve 부족으로 188/196 통과·8 실패였다. 이번 작업의 node_modules 5개를 여유 있는 `/tmp`로 보존 이동했으며 49,365개 파일의 SHA-256이 모두 같고 외부 workspace symlink만 실제 대상으로 보정했다. 기록은 `/tmp/jgw-task25-preserved-ndfnh4uv/post-final-install/preservation.json`에 있다. 캐시·다른 사용자 자료·실패 로그를 삭제하지 않았다.
 
 다음 전체 실행의 customer-auth 두 번째 child startup 실패로 19개가 skip됐고, 해당 run은 실패로 기록했다. 분리 재현은 18개가 통과하고 정상 opaque guestId와 악성 경로 문자의 기존 계약 불일치 한 건을 발견했다. BFF decoder가 Talk의 기존 허용 문자 규칙을 같이 검사하도록 수정했으며 malformed 값 거절·무조회 assertion은 유지하고 권한 없는 경로도 503으로 강화했다. 정상 opaque 구분자 이름은 null이다. 실패·skip·미실행은 통과로 집계하지 않는다.
+
+한 차례 발생한 두 번째 child startup 실패의 상세 원인은 미확정이다. 이후 양쪽 런타임 전체 회귀에서 customer-auth 19개가 모두 실제 실행·통과했으며 초기 skip 결과는 보존했다. 연결 끊김 안내 후에도 환경·로그·exit 파일에 접근할 수 있음을 다시 확인했다. 사라진 실행 결과를 성공으로 계산하지 않았다. [최종 실행 증거 JSON](cloud-task25-test-results.json)은 실제 exit 0·관찰된 시험 수·로그 SHA-256과 네 번의 실패 기록을 구분한다. runtime 첫 줄이 없는 이전 로그는 해당 메타데이터 한계도 표시한다.
+
+마지막 연결 review에서 Talk가 gateway 뒤의 발급 IP를 loopback 하나로 묶는 문제를 고쳤다. 즉시 IPv4 loopback 첫 hop만 신뢰하고 기존 gateway의 전달 IP 덮어쓰기와 맞췄다. 실제 HTTPS·PG에서 IP별 10회/11회, 다른 IP의 독립 발급, 위조된 앞쪽 chain과 다른 peer의 전달 header 우회 거절을 검증했다. 추가된 하나를 포함한 최종 Talk 25개와 package check는 `task25-talk-gateway-check22/24`, `task25-talk-gateway-integration22/24`에서 각각 exit 0이다. 이는 OS/VM 보안 설정 변경이 아니다.
 
 회사 노트북·운영 계정·새 영구 credential·CA trust·방화벽·systemd/timer·PR/main 병합·운영 배포는 변경하지 않았다. Windows PMT 상태 경로와 해당 start/note/verify/end 도구는 이 클라우드에서 없어 그 기록만 미실행이다. 저장소 지침과 실제 소스·시험 증거는 저장소 문서에 남긴다.
 

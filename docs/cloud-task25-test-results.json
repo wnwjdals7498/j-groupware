@@ -1,0 +1,642 @@
+{
+  "date": "2026-10-09",
+  "scope": "Task25 initial14 source features and bounded cloud regression; no operating/customer VM acceptance",
+  "whole_suite_verified": false,
+  "acceptance_complete": false,
+  "successful_runs": [
+    {
+      "repository": "j-auth",
+      "kind": "package_check",
+      "runtime": "v22.18.0",
+      "selected_binary": "/workspace/.cloud-setup/node22/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-auth-check-final22.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-auth-check-final22.exit",
+      "exit_code": 0,
+      "expected_passed_counts": null,
+      "log_sha256": "0d4a8deb76f941716ae4d9b1f7a16ec2a4f3d3580ef9f005a891c822e0a6d1d3"
+    },
+    {
+      "repository": "j-auth",
+      "kind": "actual_auth_keycloak_pg_https",
+      "runtime": "v22.18.0",
+      "selected_binary": "/workspace/.cloud-setup/node22/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-auth-integration-final22.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-auth-integration-final22.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "integration": 74
+      },
+      "log_sha256": "919264b842e80d51dfa4cb43e1a8833a38340af46dae315751da417cd651c174"
+    },
+    {
+      "repository": "j-auth",
+      "kind": "actual_chromium_theme",
+      "runtime": "v22.18.0",
+      "selected_binary": "/workspace/.cloud-setup/node22/bin/node",
+      "runtime_in_log": false,
+      "runtime_evidence": "saved_explicit_runtime_invocation; version_not_embedded_in_log",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-auth-theme-final22.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-auth-theme-final22.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "browser": 1
+      },
+      "log_sha256": "6fb505f22bd4153075a80d7258c6ea6efad41adb3c3ac71d5daf7915ae1cf895"
+    },
+    {
+      "repository": "j-messenger",
+      "kind": "client_react_types_and_unit",
+      "runtime": "v22.18.0",
+      "selected_binary": "/workspace/.cloud-setup/node22/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-ms-final-ui22.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-ms-final-ui22.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "unit": 13
+      },
+      "log_sha256": "337c22a97fe26e3d3c26486860d387a18868946a4ec278e524e44a9d6eb2a0ad"
+    },
+    {
+      "repository": "j-messenger",
+      "kind": "immutable_fresh_registry_consumer_types_bundle_css",
+      "runtime": "v22.18.0",
+      "selected_binary": "/workspace/.cloud-setup/node22/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-ms-registry-owned-final22.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-ms-registry-owned-final22.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "consumer": 1
+      },
+      "log_sha256": "10c9d1bb37e7133edcde0d5d561d55981bfb0cddcdea2e614f6eb83eaf277f54"
+    },
+    {
+      "repository": "j-groupware",
+      "kind": "actual_chromium_public_ui_after_preserved_dependencies",
+      "runtime": "v22.18.0",
+      "selected_binary": "/workspace/.cloud-setup/node22/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-ui-post-preserve22.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-ui-post-preserve22.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "browser": 1
+      },
+      "log_sha256": "7e4e6ae9627775e96a6da7eefb1ec63904fd6818e9ef09729f98151f9e8762e3"
+    },
+    {
+      "repository": "j-mail",
+      "kind": "package_check",
+      "runtime": "v22.18.0",
+      "selected_binary": "/workspace/.cloud-setup/node22/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-mail-check-post-producer-final-node22.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-mail-check-post-producer-final-node22.exit",
+      "exit_code": 0,
+      "expected_passed_counts": null,
+      "log_sha256": "8f76740cc210ff2ab5fa526856fc3eeb4d67e013f49000ffe74ab4097e4a2e10"
+    },
+    {
+      "repository": "j-mail",
+      "kind": "actual_smtp_mailpit_webhook_pg_outbox_receiver_retry",
+      "runtime": "v22.18.0",
+      "selected_binary": "/workspace/.cloud-setup/node22/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-mail-e8-producer-final2-node22.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-mail-e8-producer-final2-node22.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "producer": 1
+      },
+      "log_sha256": "f6fcf7af9067d0a80cd7fb204361da5de71420ff00c9cb1049b3acc5989e4f6c"
+    },
+    {
+      "repository": "j-mail",
+      "kind": "actual_full_integration",
+      "runtime": "v22.18.0",
+      "selected_binary": "/workspace/.cloud-setup/node22/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-mail-full-integration-final-node22.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-mail-full-integration-final-node22.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "integration": 19
+      },
+      "log_sha256": "a193888843aa33ae16ea68a91fd2ae7cfe49175f02681a51b1806d4d6c886605"
+    },
+    {
+      "repository": "j-talk",
+      "kind": "package_check",
+      "runtime": "v22.18.0",
+      "selected_binary": "/workspace/.cloud-setup/node22/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-talk-gateway-check22.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-talk-gateway-check22.exit",
+      "exit_code": 0,
+      "expected_passed_counts": null,
+      "log_sha256": "ffb6ab5fc0f941a91c1ffd817bb08c1d33e52b6c95082ef284a419aa04930dc1"
+    },
+    {
+      "repository": "j-talk",
+      "kind": "actual_https_pg_wss_chromium_and_gateway_ip_limits",
+      "runtime": "v22.18.0",
+      "selected_binary": "/workspace/.cloud-setup/node22/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-talk-gateway-integration22.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-talk-gateway-integration22.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "integration": 25
+      },
+      "log_sha256": "bec1e70d31d52abcfa7e37ea4f2040a1ef7fd9841de0a0682a14840d8ab83693"
+    },
+    {
+      "repository": "j-talk",
+      "kind": "immutable_contract_fresh_consumer",
+      "runtime": "v22.18.0",
+      "selected_binary": "/workspace/.cloud-setup/node22/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-talk-registry-final22.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-talk-registry-final22.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "consumer": 1
+      },
+      "log_sha256": "df06421b338006079ab19756f36379cf8dee6904454b91ce1878fa246cb921ee"
+    },
+    {
+      "repository": "j-web",
+      "kind": "package_check",
+      "runtime": "v22.18.0",
+      "selected_binary": "/workspace/.cloud-setup/node22/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-web-check-final22.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-web-check-final22.exit",
+      "exit_code": 0,
+      "expected_passed_counts": null,
+      "log_sha256": "6b08f8cf6d40d715ed4fc92a6661cd915d57faae96797b3f894d22301265655a"
+    },
+    {
+      "repository": "j-web",
+      "kind": "actual_pg_https",
+      "runtime": "v22.18.0",
+      "selected_binary": "/workspace/.cloud-setup/node22/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-web-integration-final2-node22.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-web-integration-final2-node22.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "integration": 15
+      },
+      "log_sha256": "348aae67306df924e4e68a7004a1f487fcb640c20697f1b23c24c569b57dfed9"
+    },
+    {
+      "repository": "j-web",
+      "kind": "actual_hosting_journal_and_files",
+      "runtime": "v22.18.0",
+      "selected_binary": "/workspace/.cloud-setup/node22/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-web-journal-hosting-final-node22.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-web-journal-hosting-final-node22.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "hosting": 5
+      },
+      "log_sha256": "27a3d63bdf7aa564f19c38d3ec6fea16663e16ae724b39a6bc3ad52b1e8d3a81"
+    },
+    {
+      "repository": "j-web",
+      "kind": "immutable_contract_fresh_consumer",
+      "runtime": "v22.18.0",
+      "selected_binary": "/workspace/.cloud-setup/node22/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-web-registry-final22.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-web-registry-final22.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "consumer": 1
+      },
+      "log_sha256": "fe4b9d934bf07e59c61e4a02f9f5dbe22b6e0c4e2e377ac21f10895f4b9c5224"
+    },
+    {
+      "repository": "j-groupware",
+      "kind": "build_types_unit_lint_format",
+      "runtime": "v22.18.0",
+      "selected_binary": "/workspace/.cloud-setup/node22/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-gwa-check-final4-node22.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-gwa-check-final4-node22.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "server_unit": 83,
+        "ui_unit": 3
+      },
+      "log_sha256": "7fa6e59a5ac7d71c81aafdf305e80b4894d14d6f5850d4191537b2dfc396b357"
+    },
+    {
+      "repository": "j-groupware",
+      "kind": "actual_full_bff",
+      "runtime": "v22.18.0",
+      "selected_binary": "/workspace/.cloud-setup/node22/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-gwa-bff-final-r3-node22.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-gwa-bff-final-r3-node22.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "integration": 196
+      },
+      "log_sha256": "725e201329e80624ca0f0dae501a75a30ee1944f2acd5e63eee43e52162ec180"
+    },
+    {
+      "repository": "j-groupware",
+      "kind": "six_product_cold_archives_exact_ci_actual_talk_web_pg_tls",
+      "runtime": "v22.18.0",
+      "selected_binary": "/workspace/.cloud-setup/node22/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-gwa-bundles-final22.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-gwa-bundles-final22.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "bundle": 4
+      },
+      "log_sha256": "047ab79235ade193355c3c1560256cb7e5d981bdd24c37a6bcf4446cb536c193"
+    },
+    {
+      "repository": "j-groupware",
+      "kind": "collector_preparation_only_owned_https_not_vm_acceptance",
+      "runtime": "v22.18.0",
+      "selected_binary": "/workspace/.cloud-setup/node22/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-vm-acceptance-final-node22.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-vm-acceptance-final-node22.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "fixture": 11
+      },
+      "log_sha256": "db5f9e169a409d18f4f1f4845fff314ff21a51de998187471b594ccb34cc7f80"
+    },
+    {
+      "repository": "j-auth",
+      "kind": "package_check",
+      "runtime": "v24.19.0",
+      "selected_binary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-auth-check-final24.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-auth-check-final24.exit",
+      "exit_code": 0,
+      "expected_passed_counts": null,
+      "log_sha256": "0c00cde22e634376b1840b1dc6f859b9aaa1098f5d3ee3de2bdaaa07189f4139"
+    },
+    {
+      "repository": "j-auth",
+      "kind": "actual_auth_keycloak_pg_https",
+      "runtime": "v24.19.0",
+      "selected_binary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-auth-integration-final24.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-auth-integration-final24.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "integration": 74
+      },
+      "log_sha256": "ef8421a1ca998c234a40a06655ee6b62d30fdab48a405cda06038ae8194cfb4f"
+    },
+    {
+      "repository": "j-auth",
+      "kind": "actual_chromium_theme",
+      "runtime": "v24.19.0",
+      "selected_binary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "runtime_in_log": false,
+      "runtime_evidence": "saved_explicit_runtime_invocation; version_not_embedded_in_log",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-auth-theme-final24.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-auth-theme-final24.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "browser": 1
+      },
+      "log_sha256": "987bec15348c0dd84b406b9983c6074be41f0df115f4b2e413f199ba8da8a758"
+    },
+    {
+      "repository": "j-messenger",
+      "kind": "client_react_types_and_unit",
+      "runtime": "v24.19.0",
+      "selected_binary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-ms-final-ui24.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-ms-final-ui24.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "unit": 13
+      },
+      "log_sha256": "676927f6b16d4f38fd3f59641501510057ee59857de8858c9225a268c23019b2"
+    },
+    {
+      "repository": "j-messenger",
+      "kind": "immutable_fresh_registry_consumer_types_bundle_css",
+      "runtime": "v24.19.0",
+      "selected_binary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-ms-registry-owned-final24.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-ms-registry-owned-final24.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "consumer": 1
+      },
+      "log_sha256": "ed582516b3a17439d8ea84bd16567bbf391ad0db54f917b51c0cb82476f0997a"
+    },
+    {
+      "repository": "j-groupware",
+      "kind": "actual_chromium_public_ui_after_preserved_dependencies",
+      "runtime": "v24.19.0",
+      "selected_binary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-ui-post-preserve24.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-ui-post-preserve24.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "browser": 1
+      },
+      "log_sha256": "50c354033bec8b2eb53a97a4e31a70b1c4141222ef85fa21d4ab960c8ee45804"
+    },
+    {
+      "repository": "j-mail",
+      "kind": "package_check",
+      "runtime": "v24.19.0",
+      "selected_binary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-mail-check-post-producer-node24.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-mail-check-post-producer-node24.exit",
+      "exit_code": 0,
+      "expected_passed_counts": null,
+      "log_sha256": "51d8972a82c5be434d3b27d7a26d11c371241af85747f4559153793f0cb2df2a"
+    },
+    {
+      "repository": "j-mail",
+      "kind": "actual_smtp_mailpit_webhook_pg_outbox_receiver_retry",
+      "runtime": "v24.19.0",
+      "selected_binary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-mail-e8-producer-final-node24.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-mail-e8-producer-final-node24.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "producer": 1
+      },
+      "log_sha256": "65605955758b059caf209d4a1ac3680db437a82a2cdbee9a456855a4bf286e16"
+    },
+    {
+      "repository": "j-mail",
+      "kind": "actual_full_integration",
+      "runtime": "v24.19.0",
+      "selected_binary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-mail-full-integration-node24.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-mail-full-integration-node24.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "integration": 19
+      },
+      "log_sha256": "a78744d93775c06bb7b6a04124434608e92901e1c9805537b892cd76d83be4ca"
+    },
+    {
+      "repository": "j-talk",
+      "kind": "package_check",
+      "runtime": "v24.19.0",
+      "selected_binary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-talk-gateway-check24.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-talk-gateway-check24.exit",
+      "exit_code": 0,
+      "expected_passed_counts": null,
+      "log_sha256": "e5d1c3096088bbd9455cdbbf013e17c8f1102d89b0d48e71897eea5f052374ff"
+    },
+    {
+      "repository": "j-talk",
+      "kind": "actual_https_pg_wss_chromium_and_gateway_ip_limits",
+      "runtime": "v24.19.0",
+      "selected_binary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-talk-gateway-integration24.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-talk-gateway-integration24.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "integration": 25
+      },
+      "log_sha256": "0b9c282b1424a9d9c0d26e53b1dc4738e2c34124abb42a311386d016cd744f23"
+    },
+    {
+      "repository": "j-talk",
+      "kind": "immutable_contract_fresh_consumer",
+      "runtime": "v24.19.0",
+      "selected_binary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-talk-registry-final24.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-talk-registry-final24.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "consumer": 1
+      },
+      "log_sha256": "2fe4e9f4d2ba0bdb2cf2ae793e1a8357e4b5132f0901cd758964fb66b6411955"
+    },
+    {
+      "repository": "j-web",
+      "kind": "package_check",
+      "runtime": "v24.19.0",
+      "selected_binary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-web-check-final24.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-web-check-final24.exit",
+      "exit_code": 0,
+      "expected_passed_counts": null,
+      "log_sha256": "f1e1a0fae4eacf335be6e1e9917448877c7978ace9fc329a2fa73b04aae5ce75"
+    },
+    {
+      "repository": "j-web",
+      "kind": "actual_pg_https",
+      "runtime": "v24.19.0",
+      "selected_binary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-web-integration-final-node24.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-web-integration-final-node24.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "integration": 15
+      },
+      "log_sha256": "65849b7d172b6cde39f3a4443f14f0c39dc416b69cea9b9b76ca6978bc5bb5bf"
+    },
+    {
+      "repository": "j-web",
+      "kind": "actual_hosting_journal_and_files",
+      "runtime": "v24.19.0",
+      "selected_binary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-web-journal-hosting-final-node24.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-web-journal-hosting-final-node24.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "hosting": 5
+      },
+      "log_sha256": "2d242a0e4e76a60438d9285e9f99d57a513adf49ba83cc72cd23070e8a749c57"
+    },
+    {
+      "repository": "j-web",
+      "kind": "immutable_contract_fresh_consumer",
+      "runtime": "v24.19.0",
+      "selected_binary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-web-registry-final24.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-web-registry-final24.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "consumer": 1
+      },
+      "log_sha256": "85e2272e73d0a82cbc95d2b3ef1a267c86e56da55d3e99025ec40a8772ecbf0a"
+    },
+    {
+      "repository": "j-groupware",
+      "kind": "build_types_unit_lint_format",
+      "runtime": "v24.19.0",
+      "selected_binary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-gwa-check-final-r2-node24.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-gwa-check-final-r2-node24.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "server_unit": 83,
+        "ui_unit": 3
+      },
+      "log_sha256": "4d4971cd00d4af794428f5a8475987df75344ab1e3731ca5d8b748ad272dda5d"
+    },
+    {
+      "repository": "j-groupware",
+      "kind": "actual_full_bff",
+      "runtime": "v24.19.0",
+      "selected_binary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-gwa-bff-final24.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-gwa-bff-final24.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "integration": 196
+      },
+      "log_sha256": "400aac025827ba2f143446c15b338845560bf35aea8cb8ae1b8b27d6a8c5a78f"
+    },
+    {
+      "repository": "j-groupware",
+      "kind": "six_product_cold_archives_exact_ci_actual_talk_web_pg_tls",
+      "runtime": "v24.19.0",
+      "selected_binary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-gwa-bundles-final24.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-gwa-bundles-final24.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "bundle": 4
+      },
+      "log_sha256": "9d07129a6156f4f9067957290d4c93f296de20b76d95c71dfebe397d269eac75"
+    },
+    {
+      "repository": "j-groupware",
+      "kind": "collector_preparation_only_owned_https_not_vm_acceptance",
+      "runtime": "v24.19.0",
+      "selected_binary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "runtime_in_log": true,
+      "runtime_evidence": "log_first_line",
+      "command_log": "/workspace/.suite-runtime/j-groupware/task25-vm-acceptance-final-node24.log",
+      "exit_log": "/workspace/.suite-runtime/j-groupware/task25-vm-acceptance-final-node24.exit",
+      "exit_code": 0,
+      "expected_passed_counts": {
+        "fixture": 11
+      },
+      "log_sha256": "194b4ddc746c59129fc2ceffacaf7d4915774eb395a29c1a0189cc725be604de"
+    }
+  ],
+  "failed_runs_retained": [
+    {
+      "log": "/workspace/.suite-runtime/j-groupware/task25-gwa-bff-final22.log",
+      "exit_code": 1,
+      "reason": "sandbox_tmp_ancestry_rejected; failed_and_skipped_not_passed",
+      "retained": true
+    },
+    {
+      "log": "/workspace/.suite-runtime/j-groupware/task25-gwa-bff-ownedtmp-r2-node22.log",
+      "exit_code": 1,
+      "reason": "ENOSPC_and_messenger_1GiB_reserve;188_passed_8_failed",
+      "retained": true
+    },
+    {
+      "log": "/workspace/.suite-runtime/j-groupware/task25-gwa-bff-capacity-final22.log",
+      "exit_code": 1,
+      "reason": "second_customer_child_startup_unidentified;177_passed_19_skipped;not_counted_as_pass",
+      "retained": true
+    },
+    {
+      "log": "/workspace/.suite-runtime/j-groupware/task25-gwa-customer-target22.log",
+      "exit_code": 1,
+      "reason": "18_passed_1_contract_mismatch;malformed_guest_rejection_preserved_and_strengthened_before_final_pass",
+      "retained": true
+    }
+  ],
+  "customer_startup_transient_root_cause": "unidentified; subsequent targeted run and both final full BFF runs executed all19 customer tests successfully",
+  "vm_not_run": [
+    "AU-51",
+    "GW-73",
+    "MS-09",
+    "ML-32",
+    "CA-32",
+    "AP-32",
+    "TK-42",
+    "WB-33"
+  ],
+  "source_commits_at_checkpoint": {
+    "j-auth": "93375df96a1bce319df12eb62a2b9a586e82ae1d",
+    "j-groupware": "ecb5caa5c732e7b09f411bf9303e0e2e7e920a5e",
+    "j-messenger": "632c0911bac8d3ec5394f8adb4e2de544e3af425",
+    "j-talk": "f625f1ac12a1dd86f7f019c675c98593e63c5ca8",
+    "j-mail": "abd8526502a68f8d93341e02a35ac54e7b97c45d",
+    "j-customer-auth-db": "98e013dd83eaef9067a3dcba7be99cb09ac8c429",
+    "j-approval": "a29271fbc583e274b313103105b64d661b1a7afe",
+    "j-web": "328cd137d661dd6fe79104a2ca3f206b4422446c"
+  },
+  "no_lost_result_counted_as_success": true
+}
