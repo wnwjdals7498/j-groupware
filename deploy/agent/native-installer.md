@@ -36,7 +36,8 @@ symlink·쓰기 가능한 ancestry·추가 필드·중복/비정규 JSON을 거�
   root는 product profile의 dataRoot와 같아야 한다. 백업 상한은 운영자가
   명시하고 자동 보관 주기·자동 purge 정책을 만들지 않는다.
 
-이미 검증·해제된 root 소유 제품 번들, 준비된 전용 PostgreSQL 기반과
+데이터 allocation 부모는 미리 준비된 root 소유 traversal 경로여야 하며
+private state/backup 경로와 분리한다. 이미 검증·해제된 root 소유 제품 번들, 준비된 전용 PostgreSQL 기반과
 `/usr/lib/postgresql/18/bin/pg_dump`, Nginx, systemd가 선행 조건이다.
 이 진입점은 OS 패키지 설치·PG 설치·OS CA trust·기본 BFF bootstrap을
 완료하는 전체 설치기가 아니다. 현재 CLI 검증은 inert 조합과 거절 경계다.

@@ -5,6 +5,8 @@
 
 ## 구현
 
+groupware 소스는 [b4e4310919edd2189c6f45e8768c7aa19dc29821](https://github.com/wnwjdals7498/j-groupware/commit/b4e4310919edd2189c6f45e8768c7aa19dc29821)로 커밋·푸시하고 `ls-remote`와 GitHub exact SHA를 확인했다.
+
 - [ProductStorage](../deploy/agent/product-storage.mjs): 고정 서비스 계정과
   root 소유 allocation/state, Messenger 파일 및 Mailpit 볼륨 준비, 정지 확인,
   실제 PG custom archive와 파일의 private snapshot/hash/topology 검증, 재시도,
@@ -38,8 +40,9 @@
 | groupware check | 77 pass·exit0 | 77 pass·exit0 | build/type/unit/lint/format |
 | mail check | 9 unit+3 deploy·exit0 | 9 unit+3 deploy·exit0 | build/type/lint/format 포함 |
 | mail registry | 1 pass·exit0 | 1 pass·exit0 | 실제 0.1.1 소비·pack integrity와 0.1.0 불변 |
+| 전체 BFF 최종 회귀 | 179 pass·exit0 | 179 pass·exit0 | 각각13개 파일·skip0; focused 검사를 중복 합산하지 않음 |
 
-전체 BFF179의 최종 재검증은 진행 중이다. 첫 실행은 175 pass·4 skip·exit1이며
+전체 BFF179의 최종 재검증은 두 Node에서 완료했다. 첫 실행은 175 pass·4 skip·exit1이며
 새 wrapper의 허용 경로 누락으로 bootstrap beforeAll이 실패했다. 4개를 통과로
 합산하지 않는다. 정확한 경로를 추가한 뒤 cold19는 두 Node에서 통과했다.
 
@@ -75,7 +78,14 @@ T2/E8/H7/UI 답변 대기를 독립 소스 작업 전체의 차단으로 확대�
 
 현재 source 집계는 구현109·부분32·미착수31/총172, 남은63이다.
 `whole_suite_verified=false`와 부분 구현 표시를 유지한다.
-최종 재감사와 원격 SHA는 전체 회귀 완료 뒤 같은 기록에 추가한다.
+전체179·cold19·root5·core21·check77의 실제 로그와 exit0을 확인한 뒤 재감사를 갱신했다.
+남은63의 첫 다음 단계는 독립 소스16·T2/E8/H7 정책21·UI 기준17·실제 VM9다.
+[전체 63개 감사](cloud-remaining-feature-audit-2026-10-08.md)에 ID별 다음 단계와
+전체 완료 관문을 적었다. 독립16 중 다음 유한 묶음은 Web H2 contracts/readonly
+조회·입력 검증·미리보기·고정 snippet과 BFF 계약(7개 ID)까지다. H7 수동 파일
+교체·T2 visitor 엔진·정식 UI·VM 인수로 확장하지 않는다. 전체 bootstrap/나머지
+제품 조합과 콘솔/Talk 회원 계약도 남은 소스 작업이며 환경 차단으로 숨기지 않는다.
+원격 SHA 확인 후 작업 브랜치가 원격과 일치하며 PR/main/배포는 수행하지 않았다.
 
 실행 로그는 `/workspace/.suite-runtime/j-groupware/storage-*.log`와 대응 `.exit`다.
 최종 root/core/cold/check는 `storage-{root,core,unpack,check}-node{22,24}` 이름이며

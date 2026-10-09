@@ -20,11 +20,11 @@
     "excluded": "현재 최소 범위 제외"
   },
   "summary": {
-    "ready": 0,
-    "contract": 9,
-    "service": 17,
+    "ready": 16,
+    "contract": 0,
+    "service": 0,
     "ui": 17,
-    "policy": 11,
+    "policy": 21,
     "vm": 9,
     "excluded": 0
   },
@@ -44,14 +44,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-auth/docs/decisions.md",
-        "j-auth/docs/feature-specifications.md"
+        "j-auth/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "cloud_import_and_owned_realm_generation_pass; canonical_bootstrap_user_and_claims_pass; login_theme_and_browser_acceptance_pending; actual_legacy_import_canonical_role_owner_lookup_member_201_wrong_alias_403_reduced_mail_role_pass_node22_node24; existing_fgap_catalog_hash_unchanged; corrected_new_import_scope_pass",
       "implementation": "partial",
-      "verification": "cloud_import_and_owned_realm_generation_pass; canonical_bootstrap_user_and_claims_pass; login_theme_and_browser_acceptance_pending; actual_legacy_import_canonical_role_owner_lookup_member_201_wrong_alias_403_reduced_mail_role_pass_node22_node24; existing_fgap_catalog_hash_unchanged; corrected_new_import_scope_pass"
+      "verification": "cloud_import_and_owned_realm_generation_pass; canonical_bootstrap_user_and_claims_pass; login_theme_and_browser_acceptance_pending; actual_legacy_import_canonical_role_owner_lookup_member_201_wrong_alias_403_reduced_mail_role_pass_node22_node24; existing_fgap_catalog_hash_unchanged; corrected_new_import_scope_pass",
+      "completion_boundary": "기존 UI 기준 응답 뒤 정식 화면/브라우저 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "AU-05",
@@ -68,14 +71,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-auth/docs/decisions.md",
-        "j-auth/docs/feature-specifications.md"
+        "j-auth/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_groupware_bff_code_pkce_state_nonce_cookie_pass; theme_playwright_bruteforce_not_run",
       "implementation": "partial",
-      "verification": "actual_groupware_bff_code_pkce_state_nonce_cookie_pass; theme_playwright_bruteforce_not_run"
+      "verification": "actual_groupware_bff_code_pkce_state_nonce_cookie_pass; theme_playwright_bruteforce_not_run",
+      "completion_boundary": "기존 UI 기준 응답 뒤 정식 화면/브라우저 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "AU-09",
@@ -92,14 +98,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-auth/docs/decisions.md",
-        "j-auth/docs/feature-specifications.md"
+        "j-auth/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "기존 UI 기준 응답 뒤 정식 화면/브라우저 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "AU-51",
@@ -116,14 +125,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-auth/docs/decisions.md",
-        "j-auth/docs/feature-specifications.md"
+        "j-auth/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "지정된 실제 격리 고객 VM/권한에서 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-12",
@@ -140,14 +152,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_me_menu_data_filtered_by_catalog_roles_pass; sidebar_ui_not_implemented",
       "implementation": "partial",
-      "verification": "actual_me_menu_data_filtered_by_catalog_roles_pass; sidebar_ui_not_implemented"
+      "verification": "actual_me_menu_data_filtered_by_catalog_roles_pass; sidebar_ui_not_implemented",
+      "completion_boundary": "기존 UI 기준 응답 뒤 정식 화면/브라우저 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-13",
@@ -164,14 +179,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_bff_member_list_create_delete_original_bearer_tenant_service_key_csrf_foreign_target_duplicate_concurrent_creation_pass; confirmed_delete_local_failure_retry_recovery_pass; confirmed_create_local_failure_registration_repair_pass; member_ui_playwright_pending",
       "implementation": "partial",
-      "verification": "actual_bff_member_list_create_delete_original_bearer_tenant_service_key_csrf_foreign_target_duplicate_concurrent_creation_pass; confirmed_delete_local_failure_retry_recovery_pass; confirmed_create_local_failure_registration_repair_pass; member_ui_playwright_pending"
+      "verification": "actual_bff_member_list_create_delete_original_bearer_tenant_service_key_csrf_foreign_target_duplicate_concurrent_creation_pass; confirmed_delete_local_failure_retry_recovery_pass; confirmed_create_local_failure_registration_repair_pass; member_ui_playwright_pending",
+      "completion_boundary": "기존 UI 기준 응답 뒤 정식 화면/브라우저 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-14",
@@ -188,14 +206,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_bff_grantable_catalog_implication_data_and_role_grant_revoke_effective_read_write_pass; checkbox_ui_not_implemented",
       "implementation": "partial",
-      "verification": "actual_bff_grantable_catalog_implication_data_and_role_grant_revoke_effective_read_write_pass; checkbox_ui_not_implemented"
+      "verification": "actual_bff_grantable_catalog_implication_data_and_role_grant_revoke_effective_read_write_pass; checkbox_ui_not_implemented",
+      "completion_boundary": "기존 UI 기준 응답 뒤 정식 화면/브라우저 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-20",
@@ -212,14 +233,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_pg_board_create_read_list_tenant_isolation_cursor_and_role_input_checks_pass; board_ui_playwright_not_implemented",
       "implementation": "partial",
-      "verification": "actual_pg_board_create_read_list_tenant_isolation_cursor_and_role_input_checks_pass; board_ui_playwright_not_implemented"
+      "verification": "actual_pg_board_create_read_list_tenant_isolation_cursor_and_role_input_checks_pass; board_ui_playwright_not_implemented",
+      "completion_boundary": "기존 UI 기준 응답 뒤 정식 화면/브라우저 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-21",
@@ -236,14 +260,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_org_crud_tree_cycles_depth_count_limits_composite_fk_tenant_csrf_revision_concurrency_failure_rollback_pass; org_ui_playwright_pending",
       "implementation": "partial",
-      "verification": "actual_org_crud_tree_cycles_depth_count_limits_composite_fk_tenant_csrf_revision_concurrency_failure_rollback_pass; org_ui_playwright_pending"
+      "verification": "actual_org_crud_tree_cycles_depth_count_limits_composite_fk_tenant_csrf_revision_concurrency_failure_rollback_pass; org_ui_playwright_pending",
+      "completion_boundary": "기존 UI 기준 응답 뒤 정식 화면/브라우저 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-30",
@@ -260,14 +287,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
-      "implemented_in_this_batch": true,
+      "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_Keycloak_PG_BFF_HTTP_WSS_receipts_sync_logout_role_revocation_registry_client_pass; multipart_5MB_attachment_bind_dedup_conflict_tenant_CSRF_download_independent_5day_14day_retention_pass_Node22_Node24; actual_full_BFF125_and_gateway14_each_Node22_Node24_pass; formal_UI_Playwright_VM_pending",
       "implementation": "partial",
-      "verification": "actual_Keycloak_PG_BFF_HTTP_WSS_receipts_sync_logout_role_revocation_registry_client_pass; multipart_5MB_attachment_bind_dedup_conflict_tenant_CSRF_download_independent_5day_14day_retention_pass_Node22_Node24; actual_full_BFF125_and_gateway14_each_Node22_Node24_pass; formal_UI_Playwright_VM_pending"
+      "verification": "actual_Keycloak_PG_BFF_HTTP_WSS_receipts_sync_logout_role_revocation_registry_client_pass; multipart_5MB_attachment_bind_dedup_conflict_tenant_CSRF_download_independent_5day_14day_retention_pass_Node22_Node24; actual_full_BFF125_and_gateway14_each_Node22_Node24_pass; formal_UI_Playwright_VM_pending",
+      "completion_boundary": "기존 UI 기준 응답 뒤 정식 화면/브라우저 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-31",
@@ -284,14 +314,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_cookie_bff_compiled_mail_network_none_smtp_keycloak_pg_8_pass_node22_node24; source_tenant_injection_denied; role_revocation_session_end_pass; formal_ui_sandbox_playwright_pending",
       "implementation": "partial",
-      "verification": "actual_cookie_bff_compiled_mail_network_none_smtp_keycloak_pg_8_pass_node22_node24; source_tenant_injection_denied; role_revocation_session_end_pass; formal_ui_sandbox_playwright_pending"
+      "verification": "actual_cookie_bff_compiled_mail_network_none_smtp_keycloak_pg_8_pass_node22_node24; source_tenant_injection_denied; role_revocation_session_end_pass; formal_ui_sandbox_playwright_pending",
+      "completion_boundary": "기존 UI 기준 응답 뒤 정식 화면/브라우저 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-32",
@@ -308,14 +341,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
-      "implemented_in_this_batch": true,
+      "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved"
+      "verification": "actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
+      "completion_boundary": "기존 UI 기준 응답 뒤 정식 화면/브라우저 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-33",
@@ -332,14 +368,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
-      "implemented_in_this_batch": true,
+      "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved"
+      "verification": "actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
+      "completion_boundary": "기존 UI 기준 응답 뒤 정식 화면/브라우저 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-34",
@@ -356,14 +395,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "cloud_actual_bff_compiled_approval_keycloak_postgres_10_pass; overall_73_pass; UI_Playwright_VM_not_run",
       "implementation": "partial",
-      "verification": "cloud_actual_bff_compiled_approval_keycloak_postgres_10_pass; overall_73_pass; UI_Playwright_VM_not_run"
+      "verification": "cloud_actual_bff_compiled_approval_keycloak_postgres_10_pass; overall_73_pass; UI_Playwright_VM_not_run",
+      "completion_boundary": "기존 UI 기준 응답 뒤 정식 화면/브라우저 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-35",
@@ -371,26 +413,29 @@
       "service": "j-groupware",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "service",
-      "classification_label": "서비스 구현 선행",
-      "external_or_user_gate": false,
+      "classification": "policy",
+      "classification_label": "제품 정책 결정 필요",
+      "external_or_user_gate": true,
       "additional_dependencies": [
         "ui",
         "policy"
       ],
-      "reason": "회원 room/settings와 권한별 손님 이름 조합을 실제 서비스로 검증했다. fixture 문의방이며 실제 visitor/WSS 업무와 정식 UI가 남았다.",
+      "reason": "T2 결정이 해당 기능의 첫 실제 producer/배포 단계보다 앞선다. 회원 room/settings와 권한별 손님 이름 조합을 실제 서비스로 검증했다. fixture 문의방이며 실제 visitor/WSS 업무와 정식 UI가 남았다.",
       "next_step": "T2 답변 뒤 실제 visitor/WSS 상담 전달을 연결하고 정식 UI 기준 아래 상담 화면을 구현한다. guest:read 조건의 UUID 이름 조합과 무권한 무조회는 검증 완료다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
-      "implemented_in_this_batch": true,
+      "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; customer19_each_includes_actual_Talk_customer_auth_PG_role_dependent_guest_names_single_aud_Bearer_deduplicated_page_lookups_anonymous_deleted_foreign_guest_null_no_guest_read_no_CA_call_no_CA_service_token_invalid_UUID_no_lookup_actual_CA_outage503_identifier_only_Talk_still_available_pass; unit77_each_includes_lookup_concurrency4_failure_cancellation_all_settled_pass; member_room_storage_seed_only_live_visitor_issuer_WSS_T2_and_formal_UI_Playwright_VM_not_run",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; customer19_each_includes_actual_Talk_customer_auth_PG_role_dependent_guest_names_single_aud_Bearer_deduplicated_page_lookups_anonymous_deleted_foreign_guest_null_no_guest_read_no_CA_call_no_CA_service_token_invalid_UUID_no_lookup_actual_CA_outage503_identifier_only_Talk_still_available_pass; unit77_each_includes_lookup_concurrency4_failure_cancellation_all_settled_pass; member_room_storage_seed_only_live_visitor_issuer_WSS_T2_and_formal_UI_Playwright_VM_not_run"
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; customer19_each_includes_actual_Talk_customer_auth_PG_role_dependent_guest_names_single_aud_Bearer_deduplicated_page_lookups_anonymous_deleted_foreign_guest_null_no_guest_read_no_CA_call_no_CA_service_token_invalid_UUID_no_lookup_actual_CA_outage503_identifier_only_Talk_still_available_pass; unit77_each_includes_lookup_concurrency4_failure_cancellation_all_settled_pass; member_room_storage_seed_only_live_visitor_issuer_WSS_T2_and_formal_UI_Playwright_VM_not_run",
+      "completion_boundary": "T2 정책 응답 뒤 실제 producer/실행 연결",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-36",
@@ -409,14 +454,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
-      "implemented_in_this_batch": true,
+      "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_Node22_18_Node24_19_talk_BFF_5_each_exit0_skip0; origins_page_widget_key_once_and_rotation_pass; bounded_JSON_secret_field_projection_unit2_pass; signature_example_visitor_policy_and_formal_UI_not_run",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_talk_BFF_5_each_exit0_skip0; origins_page_widget_key_once_and_rotation_pass; bounded_JSON_secret_field_projection_unit2_pass; signature_example_visitor_policy_and_formal_UI_not_run"
+      "verification": "actual_Node22_18_Node24_19_talk_BFF_5_each_exit0_skip0; origins_page_widget_key_once_and_rotation_pass; bounded_JSON_secret_field_projection_unit2_pass; signature_example_visitor_policy_and_formal_UI_not_run",
+      "completion_boundary": "기존 UI 기준 응답 뒤 정식 화면/브라우저 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-37",
@@ -424,25 +472,28 @@
       "service": "j-groupware",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "service",
-      "classification_label": "서비스 구현 선행",
+      "classification": "ready",
+      "classification_label": "구현 가능",
       "external_or_user_gate": false,
       "additional_dependencies": [
         "ui"
       ],
-      "reason": "web DB·회원 조회 backend는 구현했다. helper·사이트/계정 변경·정식 웹 관리 UI가 없다.",
-      "next_step": "web DB·인증·helper·계약부터 구현한 뒤 BFF·화면을 연결한다.",
+      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. web DB·회원 조회 backend는 구현했다. helper·사이트/계정 변경·정식 웹 관리 UI가 없다.",
+      "next_step": "H2 readonly/사이트/콘텐츠 계약과 기존 helper 공개 인터페이스를 먼저 고정해 API/BFF를 연결한다. 정식 화면은 UI 기준 뒤다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-38",
@@ -450,23 +501,26 @@
       "service": "j-groupware",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "service",
-      "classification_label": "서비스 구현 선행",
-      "external_or_user_gate": false,
+      "classification": "policy",
+      "classification_label": "제품 정책 결정 필요",
+      "external_or_user_gate": true,
       "additional_dependencies": [],
-      "reason": "talk origin API는 실제 검증했다. web deploy 및 성공/출처 등록 부분 실패 BFF 연결이 없다.",
+      "reason": "H7 결정이 해당 기능의 첫 실제 producer/배포 단계보다 앞선다. talk origin API는 실제 검증했다. web deploy 및 성공/출처 등록 부분 실패 BFF 연결이 없다.",
       "next_step": "각 backend 완성 후 성공/후속 origin 실패를 분리한 BFF 연결을 구현한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "H7 정책 응답 뒤 실제 producer/실행 연결",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-40",
@@ -474,23 +528,26 @@
       "service": "j-groupware",
       "baseline_implementation": "partial",
       "baseline_verification": "actual_isolated_j_auth_subscription_GET_unsubscribe_resubscribe_PG_registry_hash_generation_overlap_expiry_fail_closed_multi_instance_rollback_poll_retry_compiled_projection_receiver_pass; production_installer_agent_key_provisioning_pending",
-      "classification": "service",
-      "classification_label": "서비스 구현 선행",
+      "classification": "ready",
+      "classification_label": "구현 가능",
       "external_or_user_gate": false,
       "additional_dependencies": [],
-      "reason": "기본 BFF 봉인 설정·안전 unpack/cold 기동, 생성 실패 단계별 PG 해지, Approval/Talk 데이터 보존 cleanup, 짧은 수명 외부 자격/실제 알림 worker CLI를 검증했다. 전용 서비스 계정 CA/TLS·제품 storage/Messenger/Mailpit/customer cleanup·전체 bootstrap/installer entrypoint·운영 자격 갱신/토폴로지·timer와 고객 VM 인수는 남았다.",
-      "next_step": "완전한 native bootstrap/installer 조합·Messenger/Mailpit storage preparation/cleanup·production notification 자격 갱신/토폴로지를 연결한다. 봉인 one-shot agent는 실제 콘솔/PG/Talk/TLS와 fixture 설치기로 검증했고, 실제 systemd PID1/VM/timer는 별도 인수다.",
+      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. 새 storage/PG/SQLite 복원과 native control/factory/wrapper guard는 격리 검증됐고 전체 bootstrap/운영 연결·인수는 남았다.",
+      "next_step": "기존 manifest/worker와 남은 installer 조합의 입력·실패 경계를 연결한다. 운영 operator 자격 공급/갱신 주체와 로컬 PG/receiver 배치는 별도 결정한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; actual_projection_and_worker_one_shot_expiry_inactive_same_generation_recovery_pass; explicit_provision_agent18_each_fixture_installer_real_console_PG_Talk_TLS_report_pass; production_notification_credentials_renewal_topology_worker_timer_all_source_product_acceptance_pending; previous_initial_receiver_start_failure_cause_unresolved",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; actual_projection_and_worker_one_shot_expiry_inactive_same_generation_recovery_pass; explicit_provision_agent18_each_fixture_installer_real_console_PG_Talk_TLS_report_pass; production_notification_credentials_renewal_topology_worker_timer_all_source_product_acceptance_pending; previous_initial_receiver_start_failure_cause_unresolved; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; actual_projection_and_worker_one_shot_expiry_inactive_same_generation_recovery_pass; explicit_provision_agent18_each_fixture_installer_real_console_PG_Talk_TLS_report_pass; production_notification_credentials_renewal_topology_worker_timer_all_source_product_acceptance_pending; previous_initial_receiver_start_failure_cause_unresolved"
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; actual_projection_and_worker_one_shot_expiry_inactive_same_generation_recovery_pass; explicit_provision_agent18_each_fixture_installer_real_console_PG_Talk_TLS_report_pass; production_notification_credentials_renewal_topology_worker_timer_all_source_product_acceptance_pending; previous_initial_receiver_start_failure_cause_unresolved; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
+      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-44",
@@ -507,14 +564,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_list_unread_and_idempotent_per_member_read_backend_pass; icon_click_navigation_formal_UI_Playwright_pending",
       "implementation": "partial",
-      "verification": "actual_list_unread_and_idempotent_per_member_read_backend_pass; icon_click_navigation_formal_UI_Playwright_pending"
+      "verification": "actual_list_unread_and_idempotent_per_member_read_backend_pass; icon_click_navigation_formal_UI_Playwright_pending",
+      "completion_boundary": "기존 UI 기준 응답 뒤 정식 화면/브라우저 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-51",
@@ -522,23 +582,26 @@
       "service": "j-groupware",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "contract",
-      "classification_label": "기술 계약 확정 선행",
+      "classification": "ready",
+      "classification_label": "구현 가능",
       "external_or_user_gate": false,
       "additional_dependencies": [],
-      "reason": "고객 목록·상세 및 권한별 안전 projection은 실제 검증했다. 업무 계약 상태 enum·전이·변경 API는 아직 없다.",
-      "next_step": "업무 계약 상태값·전이 기준을 확인한 뒤 기존 고객 DTO/PG 저장과 연결한다.",
+      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. 고객 목록·상세 및 권한별 안전 projection은 실제 검증했다. 업무 계약 상태 enum·전이·변경 API는 아직 없다.",
+      "next_step": "명세의 G7 계약 상태 enum·전이·변경 DTO/API를 고정하고 기존 콘솔 PG/권한과 연결한다. 단순 고객 조회 완료로 계약 변경을 완료 처리하지 않는다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
-      "implemented_in_this_batch": true,
+      "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_Node22_18_Node24_19_console_16_each_exit0_skip0; customer_list_detail_safe_projection_customer_read_cached_session_role_fixture_pass; business_contract_state_enum_mutation_and_formal_UI_not_implemented",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_console_16_each_exit0_skip0; customer_list_detail_safe_projection_customer_read_cached_session_role_fixture_pass; business_contract_state_enum_mutation_and_formal_UI_not_implemented"
+      "verification": "actual_Node22_18_Node24_19_console_16_each_exit0_skip0; customer_list_detail_safe_projection_customer_read_cached_session_role_fixture_pass; business_contract_state_enum_mutation_and_formal_UI_not_implemented",
+      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-63",
@@ -546,26 +609,29 @@
       "service": "j-groupware",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "service",
-      "classification_label": "서비스 구현 선행",
+      "classification": "ready",
+      "classification_label": "구현 가능",
       "external_or_user_gate": false,
       "additional_dependencies": [
         "GW-52",
         "GW-54"
       ],
-      "reason": "기본 BFF 봉인 설정·안전 unpack/cold 기동, 생성 실패 단계별 PG 해지, Approval/Talk 데이터 보존 cleanup, 짧은 수명 외부 자격/실제 알림 worker CLI를 검증했다. 전용 서비스 계정 CA/TLS·제품 storage/Messenger/Mailpit/customer cleanup·전체 bootstrap/installer entrypoint·운영 자격 갱신/토폴로지·timer와 고객 VM 인수는 남았다.",
-      "next_step": "완전한 native bootstrap/installer 조합·Messenger/Mailpit storage preparation/cleanup·production notification 자격 갱신/토폴로지를 연결한다. 봉인 one-shot agent는 실제 콘솔/PG/Talk/TLS와 fixture 설치기로 검증했고, 실제 systemd PID1/VM/timer는 별도 인수다.",
+      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. 새 storage/PG/SQLite 복원과 native control/factory/wrapper guard는 격리 검증됐고 전체 bootstrap/운영 연결·인수는 남았다.",
+      "next_step": "준비된 번들·기본 BFF·PG·CA·agent를 연결하는 전체 bootstrap 소스와 재시작 경계를 완성한다. 실제 OS trust/systemd/timer 설치 인수는 별도다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending"
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
+      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-64",
@@ -573,8 +639,8 @@
       "service": "j-groupware",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "service",
-      "classification_label": "서비스 구현 선행",
+      "classification": "ready",
+      "classification_label": "구현 가능",
       "external_or_user_gate": false,
       "additional_dependencies": [
         "GW-63",
@@ -582,19 +648,22 @@
         "WB-20",
         "TK-40"
       ],
-      "reason": "기본 BFF 봉인 설정·안전 unpack/cold 기동, 생성 실패 단계별 PG 해지, Approval/Talk 데이터 보존 cleanup, 짧은 수명 외부 자격/실제 알림 worker CLI를 검증했다. 전용 서비스 계정 CA/TLS·제품 storage/Messenger/Mailpit/customer cleanup·전체 bootstrap/installer entrypoint·운영 자격 갱신/토폴로지·timer와 고객 VM 인수는 남았다.",
-      "next_step": "완전한 native bootstrap/installer 조합·Messenger/Mailpit storage preparation/cleanup·production notification 자격 갱신/토폴로지를 연결한다. 봉인 one-shot agent는 실제 콘솔/PG/Talk/TLS와 fixture 설치기로 검증했고, 실제 systemd PID1/VM/timer는 별도 인수다.",
+      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. 새 storage/PG/SQLite 복원과 native control/factory/wrapper guard는 격리 검증됐고 전체 bootstrap/운영 연결·인수는 남았다.",
+      "next_step": "검증된 CA/Messenger 조합을 전체 bootstrap에 연결하고 나머지 제품의 trusted adapter 입력을 고정한다. operating notification owner/topology와 실제 OS 설치는 별도다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending"
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
+      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-65",
@@ -602,26 +671,29 @@
       "service": "j-groupware",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "service",
-      "classification_label": "서비스 구현 선행",
+      "classification": "ready",
+      "classification_label": "구현 가능",
       "external_or_user_gate": false,
       "additional_dependencies": [
         "GW-64",
         "WB-25"
       ],
-      "reason": "기본 BFF 봉인 설정·안전 unpack/cold 기동, 생성 실패 단계별 PG 해지, Approval/Talk 데이터 보존 cleanup, 짧은 수명 외부 자격/실제 알림 worker CLI를 검증했다. 전용 서비스 계정 CA/TLS·제품 storage/Messenger/Mailpit/customer cleanup·전체 bootstrap/installer entrypoint·운영 자격 갱신/토폴로지·timer와 고객 VM 인수는 남았다.",
-      "next_step": "완전한 native bootstrap/installer 조합·Messenger/Mailpit storage preparation/cleanup·production notification 자격 갱신/토폴로지를 연결한다. 봉인 one-shot agent는 실제 콘솔/PG/Talk/TLS와 fixture 설치기로 검증했고, 실제 systemd PID1/VM/timer는 별도 인수다.",
+      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. 새 storage/PG/SQLite 복원과 native control/factory/wrapper guard는 격리 검증됐고 전체 bootstrap/운영 연결·인수는 남았다.",
+      "next_step": "기존 Web helper와 새 storage/DB 정리의 전체 조합·account 제거 재시도 계약을 연결한다. OS account 실제 제거/제품 의미적 복원/VM 인수를 소스 시험으로 대체하지 않는다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending"
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
+      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-66",
@@ -629,23 +701,26 @@
       "service": "j-groupware",
       "baseline_implementation": "partial",
       "baseline_verification": "cloud_internal_reconciler_actual_fixture_files_and_processes_node22_node24_14_each_pass; cross_process_lock_idempotence_observation_failure_retry_cancellation_descendant_stop_pass; actual_bff_regression_114_pass; console_wire_auth_installer_probe_real_os_wiring_and_timer_activation_not_run",
-      "classification": "service",
-      "classification_label": "서비스 구현 선행",
+      "classification": "ready",
+      "classification_label": "구현 가능",
       "external_or_user_gate": false,
       "additional_dependencies": [],
-      "reason": "기본 BFF 봉인 설정·안전 unpack/cold 기동, 생성 실패 단계별 PG 해지, Approval/Talk 데이터 보존 cleanup, 짧은 수명 외부 자격/실제 알림 worker CLI를 검증했다. 전용 서비스 계정 CA/TLS·제품 storage/Messenger/Mailpit/customer cleanup·전체 bootstrap/installer entrypoint·운영 자격 갱신/토폴로지·timer와 고객 VM 인수는 남았다.",
-      "next_step": "완전한 native bootstrap/installer 조합·Messenger/Mailpit storage preparation/cleanup·production notification 자격 갱신/토폴로지를 연결한다. 봉인 one-shot agent는 실제 콘솔/PG/Talk/TLS와 fixture 설치기로 검증했고, 실제 systemd PID1/VM/timer는 별도 인수다.",
+      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. 새 storage/PG/SQLite 복원과 native control/factory/wrapper guard는 격리 검증됐고 전체 bootstrap/운영 연결·인수는 남았다.",
+      "next_step": "고정 agent와 native 설치자의 나머지 제품 binding/실패 보고를 연결한다. 운영 알림 자격·timer 활성화·VM 인수는 별도다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending"
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
+      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-71",
@@ -662,14 +737,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "기존 UI 기준 응답 뒤 정식 화면/브라우저 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "GW-73",
@@ -686,14 +764,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md"
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "지정된 실제 격리 고객 VM/권한에서 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "MS-07",
@@ -710,14 +791,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-messenger/docs/pmt-docs/11-implementation-plan.md",
-        "j-messenger/docs/suite-integration-specifications.md"
+        "j-messenger/docs/suite-integration-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "기존 UI 기준 응답 뒤 정식 화면/브라우저 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "MS-09",
@@ -734,14 +818,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-messenger/docs/pmt-docs/11-implementation-plan.md",
-        "j-messenger/docs/suite-integration-specifications.md"
+        "j-messenger/docs/suite-integration-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "지정된 실제 격리 고객 VM/권한에서 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "ML-03",
@@ -758,14 +845,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-mail/docs/decisions.md",
-        "j-mail/docs/feature-specifications.md"
+        "j-mail/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "no_relay_network_none_capture_pass; customer_vm_egress_firewall_not_run",
       "implementation": "partial",
-      "verification": "no_relay_network_none_capture_pass; customer_vm_egress_firewall_not_run"
+      "verification": "no_relay_network_none_capture_pass; customer_vm_egress_firewall_not_run",
+      "completion_boundary": "지정된 실제 격리 고객 VM/권한에서 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "ML-20",
@@ -782,14 +872,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-mail/docs/decisions.md",
-        "j-mail/docs/feature-specifications.md"
+        "j-mail/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "T2/E8/H7 정책 응답 뒤 구현",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "ML-30",
@@ -797,26 +890,29 @@
       "service": "j-mail",
       "baseline_implementation": "partial",
       "baseline_verification": "dedicated_pg_role_cross_db_denial_checksum_migration_pass; outbox_systemd_vm_pending",
-      "classification": "service",
-      "classification_label": "서비스 구현 선행",
-      "external_or_user_gate": false,
+      "classification": "policy",
+      "classification_label": "제품 정책 결정 필요",
+      "external_or_user_gate": true,
       "additional_dependencies": [
         "E8_policy",
         "vm"
       ],
-      "reason": "전용 DB·migration은 검증됐고 E8 결정 뒤 outbox 및 systemd/VM 연결이 남았다.",
+      "reason": "E8 결정이 해당 기능의 첫 실제 producer/배포 단계보다 앞선다. 전용 DB·migration은 검증됐고 E8 결정 뒤 outbox 및 systemd/VM 연결이 남았다.",
       "next_step": "E8 결정 후 outbox를 구현하고 installer 연결·VM 인수를 분리한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-mail/docs/decisions.md",
-        "j-mail/docs/feature-specifications.md"
+        "j-mail/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "dedicated_pg_role_cross_db_denial_checksum_migration_pass; outbox_systemd_vm_pending",
       "implementation": "partial",
-      "verification": "dedicated_pg_role_cross_db_denial_checksum_migration_pass; outbox_systemd_vm_pending"
+      "verification": "dedicated_pg_role_cross_db_denial_checksum_migration_pass; outbox_systemd_vm_pending",
+      "completion_boundary": "E8 정책 응답 뒤 실제 producer/실행 연결",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "ML-32",
@@ -833,14 +929,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-mail/docs/decisions.md",
-        "j-mail/docs/feature-specifications.md"
+        "j-mail/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "지정된 실제 격리 고객 VM/권한에서 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "CA-32",
@@ -857,14 +956,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-customer-auth-db/docs/decisions.md",
-        "j-customer-auth-db/docs/feature-specifications.md"
+        "j-customer-auth-db/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "지정된 실제 격리 고객 VM/권한에서 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "AP-32",
@@ -881,14 +983,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-approval/docs/decisions.md",
-        "j-approval/docs/feature-specifications.md"
+        "j-approval/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "지정된 실제 격리 고객 VM/권한에서 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "TK-02",
@@ -896,23 +1001,26 @@
       "service": "j-talk",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "service",
-      "classification_label": "서비스 구현 선행",
-      "external_or_user_gate": false,
+      "classification": "policy",
+      "classification_label": "제품 정책 결정 필요",
+      "external_or_user_gate": true,
       "additional_dependencies": [],
-      "reason": "빌드 JS에 Shadow DOM FAB/panel 소스가 있다. visitor transport는 비가용이며 실제 대화와 브라우저 스타일 인수는 미실행이다. 기존 정식 UI 기준 답변은 별도 대기한다.",
+      "reason": "T2 결정이 해당 기능의 첫 실제 producer/배포 단계보다 앞선다. 빌드 JS에 Shadow DOM FAB/panel 소스가 있다. visitor transport는 비가용이며 실제 대화와 브라우저 스타일 인수는 미실행이다. 기존 정식 UI 기준 답변은 별도 대기한다.",
       "next_step": "visitor producer와 실제 텍스트 대화 UI를 연결하고 브라우저에서 격리를 검증한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
+        "j-talk/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_Vite8_3_4_library_single_embedded_CSS_widget_min_js_1199_bytes_gzip_default733_bytes; actual_https_fixed_v1_cache300_sha256_ETag_304_each_node22_node24_in_14_pass_exit0_skip0; built_script_no_DOM_when_visitor_transport_unavailable; actual_browser_chat_UI_visitor_producer_WSS_not_run",
       "implementation": "partial",
-      "verification": "actual_Vite8_3_4_library_single_embedded_CSS_widget_min_js_1199_bytes_gzip_default733_bytes; actual_https_fixed_v1_cache300_sha256_ETag_304_each_node22_node24_in_14_pass_exit0_skip0; built_script_no_DOM_when_visitor_transport_unavailable; actual_browser_chat_UI_visitor_producer_WSS_not_run"
+      "verification": "actual_Vite8_3_4_library_single_embedded_CSS_widget_min_js_1199_bytes_gzip_default733_bytes; actual_https_fixed_v1_cache300_sha256_ETag_304_each_node22_node24_in_14_pass_exit0_skip0; built_script_no_DOM_when_visitor_transport_unavailable; actual_browser_chat_UI_visitor_producer_WSS_not_run",
+      "completion_boundary": "T2 정책 응답 뒤 실제 producer/실행 연결",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "TK-03",
@@ -920,25 +1028,28 @@
       "service": "j-talk",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "service",
-      "classification_label": "서비스 구현 선행",
-      "external_or_user_gate": false,
+      "classification": "policy",
+      "classification_label": "제품 정책 결정 필요",
+      "external_or_user_gate": true,
       "additional_dependencies": [
         "visitor_policy"
       ],
-      "reason": "빌드 script는 transport 비가용 시 DOM을 만들지 않는다. 미가입 gateway 빈 script는 검증했고 활성 위젯 producer는 없다.",
+      "reason": "T2 결정이 해당 기능의 첫 실제 producer/배포 단계보다 앞선다. 빌드 script는 transport 비가용 시 DOM을 만들지 않는다. 미가입 gateway 빈 script는 검증했고 활성 위젯 producer는 없다.",
       "next_step": "실제 동작/허용/가입 capability를 연결하고 표시·비표시 각각을 브라우저에서 검증한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
+        "j-talk/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_Vite8_3_4_library_single_embedded_CSS_widget_min_js_1199_bytes_gzip_default733_bytes; actual_https_fixed_v1_cache300_sha256_ETag_304_each_node22_node24_in_14_pass_exit0_skip0; built_script_no_DOM_when_visitor_transport_unavailable; actual_browser_chat_UI_visitor_producer_WSS_not_run",
       "implementation": "partial",
-      "verification": "actual_Vite8_3_4_library_single_embedded_CSS_widget_min_js_1199_bytes_gzip_default733_bytes; actual_https_fixed_v1_cache300_sha256_ETag_304_each_node22_node24_in_14_pass_exit0_skip0; built_script_no_DOM_when_visitor_transport_unavailable; actual_browser_chat_UI_visitor_producer_WSS_not_run"
+      "verification": "actual_Vite8_3_4_library_single_embedded_CSS_widget_min_js_1199_bytes_gzip_default733_bytes; actual_https_fixed_v1_cache300_sha256_ETag_304_each_node22_node24_in_14_pass_exit0_skip0; built_script_no_DOM_when_visitor_transport_unavailable; actual_browser_chat_UI_visitor_producer_WSS_not_run",
+      "completion_boundary": "T2 정책 응답 뒤 실제 producer/실행 연결",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "TK-04",
@@ -955,14 +1066,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
+        "j-talk/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "T2/E8/H7 정책 응답 뒤 구현",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "TK-05",
@@ -979,14 +1093,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
+        "j-talk/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "T2/E8/H7 정책 응답 뒤 구현",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "TK-06",
@@ -1003,14 +1120,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
+        "j-talk/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "T2/E8/H7 정책 응답 뒤 구현",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "TK-07",
@@ -1018,23 +1138,26 @@
       "service": "j-talk",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "service",
-      "classification_label": "서비스 구현 선행",
-      "external_or_user_gate": false,
+      "classification": "policy",
+      "classification_label": "제품 정책 결정 필요",
+      "external_or_user_gate": true,
       "additional_dependencies": [],
-      "reason": "429 안내 요구는 확정됐으나 실제 제한 응답 backend가 없다.",
+      "reason": "T2 결정이 해당 기능의 첫 실제 producer/배포 단계보다 앞선다. 429 안내 요구는 확정됐으나 실제 제한 응답 backend가 없다.",
       "next_step": "T2/T4 제한 응답과 widget 안내를 연결한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
+        "j-talk/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "T2 정책 응답 뒤 실제 producer/실행 연결",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "TK-08",
@@ -1042,23 +1165,26 @@
       "service": "j-talk",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "service",
-      "classification_label": "서비스 구현 선행",
-      "external_or_user_gate": false,
+      "classification": "policy",
+      "classification_label": "제품 정책 결정 필요",
+      "external_or_user_gate": true,
       "additional_dependencies": [],
-      "reason": "위젯 삽입 예제 요구는 확정됐으나 배포 파일과 실제 backend가 없다.",
+      "reason": "T2 결정이 해당 기능의 첫 실제 producer/배포 단계보다 앞선다. 위젯 삽입 예제 요구는 확정됐으나 배포 파일과 실제 backend가 없다.",
       "next_step": "실제 widget·허용 Origin으로 예제 페이지를 실행한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
+        "j-talk/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "T2 정책 응답 뒤 실제 producer/실행 연결",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "TK-10",
@@ -1075,14 +1201,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
+        "j-talk/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "T2/E8/H7 정책 응답 뒤 구현",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "TK-11",
@@ -1099,14 +1228,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
+        "j-talk/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "T2/E8/H7 정책 응답 뒤 구현",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "TK-12",
@@ -1123,14 +1255,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
+        "j-talk/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "T2/E8/H7 정책 응답 뒤 구현",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "TK-13",
@@ -1153,14 +1288,17 @@
         "j-talk/docs/feature-specifications.md",
         "j-talk/apps/server/src/settings.ts",
         "j-talk/apps/server/src/app.ts",
-        "j-talk/tests/integration/settings.integration.test.ts"
+        "j-talk/tests/integration/settings.integration.test.ts",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
-      "implemented_in_this_batch": true,
+      "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_db_exact_origin_http_get_options_cors_registered_only_pass_node22_node24; visitor_http_and_wss_auth_transport_not_implemented",
       "implementation": "partial",
-      "verification": "actual_db_exact_origin_http_get_options_cors_registered_only_pass_node22_node24; visitor_http_and_wss_auth_transport_not_implemented"
+      "verification": "actual_db_exact_origin_http_get_options_cors_registered_only_pass_node22_node24; visitor_http_and_wss_auth_transport_not_implemented",
+      "completion_boundary": "T2/E8/H7 정책 응답 뒤 구현",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "TK-14",
@@ -1168,23 +1306,26 @@
       "service": "j-talk",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "contract",
-      "classification_label": "기술 계약 확정 선행",
-      "external_or_user_gate": false,
+      "classification": "policy",
+      "classification_label": "제품 정책 결정 필요",
+      "external_or_user_gate": true,
       "additional_dependencies": [],
-      "reason": "실제 열린 방 하나 DB 제약과 UTF-8 4096-byte 저장 제한을 구현했다. visitor/IP rate limit producer는 없다.",
+      "reason": "T2 결정이 해당 기능의 첫 실제 producer/배포 단계보다 앞선다. 실제 열린 방 하나 DB 제약과 UTF-8 4096-byte 저장 제한을 구현했다. visitor/IP rate limit producer는 없다.",
       "next_step": "visitor issuer 뒤 visitor/IP rate limit을 구현하고 실제 429 경계를 검증한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
+        "j-talk/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
       "implementation": "partial",
-      "verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run"
+      "verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
+      "completion_boundary": "T2 정책 응답 뒤 실제 producer/실행 연결",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "TK-21",
@@ -1192,23 +1333,26 @@
       "service": "j-talk",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "service",
-      "classification_label": "서비스 구현 선행",
+      "classification": "ready",
+      "classification_label": "구현 가능",
       "external_or_user_gate": false,
       "additional_dependencies": [],
-      "reason": "실제 검증 회원의 본인 배정과 종료방 충돌을 구현했다. 다른 회원 검증·재배정 및 알림은 남았다.",
-      "next_step": "tenant 회원 배정 대상 검증과 배정 발생별 outbox 알림을 구현한다.",
+      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. 실제 검증 회원의 본인 배정과 종료방 충돌을 구현했다. 다른 회원 검증·재배정 및 알림은 남았다.",
+      "next_step": "기존 회원 공개 API로 같은 tenant의 배정 대상 검증·재배정을 연결하고 occurrence별 outbox를 구현한다. visitor 전달은 T2 뒤다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
+        "j-talk/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
       "implementation": "partial",
-      "verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run"
+      "verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
+      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "TK-22",
@@ -1216,23 +1360,26 @@
       "service": "j-talk",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "service",
-      "classification_label": "서비스 구현 선행",
-      "external_or_user_gate": false,
+      "classification": "policy",
+      "classification_label": "제품 정책 결정 필요",
+      "external_or_user_gate": true,
       "additional_dependencies": [],
-      "reason": "실제 회원 메시지/outbox 원자 commit·dedup·rollback을 구현했다. 손님 WSS 전달은 남았다.",
+      "reason": "T2 결정이 해당 기능의 첫 실제 producer/배포 단계보다 앞선다. 실제 회원 메시지/outbox 원자 commit·dedup·rollback을 구현했다. 손님 WSS 전달은 남았다.",
       "next_step": "outbox poller와 정책이 확정된 guest WSS/signed cursor 복구를 연결한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
+        "j-talk/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
       "implementation": "partial",
-      "verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run"
+      "verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
+      "completion_boundary": "T2 정책 응답 뒤 실제 producer/실행 연결",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "TK-23",
@@ -1240,23 +1387,26 @@
       "service": "j-talk",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "service",
-      "classification_label": "서비스 구현 선행",
-      "external_or_user_gate": false,
+      "classification": "policy",
+      "classification_label": "제품 정책 결정 필요",
+      "external_or_user_gate": true,
       "additional_dependencies": [],
-      "reason": "실제 회원 종료 잠금·상태·409를 구현했다. 종료 후 새 손님 문의 producer는 남았다.",
+      "reason": "T2 결정이 해당 기능의 첫 실제 producer/배포 단계보다 앞선다. 실제 회원 종료 잠금·상태·409를 구현했다. 종료 후 새 손님 문의 producer는 남았다.",
       "next_step": "visitor 소유권 정책 뒤 종료 후 새 방 생성과 전체 lifecycle을 검증한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
+        "j-talk/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
       "implementation": "partial",
-      "verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run"
+      "verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
+      "completion_boundary": "T2 정책 응답 뒤 실제 producer/실행 연결",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "TK-24",
@@ -1273,14 +1423,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
+        "j-talk/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
       "implementation": "partial",
-      "verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run"
+      "verification": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
+      "completion_boundary": "T2/E8/H7 정책 응답 뒤 구현",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "TK-27",
@@ -1304,14 +1457,17 @@
         "j-talk/docs/feature-specifications.md",
         "j-talk/apps/server/src/auth.ts",
         "j-talk/apps/server/src/app.ts",
-        "j-talk/tests/integration/settings.integration.test.ts"
+        "j-talk/tests/integration/settings.integration.test.ts",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
-      "implemented_in_this_batch": true,
+      "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "partial",
       "current_verification": "actual_member_single_jtalk_aud_azp_tenant_sid_role_cookie_refusal_401_403_404_409_real_jwks_and_db503_pass_node22_node24; visitor_token_lifetime_rotation_rebinding_wss_and_rate_limit_not_implemented",
       "implementation": "partial",
-      "verification": "actual_member_single_jtalk_aud_azp_tenant_sid_role_cookie_refusal_401_403_404_409_real_jwks_and_db503_pass_node22_node24; visitor_token_lifetime_rotation_rebinding_wss_and_rate_limit_not_implemented"
+      "verification": "actual_member_single_jtalk_aud_azp_tenant_sid_role_cookie_refusal_401_403_404_409_real_jwks_and_db503_pass_node22_node24; visitor_token_lifetime_rotation_rebinding_wss_and_rate_limit_not_implemented",
+      "completion_boundary": "T2/E8/H7 정책 응답 뒤 구현",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "TK-30",
@@ -1319,23 +1475,26 @@
       "service": "j-talk",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "contract",
-      "classification_label": "기술 계약 확정 선행",
+      "classification": "ready",
+      "classification_label": "구현 가능",
       "external_or_user_gate": false,
       "additional_dependencies": [],
-      "reason": "talk.new/assigned 대상과 PG outbox·재시도는 확정됐고 재배정 반복의 사건 ID가 T2/G22에서 필요하다.",
-      "next_step": "실제 occurrence ID를 dedupKey에 고정해 같은 사건 중복만 제거한다.",
+      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. talk.new/assigned 대상과 PG outbox·재시도는 확정됐고 재배정 반복의 사건 ID가 T2/G22에서 필요하다.",
+      "next_step": "회원 배정 occurrence ID와 고정 dedupKey·PG outbox/retry를 먼저 연결한다. talk.new visitor producer는 T2 뒤다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
+        "j-talk/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "TK-41",
@@ -1343,25 +1502,28 @@
       "service": "j-talk",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "contract",
-      "classification_label": "기술 계약 확정 선행",
+      "classification": "ready",
+      "classification_label": "구현 가능",
       "external_or_user_gate": false,
       "additional_dependencies": [
         "visitor_policy"
       ],
-      "reason": "관리/회원 계약은 독립 고정 가능하고 visitor 정책에 의존하는 계약 부분은 별도다.",
-      "next_step": "T2 관리/회원 DTO를 먼저 고정하고 visitor 정책 결정을 분리한다.",
+      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. 관리/회원 계약은 독립 고정 가능하고 visitor 정책에 의존하는 계약 부분은 별도다.",
+      "next_step": "관리/회원의 현재 DTO와 사건 계약을 정확 버전으로 고정한다. visitor 발급/WSS 계약은 T2 뒤다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
+        "j-talk/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "TK-42",
@@ -1378,14 +1540,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md"
+        "j-talk/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "지정된 실제 격리 고객 VM/권한에서 인수",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "WB-01",
@@ -1393,23 +1558,26 @@
       "service": "j-web",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "service",
-      "classification_label": "서비스 구현 선행",
+      "classification": "ready",
+      "classification_label": "구현 가능",
       "external_or_user_gate": false,
       "additional_dependencies": [],
-      "reason": "사이트 상태 조회 요구는 확정됐고 H1/H2·helper probe가 없다.",
-      "next_step": "DB 상태와 실제 probe 결과를 구별한 조회를 구현한다.",
+      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. 사이트 상태 조회 요구는 확정됐고 H1/H2·helper probe가 없다.",
+      "next_step": "H2 상태 DTO와 기존 helper의 owned 공개 probe를 연결해 저장 상태·실제 준비 결과·실패를 구별한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-web/docs/decisions.md",
-        "j-web/docs/feature-specifications.md"
+        "j-web/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "WB-02",
@@ -1417,23 +1585,26 @@
       "service": "j-web",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "contract",
-      "classification_label": "기술 계약 확정 선행",
+      "classification": "ready",
+      "classification_label": "구현 가능",
       "external_or_user_gate": false,
       "additional_dependencies": [],
-      "reason": "hosts/DNS 안내 요구는 확정됐고 구체 응답 DTO는 H2에서 고정한다.",
-      "next_step": "도메인 검증과 DNS 안내 DTO를 고정하고 문자열·tenant 검증을 구현한다.",
+      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. hosts/DNS 안내 요구는 확정됐고 구체 응답 DTO는 H2에서 고정한다.",
+      "next_step": "H2 도메인/tenant 검증과 A-record/hosts 안내 DTO를 고정한다. DNS 쓰기는 추가하지 않는다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-web/docs/decisions.md",
-        "j-web/docs/feature-specifications.md"
+        "j-web/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "WB-10",
@@ -1441,23 +1612,26 @@
       "service": "j-web",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "contract",
-      "classification_label": "기술 계약 확정 선행",
+      "classification": "ready",
+      "classification_label": "구현 가능",
       "external_or_user_gate": false,
       "additional_dependencies": [],
-      "reason": "콘텐츠 필드와 HTML escape는 확정됐고 로고 MIME·bytes·필드 상한은 H2 기술 계약이다.",
-      "next_step": "H2 검증값을 고정하고 저장·escape를 구현한다.",
+      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. 콘텐츠 필드와 HTML escape는 확정됐고 로고 MIME·bytes·필드 상한은 H2 기술 계약이다.",
+      "next_step": "H2 콘텐츠 필드·로고 MIME/bytes 상한을 기술 계약으로 고정하고 HTML escape/저장을 구현한다. 수동 파일 교체는 H7 뒤다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-web/docs/decisions.md",
-        "j-web/docs/feature-specifications.md"
+        "j-web/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "WB-11",
@@ -1465,23 +1639,26 @@
       "service": "j-web",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "contract",
-      "classification_label": "기술 계약 확정 선행",
+      "classification": "ready",
+      "classification_label": "구현 가능",
       "external_or_user_gate": false,
       "additional_dependencies": [],
-      "reason": "단일 템플릿 미리보기 요구는 확정돼 있다.",
-      "next_step": "H2 입력 검증과 HTML escape로 preview를 구현한다.",
+      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. 단일 템플릿 미리보기 요구는 확정돼 있다.",
+      "next_step": "H2 입력 검증·HTML escape로 readonly 미리보기를 구현한다. 실제 public-root 교체는 H7 뒤다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-web/docs/decisions.md",
-        "j-web/docs/feature-specifications.md"
+        "j-web/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "WB-12",
@@ -1498,14 +1675,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-web/docs/decisions.md",
-        "j-web/docs/feature-specifications.md"
+        "j-web/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "T2/E8/H7 정책 응답 뒤 구현",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "WB-13",
@@ -1513,23 +1693,26 @@
       "service": "j-web",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "contract",
-      "classification_label": "기술 계약 확정 선행",
+      "classification": "ready",
+      "classification_label": "구현 가능",
       "external_or_user_gate": false,
       "additional_dependencies": [],
-      "reason": "고정 widget snippet을 항상 포함하도록 결정돼 있다.",
-      "next_step": "확정된 widget 주소·snippet contract로 삽입 및 escape를 구현한다.",
+      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. 고정 widget snippet을 항상 포함하도록 결정돼 있다.",
+      "next_step": "확정된 tenant gateway widget 주소 한 줄을 항상 넣는 snippet 계약·escape를 구현한다. visitor 엔진·배포 덮어쓰기 정책과 구별한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-web/docs/decisions.md",
-        "j-web/docs/feature-specifications.md"
+        "j-web/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "WB-31",
@@ -1537,23 +1720,26 @@
       "service": "j-web",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "contract",
-      "classification_label": "기술 계약 확정 선행",
+      "classification": "ready",
+      "classification_label": "구현 가능",
       "external_or_user_gate": false,
       "additional_dependencies": [],
-      "reason": "사이트·배포·계정 상태/DTO는 H2에서 구현자가 고정한다.",
-      "next_step": "H1 이후 계약을 고정하고 registry 소비를 검증한다.",
+      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. 사이트·배포·계정 상태/DTO는 H2에서 구현자가 고정한다.",
+      "next_step": "H2 사이트/콘텐츠/계정/오류/배포 DTO를 정확 버전으로 고정하고 immutable registry 소비를 검증한다. 실행 정책 H7은 별도다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-web/docs/decisions.md",
-        "j-web/docs/feature-specifications.md"
+        "j-web/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
+      "reviewed_date": "2026-10-09"
     },
     {
       "id": "WB-33",
@@ -1570,14 +1756,17 @@
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-web/docs/decisions.md",
-        "j-web/docs/feature-specifications.md"
+        "j-web/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": false,
       "acceptance_complete": false,
       "current_implementation": "not_started",
       "current_verification": "not_run",
       "implementation": "not_started",
-      "verification": "not_run"
+      "verification": "not_run",
+      "completion_boundary": "지정된 실제 격리 고객 VM/권한에서 인수",
+      "reviewed_date": "2026-10-09"
     }
   ],
   "E8": {
@@ -1596,7 +1785,8 @@
     "T2: 방문자 token 수명·회전·회수와 browser WSS 인증 전달, guestId 재연결/방 소유권 충돌 정책",
     "H7: 수동 SFTP/FTPS 파일과 template 재배포의 보존·교체 경계",
     "기존 UI 기준 질의의 응답(반복 질의하지 않음)",
-    "실제 외부 인수 실행 시 격리 VM 대상과 권한"
+    "실제 외부 인수 실행 시 격리 VM 대상과 권한",
+    "운영 notification refresh 자격 소유자·key 회전·control-plane/customer 로컬 PG/private receiver 배치 계약"
   ],
   "next_independent_batches": [
     "GW-63/64/65/66: 완전한 native bootstrap/installer 조합·Messenger/Mailpit storage preparation/cleanup; root/account/CA/TLS OS 시험은 격리 컨테이너만, 실제 systemd/VM/timer 인수는 별도",
@@ -1612,12 +1802,12 @@
     "remaining": 63,
     "web_source_commit": "13861dd835362992f6ba0ee8bd237e30db8ca0ba",
     "talk_source_commit": "41f84030119d8deaa7eff94079f95da1a4a7d23b",
-    "agent_source_commit": "a1e875006117aa7feffd2dea72d07d5d7535db55",
+    "agent_source_commit": "b4e4310919edd2189c6f45e8768c7aa19dc29821",
     "console_source_commit": "998a48abe1e66f2aefd88d28fa6adda07627107c",
     "talk_bff_source_commit": "8525b5804fe6aa5ffff3d438612a1b0353c3af1d",
-    "bundle_source_commit": "a1e875006117aa7feffd2dea72d07d5d7535db55",
+    "bundle_source_commit": "b4e4310919edd2189c6f45e8768c7aa19dc29821",
     "bootstrap_source_commit": "aa2a2f13e88fa1e6959ccb08c276434a8e7c831f",
-    "teardown_source_commit": "e00000f9f2d0b8f2f7ec1ecaac5c12dce41deaa5",
+    "teardown_source_commit": "b4e4310919edd2189c6f45e8768c7aa19dc29821",
     "notification_worker_source_commit": "ea24dd34636bcfebbf89ec26d87c79831a577ece",
     "customer_auth_source_commit": "6cbfdc8b4ec6b104f9cf6cc0e96eb73d7229db35",
     "customer_auth_test_source_commit": "b15b53bb32942eee832413729940af02c1950edf",
@@ -1625,7 +1815,9 @@
     "tls_credentials_test_source_commit": "66e41b2070ed2aa7c0efcb5e684891b3926db0b6",
     "customer_auth_contracts_source_commit": "6cbfdc8b4ec6b104f9cf6cc0e96eb73d7229db35",
     "customer_auth_bff_source_commit": "4acce86650d3ccc8f0e8f5f6bb68558e4a455739",
-    "customer_auth_bundle_gateway_source_commit": "b15b53bb32942eee832413729940af02c1950edf"
+    "customer_auth_bundle_gateway_source_commit": "b15b53bb32942eee832413729940af02c1950edf",
+    "native_storage_source_commit": "b4e4310919edd2189c6f45e8768c7aa19dc29821",
+    "mail_capture_contracts_source_commit": "92809bc96ca75e1ccfd552f7247d989f6e8f28a2"
   },
   "completed_since_baseline": [
     {
@@ -2755,6 +2947,42 @@
     ],
     "reclassification_does_not_mean_complete": true
   },
-  "continueable_work_note": "ready=0은 기술 작업 소진을 뜻하지 않는다. 고객 인증 연결에 이어 기존 봉인 자격을 사용하는 명시적 one-shot agent와 권한별 상담 손님 이름 조합을 검증했다. 완전한 native bootstrap/installer 조합·Messenger/Mailpit storage preparation/cleanup·production notification 자격 갱신/토폴로지는 독립 구현이 남아 있다. T2·E8·H7·정식 UI·실제 systemd PID1/VM/timer 인수는 별도 경계다.",
-  "verification_summary": "[one-shot agent·손님 이름 연결 증거](cloud-agent-guest-names-verification-2026-10-08.md): Node22/24 전체 BFF179 각각 13files/exit0/skip0이고 실제 종료 파일을 보존했다. 집중 console18·customer19는 이 전체 회귀에 포함하며 중복 합산하지 않는다. agent core20·cold unpack19(provision-agent fresh install/inert import 포함)·groupware check77(build/type/lint/format)·Talk check1도 각각 exit0이다. 에이전트의 실제 콘솔/PG/Talk/TLS/report와 fixture 설치기를 구분한다. 손님 이름의 role 조건·dedup·무권한 무조회/무토큰·다른 tenant/deleted null·실제 CA 장애503 및 unit bounded4/cancellation을 확인했다. 실패했던 잘못된 콘솔 CA와 안전 오류 코드/negative 문자열 false positive의 exit1 로그를 보존했다. 이전 receiver startup 실패 원인은 미확정이며 최신 통과로 해결됐다고 주장하지 않는다. 이전 TLS3·PG6·product5·optional bundle4·Nginx15·Web cleanup2는 별도 과거 증거다. 운영 자격·timer·외부 송신·실제 systemd PID1/VM·정식 UI·전체 인수는 미실행이다."
+  "continueable_work_note": "남은63의 첫 다음 단계 재감사: 독립 소스 작업16, T2/E8/H7 정책 선행21, 기존 UI 기준 응답 선행17, 실제 고객 VM 인수9. ready16은 기능 완료16을 뜻하지 않는다. native control/CA·Messenger 조합과 Messenger/Mailpit storage/PG·SQLite·파일 복원은 격리 검증했지만 전체 bootstrap·나머지 운영 binding·OS account 제거·systemd/CA trust/timer·VM 인수는 남았다. 운영 notification 자격 갱신 주체와 control-plane→고객 로컬 PG/private receiver 토폴로지를 임의 결정하지 않는다.",
+  "verification_summary": "[20차 native/storage 증거](cloud-native-storage-verification-2026-10-09.md): Node22/24 전체 BFF179 각각13files/exit0/skip0, root storage/native5·agent core21·cold unpack19·groupware check77·mail check9unit+3deploy·mail registry1 각각exit0이다. 실제 파일 권한·정지/재시작 거절·PG custom dump restore·Mailpit SMTP/SQLite 동일 ID/본문 복원과 native control/factory/wrapper inert/거절 검증이다. 실제 systemd 설치·Messenger 공개 모듈 의미적 복원·운영 갱신/토폴로지·OS account 제거·timer·20GB/VM·방화벽·UI/전체 인수는 미실행이다. 첫 cold 허용경로 누락과 전체 BFF175pass/4skip/exit1, fixture 준비와 object-field-order 비교 실패의 로그를 보존한다. 이전 receiver startup 원인은 여전히 미확정이다.",
+  "reviewed_date": "2026-10-09",
+  "next_independent_batch": {
+    "ids": [
+      "GW-37",
+      "GW-40",
+      "GW-51",
+      "GW-63",
+      "GW-64",
+      "GW-65",
+      "GW-66",
+      "TK-21",
+      "TK-30",
+      "TK-41",
+      "WB-01",
+      "WB-02",
+      "WB-10",
+      "WB-11",
+      "WB-13",
+      "WB-31"
+    ],
+    "bounded_recommendation": [
+      "WB-31",
+      "WB-02",
+      "WB-10",
+      "WB-11",
+      "WB-13",
+      "WB-01",
+      "GW-37"
+    ],
+    "boundary": "H2 contracts/readonly 조회·검증·미리보기/snippet과 BFF 공개 계약까지만. H7 public-root 교체, T2 visitor 엔진, UI/VM 인수로 확장하지 않는다. 설치의 나머지 조합과 console/Talk 회원 계약도 독립 소스 미완료이며 환경 차단으로 숨기지 않는다."
+  },
+  "operating_notification_contract": [
+    "기존 GET /auth/tenants/<tenant>/services는 실제 operator Bearer와 console serviceKey를 요구한다. supplier 파일은 mode600, access exp<=15분·만료5초전 거절이며 j-auth가 signature/issuer/audience/role/key를 검증한다.",
+    "refresh 자격 소유 operator/클라이언트와 발급·갱신·회수 권한, console key 회전·비밀 보관/교체 책임이 필요하다. 일반 회원 세션/새 영구 token으로 대신하지 않는다.",
+    "현재 worker는 127.0.0.1의 고객 jgw_groupware DB/private receiver에 연결한다. control-plane credential owner를 어느 호스트에 두고 고객 projection/lease를 어떻게 전달할지 실제 배치 계약이 필요하다. 원격 PG·새 grant·운영 timer를 임의 도입하지 않는다."
+  ]
 }

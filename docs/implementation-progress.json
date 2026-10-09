@@ -1,5 +1,5 @@
 {
-  "updated_date": "2026-10-08",
+  "updated_date": "2026-10-09",
   "scope": "suite integration features only; existing messenger feature set is separate",
   "status_basis": "source implementation and bounded cloud checks; verification describes executed coverage, not service-level acceptance completion",
   "system_installation": "forbidden on company laptop",
@@ -12,7 +12,7 @@
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal UI and Playwright acceptance pending",
-    "Independent technical work remains: complete native bootstrap/installer composition, Messenger/Mailpit storage preparation/cleanup and production notification credential renewal/topology. Explicit sealed-bootstrap one-shot agent and GW-35 role-dependent guest names are verified against real isolated services; the installer in the agent fixture is not native OS installation. Actual systemd/timer/VM acceptance remains separate.",
+    "Independent source work remains: complete base bootstrap and remaining native bindings, Web readonly/content contracts, console contract state and Talk member assignment/occurrence contracts. Owned Messenger/Mailpit storage preparation, private PG/file snapshots, actual PG/SQLite/file restoration and fixed CA/Messenger native control/factory/wrapper guards pass in isolated containers. Production notification renewal owner/topology, actual systemd/OS accounts removal/timer/customer VM acceptance remain separate; the native installer has not performed real systemd installation.",
     "Actual customer VM/20GB data disk/systemd/firewall/OS CA trust and external deployment acceptance not executed in the cloud fixture runtime",
     "Mail E8 needs FS-U07 pre-webhook loss criteria and full SMTP envelope recipient preservation contract; no outbox/ingress recovery policy invented"
   ],
@@ -942,7 +942,7 @@
         "G22"
       ],
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; actual_projection_and_worker_one_shot_expiry_inactive_same_generation_recovery_pass; explicit_provision_agent18_each_fixture_installer_real_console_PG_Talk_TLS_report_pass; production_notification_credentials_renewal_topology_worker_timer_all_source_product_acceptance_pending; previous_initial_receiver_start_failure_cause_unresolved",
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; actual_projection_and_worker_one_shot_expiry_inactive_same_generation_recovery_pass; explicit_provision_agent18_each_fixture_installer_real_console_PG_Talk_TLS_report_pass; production_notification_credentials_renewal_topology_worker_timer_all_source_product_acceptance_pending; previous_initial_receiver_start_failure_cause_unresolved; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
       "code": [
         "j-groupware/apps/server/src/notification-receiver.ts",
         "j-groupware/apps/server/src/db/notifications.ts",
@@ -961,7 +961,16 @@
         "j-groupware/deploy/agent/product-environment.mjs",
         "j-groupware/deploy/agent/product-readiness.mjs",
         "j-groupware/tests/bff/customer-auth.integration.test.ts",
-        "j-groupware/docs/cloud-agent-guest-names-verification-2026-10-08.md"
+        "j-groupware/docs/cloud-agent-guest-names-verification-2026-10-08.md",
+        "j-groupware/deploy/agent/product-storage.mjs",
+        "j-groupware/deploy/agent/mailpit-platform.mjs",
+        "j-groupware/deploy/agent/provision-service.mjs",
+        "j-groupware/deploy/provision-service",
+        "j-groupware/deploy/agent/service-lifecycle.mjs",
+        "j-groupware/deploy/agent/native-installer.md",
+        "j-groupware/tests/agent/storage.integration.test.mjs",
+        "j-groupware/tests/agent/storage-fixture.mjs",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ]
     },
     {
@@ -1177,7 +1186,7 @@
         "G18"
       ],
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending",
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
       "code": [
         "j-groupware/deploy/agent/bootstrap-files.mjs",
         "j-groupware/deploy/agent/service-database.mjs",
@@ -1216,14 +1225,20 @@
         "j-groupware/deploy/agent/launch-service.mjs",
         "j-groupware/tests/agent/tls-credentials.integration.test.mjs",
         "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md",
-        "j-groupware/deploy/agent/product-environment.mjs",
-        "j-groupware/deploy/agent/product-readiness.mjs",
         "j-groupware/tests/bff/customer-auth.integration.test.ts",
         "j-groupware/deploy/agent/provision-agent.mjs",
         "j-groupware/deploy/agent/provision-agent.d.mts",
         "j-groupware/deploy/agent/provision-agent.md",
         "j-groupware/tests/bff/console.integration.test.ts",
-        "j-groupware/docs/cloud-agent-guest-names-verification-2026-10-08.md"
+        "j-groupware/docs/cloud-agent-guest-names-verification-2026-10-08.md",
+        "j-groupware/deploy/agent/product-storage.mjs",
+        "j-groupware/deploy/agent/mailpit-platform.mjs",
+        "j-groupware/deploy/agent/provision-service.mjs",
+        "j-groupware/deploy/provision-service",
+        "j-groupware/deploy/agent/native-installer.md",
+        "j-groupware/tests/agent/storage.integration.test.mjs",
+        "j-groupware/tests/agent/storage-fixture.mjs",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ]
     },
     {
@@ -1234,7 +1249,7 @@
         "G18"
       ],
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending",
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
       "code": [
         "j-groupware/deploy/agent/bootstrap-files.mjs",
         "j-groupware/deploy/agent/service-database.mjs",
@@ -1273,14 +1288,20 @@
         "j-groupware/deploy/agent/launch-service.mjs",
         "j-groupware/tests/agent/tls-credentials.integration.test.mjs",
         "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md",
-        "j-groupware/deploy/agent/product-environment.mjs",
-        "j-groupware/deploy/agent/product-readiness.mjs",
         "j-groupware/tests/bff/customer-auth.integration.test.ts",
         "j-groupware/deploy/agent/provision-agent.mjs",
         "j-groupware/deploy/agent/provision-agent.d.mts",
         "j-groupware/deploy/agent/provision-agent.md",
         "j-groupware/tests/bff/console.integration.test.ts",
-        "j-groupware/docs/cloud-agent-guest-names-verification-2026-10-08.md"
+        "j-groupware/docs/cloud-agent-guest-names-verification-2026-10-08.md",
+        "j-groupware/deploy/agent/product-storage.mjs",
+        "j-groupware/deploy/agent/mailpit-platform.mjs",
+        "j-groupware/deploy/agent/provision-service.mjs",
+        "j-groupware/deploy/provision-service",
+        "j-groupware/deploy/agent/native-installer.md",
+        "j-groupware/tests/agent/storage.integration.test.mjs",
+        "j-groupware/tests/agent/storage-fixture.mjs",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ]
     },
     {
@@ -1291,7 +1312,7 @@
         "G18"
       ],
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending",
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
       "code": [
         "j-groupware/deploy/agent/bootstrap-files.mjs",
         "j-groupware/deploy/agent/service-database.mjs",
@@ -1334,7 +1355,15 @@
         "j-groupware/deploy/agent/provision-agent.d.mts",
         "j-groupware/deploy/agent/provision-agent.md",
         "j-groupware/tests/bff/console.integration.test.ts",
-        "j-groupware/docs/cloud-agent-guest-names-verification-2026-10-08.md"
+        "j-groupware/docs/cloud-agent-guest-names-verification-2026-10-08.md",
+        "j-groupware/deploy/agent/product-storage.mjs",
+        "j-groupware/deploy/agent/mailpit-platform.mjs",
+        "j-groupware/deploy/agent/provision-service.mjs",
+        "j-groupware/deploy/provision-service",
+        "j-groupware/deploy/agent/native-installer.md",
+        "j-groupware/tests/agent/storage.integration.test.mjs",
+        "j-groupware/tests/agent/storage-fixture.mjs",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ]
     },
     {
@@ -1345,7 +1374,7 @@
         "G21"
       ],
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending",
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
       "code": [
         "j-groupware/deploy/agent/reconciler.mjs",
         "j-groupware/deploy/agent/provision-command.mjs",
@@ -1380,14 +1409,21 @@
         "j-groupware/deploy/agent/launch-service.mjs",
         "j-groupware/tests/agent/tls-credentials.integration.test.mjs",
         "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md",
-        "j-groupware/deploy/agent/product-environment.mjs",
-        "j-groupware/deploy/agent/product-readiness.mjs",
         "j-groupware/tests/bff/customer-auth.integration.test.ts",
         "j-groupware/deploy/agent/provision-agent.mjs",
         "j-groupware/deploy/agent/provision-agent.d.mts",
         "j-groupware/deploy/agent/provision-agent.md",
         "j-groupware/tests/bff/console.integration.test.ts",
-        "j-groupware/docs/cloud-agent-guest-names-verification-2026-10-08.md"
+        "j-groupware/docs/cloud-agent-guest-names-verification-2026-10-08.md",
+        "j-groupware/deploy/agent/product-storage.mjs",
+        "j-groupware/deploy/agent/mailpit-platform.mjs",
+        "j-groupware/deploy/agent/provision-service.mjs",
+        "j-groupware/deploy/provision-service",
+        "j-groupware/deploy/agent/service-lifecycle.mjs",
+        "j-groupware/deploy/agent/native-installer.md",
+        "j-groupware/tests/agent/storage.integration.test.mjs",
+        "j-groupware/tests/agent/storage-fixture.mjs",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
       ]
     },
     {

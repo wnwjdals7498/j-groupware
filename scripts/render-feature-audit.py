@@ -23,7 +23,7 @@ initial = audit['ready_batch']['initial_ids']
 for status in ['implemented', 'partial', 'not_started']:
     assert audit['ready_batch'][status] == sum(features[i]['implementation'] == status for i in initial)
 assert audit['ready_batch']['remaining_ids'] == [i for i in initial if features[i]['implementation'] != 'implemented']
-lines = ['# 남은 기능 감사 — 2026-10-08', '', audit['basis'], '',
+lines = [f"# 남은 기능 감사 — {audit.get('reviewed_date', audit['date'])}", '', audit['basis'], '',
          f"현재 소스 기준: 구현 {counts['implemented']}, 부분 {counts['partial']}, 미착수 {counts['not_started']} / 총 172. 남은 {len(remaining)}개. 전체 통합 인수: 미완료.", '',
          audit['continueable_work_note'], '', '| 분류 | 남은 수 |', '|---|---:|']
 lines += [f"| {audit['classification_labels'][k]} | {v} |" for k, v in audit['summary'].items()]
@@ -32,6 +32,14 @@ for item in remaining:
     fields = [str(item.get(k, '')).replace('|', '\\|').replace('\n', ' ')
               for k in ['id', 'service', 'name', 'classification_label', 'implementation', 'next_step']]
     lines.append('| ' + ' | '.join(fields) + ' |')
+if 'next_independent_batch' in audit:
+    batch = audit['next_independent_batch']
+    lines += ['', '## 독립 구현과 기능 완료의 경계', '', batch['boundary'], '',
+              '독립 소스의 첫 다음 단계 16개: ' + ', '.join(batch['ids']) + '.', '',
+              '다음 유한 묶음 권고: ' + ', '.join(batch['bounded_recommendation']) + '.']
+if 'operating_notification_contract' in audit:
+    lines += ['', '## 운영 알림 연결에 필요한 계약', '']
+    lines += ['- ' + value for value in audit['operating_notification_contract']]
 lines += ['', '## 제품 정책과 실제 인수에 필요한 결정', '']
 lines += ['- ' + value for value in audit['minimal_other_decisions']]
 lines += ['', '## E8 메일 envelope와 수신 전 누락', '']
@@ -42,6 +50,9 @@ lines += ['## 실제 검증 범위', '',
           '작업 브랜치의 마지막 소스 커밋:', '']
 lines += ['- ' + key + ': `' + audit['current_progress'][key] + '`'
           for key in ['web_source_commit', 'agent_source_commit', 'talk_source_commit', 'console_source_commit', 'talk_bff_source_commit', 'bundle_source_commit', 'bootstrap_source_commit', 'teardown_source_commit', 'notification_worker_source_commit', 'customer_auth_source_commit', 'customer_auth_test_source_commit', 'tls_credentials_source_commit', 'tls_credentials_test_source_commit']]
+lines += ['- ' + key + ': `' + audit['current_progress'][key] + '`'
+          for key in ['native_storage_source_commit', 'mail_capture_contracts_source_commit']
+          if key in audit['current_progress']]
 lines += ['', '재생성: `python3 scripts/render-feature-audit.py`. JSON·진행표·baseline·분류·ready 집계가 서로 맞아야 생성한다.', '']
 (repo / 'docs/cloud-remaining-feature-audit-2026-10-08.md').write_text('\n'.join(lines))
 print(json.dumps({'features': len(features), 'remaining': len(remaining), 'summary': dict(counts)}, ensure_ascii=False))
