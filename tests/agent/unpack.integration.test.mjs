@@ -14,6 +14,12 @@ import {
 } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { buildProductBundle } from "../../deploy/agent/build-product-bundle.mjs";
+import {
+  buildBootstrapKit,
+  verifyBootstrapKit,
+} from "../../deploy/agent/bootstrap-kit.mjs";
+import { OS_REQUIRED_PACKAGES } from "../../deploy/agent/os-bootstrap.mjs";
+import { runFullBootstrap } from "../../deploy/agent/full-bootstrap.mjs";
 import { BundleInstaller } from "../../deploy/agent/bundle-install.mjs";
 import { execute } from "../../deploy/gateway/gateway.mjs";
 
@@ -323,4 +329,114 @@ test("cancellation stops the dependency process before releasing the stage and l
   const { pid } = JSON.parse(await readFile(started, "utf8"));
   assert.throws(() => process.kill(pid, 0), { code: "ESRCH" });
   assert.deepEqual(await readdir(target), []);
+});
+
+test("assembles all seven real archives, dereferenced ready runtime and Node/npm; verifies every kit file and refuses drift/foreign dependencies without activation", async () => {
+  for (const service of [
+    "j-approval",
+    "j-messenger",
+    "j-mail",
+    "j-web",
+    "j-customer-auth-db",
+  ]) {
+    const archive = root + "/" + service + ".tar.gz";
+    const built = await buildProductBundle({
+      service,
+      sourceRoot: "/workspace/" + service,
+      output: archive,
+      npmConfig,
+      cache,
+      npmCli,
+    });
+    archives.set(service, { service, archive, digest: built.sha256 });
+  }
+  const osPackages = [];
+  for (const name of OS_REQUIRED_PACKAGES) {
+    const directory = root + "/kit-os-fixtures/" + name;
+    await mkdir(directory + "/DEBIAN", { recursive: true, mode: 0o755 });
+    await writeFile(
+      directory + "/DEBIAN/control",
+      "Package: " +
+        name +
+        "\nVersion: 0.0.1\nArchitecture: all\nMaintainer: Isolated Fixture <fixture@example.invalid>\nDescription: Metadata-only test artifact. Never installed.\n",
+    );
+    await chmod(directory + "/DEBIAN", 0o755);
+    await chmod(directory + "/DEBIAN/control", 0o644);
+    const file = root + "/kit-os-fixtures/" + name + ".deb";
+    await execute("/usr/bin/dpkg-deb", ["--build", directory, file]);
+    osPackages.push({
+      name,
+      version: "0.0.1",
+      architecture: "all",
+      file,
+      sha256: digest(await readFile(file)),
+    });
+  }
+  const kit = root + "/review-kit";
+  // The managed Node24 runtime is mounted with uid nobody. Preserve that host
+  // binary; a reviewed kit input is an owned copy of the exact executing bytes.
+  const kitNode = root + "/kit-node";
+  const nodeBytes = await readFile(process.execPath);
+  await writeFile(kitNode, nodeBytes, { flag: "wx", mode: 0o555 });
+  await chmod(kitNode, 0o555);
+  assert.equal(digest(await readFile(kitNode)), digest(nodeBytes));
+  assert.equal((await execute(kitNode, ["--version"])).trim(), process.version);
+  const result = await buildBootstrapKit({
+    runtimeRoot: bundleRoot + "/j-groupware",
+    nodeFile: kitNode,
+    nodeSha256: digest(nodeBytes),
+    npmRoot: "/workspace/.cloud-setup/node22/lib/node_modules/npm",
+    archives: [...archives.values()],
+    osPackages,
+    output: kit,
+  });
+  assert.equal(result.activation, "pending");
+  const manifest = await verifyBootstrapKit(kit);
+  assert(
+    manifest.files.some(
+      (row) => row.path === "runtime/deploy/agent/native-web.mjs",
+    ),
+  );
+  assert(
+    manifest.files.some(
+      (row) => row.path === "runtime/deploy/agent/full-bootstrap.mjs",
+    ),
+  );
+  assert.equal(
+    manifest.files.filter((row) => row.path.startsWith("archives/")).length,
+    7,
+  );
+  assert.equal(
+    manifest.files.filter((row) => row.path.startsWith("os/")).length,
+    OS_REQUIRED_PACKAGES.length,
+  );
+  assert(!manifest.files.some((row) => row.path.endsWith("/.npmrc")));
+  await assert.rejects(
+    runFullBootstrap({ kitRoot: kit, operation: "activate" }),
+    { code: "root_required" },
+  );
+  await chmod(kit + "/runtime/deploy/agent/full-bootstrap.mjs", 0o644);
+  await assert.rejects(verifyBootstrapKit(kit), {
+    code: "kit_content_mismatch",
+  });
+  await chmod(kit + "/runtime/deploy/agent/full-bootstrap.mjs", 0o444);
+  await symlink("/etc/passwd", kit + "/foreign");
+  await assert.rejects(verifyBootstrapKit(kit), {
+    code: "kit_content_mismatch",
+  });
+  await rm(kit + "/foreign");
+  await verifyBootstrapKit(kit);
+  await assert.rejects(
+    buildBootstrapKit({
+      runtimeRoot: bundleRoot + "/j-groupware",
+      nodeFile: kitNode,
+      nodeSha256: "0".repeat(64),
+      npmRoot: "/workspace/.cloud-setup/node22/lib/node_modules/npm",
+      archives: [...archives.values()],
+      osPackages,
+      output: root + "/bad-kit",
+    }),
+    { code: "invalid_bootstrap_kit" },
+  );
+  await rm(kit, { recursive: true });
 });

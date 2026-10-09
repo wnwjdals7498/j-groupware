@@ -191,6 +191,47 @@ if (mode === "prepare") {
   );
   await assert.rejects(storage.prepare("j-mail"), { code: "root_required" });
   console.log("isolated");
+} else if (mode === "mailpit-compose") {
+  const root = base + "/compose-volume";
+  await mkdir(root, { mode: 0o755 });
+  await chmod(root, 0o755);
+  await mkdir(root + "/data", { mode: 0o700 });
+  const actor = await storageAccount("j-mail");
+  await chown(root + "/data", actor.uid, actor.gid);
+  const composed = new MailpitPlatform({
+    tenant: tenant + "-compose",
+    dataRoot: root + "/data",
+    environmentRoot: base + "/control/mailpit-compose",
+    smtpPort: smtp,
+    httpPort: http,
+    compose: true,
+  });
+  let id;
+  try {
+    assert.equal((await composed.start()).changed, true);
+    id = (await composed.inspect()).id;
+    assert.equal((await composed.start()).changed, false);
+    await composed.stop();
+    assert.equal((await composed.inspect()).running, false);
+    assert.equal((await composed.start()).changed, true);
+    assert.equal((await composed.inspect()).id, id);
+    await composed.stop();
+    const marker = await readFile(composed.composeFile, "utf8");
+    await writeFile(composed.composeFile, "changed");
+    await assert.rejects(composed.inspect(), {
+      code: "mailpit_environment_conflict",
+    });
+    await writeFile(composed.composeFile, marker);
+    assert.equal((await composed.inspect()).id, id);
+    assert((await lstat(root + "/data/mailpit.db")).isFile());
+    console.log("compose-owned-capture-retained");
+  } finally {
+    const observed = await composed.inspect();
+    if (observed) {
+      await composed.stop();
+      await composed.command(["container", "rm", observed.id]);
+    }
+  }
 } else if (mode === "snapshot") {
   const actor = await storageAccount("j-messenger");
   const writer = spawn(
@@ -624,6 +665,177 @@ if (mode === "prepare") {
     (error) =>
       error.status === 1 && error.stderr === "invalid_bootstrap_arguments\n",
   );
+  const { prepareProvisionAgent, activatePreparedProvisionAgent } =
+    await import("../../deploy/agent/agent-install.mjs");
+  const agentOptions = {
+    bootstrapRoot: control.bootstrapRoot,
+    productProfileFile: control.productProfileFile,
+    bundleRoot: roots.bundleRoot,
+    stateRoot: roots.stateRoot,
+    lockRoot: roots.lockRoot,
+    controlRoot: base + "/control/agent",
+    unitRoot: roots.unitRoot,
+  };
+  process.umask(0o077);
+  const prepared = await prepareProvisionAgent(agentOptions);
+  assert.equal(prepared.phase, "agent_prepared");
+  assert.equal(
+    JSON.parse(
+      await readFile(agentOptions.controlRoot + "/control.json", "utf8"),
+    ).lockRoot,
+    roots.lockRoot + "-agent",
+  );
+  assert.equal(prepared.activation, "pending");
+  assert.equal(
+    (await prepareProvisionAgent(agentOptions)).phase,
+    "agent_prepared",
+  );
+  const timer = await readFile(
+    roots.unitRoot + "/jgw-provision-agent.timer",
+    "utf8",
+  );
+  assert(timer.includes("OnUnitActiveSec=60s"));
+  assert.equal(
+    (await lstat(agentOptions.controlRoot + "/control.json")).mode & 0o777,
+    0o600,
+  );
+  await assert.rejects(
+    activatePreparedProvisionAgent(agentOptions.controlRoot),
+    { code: "invalid_agent_installation" },
+  );
+  const { OsBootstrap, OS_REQUIRED_PACKAGES } =
+    await import("../../deploy/agent/os-bootstrap.mjs");
+  const { installationDigest } =
+    await import("../../deploy/agent/install-files.mjs");
+  const packages = [];
+  for (const name of OS_REQUIRED_PACKAGES) {
+    const packageRoot = base + "/deb-fixture/" + name;
+    await mkdir(packageRoot + "/DEBIAN", { recursive: true, mode: 0o755 });
+    await writeFile(
+      packageRoot + "/DEBIAN/control",
+      "Package: " +
+        name +
+        "\nVersion: 0.0.1\nArchitecture: all\nMaintainer: Isolated Fixture <fixture@example.invalid>\nDescription: Metadata validation fixture only; never installed.\n",
+      { mode: 0o644 },
+    );
+    await chmod(packageRoot + "/DEBIAN", 0o755);
+    await chmod(packageRoot + "/DEBIAN/control", 0o644);
+    const file = base + "/deb-fixture/" + name + ".deb";
+    execFileSync("/usr/bin/dpkg-deb", ["--build", packageRoot, file], {
+      stdio: "ignore",
+    });
+    packages.push({
+      name,
+      version: "0.0.1",
+      architecture: "all",
+      sha256: installationDigest(await readFile(file)),
+      file,
+    });
+  }
+  const passwordFile = base + "/control/postgres-password";
+  await writeFile(passwordFile, "A".repeat(43) + "\n", { mode: 0o600 });
+  const osProfile = {
+    packages,
+    node: {
+      file: "/usr/local/bin/node",
+      version: process.version,
+      sha256: installationDigest(await readFile("/usr/local/bin/node")),
+    },
+    caFile: config.bootstrap.ca,
+    postgres: {
+      image: "postgres:18.6-bookworm@sha256:" + "1".repeat(64),
+      dataRoot: base + "/os-data",
+      port: 55177,
+      passwordFile,
+    },
+  };
+  const osOptions = {
+    tenant,
+    profile: osProfile,
+    stateRoot: base + "/os-state",
+    unitRoot: base + "/os-units",
+  };
+  await assert.rejects(
+    new OsBootstrap({
+      ...osOptions,
+      profile: {
+        ...osProfile,
+        packages: packages.map((row, index) =>
+          index ? row : { ...row, sha256: "0".repeat(64) },
+        ),
+      },
+    }).prepare(),
+    { code: "os_artifact_mismatch" },
+  );
+  await assert.rejects(lstat(osOptions.stateRoot), { code: "ENOENT" });
+  const osAdapter = new OsBootstrap(osOptions);
+  assert.equal((await osAdapter.prepare()).phase, "os_prepared");
+  await osAdapter.requirePrepared();
+  assert.equal((await osAdapter.prepare()).activation, "pending");
+  const pgUnit = await readFile(
+    osOptions.unitRoot + "/jgw-postgres.service",
+    "utf8",
+  );
+  assert(
+    pgUnit.includes("--pull never") &&
+      !pgUnit.includes("down") &&
+      !pgUnit.includes("--volumes"),
+  );
+  assert.equal(
+    (await lstat(osOptions.stateRoot + "/compose.json")).mode & 0o777,
+    0o600,
+  );
+  await assert.rejects(osAdapter.applyPackages(), {
+    code: "invalid_activation_target",
+  });
+  await assert.rejects(osAdapter.startPostgres(), {
+    code: "invalid_activation_target",
+  });
+  const originalProducts = JSON.parse(
+    await readFile(productProfileFile, "utf8"),
+  );
+  const nativeBindingsFile = base + "/control/native-bindings.json";
+  const mailProducts = {
+    ...originalProducts,
+    profiles: {
+      ...originalProducts.profiles,
+      "j-mail": {
+        port: 55173,
+        certificate,
+        key,
+        ca: certificate,
+        dataRoot: profiles["j-mail"].root,
+        mailpitOrigin: "http://127.0.0.1:" + http,
+      },
+    },
+  };
+  await json(productProfileFile, mailProducts);
+  await json(nativeBindingsFile, {
+    mailpit: { smtpPort: smtp, httpPort: http },
+  });
+  await json(controlFile, {
+    ...control,
+    nativeBindingsFile,
+    storageProfiles: profiles,
+  });
+  const configuredMail = await loadProvisionServiceControl(controlFile);
+  const mailRuntime = createProvisionServiceRuntime(configuredMail);
+  try {
+    await assert.rejects(mailRuntime.run("j-mail"), {
+      code: "notification_operating_owner_unbound",
+    });
+  } finally {
+    await mailRuntime.close();
+  }
+  await assert.rejects(lstat(roots.environmentRoot), { code: "ENOENT" });
+  await json(nativeBindingsFile, {
+    mailpit: { smtpPort: 3001, httpPort: http },
+  });
+  await assert.rejects(loadProvisionServiceControl(controlFile), {
+    code: "invalid_mailpit_profile",
+  });
+  await json(productProfileFile, originalProducts);
+  await json(controlFile, control);
   console.log("native-inert-and-guarded");
 } else if (mode === "native-denied") {
   await assert.rejects(

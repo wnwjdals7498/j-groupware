@@ -74,6 +74,8 @@ before(async () => {
     "--mount",
     "type=bind,src=/usr/local/bin/docker,dst=/test-docker/docker,readonly",
     "--mount",
+    "type=bind,src=/usr/libexec/docker/cli-plugins/docker-compose,dst=/test-compose/docker-compose,readonly",
+    "--mount",
     "type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock",
     "--mount",
     "type=bind,src=" + base + ",dst=" + base,
@@ -91,7 +93,7 @@ before(async () => {
     "/test-node/node",
     "--input-type=module",
     "-e",
-    "import {copyFile,chmod,mkdir,cp} from 'node:fs/promises';await copyFile('/test-node/node','/usr/local/bin/node');await chmod('/usr/local/bin/node',0o555);await copyFile('/test-docker/docker','/usr/bin/docker');await chmod('/usr/bin/docker',0o555);await mkdir('/opt/jgw/test-agent/tests/agent',{recursive:true});await cp('/code/deploy','/opt/jgw/test-agent/deploy',{recursive:true});await cp('/code/tests/agent/storage-fixture.mjs','/opt/jgw/test-agent/tests/agent/storage-fixture.mjs');await mkdir('/opt/jgw/test-agent/node_modules/@j-auth',{recursive:true});await mkdir('/opt/jgw/test-agent/node_modules/@j-mail',{recursive:true});await cp('/code/node_modules/@j-auth/contracts','/opt/jgw/test-agent/node_modules/@j-auth/contracts',{recursive:true});await cp('/code/node_modules/@j-mail/contracts','/opt/jgw/test-agent/node_modules/@j-mail/contracts',{recursive:true});for(const p of ['pg','pg-pool','pg-protocol','pg-types','pg-int8','pg-connection-string','pgpass','split2','postgres-array','postgres-bytea','postgres-date','postgres-interval','xtend','pg-cloudflare'])await cp('/code/node_modules/'+p,'/opt/jgw/test-agent/node_modules/'+p,{recursive:true});",
+    "import {copyFile,chmod,chown,mkdir,cp} from 'node:fs/promises';await copyFile('/test-node/node','/usr/local/bin/node');await chmod('/usr/local/bin/node',0o555);await chown('/usr/local/bin/node',0,0);await copyFile('/test-docker/docker','/usr/bin/docker');await chmod('/usr/bin/docker',0o555);await mkdir('/usr/libexec/docker/cli-plugins',{recursive:true});await copyFile('/test-compose/docker-compose','/usr/libexec/docker/cli-plugins/docker-compose');await chmod('/usr/libexec/docker/cli-plugins/docker-compose',0o555);await mkdir('/opt/jgw/test-agent/tests/agent',{recursive:true});await cp('/code/deploy','/opt/jgw/test-agent/deploy',{recursive:true});await cp('/code/tests/agent/storage-fixture.mjs','/opt/jgw/test-agent/tests/agent/storage-fixture.mjs');await mkdir('/opt/jgw/test-agent/node_modules/@j-auth',{recursive:true});await mkdir('/opt/jgw/test-agent/node_modules/@j-mail',{recursive:true});await cp('/code/node_modules/@j-auth/contracts','/opt/jgw/test-agent/node_modules/@j-auth/contracts',{recursive:true});await cp('/code/node_modules/@j-mail/contracts','/opt/jgw/test-agent/node_modules/@j-mail/contracts',{recursive:true});for(const p of ['undici','pg','pg-pool','pg-protocol','pg-types','pg-int8','pg-connection-string','pgpass','split2','postgres-array','postgres-bytea','postgres-date','postgres-interval','xtend','pg-cloudflare'])await cp('/code/node_modules/'+p,'/opt/jgw/test-agent/node_modules/'+p,{recursive:true});",
   ]);
   await docker([
     "exec",
@@ -209,6 +211,34 @@ before(async () => {
 });
 after(async () => {
   // Cleanup only containers this test created or whose exact ID it observed.
+  const composed = JSON.parse(
+    await docker([
+      "container",
+      "ls",
+      "--all",
+      "--format",
+      "{{json .}}",
+      "--filter",
+      "label=jgw.tenant=" + tenant + "-compose",
+    ]).then(
+      (text) => "[" + text.trim().split("\n").filter(Boolean).join(",") + "]",
+    ),
+  );
+  for (const candidate of composed) {
+    const [row] = JSON.parse(await docker(["inspect", candidate.ID]));
+    if (
+      row.Config.Labels["jgw.managed"] !== "1" ||
+      row.Config.Labels["com.docker.compose.project"] !==
+        "jgw-mailpit-" + tenant + "-compose" ||
+      !row.Mounts.some(
+        (mount) =>
+          mount.Source === base + "/compose-volume/data" &&
+          mount.Destination === "/data",
+      )
+    )
+      throw new Error("Foreign test resource refused.");
+    await docker(["container", "rm", "--force", row.Id]);
+  }
   if (mailId) await docker(["rm", "--force", mailId]);
   if (pgOwned) await docker(["rm", "--force", "--volumes", pg]);
   if (controllerOwned) {
@@ -236,6 +266,12 @@ test("concrete native control and factory are inert; unsupported owners, secret 
   assert.equal(
     await fixture("native-denied", "jgw-mail"),
     "native-root-required\n",
+  );
+});
+test("native Mailpit Compose owns the pinned capture container and volume without pulling, recreating or deleting data", async () => {
+  assert.equal(
+    await fixture("mailpit-compose"),
+    "compose-owned-capture-retained\n",
   );
 });
 test("real stopped writer, PG archive and pinned Mailpit volume produce verified retryable private snapshots", async () => {

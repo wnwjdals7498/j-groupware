@@ -1,6 +1,6 @@
 import { lstat, mkdir } from "node:fs/promises";
 import path from "node:path";
-import { ProvisionError } from "./service-database.mjs";
+import { ProvisionError } from "./provision-error.mjs";
 export async function privateDirectory(target) {
   const entries = [];
   for (let value = target; value !== "/"; value = path.dirname(value))

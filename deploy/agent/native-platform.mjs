@@ -8,6 +8,7 @@ import {
 } from "node:fs/promises";
 import { createHash, randomUUID } from "node:crypto";
 import path from "node:path";
+import { parseUnitObservation } from "./unit-observation.mjs";
 import { NativeServiceAccounts } from "./native-accounts.mjs";
 import { execute, externalPath } from "../gateway/gateway.mjs";
 import { ProvisionError, serviceDatabase } from "./service-database.mjs";
@@ -44,7 +45,7 @@ export function renderServiceUnit(service, bundleRoot, environmentRoot) {
   serviceDatabase(service);
   externalPath(bundleRoot);
   externalPath(environmentRoot);
-  return `[Unit]\nDescription=J Groupware ${service}\nAfter=network.target postgresql.service\n\n[Service]\nType=simple\nUser=${user(service)}\nGroup=${user(service)}\nWorkingDirectory=${bundleRoot}/${service}\nEnvironmentFile=${environmentRoot}/${service}.env\n${serviceCredentialVariables(
+  return `[Unit]\nDescription=J Groupware ${service}\nAfter=network.target jgw-postgres.service\n\n[Service]\nType=simple\nUser=${user(service)}\nGroup=${user(service)}\nWorkingDirectory=${bundleRoot}/${service}\nEnvironmentFile=${environmentRoot}/${service}.env\n${serviceCredentialVariables(
     service,
   )
     .map(
@@ -250,7 +251,7 @@ export class NativeSystemdPlatform {
     )
       throw new ProvisionError("unit_conflict");
     await run("/usr/bin/systemctl", ["disable", "--now", this.unit(service)]);
-    if (!(await this.stopped(service)))
+    if (!(await NativeSystemdPlatform.prototype.stopped.call(this, service)))
       throw new ProvisionError("unit_not_stopped");
     return { unit: "stopped" };
   }
@@ -293,37 +294,4 @@ export class NativeSystemdPlatform {
     return this.accounts.remove(service);
   }
 }
-export function parseUnitObservation(text) {
-  if (typeof text !== "string" || Buffer.byteLength(text) > 4096)
-    throw new ProvisionError("invalid_unit_observation");
-  const rows = text.trim().split("\n"),
-    result = {};
-  for (const row of rows) {
-    const equals = row.indexOf("=");
-    const name = row.slice(0, equals),
-      value = row.slice(equals + 1);
-    if (
-      equals < 1 ||
-      !["LoadState", "FragmentPath", "ActiveState"].includes(name) ||
-      Object.hasOwn(result, name) ||
-      /[\x00-\x1f]/.test(value)
-    )
-      throw new ProvisionError("invalid_unit_observation");
-    result[name] = value;
-  }
-  if (
-    Object.keys(result).length !== 3 ||
-    !["loaded", "not-found"].includes(result.LoadState) ||
-    ![
-      "active",
-      "inactive",
-      "failed",
-      "activating",
-      "deactivating",
-      "reloading",
-      "refreshing",
-    ].includes(result.ActiveState)
-  )
-    throw new ProvisionError("invalid_unit_observation");
-  return result;
-}
+export { parseUnitObservation } from "./unit-observation.mjs";

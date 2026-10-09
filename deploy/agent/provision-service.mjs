@@ -1,6 +1,8 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { Pool } from "pg";
+import { X509Certificate } from "node:crypto";
+import { parseEnv } from "node:util";
 import { readPreparedBootstrap } from "./base-environment.mjs";
 import { readControlJson, readControlFile } from "./control-files.mjs";
 import { ProductEnvironment } from "./product-environment.mjs";
@@ -12,6 +14,11 @@ import {
 } from "./service-database.mjs";
 import { ServiceEnvironment } from "./service-environment.mjs";
 import { NativeSystemdPlatform } from "./native-platform.mjs";
+import { NativeGateway } from "./native-gateway.mjs";
+import { NativeProductsPlatform } from "./native-products.mjs";
+import { NativeWebHosting } from "./native-web.mjs";
+import { MailpitPlatform } from "./mailpit-platform.mjs";
+import { WebServiceCleanup } from "./web-cleanup.mjs";
 import { ProductGateway } from "./product-gateway.mjs";
 import { ProductCleanup } from "./product-cleanup.mjs";
 import { ProductStorage, protectedStoragePath } from "./product-storage.mjs";
@@ -23,7 +30,10 @@ import {
 } from "../gateway/gateway.mjs";
 import { ProvisionError } from "./provision-error.mjs";
 import { BaseBootstrap } from "./base-bootstrap.mjs";
-import { isNotificationInstallerBinding } from "./notification-binding.mjs";
+import {
+  isNotificationInstallerBinding,
+  loadNotificationInstallerBinding,
+} from "./notification-binding.mjs";
 
 const fail = (code = "invalid_installer_control") => {
   throw new ProvisionError(code);
@@ -57,11 +67,16 @@ export function parseProvisionServiceArguments(argv) {
   if (argv[0] === "j-groupware") fail("invalid_installer_arguments");
   return { service: argv[0], kind: argv.length === 2 ? "remove" : "install" };
 }
-function bound(service, notificationBinding) {
+function bound(service, notificationBinding, nativeBindings = {}) {
   if (["j-approval", "j-talk"].includes(service) && notificationBinding) return;
+  if (service === "j-mail" && notificationBinding && nativeBindings.mailpit)
+    return;
   if (["j-approval", "j-talk", "j-mail"].includes(service))
     fail("notification_operating_owner_unbound");
-  if (service === "j-web") fail("web_native_installation_unbound");
+  if (service === "j-web") {
+    if (nativeBindings.web) return;
+    fail("web_native_installation_unbound");
+  }
   if (!["j-messenger", "j-customer-auth-db"].includes(service))
     fail("invalid_service");
 }
@@ -72,14 +87,19 @@ export async function loadProvisionServiceControl(file = INSTALLER_CONTROL) {
     fail("root_required");
   const input = await readControlJson(file, 32768);
   if (
-    !keys(input, [
-      "bootstrapRoot",
-      "productProfileFile",
-      "postgresFile",
-      "gatewayProfileFile",
-      "roots",
-      "storageProfiles",
-    ]) ||
+    !keys(
+      Object.fromEntries(
+        Object.entries(input).filter(([name]) => name !== "nativeBindingsFile"),
+      ),
+      [
+        "bootstrapRoot",
+        "productProfileFile",
+        "postgresFile",
+        "gatewayProfileFile",
+        "roots",
+        "storageProfiles",
+      ],
+    ) ||
     !keys(input.roots, rootNames)
   )
     fail();
@@ -104,6 +124,9 @@ export async function loadProvisionServiceControl(file = INSTALLER_CONTROL) {
     input.productProfileFile,
     input.postgresFile,
     input.gatewayProfileFile,
+    ...(input.nativeBindingsFile === undefined
+      ? []
+      : [externalPath(input.nativeBindingsFile)]),
   ])
     if (
       allRoots.some(
@@ -170,6 +193,95 @@ export async function loadProvisionServiceControl(file = INSTALLER_CONTROL) {
     gateway.bffPort,
     ...Object.values(environment.profiles).map((profile) => profile.port),
   ];
+  let nativeBindings = {};
+  if (input.nativeBindingsFile !== undefined) {
+    nativeBindings = await readControlJson(input.nativeBindingsFile, 16384);
+    if (
+      Object.keys(nativeBindings).some(
+        (name) => !["web", "mailpit", "notificationControlFile"].includes(name),
+      )
+    )
+      fail("invalid_native_bindings");
+    if (nativeBindings.notificationControlFile !== undefined) {
+      externalPath(nativeBindings.notificationControlFile);
+      if (
+        allRoots.some(
+          (root) =>
+            nativeBindings.notificationControlFile === root ||
+            nativeBindings.notificationControlFile.startsWith(root + "/"),
+        )
+      )
+        fail("overlapping_installer_roots");
+    }
+    if (nativeBindings.web !== undefined) {
+      new NativeWebHosting({
+        tenant: bootstrap.tenant,
+        bundleRoot: input.roots.bundleRoot,
+        unitRoot: input.roots.unitRoot,
+        stateRoot: input.roots.storageStateRoot + "/web",
+        profile: nativeBindings.web,
+      });
+      if (
+        !environment.profiles["j-web"] ||
+        input.roots.gatewayRoot !== "/etc/nginx"
+      )
+        fail("invalid_native_bindings");
+      for (const name of [
+        "caCertificate",
+        "caKey",
+        "ftpsCertificate",
+        "ftpsKey",
+        "sshHostKey",
+      ])
+        if (
+          allRoots.some(
+            (root) =>
+              nativeBindings.web[name] === root ||
+              nativeBindings.web[name].startsWith(root + "/"),
+          )
+        )
+          fail("overlapping_installer_roots");
+      if (
+        new X509Certificate(
+          await readControlFile(nativeBindings.web.caCertificate, {
+            privateFile: false,
+          }),
+        ).fingerprint256 !==
+        new X509Certificate(
+          await readControlFile(bootstrap.ca, { privateFile: false }),
+        ).fingerprint256
+      )
+        fail("invalid_native_bindings");
+      ports.push(nativeBindings.web.sftpPort, nativeBindings.web.ftpsPort);
+      if (
+        ports.some(
+          (port) =>
+            port >= nativeBindings.web.passiveMin &&
+            port <= nativeBindings.web.passiveMax,
+        )
+      )
+        fail("invalid_native_bindings");
+    }
+    if (nativeBindings.mailpit !== undefined) {
+      if (
+        !keys(nativeBindings.mailpit, ["smtpPort", "httpPort"]) ||
+        !environment.profiles["j-mail"]?.dataRoot ||
+        environment.profile("j-mail").mailpitOrigin !==
+          "http://127.0.0.1:" + nativeBindings.mailpit.httpPort
+      )
+        fail("invalid_native_bindings");
+      new MailpitPlatform({
+        tenant: bootstrap.tenant,
+        dataRoot: environment.profile("j-mail").dataRoot + "/data",
+        environmentRoot: input.roots.environmentRoot,
+        ...nativeBindings.mailpit,
+      });
+      ports.push(
+        nativeBindings.mailpit.smtpPort,
+        nativeBindings.mailpit.httpPort,
+      );
+    }
+  }
   if (new Set(ports).size !== ports.length) fail("invalid_installer_profile");
   const customer = environment.profiles["j-customer-auth-db"];
   if (
@@ -184,7 +296,7 @@ export async function loadProvisionServiceControl(file = INSTALLER_CONTROL) {
     typeof input.storageProfiles !== "object" ||
     Array.isArray(input.storageProfiles) ||
     Object.keys(input.storageProfiles).some(
-      (service) => service !== "j-messenger",
+      (service) => !["j-messenger", "j-mail"].includes(service),
     )
   )
     fail("invalid_installer_profile");
@@ -196,6 +308,11 @@ export async function loadProvisionServiceControl(file = INSTALLER_CONTROL) {
     !input.storageProfiles["j-messenger"]
   )
     fail("storage_adapter_unbound");
+  if (
+    (input.storageProfiles["j-mail"] && !nativeBindings.mailpit) ||
+    (nativeBindings.mailpit && !input.storageProfiles["j-mail"])
+  )
+    fail("mailpit_adapter_unbound");
   return {
     bootstrap,
     environment,
@@ -203,11 +320,20 @@ export async function loadProvisionServiceControl(file = INSTALLER_CONTROL) {
     gatewayProfile,
     roots: input.roots,
     storageProfiles: input.storageProfiles,
+    nativeBindings,
   };
 }
 
 export function createProvisionServiceRuntime(
-  { bootstrap, environment, postgres, gatewayProfile, roots, storageProfiles },
+  {
+    bootstrap,
+    environment,
+    postgres,
+    gatewayProfile,
+    roots,
+    storageProfiles,
+    nativeBindings = {},
+  },
   { notificationBinding } = {},
 ) {
   if (
@@ -268,7 +394,27 @@ export function createProvisionServiceRuntime(
     },
   });
   const readiness = new ProductReadiness({ environment });
-  const platform = new NativeSystemdPlatform({
+  const web = nativeBindings.web
+    ? new NativeWebHosting({
+        tenant,
+        bundleRoot: roots.bundleRoot,
+        unitRoot: roots.unitRoot,
+        stateRoot: roots.storageStateRoot + "/web",
+        profile: nativeBindings.web,
+      })
+    : undefined;
+  const mailpit = nativeBindings.mailpit
+    ? new MailpitPlatform({
+        tenant,
+        dataRoot: environment.profile("j-mail").dataRoot + "/data",
+        environmentRoot: roots.environmentRoot,
+        compose: true,
+        ...nativeBindings.mailpit,
+      })
+    : undefined;
+  const platform = new NativeProductsPlatform({
+    web,
+    mailpit,
     bundleRoot: roots.bundleRoot,
     environmentRoot: roots.environmentRoot,
     unitRoot: roots.unitRoot,
@@ -280,13 +426,33 @@ export function createProvisionServiceRuntime(
     backupRoot: roots.storageBackupRoot,
     profiles: storageProfiles,
     stopped: (service) => platform.stopped(service),
+    mailpit,
   });
-  const cleanup = new ProductCleanup({ messenger: storage });
+  const cleanup = new ProductCleanup({
+    messenger: storage,
+    mail: storage,
+    web: web
+      ? new WebServiceCleanup({
+          tenant,
+          stateRoot: roots.storageStateRoot + "/web",
+          stopped: (service) => platform.stopped(service),
+          maxBytes: nativeBindings.web.backupMaxBytes,
+          maxEntries: nativeBindings.web.backupMaxEntries,
+        })
+      : undefined,
+  });
+  const nativeGateway =
+    roots.gatewayRoot === "/etc/nginx"
+      ? new NativeGateway({ unitRoot: roots.unitRoot })
+      : undefined;
   const gateway = new ProductGateway({
     root: roots.gatewayRoot,
     profile: gatewayProfile,
     state,
     commands: {
+      ...(nativeGateway
+        ? { ensureRunning: () => nativeGateway.ensureRunning() }
+        : {}),
       validate: () =>
         execute(
           "/usr/sbin/nginx",
@@ -294,11 +460,13 @@ export function createProvisionServiceRuntime(
           { env },
         ),
       reload: () =>
-        execute(
-          "/usr/sbin/nginx",
-          ["-s", "reload", "-c", roots.gatewayRoot + "/nginx.conf"],
-          { env },
-        ),
+        nativeGateway
+          ? nativeGateway.reload()
+          : execute(
+              "/usr/sbin/nginx",
+              ["-s", "reload", "-c", roots.gatewayRoot + "/nginx.conf"],
+              { env },
+            ),
     },
   });
   const serviceEnvironment = new ServiceEnvironment({
@@ -359,16 +527,20 @@ export function createProvisionServiceRuntime(
             "/usr/bin/systemctl",
           ])
             await protectedStoragePath(binary, false);
+          if (nativeGateway) {
+            await execute("/usr/bin/systemctl", ["daemon-reload"], { env });
+            await nativeGateway.preflight();
+          }
           await protectedStoragePath(roots.bundleRoot, true);
           await protectedStoragePath(roots.unitRoot, true);
         },
       });
     },
     async run(service, kind = "install") {
-      bound(service, notificationBinding);
+      bound(service, notificationBinding, nativeBindings);
       if (!["install", "remove"].includes(kind)) fail("invalid_action");
       environment.profile(service);
-      if (["j-approval", "j-talk"].includes(service)) {
+      if (["j-approval", "j-talk", "j-mail"].includes(service)) {
         if (!environment.notificationOrigin)
           fail("notification_receiver_unbound");
         await notificationBinding.preflight(service, kind);
@@ -389,15 +561,40 @@ export async function runProvisionServiceCli(argv = process.argv.slice(2)) {
   const action = parseProvisionServiceArguments(argv);
   if (process.platform !== "linux" || process.getuid() !== 0)
     fail("root_required");
-  bound(action.service);
-  const runtime = createProvisionServiceRuntime(
-    await loadProvisionServiceControl(),
-  );
+  let control;
   try {
+    control = await loadProvisionServiceControl();
+  } catch (error) {
+    if (error.code === "ENOENT") bound(action.service);
+    throw error;
+  }
+  let binding, runtime;
+  try {
+    if (control.nativeBindings.notificationControlFile) {
+      const baseEnvironmentFile = path.join(
+        control.roots.environmentRoot,
+        "j-groupware.env",
+      );
+      const base = parseEnv(await readControlFile(baseEnvironmentFile));
+      binding = await loadNotificationInstallerBinding({
+        controlFile: control.nativeBindings.notificationControlFile,
+        tenant: control.bootstrap.tenant,
+        databasePort: control.environment.databasePort,
+        baseEnvironmentFile,
+        authOrigin: base.JAUTH_PUBLIC_URL,
+      });
+    }
+    runtime = createProvisionServiceRuntime(control, {
+      notificationBinding: binding,
+    });
     const result = await runtime.run(action.service, action.kind);
     process.stdout.write(JSON.stringify(result) + "\n");
   } finally {
-    await runtime.close();
+    try {
+      await runtime?.close();
+    } finally {
+      await binding?.close();
+    }
   }
 }
 if (

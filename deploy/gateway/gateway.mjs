@@ -134,8 +134,14 @@ export function loadGatewayProfile(env) {
 export function execute(
   command,
   args,
-  { input, env = process.env, timeout = 15000 } = {},
+  { input, env = process.env, timeout = 15000, maximum = 131072 } = {},
 ) {
+  if (
+    !Number.isSafeInteger(maximum) ||
+    maximum < 1 ||
+    maximum > 4 * 1024 * 1024
+  )
+    throw new GatewayError("invalid_output_limit");
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
       env,
@@ -154,7 +160,7 @@ export function execute(
     });
     child.stdout.on("data", (data) => {
       size += data.length;
-      if (size <= 131072) output += data;
+      if (size <= maximum) output += data;
       else child.kill("SIGKILL");
     });
     child.stderr.resume();
@@ -162,7 +168,7 @@ export function execute(
     child.stdin.end(input);
     child.on("close", (code) => {
       clearTimeout(timer);
-      if (code === 0 && size <= 131072) resolve(output);
+      if (code === 0 && size <= maximum) resolve(output);
       else reject(new GatewayError("command_failed"));
     });
   });
@@ -410,7 +416,10 @@ export async function applyGateway(
       )
     ) {
       await commands.validate();
-      if (reload) await verifyGateway(files);
+      if (reload) {
+        await commands.ensureRunning?.();
+        await verifyGateway(files);
+      }
       return { changed: false, reloaded: false };
     }
     changed = true;

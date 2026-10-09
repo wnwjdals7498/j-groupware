@@ -124,7 +124,11 @@ export class ProductEnvironment {
         value.guestSigningKey !== undefined
       )
         fail();
-      if (service === "j-messenger") p.dataRoot = externalPath(value.dataRoot);
+      if (
+        service === "j-messenger" ||
+        (service === "j-mail" && value.dataRoot !== undefined)
+      )
+        p.dataRoot = externalPath(value.dataRoot);
       if (service === "j-mail")
         p.mailpitOrigin = origin(value.mailpitOrigin, "mailpit");
       if (value.customerAddress !== undefined) {
