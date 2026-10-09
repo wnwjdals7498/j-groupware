@@ -190,6 +190,11 @@ export class ProductEnvironment {
           JAP_NOTIFICATION_URL: this.notificationOrigin,
           JAP_NOTIFICATION_KEY: value.notificationKey,
         });
+      if (service === "j-talk" && this.notificationOrigin)
+        Object.assign(variables, {
+          JT_NOTIFICATION_URL: this.notificationOrigin,
+          JT_NOTIFICATION_KEY: value.notificationKey,
+        });
       if (service === "j-mail") variables.JML_MAILPIT_URL = p.mailpitOrigin;
       if (service === "j-customer-auth-db") {
         const cursorSigningKey = secret(value.cursorSigningKey);

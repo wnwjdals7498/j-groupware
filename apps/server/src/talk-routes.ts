@@ -1,5 +1,16 @@
 import type { FastifyInstance, FastifyRequest } from "fastify";
 import { SESSION_POLICY } from "@j-groupware/contracts";
+import {
+  TALK_MEMBER_SCHEMAS,
+  TALK_UUID_PATTERN,
+  TALK_ROOM_STATUSES,
+  TALK_MEMBER_LIMITS,
+} from "@j-talk/contracts";
+import type {
+  TalkRoomStatus,
+  TalkReplyResult,
+  TalkAssignmentResult,
+} from "@j-talk/contracts";
 import type { ServiceClient } from "./services.js";
 import { cookieValue } from "./security.js";
 import { ApiError, unavailable } from "./errors.js";
@@ -7,23 +18,8 @@ import {
   decodeCustomerAuthResponse,
   decodeGuest,
 } from "./customer-auth-routes.js";
-const uuidPattern = "^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$";
-const uuid = { type: "string", pattern: uuidPattern };
-const empty = { type: "object", additionalProperties: false };
-const params = {
-  type: "object",
-  additionalProperties: false,
-  required: ["id"],
-  properties: { id: uuid },
-};
-const page = {
-  type: "object",
-  additionalProperties: false,
-  properties: {
-    limit: { type: "integer", minimum: 1, maximum: 100, default: 50 },
-    after: uuid,
-  },
-};
+const uuidPattern = TALK_UUID_PATTERN;
+const { empty, roomParams: params, page } = TALK_MEMBER_SCHEMAS;
 const record = (value: unknown): Record<string, unknown> => {
   if (!value || typeof value !== "object" || Array.isArray(value))
     throw unavailable();
@@ -47,10 +43,10 @@ const date = (value: unknown) => {
     throw unavailable();
   return v;
 };
-const status = (value: unknown) => {
+const status = (value: unknown): TalkRoomStatus => {
   const v = string(value, 16);
-  if (!["waiting", "in_progress", "closed"].includes(v)) throw unavailable();
-  return v;
+  if (!TALK_ROOM_STATUSES.includes(v as TalkRoomStatus)) throw unavailable();
+  return v as TalkRoomStatus;
 };
 const nullableId = (value: unknown) => (value === null ? null : id(value));
 function room(value: unknown, summary = false) {
@@ -208,7 +204,7 @@ export function registerTalkRoutes(
             ...page.properties,
             status: {
               type: "string",
-              enum: ["waiting", "in_progress", "closed"],
+              enum: TALK_ROOM_STATUSES,
             },
           },
         },
@@ -280,11 +276,12 @@ export function registerTalkRoutes(
               throw unavailable();
             return action === "close"
               ? { id: r.params.id, status: "closed" }
-              : {
+              : ({
                   id: r.params.id,
                   status: "in_progress",
                   assignedMemberId: id(row.assignedMemberId),
-                };
+                  occurrenceId: id(row.occurrenceId),
+                } satisfies TalkAssignmentResult);
           },
         ),
     );
@@ -297,19 +294,14 @@ export function registerTalkRoutes(
       schema: {
         params,
         querystring: empty,
-        body: {
-          type: "object",
-          additionalProperties: false,
-          required: ["requestId", "text"],
-          properties: {
-            requestId: uuid,
-            text: { type: "string", minLength: 1, maxLength: 4096 },
-          },
-        },
+        body: TALK_MEMBER_SCHEMAS.reply,
       },
     },
     async (r) => {
-      if (!r.body.text.trim() || Buffer.byteLength(r.body.text) > 4096)
+      if (
+        !r.body.text.trim() ||
+        Buffer.byteLength(r.body.text) > TALK_MEMBER_LIMITS.textBytes
+      )
         throw new ApiError(
           400,
           "invalid_input",
@@ -326,7 +318,10 @@ export function registerTalkRoutes(
         (v) => {
           const row = record(v);
           if (row.delivery !== "pending") throw unavailable();
-          return { id: id(row.id), delivery: "pending" };
+          return {
+            id: id(row.id),
+            delivery: "pending",
+          } satisfies TalkReplyResult;
         },
       );
     },
