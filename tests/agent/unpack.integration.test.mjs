@@ -93,7 +93,7 @@ test("installs base and Talk from fresh runtime archives, npm ci and local works
       await execute(process.execPath, [
         "--input-type=module",
         "-e",
-        `await import(${JSON.stringify(target + "/deploy/agent/bundle-install.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/base-environment.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/notification-worker.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/provision-agent.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/tls-credentials.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/launch-service.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/product-storage.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/mailpit-platform.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/provision-service.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/bootstrap-runtime.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/base-bootstrap.mjs")});`,
+        `await import(${JSON.stringify(target + "/deploy/agent/bundle-install.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/base-environment.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/notification-worker.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/provision-agent.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/tls-credentials.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/launch-service.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/product-storage.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/mailpit-platform.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/provision-service.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/bootstrap-runtime.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/base-bootstrap.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/native-accounts.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/notification-binding.mjs")});`,
       ]);
     if (service === "j-groupware") {
       assert.equal(
@@ -105,6 +105,15 @@ test("installs base and Talk from fresh runtime archives, npm ci and local works
         code: "bundle_conflict",
       });
       await chmod(target + "/deploy/provision-service", 0o755);
+      assert.equal(
+        (await stat(target + "/deploy/bootstrap")).mode & 0o777,
+        0o755,
+      );
+      await chmod(target + "/deploy/bootstrap", 0o644);
+      await assert.rejects(installer.install(input), {
+        code: "bundle_conflict",
+      });
+      await chmod(target + "/deploy/bootstrap", 0o755);
     }
     assert(
       (await readdir(target + "/deploy/migrations")).some((name) =>

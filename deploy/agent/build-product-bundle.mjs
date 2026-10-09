@@ -267,9 +267,11 @@ export async function buildProductBundle({
         "console-client",
         "control-files",
         "native-platform",
+        "native-accounts",
         "tls-credentials",
         "launch-service",
         "notification-manifest",
+        "notification-binding",
         "notification-worker",
         "private-files",
         "product-environment",
@@ -292,6 +294,7 @@ export async function buildProductBundle({
       ])
         await copy("deploy/agent/" + name + ".mjs");
       await copy("deploy/provision-service");
+      await copy("deploy/bootstrap");
       for (const name of [
         "gateway.mjs",
         "nginx.conf.template",

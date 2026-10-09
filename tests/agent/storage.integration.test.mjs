@@ -389,3 +389,10 @@ test("an unmarked container with the tenant name is refused and preserved", asyn
     "created",
   );
 });
+
+test("owned root-container accounts refuse active/drift/shared/foreign identities and recover deletion with retained bytes", async () => {
+  assert.equal(
+    await fixture("accounts"),
+    "owned-account-retry-and-retention\n",
+  );
+});

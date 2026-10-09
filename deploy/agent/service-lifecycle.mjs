@@ -39,7 +39,9 @@ export class ServiceStateFiles {
         !["installing", "active", "removing", "removed", "failed"].includes(
           value.status,
         ) ||
-        typeof value.phase !== "string"
+        typeof value.phase !== "string" ||
+        (value.cleanupComplete !== undefined &&
+          typeof value.cleanupComplete !== "boolean")
       )
         throw new ProvisionError("invalid_state");
       return value;
@@ -95,6 +97,12 @@ export class ServiceLifecycle {
       !environment?.remove ||
       !environment?.backupPath ||
       !cleanup?.run
+    )
+      throw new ProvisionError("invalid_configuration");
+    if (
+      platform.removeAccount !== undefined &&
+      (typeof platform.removeAccount !== "function" ||
+        typeof cleanup.verifyRetained !== "function")
     )
       throw new ProvisionError("invalid_configuration");
     Object.assign(this, {
@@ -211,7 +219,7 @@ export class ServiceLifecycle {
         role: allocation.role,
         database: allocation.database,
       };
-      await this.cleanup.preflight?.(service);
+      if (!state.cleanupComplete) await this.cleanup.preflight?.(service);
       phase = "stop";
       await record("removing");
       await this.platform.stop(service, { allowMissing: true });
@@ -230,11 +238,16 @@ export class ServiceLifecycle {
       });
       phase = "cleanup";
       await record("removing");
-      const cleaned = await this.cleanup.run(service, {
+      const context = {
         databaseBackup: state.backup,
-      });
-      if (cleaned?.storageBackup) {
-        state.storageBackup = cleaned.storageBackup;
+        storageBackup: state.storageBackup,
+      };
+      const cleaned = state.cleanupComplete
+        ? await this.cleanup.verifyRetained(service, context)
+        : await this.cleanup.run(service, context);
+      if (cleaned?.storageBackup) state.storageBackup = cleaned.storageBackup;
+      if (this.platform.removeAccount) {
+        state.cleanupComplete = true;
         await record("removing");
       }
       if (["j-approval", "j-talk", "j-mail"].includes(service)) {
@@ -245,6 +258,11 @@ export class ServiceLifecycle {
       phase = "gateway";
       await record("removing");
       await this.gateway.set(service, false);
+      if (this.platform.removeAccount) {
+        phase = "account_remove";
+        await record("removing");
+        await this.platform.removeAccount(service);
+      }
       phase = "environment_remove";
       await record("removing");
       await this.environment.remove(service);

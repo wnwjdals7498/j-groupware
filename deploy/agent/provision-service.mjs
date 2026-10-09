@@ -23,6 +23,7 @@ import {
 } from "../gateway/gateway.mjs";
 import { ProvisionError } from "./provision-error.mjs";
 import { BaseBootstrap } from "./base-bootstrap.mjs";
+import { isNotificationInstallerBinding } from "./notification-binding.mjs";
 
 const fail = (code = "invalid_installer_control") => {
   throw new ProvisionError(code);
@@ -56,7 +57,8 @@ export function parseProvisionServiceArguments(argv) {
   if (argv[0] === "j-groupware") fail("invalid_installer_arguments");
   return { service: argv[0], kind: argv.length === 2 ? "remove" : "install" };
 }
-function bound(service) {
+function bound(service, notificationBinding) {
+  if (["j-approval", "j-talk"].includes(service) && notificationBinding) return;
   if (["j-approval", "j-talk", "j-mail"].includes(service))
     fail("notification_operating_owner_unbound");
   if (service === "j-web") fail("web_native_installation_unbound");
@@ -204,19 +206,36 @@ export async function loadProvisionServiceControl(file = INSTALLER_CONTROL) {
   };
 }
 
-export function createProvisionServiceRuntime({
-  bootstrap,
-  environment,
-  postgres,
-  gatewayProfile,
-  roots,
-  storageProfiles,
-}) {
+export function createProvisionServiceRuntime(
+  { bootstrap, environment, postgres, gatewayProfile, roots, storageProfiles },
+  { notificationBinding } = {},
+) {
   if (
     environment?.tenant !== bootstrap?.tenant ||
     gatewayProfile?.JGW_TENANT !== bootstrap.tenant
   )
     fail("invalid_installer_profile");
+  if (
+    notificationBinding !== undefined &&
+    (!isNotificationInstallerBinding(notificationBinding) ||
+      notificationBinding.tenant !== bootstrap.tenant ||
+      notificationBinding.databasePort !== environment.databasePort ||
+      notificationBinding.databasePort !== postgres.port ||
+      notificationBinding.baseEnvironmentFile !==
+        path.join(roots.environmentRoot, "j-groupware.env") ||
+      notificationBinding.inputFiles.some((file) =>
+        Object.values(roots).some(
+          (root) => file === root || file.startsWith(root + "/"),
+        ),
+      ) ||
+      Object.values(roots).some(
+        (root) =>
+          notificationBinding.root === root ||
+          notificationBinding.root.startsWith(root + "/") ||
+          root.startsWith(notificationBinding.root + "/"),
+      ))
+  )
+    fail("invalid_notification_binding");
   const tenant = bootstrap.tenant;
   // Pool construction is inert; connections open only in an explicitly bound run.
   const admin = new Pool({
@@ -297,6 +316,7 @@ export function createProvisionServiceRuntime({
     gateway,
     cleanup,
     environment: serviceEnvironment,
+    notifications: notificationBinding?.manifest,
   });
   return {
     createBaseBootstrap(baseEnvironment, bundles) {
@@ -345,9 +365,14 @@ export function createProvisionServiceRuntime({
       });
     },
     async run(service, kind = "install") {
-      bound(service);
+      bound(service, notificationBinding);
       if (!["install", "remove"].includes(kind)) fail("invalid_action");
       environment.profile(service);
+      if (["j-approval", "j-talk"].includes(service)) {
+        if (!environment.notificationOrigin)
+          fail("notification_receiver_unbound");
+        await notificationBinding.preflight(service, kind);
+      }
       // Fixed root-owned binaries. Database foundation must already be prepared.
       for (const binary of [
         "/usr/lib/postgresql/18/bin/pg_dump",

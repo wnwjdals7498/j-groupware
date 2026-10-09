@@ -1,0 +1,9 @@
+#!/usr/bin/node
+import { runBootstrapCli } from "/opt/jgw/bundles/j-groupware/deploy/agent/bootstrap-runtime.mjs";
+import { ProvisionError } from "/opt/jgw/bundles/j-groupware/deploy/agent/provision-error.mjs";
+runBootstrapCli().catch((error) => {
+  process.stderr.write(
+    (error instanceof ProvisionError ? error.code : "bootstrap_failed") + "\n",
+  );
+  process.exitCode = 1;
+});

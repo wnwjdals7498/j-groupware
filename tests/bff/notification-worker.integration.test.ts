@@ -21,6 +21,7 @@ import {
   createNotificationRuntime,
   loadNotificationControl,
 } from "../../deploy/agent/notification-worker.mjs";
+import { loadNotificationInstallerBinding } from "../../deploy/agent/notification-binding.mjs";
 import { FileSubscriptionCredentials } from "../../deploy/agent/subscription-credentials.mjs";
 import { execute } from "../../deploy/gateway/gateway.mjs";
 
@@ -30,6 +31,7 @@ describe("explicit notification worker with external ephemeral credentials, actu
     token: string,
     credentialsFile: string,
     controlFile: string,
+    receiverOrigin: string,
     worker: ReturnType<typeof createNotificationRuntime>,
     receiver: ReturnType<typeof createNotificationReceiver>;
   const key = randomBytes(32).toString("base64url");
@@ -54,7 +56,7 @@ describe("explicit notification worker with external ephemeral credentials, actu
       projection_expires_at: Date;
     };
   const receive = () =>
-    rt.fetchLoopback("http://127.0.0.1:54260/internal/notifications", {
+    rt.fetchLoopback(receiverOrigin + "/internal/notifications", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -129,7 +131,11 @@ describe("explicit notification worker with external ephemeral credentials, actu
     receiver = createNotificationReceiver(
       new NotificationStore(rt.pool, rt.fixtures[0]!.tenant),
     );
-    await receiver.listen({ host: "127.0.0.1", port: 54260 });
+    await receiver.listen({ host: "127.0.0.1", port: 0 });
+    const address = receiver.server.address();
+    if (!address || typeof address === "string" || address.port === 3001)
+      throw new Error("Isolated receiver address required.");
+    receiverOrigin = `http://127.0.0.1:${address.port}`;
   });
   afterAll(async () => {
     if (receiver) await receiver.close();
@@ -159,6 +165,53 @@ describe("explicit notification worker with external ephemeral credentials, actu
       database: "jgw_groupware",
       user: "jgw_groupware",
     });
+  });
+  it("binds the existing private worker to matching BFF DB inputs and verifies actual subscriptions before installer mutation", async () => {
+    const baseEnvironmentFile = root + "/base.env",
+      tenant = rt.fixtures[0]!.tenant,
+      port = Number(required("JGW_DB_PORT"));
+    await writeFile(
+      baseEnvironmentFile,
+      `JGW_TENANT=${tenant}\nJAUTH_PUBLIC_URL=https://jauth.jgw.test:54231\nJGW_DB_HOST=127.0.0.1\nJGW_DB_PORT=${port}\nJGW_DB_NAME=jgw_groupware\nJGW_DB_USER=jgw_groupware\nJGW_DB_PASSWORD=${required("JGW_DB_PASSWORD")}\n`,
+      { mode: 0o600 },
+    );
+    const input = {
+      controlFile,
+      tenant,
+      databasePort: port,
+      baseEnvironmentFile,
+      authOrigin: "https://jauth.jgw.test:54231",
+      fetch: rt.fetch,
+    };
+    await expect(
+      loadNotificationInstallerBinding({
+        ...input,
+        tenant: rt.fixtures[1]!.tenant,
+      }),
+    ).rejects.toMatchObject({ code: "notification_binding_mismatch" });
+    const binding = await loadNotificationInstallerBinding(input);
+    try {
+      expect(await worker.manifest.read()).toBeNull();
+      await expect(binding.preflight("j-mail")).rejects.toMatchObject({
+        code: "notification_service_inactive",
+      });
+      expect(await worker.manifest.read()).toBeNull();
+      expect((await rt.subscribe(0, "j-mail")).status).toBe(200);
+      await binding.preflight("j-mail");
+      await binding.manifest.register("j-mail", key);
+      expect(await state()).toMatchObject({
+        active: true,
+        key_hashes: [digest(key)],
+      });
+      expect((await receive()).status).toBe(200);
+      await chmod(baseEnvironmentFile, 0o644);
+      await expect(binding.preflight("j-mail")).rejects.toMatchObject({
+        code: "unsafe_control_file",
+      });
+      await chmod(baseEnvironmentFile, 0o600);
+    } finally {
+      await binding.close();
+    }
   });
   it("projects an actual j-auth subscription with installer hashes and accepts the real private HTTP receiver", async () => {
     expect((await rt.subscribe(0, "j-mail")).status).toBe(200);

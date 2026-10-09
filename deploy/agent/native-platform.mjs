@@ -8,6 +8,7 @@ import {
 } from "node:fs/promises";
 import { createHash, randomUUID } from "node:crypto";
 import path from "node:path";
+import { NativeServiceAccounts } from "./native-accounts.mjs";
 import { execute, externalPath } from "../gateway/gateway.mjs";
 import { ProvisionError, serviceDatabase } from "./service-database.mjs";
 import {
@@ -70,6 +71,10 @@ export class NativeSystemdPlatform {
       environmentRoot,
       unitRoot,
       probe: ready,
+    });
+    this.accounts = new NativeServiceAccounts({
+      root: environmentRoot,
+      stopped: (service) => this.stopped(service),
     });
   }
   unit(service) {
@@ -153,34 +158,7 @@ export class NativeSystemdPlatform {
     await new NativeTlsCredentials({
       environmentRoot: this.environmentRoot,
     }).prepare(service);
-    const name = user(service);
-    let existing;
-    try {
-      existing = (await run("/usr/bin/getent", ["passwd", name]))
-        .trim()
-        .split(":");
-    } catch {}
-    if (existing) {
-      if (
-        existing[0] !== name ||
-        !/^[1-9][0-9]*$/.test(existing[2]) ||
-        !/^[1-9][0-9]*$/.test(existing[3]) ||
-        existing[5] !== "/var/lib/" + name ||
-        existing[6] !== "/usr/sbin/nologin"
-      )
-        throw new ProvisionError("unmanaged_service_account");
-    } else
-      await run("/usr/sbin/useradd", [
-        "--system",
-        "--user-group",
-        "--no-create-home",
-        "--home-dir",
-        "/var/lib/" + name,
-        "--shell",
-        "/usr/sbin/nologin",
-        "--",
-        name,
-      ]);
+    await this.accounts.ensure(service);
     const root = await lstat(this.unitRoot);
     if (
       !root.isDirectory() ||
@@ -310,6 +288,9 @@ export class NativeSystemdPlatform {
     )
       throw new ProvisionError("unit_conflict");
     return ["inactive", "failed"].includes(observation.ActiveState);
+  }
+  removeAccount(service) {
+    return this.accounts.remove(service);
   }
 }
 export function parseUnitObservation(text) {

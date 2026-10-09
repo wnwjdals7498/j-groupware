@@ -326,3 +326,79 @@ test("native units carry fixed entrypoints, separate users and web helper privil
   ])
     assert.throws(() => parseUnitObservation(observed));
 });
+
+test("native account removal retry verifies retained cleanup after an ambiguous environment-delete failure", async () => {
+  const dir = root + "/account-retry";
+  await mkdir(dir, { mode: 0o700 });
+  const state = new ServiceStateFiles(dir + "/state", "agent-fixture"),
+    environment = new ServiceEnvironment({
+      root: dir + "/environment",
+      backups: dir + "/backups",
+      render: (_service, value) => JSON.stringify(value),
+      read: (_service, text) => JSON.parse(text),
+    });
+  let clean = 0,
+    verify = 0,
+    accounts = 0,
+    envFail = true,
+    verifyFail = false;
+  const remove = environment.remove.bind(environment);
+  environment.remove = async (service) => {
+    if (envFail) throw new Error("private fault");
+    return remove(service);
+  };
+  const lifecycle = new ServiceLifecycle({
+    tenant: "agent-fixture",
+    state,
+    environment,
+    database: {
+      ensure: async () => {},
+      inspect: async () => ({ role: true, database: true }),
+      dump: async (_s, file) =>
+        writeFile(file, "retained real file", { mode: 0o600 }),
+      disable: async () => {},
+    },
+    platform: {
+      preflight: async () => {},
+      install: async () => {},
+      start: async () => {},
+      ready: async () => {},
+      stop: async () => {},
+      removeAccount: async () => {
+        accounts++;
+      },
+    },
+    gateway: { set: async () => {} },
+    cleanup: {
+      preflight: async () => {},
+      run: async () => {
+        clean++;
+        return { storageBackup: dir + "/retained" };
+      },
+      verifyRetained: async () => {
+        verify++;
+        if (verifyFail) throw new Error("backup corrupt");
+        return { storageBackup: dir + "/retained" };
+      },
+    },
+  });
+  await lifecycle.run("j-customer-auth-db");
+  await assert.rejects(lifecycle.run("j-customer-auth-db", "remove"));
+  const saved = await state.read("j-customer-auth-db");
+  assert.equal(saved.phase, "environment_remove");
+  assert.equal(saved.cleanupComplete, true);
+  assert.equal(clean, 1);
+  assert.equal(accounts, 1);
+  envFail = false;
+  verifyFail = true;
+  await assert.rejects(lifecycle.run("j-customer-auth-db", "remove"));
+  assert.equal(accounts, 1);
+  assert.equal((await state.read("j-customer-auth-db")).phase, "cleanup");
+  verifyFail = false;
+  await lifecycle.run("j-customer-auth-db", "remove");
+  assert.equal(clean, 1);
+  assert.equal(verify, 2);
+  assert.equal(accounts, 2);
+  assert.equal((await state.read("j-customer-auth-db")).status, "removed");
+  assert.equal(await readFile(saved.backup, "utf8"), "retained real file");
+});

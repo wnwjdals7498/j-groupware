@@ -14,6 +14,8 @@ import {
   readdir,
 } from "node:fs/promises";
 import { execFileSync, spawn } from "node:child_process";
+import { once } from "node:events";
+import { NativeServiceAccounts } from "../../deploy/agent/native-accounts.mjs";
 import { createHash, randomBytes, X509Certificate } from "node:crypto";
 import { createConnection } from "node:net";
 import {
@@ -545,6 +547,13 @@ if (mode === "prepare") {
   await assert.rejects(loadBootstrapRuntimeControl(bootstrapControlFile), {
     code: "invalid_bootstrap_control",
   });
+  assert.throws(
+    () =>
+      createProvisionServiceRuntime(config, {
+        notificationBinding: { tenant, root: base + "/foreign-manifest" },
+      }),
+    { code: "invalid_notification_binding" },
+  );
   const runtime = createProvisionServiceRuntime(config);
   try {
     for (const service of ["j-talk", "j-mail", "j-approval"])
@@ -605,6 +614,16 @@ if (mode === "prepare") {
       error.status === 1 &&
       error.stderr === "notification_operating_owner_unbound\n",
   );
+  assert.throws(
+    () =>
+      execFileSync(
+        "/usr/local/bin/node",
+        ["/opt/jgw/bundles/j-groupware/deploy/bootstrap", "--extra"],
+        { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
+      ),
+    (error) =>
+      error.status === 1 && error.stderr === "invalid_bootstrap_arguments\n",
+  );
   console.log("native-inert-and-guarded");
 } else if (mode === "native-denied") {
   await assert.rejects(
@@ -612,6 +631,146 @@ if (mode === "prepare") {
     { code: "root_required" },
   );
   console.log("native-root-required");
+} else if (mode === "accounts") {
+  const root = base + "/control/accounts";
+  await mkdir(root, { mode: 0o700 });
+  let isStopped = false;
+  const accounts = new NativeServiceAccounts({
+    root,
+    stopped: async () => isStopped,
+  });
+  await assert.rejects(lstat(root + "/j-customer-auth-db.account.json"), {
+    code: "ENOENT",
+  });
+  const identity = await accounts.ensure("j-customer-auth-db");
+  assert.deepEqual(await accounts.ensure("j-customer-auth-db"), identity);
+  const retained = base + "/control/account-retained.bin";
+  await writeFile(retained, "private retained bytes", { mode: 0o600 });
+  await chown(retained, identity.uid, identity.gid);
+  await assert.rejects(accounts.remove("j-customer-auth-db"), {
+    code: "account_writer_active",
+  });
+  isStopped = true;
+  const child = spawn(
+    "/usr/sbin/runuser",
+    ["-u", "jgw-customer-auth-db", "--", "/bin/sleep", "30"],
+    { detached: true, stdio: "ignore" },
+  );
+  try {
+    let active = false;
+    for (let i = 0; i < 50; i++) {
+      try {
+        execFileSync("/usr/bin/pgrep", ["-u", String(identity.uid)], {
+          stdio: "ignore",
+        });
+        active = true;
+        break;
+      } catch {}
+      await new Promise((r) => setTimeout(r, 20));
+    }
+    assert(active);
+    await assert.rejects(accounts.remove("j-customer-auth-db"), {
+      code: "account_processes_active",
+    });
+  } finally {
+    // Kill the service child first so runuser reaps it; a sleep PID1 does not reap orphan zombies.
+    const ended = once(child, "exit");
+    for (const pid of execFileSync(
+      "/usr/bin/pgrep",
+      ["-u", String(identity.uid)],
+      { encoding: "utf8" },
+    )
+      .trim()
+      .split("\n"))
+      process.kill(Number(pid), "SIGTERM");
+    await ended;
+  }
+  execFileSync("/usr/sbin/usermod", [
+    "--home",
+    "/foreign",
+    "jgw-customer-auth-db",
+  ]);
+  await assert.rejects(accounts.remove("j-customer-auth-db"), {
+    code: "unmanaged_service_account",
+  });
+  execFileSync("/usr/sbin/usermod", [
+    "--home",
+    "/var/lib/jgw-customer-auth-db",
+    "jgw-customer-auth-db",
+  ]);
+  execFileSync("/usr/sbin/useradd", [
+    "--system",
+    "--non-unique",
+    "--uid",
+    String(identity.uid),
+    "--gid",
+    String(identity.gid),
+    "--no-create-home",
+    "--shell",
+    "/usr/sbin/nologin",
+    "jgw-test-alias",
+  ]);
+  await assert.rejects(accounts.remove("j-customer-auth-db"), {
+    code: "shared_service_identity",
+  });
+  execFileSync("/usr/sbin/userdel", ["--", "jgw-test-alias"]);
+  const receipt = await accounts.read("j-customer-auth-db");
+  await accounts.write("j-customer-auth-db", { ...receipt, phase: "removing" });
+  execFileSync("/usr/sbin/userdel", ["--", "jgw-customer-auth-db"]);
+  assert.deepEqual(await accounts.remove("j-customer-auth-db"), {
+    account: "removed",
+  });
+  assert.deepEqual(await accounts.remove("j-customer-auth-db"), {
+    account: "removed",
+  });
+  assert.equal(await readFile(retained, "utf8"), "private retained bytes");
+  assert.equal((await lstat(retained)).uid, identity.uid);
+  await assert.rejects(accounts.ensure("j-customer-auth-db"), {
+    code: "removed_account_requires_review",
+  });
+  const approval = await accounts.ensure("j-approval");
+  assert.deepEqual(await accounts.remove("j-approval"), { account: "removed" });
+  assert(approval.uid > 0);
+  assert.throws(() =>
+    execFileSync("/usr/bin/getent", ["passwd", "jgw-approval"], {
+      stdio: "ignore",
+    }),
+  );
+  execFileSync("/usr/sbin/useradd", [
+    "--system",
+    "--user-group",
+    "--no-create-home",
+    "--home-dir",
+    "/var/lib/jgw-talk",
+    "--shell",
+    "/usr/sbin/nologin",
+    "jgw-talk",
+  ]);
+  await assert.rejects(accounts.ensure("j-talk"), {
+    code: "unmanaged_service_account",
+  });
+  await assert.rejects(accounts.remove("j-talk"), {
+    code: "unmanaged_service_account",
+  });
+  assert(
+    execFileSync("/usr/bin/getent", ["passwd", "jgw-talk"], {
+      encoding: "utf8",
+    }).startsWith("jgw-talk:"),
+  );
+  await chmod(accounts.file("j-approval"), 0o644);
+  await assert.rejects(accounts.remove("j-approval"), {
+    code: "unsafe_control_file",
+  });
+  await chmod(accounts.file("j-approval"), 0o600);
+  // Retained storage verification does not depend on the now absent writer account.
+  const m = await storage.record("j-messenger");
+  execFileSync("/usr/sbin/userdel", ["--", "jgw-messenger"]);
+  const proof = await storage.verifyRetained("j-messenger", {
+    storageBackup: m.backup,
+    databaseBackup: base + "/database.dump",
+  });
+  assert.equal(proof.storageBackup, m.backup);
+  console.log("owned-account-retry-and-retention");
 } else if (mode === "foreign") {
   await assert.rejects(mailpit.stop(), { code: "unmanaged_mailpit" });
   console.log("foreign-preserved");

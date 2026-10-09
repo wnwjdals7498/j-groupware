@@ -301,6 +301,7 @@ const allowedSource = (service, name) => {
     (/^deploy\/agent\/[a-z-]+\.mjs$/.test(name) ||
       [
         "deploy/provision-service",
+        "deploy/bootstrap",
         "deploy/gateway/gateway.mjs",
         "deploy/gateway/nginx.conf.template",
         "deploy/gateway/gw.conf.template",
@@ -601,13 +602,16 @@ export class BundleInstaller {
           if (hash(await readFile(path.join(target, name))) !== original.sha256)
             fail("bundle_conflict");
         }
-        if (
-          service === "j-groupware" &&
-          contents.files.has("deploy/provision-service") &&
-          ((await lstat(target + "/deploy/provision-service")).mode & 0o777) !==
-            0o755
-        )
-          fail("bundle_conflict");
+        if (service === "j-groupware")
+          for (const wrapper of [
+            "deploy/provision-service",
+            "deploy/bootstrap",
+          ])
+            if (
+              contents.files.has(wrapper) &&
+              ((await lstat(target + "/" + wrapper)).mode & 0o777) !== 0o755
+            )
+              fail("bundle_conflict");
         const dependencies = await lstat(target + "/node_modules");
         if (
           !dependencies.isDirectory() ||
@@ -628,12 +632,11 @@ export class BundleInstaller {
       // preexisting user directory. The final ready marker is published last.
       await npmInstall(stage, this.npmConfig, this.cache, this.npmCli, signal);
       // Extraction strips executable bits. Restore only this fixed, hash-checked
-      // base installer entrypoint; arbitrary archive scripts remain nonexecutable.
-      if (
-        service === "j-groupware" &&
-        contents.files.has("deploy/provision-service")
-      )
-        await chmod(stage + "/deploy/provision-service", 0o755);
+      // base entrypoints; arbitrary archive scripts remain nonexecutable.
+      if (service === "j-groupware")
+        for (const wrapper of ["deploy/provision-service", "deploy/bootstrap"])
+          if (contents.files.has(wrapper))
+            await chmod(stage + "/" + wrapper, 0o755);
       await runtimeModes(stage, signal);
       signal?.throwIfAborted();
       await mkdir(target, { mode: 0o700 });

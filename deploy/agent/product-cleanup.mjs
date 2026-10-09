@@ -42,4 +42,13 @@ export class ProductCleanup {
     if (!adapter?.run) throw new ProvisionError("cleanup_adapter_unbound");
     return adapter.run(service, context);
   }
+  async verifyRetained(service, context) {
+    serviceDatabase(service);
+    if (["j-approval", "j-talk", "j-customer-auth-db"].includes(service))
+      return { service, storage: "postgres", data: "retained" };
+    const adapter = this.adapter(service);
+    if (!adapter?.verifyRetained)
+      throw new ProvisionError("retained_cleanup_verification_unbound");
+    return adapter.verifyRetained(service, context);
+  }
 }

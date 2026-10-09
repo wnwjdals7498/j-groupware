@@ -13,6 +13,16 @@ Approval/Talk/Mail은 `notification_operating_owner_unbound`, Web은
 `web_native_installation_unbound`로 state/DB/OS 변경 전에 거절한다.
 이 거절을 설치 성공이나 해당 서비스 구현 완료로 취급하지 않는다.
 
+명시적 `loadNotificationInstallerBinding`으로 준비된 기존 worker control과
+private 기본 BFF env를 읽은 호출자는 factory에 binding을 전달해 Approval/Talk
+manifest를 연결할 수 있다. tenant·auth origin·PG port/DB/user/password를 대조하고,
+실제 j-auth 구독 조회 preflight가 설치 state/DB 변경보다 앞선다. 비활성 구독의
+설치는 거절하며 해지는 유효 자격으로 조회한 뒤 비활성 구독에서도 허용한다.
+control 입력과 manifest/native 출력의 겹침 및 임의 binding 객체를 거절한다.
+binding의 Pool/HTTPS agent는 호출자가 `close()`한다. import와 factory 생성은
+inert다. 이 API는 운영 owner를 선택하거나 자격을 발급·갱신하지 않으며,
+고정 CLI와 Mail/Web 연결 관문은 위와 같이 유지한다.
+
 ## 입력과 선행 조건
 
 control은 root 소유 mode-600 canonical JSON 한 줄과 마지막 개행이어야 한다.
@@ -48,6 +58,11 @@ private state/backup 경로와 분리한다. 이미 검증·해제된 root 소�
 gateway를 연결한다. 동일 control/state/lock/PG를 CA/Messenger와 공유하며
 성공은 `base_ready`다. OS package/trust/timer 설치나 전체 GW-63 완료를 뜻하지 않는다.
 
+기본 번들의 `deploy/bootstrap` wrapper는 `/usr/bin/node`와 고정 설치 경로의
+`bootstrap-runtime.mjs`를 실행하며 argv를 받지 않는다. 해제 시 hash 검증된
+두 wrapper(`bootstrap`, `provision-service`)만 0755로 복원한다. 재시도는 두
+파일의 권한 변조도 거절한다. 준비된 기본 조합의 진입점이며 OS 기반 설치기는 아니다.
+
 ## 저장소 준비·해지
 
 ProductStorage는 root 소유 allocation 루트와 고정 서비스 계정의 mode-700
@@ -56,7 +71,8 @@ data다. 상위 루트의 0711은 전용 계정이 자신의 하위 디렉터리
 하며 임의 형제 디렉터리나 root 제어 파일을 쓰게 하지 않는다.
 기존 미표시 경로·UID/GID 변경·symlink·다른 소유자를 인수하지 않는다.
 
-S14 순서는 서비스 중지 → PG dump → DB NOLOGIN/세션 종료 → 제품 정리다.
+S14 순서는 서비스 중지 → PG dump → DB NOLOGIN/세션 종료 → 제품 정리 →
+알림 manifest 제거 → gateway 해제 → 관리 계정 제거 → env 제거다.
 Mailpit 중지와 볼륨 백업은 제품 정리 단계에 있다. 준비/소유권 preflight는
 DB 할당 또는 서비스 정지 전이며, 계정 생성 뒤 저장소 준비가 서비스 기동보다 앞선다.
 
@@ -71,7 +87,22 @@ Messenger tmp/web-dist/backups는 원본 allocation 안에 보존하고 제거 s
 
 Messenger private 테이블을 직접 조회하지 않는다. 이 백업의 PG/file bytes
 복원 검증은 Messenger 공개 모듈의 file-reference/session purge 의미적 복원
-인수와 구별한다. 전용 OS 계정 삭제·별도 재해 복구 보관·고객 VM 인수도 미실행이다.
+인수와 구별한다. 별도 재해 복구 보관·고객 VM 인수는 미실행이다.
+
+`NativeServiceAccounts`는 신규 생성 전 root 소유 private receipt를 기록하며,
+자신이 만든 UID/GID·managed comment·home·nologin·전용 빈 group을 검증한다.
+기존 무표시 계정을 인수하지 않는다. 해지는 중지 확인과 살아 있는 UID process,
+공유 UID/primary GID, 이름·UID/GID 재사용 및 계정 속성 변조 검사를 거친다.
+`userdel`에는 `-r`을 사용하지 않으므로 원본 파일과 백업을 보존한다.
+계정 제거 완료 뒤 실패해도 receipt로 재시도하며 자동 재설치를 허용하지 않는다.
+
+제품 정리 완료는 durable `cleanupComplete`로 기록한다. 이후 실패한 해지는
+계정 조회에 의존하는 정리를 반복하지 않고 보존 root/topology/numeric UID와
+Messenger/Mail 파일 저장소의 원본·백업·PG archive hash를 다시 검사한다.
+PG만 사용하는 제품은 기존 DB/backup을 보존하며 이 파일 snapshot 계약을
+적용하지 않는다. 재검증 실패는 계정/env 제거 전에
+멈춘다. 실제 계정 생성/제거는 owned root 컨테이너에서 검증했으며 고객 OS나
+systemd PID1 전체 설치·해지를 실행한 증거는 아니다.
 
 ## Mailpit owner
 
@@ -85,7 +116,7 @@ HTTP/SMTP는 명시적 loopback 포트이며 3001은 금지다. 준비 확인은
 `/readyz`를 사용한다. 이 owner는 독립 격리 검증됐으며 운영 Mail installer
 조합은 알림 owner 계약이 없어 연결하지 않았다. 고객 VM의 SMTP egress 방화벽은 미실행이다.
 
-기본 번들은 세 모듈과 고정 wrapper를 포함한다. 안전 해제는 검증된 기본
+기본 번들은 native/storage/account/binding 모듈과 고정 wrapper를 포함한다. 안전 해제는 검증된 기본
 번들의 wrapper에만 0755를 복원하고, 재시도 때 실행 권한 변조를 거절한다.
 다른 archive script에 실행 권한을 추가하지 않는다.
 

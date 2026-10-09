@@ -955,6 +955,10 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
         guestName: null,
       });
     } finally {
+      // Seeded rooms now own occurrence rows; preserve the production FK rules.
+      await talkPool.query("DELETE FROM event_outbox WHERE tenant_id=$1", [
+        fixture.tenant,
+      ]);
       await talkPool.query("DELETE FROM rooms WHERE tenant_id=$1", [
         fixture.tenant,
       ]);
@@ -999,6 +1003,10 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
           .filter((call) => call.path.startsWith("/customer-auth/")),
       ).toEqual([]);
     } finally {
+      await talkPool.query(
+        "DELETE FROM event_outbox WHERE tenant_id=$1 AND room_id=$2",
+        [fixture.tenant, room],
+      );
       await talkPool.query("DELETE FROM rooms WHERE tenant_id=$1 AND id=$2", [
         fixture.tenant,
         room,
@@ -2101,6 +2109,10 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
       expect(ready).toBe(true);
+      await talkPool.query(
+        "DELETE FROM event_outbox WHERE tenant_id=$1 AND room_id=$2",
+        [fixture.tenant, room],
+      );
       await talkPool.query("DELETE FROM rooms WHERE tenant_id=$1 AND id=$2", [
         fixture.tenant,
         room,

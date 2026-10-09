@@ -508,6 +508,60 @@ export class ProductStorage {
       files: manifest.files.length,
     };
   }
+  async verifyRetained(service, { databaseBackup, storageBackup } = {}) {
+    this.root();
+    const value = await this.record(service),
+      profile = this.profile(service);
+    if (!value) {
+      try {
+        await lstat(profile.root);
+        fail("unmanaged_product_storage");
+      } catch (error) {
+        if (error.code !== "ENOENT") throw error;
+      }
+      if (storageBackup) fail("storage_backup_conflict");
+      await this.quiescent(service);
+      return { service, data: "absent" };
+    }
+    if (
+      value.phase !== "retained" ||
+      !value.backup ||
+      value.backup !== storageBackup
+    )
+      fail("storage_backup_conflict");
+    await protectedStoragePath(profile.root, true);
+    if (((await lstat(profile.root)).mode & 0o777) !== 0o700)
+      fail("unsafe_storage_root");
+    for (const child of await readdir(profile.root)) {
+      if (!CHILDREN[service].includes(child)) fail("unmanaged_product_storage");
+      const info = await lstat(profile.root + "/" + child);
+      if (
+        !info.isDirectory() ||
+        info.isSymbolicLink() ||
+        info.uid !== value.uid ||
+        info.gid !== value.gid ||
+        info.mode & 0o077
+      )
+        fail("unsafe_storage_file");
+    }
+    if ((await readdir(profile.root)).length !== CHILDREN[service].length)
+      fail("unmanaged_product_storage");
+    await this.quiescent(service);
+    const result = await this.verify(service, value.backup, databaseBackup),
+      manifest = await readControlJson(
+        value.backup + "/manifest.json",
+        16 * 1024 * 1024,
+      ),
+      original = await this.walk(service, value, profile.root);
+    if (
+      JSON.stringify(original.files) !== JSON.stringify(manifest.files) ||
+      JSON.stringify(original.directories) !==
+        JSON.stringify(manifest.directories)
+    )
+      fail("storage_changed");
+    await this.quiescent(service);
+    return result;
+  }
   async run(service, { databaseBackup } = {}) {
     let value = await this.preflight(service);
     if (!value) return { service, data: "absent" };
