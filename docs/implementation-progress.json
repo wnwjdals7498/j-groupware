@@ -6,13 +6,13 @@
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 114,
-    "partial": 36,
+    "implemented": 116,
+    "partial": 34,
     "not_started": 22
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal UI and Playwright acceptance pending",
-    "23차 OS bootstrap kit, pinned customer PG Compose, owned gateway, explicit Web/Mailpit/prepared notification native bindings, retained Web teardown and agent preparation sources are connected and isolated-tested. Actual trusted offline package/dependency installation, OS CA trust, systemd PID1 first bootstrap/native lifecycle, timer, firewall traffic and customer VM acceptance remain unrun. GW-51/TK-21/GW-40/T2/E8/H7 and formal UI decisions remain unchanged.",
+    "23차 OS bootstrap kit, pinned customer PG Compose, owned gateway, explicit Web/Mailpit/prepared notification native bindings, retained Web teardown and agent preparation sources are connected and isolated-tested. Actual trusted offline package/dependency installation, OS CA trust, systemd PID1 first bootstrap/native lifecycle, timer, firewall traffic and customer VM acceptance remain unrun. GW-40/T2/E8/H7 and formal UI decisions remain unchanged.",
     "Actual customer VM/20GB data disk/systemd/firewall/OS CA trust and external deployment acceptance not executed in the cloud fixture runtime",
     "Mail E8 needs FS-U07 pre-webhook loss criteria and full SMTP envelope recipient preservation contract; no outbox/ingress recovery policy invented"
   ],
@@ -1083,15 +1083,17 @@
       "items": [
         "G7"
       ],
-      "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_console_16_each_exit0_skip0; customer_list_detail_safe_projection_customer_read_cached_session_role_fixture_pass; business_contract_state_enum_mutation_and_formal_UI_not_implemented; spec_review_G7_business_contract_status_enum_initial_state_transition_subscription_effect_UNDECIDED_not_registration_authState",
+      "implementation": "implemented",
+      "verification": "actual_Node22_18_Node24_19_GWA_check81_full_BFF194_15files_each_exit0_skip0_console20_included; actual_operator_Code_PKCE_customer_read_write_CSRF_PG_prepared_active_ended_forward_transition_current_revision_idempotence_stale_concurrent409_one_connection10_requests_safe_snapshot_and_subscription_independence_pass; formal_console_UI_Playwright_customer_VM_whole_suite_acceptance_UNRUN",
       "code": [
         "j-groupware/apps/console-server/src/auth-control.ts",
         "j-groupware/apps/console-server/src/customers.ts",
         "j-groupware/apps/console-server/src/customer-routes.ts",
         "j-groupware/deploy/console-migrations/002-customer-agent-state.sql",
         "j-groupware/tests/bff/console.integration.test.ts",
-        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md",
+        "j-groupware/deploy/console-migrations/003-business-contract.sql",
+        "j-groupware/docs/cloud-contract-assignment-verification-2026-10-09.md"
       ]
     },
     {
@@ -2608,8 +2610,8 @@
       "items": [
         "T5"
       ],
-      "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_Talk_check2_registry1_PG_integration14_each_exit0_skip0; actual_G22_BFF_occurrence_delivery6_each_in_full191_15files_exit0_skip0; new_room_transaction_trigger_and_assignment_original_recipient_distinct_UUID_atomic_rollback_receiver_restart_ACK_failure_dedup_multi_sender_lease_compiled_main_SIGKILL_actual20sec_expiry_SSE_pass; room_seed_is_explicit_PG_fixture_not_public_visitor_producer; T2_visitor_WSS_UI_customer_VM_whole_suite_acceptance_UNRUN; arbitrary_same_tenant_assignment_candidate_read_permission_target_eligibility_and_trusted_BFF_to_Talk_handoff_UNDECIDED; existing_j_auth_profile_requires_member_manage_or_org_manage_not_talk_write",
+      "implementation": "implemented",
+      "verification": "actual_Node22_18_Node24_19_Auth_check18_node_tests30_Vitest_full74_10files_Talk_check4_PG15_registry1_GWA_check81_full_BFF194_15files_each_exit0_skip0; actual_minimal_candidate_id_username_same_tenant_active_effective_talk_write_without_member_or_org_grants_current_caller_and_target_disable_role_revocation_BFF_session401_guard_CSRF_manual_assignment_reassignment_single_assignee_distinct_original_recipient_occurrences_and_closed409_pass; forged_scope_session_tenant_expired_proof_and_concurrent_nonce_replay409_atomic_room_outbox_receipt_rollback_pass; immutable_exact_contracts0_1_2_fresh_consumer_integrity_and_private_existing_key_derived_product_env_pass; explicit_seed_rooms_not_public_visitor_producer; ten_second_distributed_validation_commit_race_documented; T2_formal_UI_VM_whole_suite_acceptance_UNRUN",
       "code": [
         "j-talk/apps/server/src/rooms.ts",
         "j-talk/apps/server/src/app.ts",
@@ -2618,7 +2620,22 @@
         "j-talk/docs/cloud-member-room-widget-2026-10-08.md",
         "j-talk/deploy/migrations/003-notifications.sql",
         "j-groupware/tests/bff/talk-notifications.integration.test.ts",
-        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md",
+        "j-auth/apps/server/src/app.ts",
+        "j-auth/apps/server/src/keycloak/members.ts",
+        "j-auth/apps/server/src/security/authorize.ts",
+        "j-auth/tests/integration/members.test.ts",
+        "j-talk/apps/server/src/assignment.ts",
+        "j-talk/deploy/migrations/004-assignment-receipts.sql",
+        "j-talk/packages/contracts/src/index.ts",
+        "j-talk/tests/server/assignment.test.ts",
+        "j-groupware/apps/server/src/talk-assignments.ts",
+        "j-groupware/apps/server/src/talk-routes.ts",
+        "j-groupware/tests/server/talk-assignments.test.ts",
+        "j-groupware/tests/bff/talk.integration.test.ts",
+        "j-groupware/deploy/agent/product-environment.mjs",
+        "j-groupware/tests/agent/products.integration.test.mjs",
+        "j-groupware/docs/cloud-contract-assignment-verification-2026-10-09.md"
       ]
     },
     {
@@ -3299,17 +3316,18 @@
     "j-web/docs/cloud-content-contract-verification-2026-10-09.md",
     "j-talk/docs/cloud-notification-contract-verification-2026-10-09.md",
     "j-groupware/docs/cloud-talk-notification-bff-2026-10-09.md",
-    "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md"
+    "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md",
+    "j-groupware/docs/cloud-contract-assignment-verification-2026-10-09.md"
   ],
   "pending_implementation": [
     "H7 Web public deployment/manual-file overwrite/version policy and subsequent Talk allowed-origin registration; T2 visitor/WSS and E8 mail envelope/outbox. Existing member/guest/mail/approval/Web BFF APIs are connected in bounded cloud coverage.",
     "G6/G15 formal member/organization/repair UI and Playwright; G16 formal approval UI and Playwright (actual BFF business API and snapshot already verified)",
     "G2/G9 canonical UI guidelines/sidebar/board UI; I2 formal theme/Playwright/brute-force acceptance",
     "Messenger formal UI/app product-path freezing and talk business WSS; actual messenger PG/BFF HTTP/client transport/WSS and approval notification delivery independently verified",
-    "G18 full OS bootstrap kit and remaining native Web/product installation, GW-65 complete teardown depends on GW-64 native wiring, G21 full kit/agent composition. Account removal/retained retry and prepared explicit notification binding are source-implemented; actual PID1 installation, operating credentials/topology, OS package/trust/config/timer/customer VM acceptance unrun.",
+    "G18 OS bootstrap kit/native lifecycle/retained teardown and G21 agent source connected (23rd batch), with TK-21 derived Talk assignment binding added (24th). Actual OS package/CA trust/systemd PID1/full native lifecycle/timer/firewall/customer VM acceptance unrun; operating credential/topology remains unapproved.",
     "G22 formal notification UI/Playwright and all product notification delivery acceptance; production source credential renewal/topology and worker/timer activation remain separate from verified short-lived credential file binding and explicit CLI",
     "Per-feature remaining audit: docs/cloud-remaining-feature-audit-2026-10-08.json; technical contracts and service predecessors remain implementable; E8/visitor ownership/template manual-file replacement choices and existing UI guideline answer remain gates",
-    "GW-51 business contract status enum/initial state/transitions/subscription effects and TK-21 minimal candidate-read permission/eligibility plus trusted BFF-to-Talk target handoff need explicit decisions; existing customer registration/authState and member:manage/org:manage APIs do not define them."
+    "GW-51 manual business contract and TK-21 current active talk:write candidate/trusted assignment source are implemented under explicit user approval. Formal UI/customer VM and T2 visitor production remain unrun; assignment validation-to-commit race is bounded by the ten-second proof lifetime."
   ],
-  "latest_bounded_verification_report": "j-groupware/docs/cloud-bootstrap-kit-verification-2026-10-09.md"
+  "latest_bounded_verification_report": "j-groupware/docs/cloud-contract-assignment-verification-2026-10-09.md"
 }

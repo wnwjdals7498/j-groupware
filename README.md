@@ -17,3 +17,5 @@ G23의 서비스별 token exchange·세션 cache·공통 내부 호출 함수도
 실제 WSS/SSE 연결의 다중 인스턴스 종료·세션 폐기·장애 처리는 [실시간 검증 기록](docs/cloud-realtime-verification-2026-10-08.md)을 따른다. 하위 peer 전송 검사를 실제 메신저 업무 인수로 표시하지 않으며 알림 수신/저장/필터는 후속이다.
 
 고객 서버용 [OS bootstrap kit·native 제품·agent 준비](deploy/agent/bootstrap-kit.md)를 연결했다. 정확한 offline package/Node/archive와 기존 private 입력을 검증하며 실제 OS 설치·PID1 기동·CA trust·timer 활성화는 후속 인수다. [23차 검증 기록](docs/cloud-bootstrap-kit-verification-2026-10-09.md)에 실행 결과와 미실행 경계를 구분한다.
+
+24차 사용자 승인 구현: 업무 계약 준비→유효→종료와 같은 테넌트 활성 `talk:write` 후보·수동 배정/재배정을 연결했다. Node 22/24의 Auth 74·Talk 15·Groupware 전체 BFF 194 및 단위 81개가 각각 통과했으며 소스 집계는 116/34/22다. [검증·남은 인수 경계](docs/cloud-contract-assignment-verification-2026-10-09.md)를 확인한다. 전체 서비스 인수는 미완료다.

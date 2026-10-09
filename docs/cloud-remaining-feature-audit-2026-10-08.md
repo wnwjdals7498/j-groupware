@@ -2,9 +2,9 @@
 
 기존 명세/결정과 실제 소스·실행 증거 대조. 각 기능의 첫 미완료 단계 기준이며 구현 완료·제품 인수 완료를 뜻하지 않는다. 기술 계약과 선행 서비스는 구현자가 계속할 수 있는 작업이며 사용자/외부 환경 차단으로 취급하지 않는다.
 
-현재 소스 기준: 구현 114, 부분 36, 미착수 22 / 총 172. 남은 58개. 전체 통합 인수: 미완료.
+현재 소스 기준: 구현 116, 부분 34, 미착수 22 / 총 172. 남은 56개. 전체 통합 인수: 미완료.
 
-남은58의 첫 다음 단계: 독립 소스0·서비스 선행0·제품 정책28·UI17·실제 VM13. 23차 GW-63/64/65/66의 독립 kit/native/agent/보존 소스를 연결했지만 실제 OS/PID1 인수 미실행으로 4개 모두 부분 구현을 유지한다. 집계114/36/22와 whole_suite_verified=false를 유지하며 분류 이동을 기능 완료로 계산하지 않는다.
+남은56의 첫 다음 단계: 독립 소스0·서비스 선행0·제품 정책26·UI17·실제 VM13. 24차에서 승인된 GW-51/TK-21 backend 소스 구현을 완료해 집계116/34/22로 갱신했다. 정식 UI/VM·T2 공개 visitor producer와 전체 통합 인수는 별도이며 whole_suite_verified=false다.
 
 | 분류 | 남은 수 |
 |---|---:|
@@ -12,7 +12,7 @@
 | 기술 계약 확정 선행 | 0 |
 | 서비스 구현 선행 | 0 |
 | UI 기준 선행 | 17 |
-| 제품 정책 결정 필요 | 28 |
+| 제품 정책 결정 필요 | 26 |
 | 외부 VM 인수 | 13 |
 | 현재 최소 범위 제외 | 0 |
 
@@ -38,7 +38,6 @@
 | GW-38 | j-groupware | 배포 후 허용 출처 등록 | 제품 정책 결정 필요 | not_started | 각 backend 완성 후 성공/후속 origin 실패를 분리한 BFF 연결을 구현한다. |
 | GW-40 | j-groupware | 알림 수신 API | 제품 정책 결정 필요 | partial | 운영 owner/갱신·key 회전·배치/전달 책임 확정 뒤 고정 CLI/실제 고객 설치와 연결한다. 새 영구 자격·grant·timer를 임의 도입하지 않는다. |
 | GW-44 | j-groupware | 알림 화면 | UI 기준 선행 | partial | 정식 UI와 기존 알림 계약을 연결한다. |
-| GW-51 | j-groupware | 고객 목록·계약 상태 | 제품 정책 결정 필요 | partial | 업무 계약 상태·초기값·전이/권한·구독 영향을 확정한 뒤 콘솔 PG/변경 API를 구현한다. |
 | GW-63 | j-groupware | 부트스트랩 | 외부 VM 인수 | partial | 신뢰한 실제 offline package와 dependency closure·기존 private 입력을 준비해 승인된 고객 VM에서 첫 bootstrap/CA trust/PG Compose/전체 인수를 실행한다. |
 | GW-64 | j-groupware | 서비스 설치 | 외부 VM 인수 | partial | 승인된 고객 VM의 기존 준비 입력으로 전체 native 설치·중지/재시도·gateway/방화벽 traffic 인수를 실행한다. 운영 owner·E8/H7 계약은 별도다. |
 | GW-65 | j-groupware | 서비스 해지 | 외부 VM 인수 | partial | 고객 VM에서 native 제품 전체 해지·실패/retry·PG/files/backup 보존과 gateway/account/env 순서 인수를 실행한다. 자동 purge는 하지 않는다. |
@@ -65,7 +64,6 @@
 | TK-12 | j-talk | 문의 메시지 보내기·받기 | 제품 정책 결정 필요 | not_started | T2 정책과 T4 인증 후 메시지 저장·방 생성·outbox를 구현한다. |
 | TK-13 | j-talk | 출처 검사 | 제품 정책 결정 필요 | partial | 방문자 WSS 인증 정책 확정 후 같은 Origin owner로 actual upgrade/denial을 연결한다. |
 | TK-14 | j-talk | 남용 제한 | 제품 정책 결정 필요 | partial | visitor issuer 뒤 visitor/IP rate limit을 구현하고 실제 429 경계를 검증한다. |
-| TK-21 | j-talk | 배정·재배정 | 제품 정책 결정 필요 | partial | 최소 후보 조회 권한·대상 자격/가용성·BFF가 검증한 대상의 Talk 전달 계약을 확정한 뒤 임의 담당자 배정/재배정을 구현한다. |
 | TK-22 | j-talk | 답장 | 제품 정책 결정 필요 | partial | outbox poller와 정책이 확정된 guest WSS/signed cursor 복구를 연결한다. |
 | TK-23 | j-talk | 종료 | 제품 정책 결정 필요 | partial | visitor 소유권 정책 뒤 종료 후 새 방 생성과 전체 lifecycle을 검증한다. |
 | TK-24 | j-talk | 실시간 전달 | 제품 정책 결정 필요 | partial | visitor 인증 운반 정책 뒤 typed outbox/WSS/signed cursor sync를 구현한다. |
@@ -79,7 +77,7 @@
 
 ## 독립 구현과 기능 완료의 경계
 
-23차 독립 OS kit·Web/Mailpit/notification native 제품·agent·보존 소스 연결을 마쳤다. 다음 실행은 실제 OS/PID1 고객 VM 또는 기존 정책/UI 결정이며, component fixture 성공을 전체 기능 인수로 계산하지 않는다.
+24차 사용자 승인에 따라 GW-51 업무 계약과 TK-21 최소 활성 후보·신뢰 전달·배정/재배정 소스를 마쳤다. 남은 첫 단계는 T2/E8/H7/운영 알림 정책과 기존 UI 기준·실제 고객 VM 인수이며 component 성공을 전체 인수로 계산하지 않는다.
 
 독립 소스의 첫 다음 단계 0개: .
 
@@ -98,8 +96,6 @@
 - 기존 UI 기준 질의의 응답(반복 질의하지 않음)
 - 실제 외부 인수 실행 시 격리 VM 대상과 권한
 - 운영 notification refresh 자격 소유자·key 회전·control-plane/customer 로컬 PG/private receiver 배치 계약
-- GW-51: 업무 계약 상태 enum·초기 상태·허용 전이·변경 권한 및 서비스 구독 영향. 고객 등록/authState와 구분한다.
-- TK-21: talk:write 담당자의 최소 같은-tenant 배정 후보 조회 권한·대상 자격/가용성 및 BFF 검증 대상의 Talk 전달 계약. 기존 member:manage/org:manage 권한을 임의 추가하지 않는다.
 
 ## E8 메일 envelope와 수신 전 누락
 
@@ -113,15 +109,15 @@ FS-U07의 현 최소 범위를 유지: webhook 수신 전 누락 허용, 수신�
 
 ## 실제 검증 범위
 
-[23차 실제 증거](cloud-bootstrap-kit-verification-2026-10-09.md): Node22.18/24.19 각각 check80·전체 BFF191/15files·agent27·native3·owned root storage7·Web prepare/SFTP/FTPS/retention4·fresh unpack/kit20·실제 gateway15·JWeb check6+helper1이 exit0/skip0다. 7개 실제 archive와 Node/npm을 묶은 kit, OS metadata-only Deb 및 inactive unit/agent 준비, Mailpit Compose 실제 동일 ID 생성/중지/재시도와 retained data, 실제 helper/group receipt/Web backup hash/drift를 검증했다. 0.0.1 Deb fixture는 설치하지 않았다. 실제 OS package/PG Compose PID1 첫 기동·CA trust·전체 native 제품 lifecycle/timer·firewall traffic·20GB 고객 VM 및 정식 UI는 미실행이다. 실패 로그/임시 파일을 보존하며 23차 full activation 성공을 주장하지 않는다.
+24차 Auth 전체74, Talk PG/HTTPS15·unit4·immutable registry1, GWA check81·전체 BFF194/15files(콘솔20·상담6·알림6 포함), 환경 생성 및 fresh bundle 테스트를 Node22.18/24.19에서 실제 실행해 각각 exit0·skip0를 확인했다. 초기 실패·Node26 diagnostic은 별도 보존·제외했으며 수정 후 성공 실행의 exit 파일을 근거로 삼는다. 실제 OS/PID1·UI/브라우저·고객 VM 인수는 실행하지 않았다. j-groupware/docs/cloud-contract-assignment-verification-2026-10-09.md
 
 작업 브랜치의 마지막 소스 커밋:
 
 - web_source_commit: `746c6b21c7b9534dd08de5e76d32e349b62e9531`
 - agent_source_commit: `894ddc1a2c81adbca9c9a6c1463506f5751f6ad0`
-- talk_source_commit: `ff6d4eb706ff366e0c3babb4c8726cfed1793581`
-- console_source_commit: `998a48abe1e66f2aefd88d28fa6adda07627107c`
-- talk_bff_source_commit: `95b4967a30012dfa7fbdcf20974e54c70d1606ff`
+- talk_source_commit: `41c6775c7cafc91090e9e1a93c56479367ab7ec9`
+- console_source_commit: `c3284e7bff6c87f34610cc37875d558004c0bd1b`
+- talk_bff_source_commit: `c3284e7bff6c87f34610cc37875d558004c0bd1b`
 - bundle_source_commit: `894ddc1a2c81adbca9c9a6c1463506f5751f6ad0`
 - bootstrap_source_commit: `894ddc1a2c81adbca9c9a6c1463506f5751f6ad0`
 - teardown_source_commit: `894ddc1a2c81adbca9c9a6c1463506f5751f6ad0`

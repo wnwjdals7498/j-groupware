@@ -24,7 +24,7 @@
     "contract": 0,
     "service": 0,
     "ui": 17,
-    "policy": 28,
+    "policy": 26,
     "vm": 13,
     "excluded": 0
   },
@@ -578,34 +578,6 @@
       "implementation": "partial",
       "verification": "actual_list_unread_and_idempotent_per_member_read_backend_pass; icon_click_navigation_formal_UI_Playwright_pending",
       "completion_boundary": "기존 UI 기준 응답 뒤 정식 화면/브라우저 인수",
-      "reviewed_date": "2026-10-09"
-    },
-    {
-      "id": "GW-51",
-      "name": "고객 목록·계약 상태",
-      "service": "j-groupware",
-      "baseline_implementation": "not_started",
-      "baseline_verification": "not_run",
-      "classification": "policy",
-      "classification_label": "제품 정책 결정 필요",
-      "external_or_user_gate": true,
-      "additional_dependencies": [],
-      "reason": "G7에는 업무 계약의 상태 enum·초기 상태·허용 전이·서비스 구독 영향이 정의돼 있지 않다. 기존 고객 조회/등록 및 authState를 업무 계약 상태로 대체할 수 없다.",
-      "next_step": "업무 계약 상태·초기값·전이/권한·구독 영향을 확정한 뒤 콘솔 PG/변경 API를 구현한다.",
-      "sources": [
-        "j-groupware/docs/implementation-progress.json",
-        "j-groupware/docs/decisions.md",
-        "j-groupware/docs/suite-feature-specifications.md",
-        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
-        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md"
-      ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false,
-      "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_console_16_each_exit0_skip0; customer_list_detail_safe_projection_customer_read_cached_session_role_fixture_pass; business_contract_state_enum_mutation_and_formal_UI_not_implemented; spec_review_G7_business_contract_status_enum_initial_state_transition_subscription_effect_UNDECIDED_not_registration_authState",
-      "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_console_16_each_exit0_skip0; customer_list_detail_safe_projection_customer_read_cached_session_role_fixture_pass; business_contract_state_enum_mutation_and_formal_UI_not_implemented; spec_review_G7_business_contract_status_enum_initial_state_transition_subscription_effect_UNDECIDED_not_registration_authState",
-      "completion_boundary": "독립 소스 기여와 전체 기능 완료를 구별; 첫 다음 단계는 제품 정책 결정 필요",
       "reviewed_date": "2026-10-09"
     },
     {
@@ -1343,34 +1315,6 @@
       "reviewed_date": "2026-10-09"
     },
     {
-      "id": "TK-21",
-      "name": "배정·재배정",
-      "service": "j-talk",
-      "baseline_implementation": "not_started",
-      "baseline_verification": "not_run",
-      "classification": "policy",
-      "classification_label": "제품 정책 결정 필요",
-      "external_or_user_gate": true,
-      "additional_dependencies": [],
-      "reason": "자기 배정 occurrence·원래 대상 알림은 구현·검증했다. 기존 j-auth profile은 member:manage/org:manage를 요구해 talk:write의 다른 배정 후보 조회·검증을 허용하지 않는다. S7상 Talk의 직접 조회/다른 DB 접근도 대안이 아니다.",
-      "next_step": "최소 후보 조회 권한·대상 자격/가용성·BFF가 검증한 대상의 Talk 전달 계약을 확정한 뒤 임의 담당자 배정/재배정을 구현한다.",
-      "sources": [
-        "j-groupware/docs/implementation-progress.json",
-        "j-talk/docs/decisions.md",
-        "j-talk/docs/feature-specifications.md",
-        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
-        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md"
-      ],
-      "implemented_in_this_batch": true,
-      "acceptance_complete": false,
-      "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_Talk_check2_registry1_PG_integration14_each_exit0_skip0; actual_G22_BFF_occurrence_delivery6_each_in_full191_15files_exit0_skip0; new_room_transaction_trigger_and_assignment_original_recipient_distinct_UUID_atomic_rollback_receiver_restart_ACK_failure_dedup_multi_sender_lease_compiled_main_SIGKILL_actual20sec_expiry_SSE_pass; room_seed_is_explicit_PG_fixture_not_public_visitor_producer; T2_visitor_WSS_UI_customer_VM_whole_suite_acceptance_UNRUN; arbitrary_same_tenant_assignment_candidate_read_permission_target_eligibility_and_trusted_BFF_to_Talk_handoff_UNDECIDED; existing_j_auth_profile_requires_member_manage_or_org_manage_not_talk_write",
-      "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_Talk_check2_registry1_PG_integration14_each_exit0_skip0; actual_G22_BFF_occurrence_delivery6_each_in_full191_15files_exit0_skip0; new_room_transaction_trigger_and_assignment_original_recipient_distinct_UUID_atomic_rollback_receiver_restart_ACK_failure_dedup_multi_sender_lease_compiled_main_SIGKILL_actual20sec_expiry_SSE_pass; room_seed_is_explicit_PG_fixture_not_public_visitor_producer; T2_visitor_WSS_UI_customer_VM_whole_suite_acceptance_UNRUN; arbitrary_same_tenant_assignment_candidate_read_permission_target_eligibility_and_trusted_BFF_to_Talk_handoff_UNDECIDED; existing_j_auth_profile_requires_member_manage_or_org_manage_not_talk_write",
-      "completion_boundary": "독립 소스 기여와 전체 기능 완료를 구별; 첫 다음 단계는 제품 정책 결정 필요",
-      "reviewed_date": "2026-10-09"
-    },
-    {
       "id": "TK-22",
       "name": "답장",
       "service": "j-talk",
@@ -1674,26 +1618,24 @@
     "H7: 수동 SFTP/FTPS 파일과 template 재배포의 보존·교체 경계",
     "기존 UI 기준 질의의 응답(반복 질의하지 않음)",
     "실제 외부 인수 실행 시 격리 VM 대상과 권한",
-    "운영 notification refresh 자격 소유자·key 회전·control-plane/customer 로컬 PG/private receiver 배치 계약",
-    "GW-51: 업무 계약 상태 enum·초기 상태·허용 전이·변경 권한 및 서비스 구독 영향. 고객 등록/authState와 구분한다.",
-    "TK-21: talk:write 담당자의 최소 같은-tenant 배정 후보 조회 권한·대상 자격/가용성 및 BFF 검증 대상의 Talk 전달 계약. 기존 member:manage/org:manage 권한을 임의 추가하지 않는다."
+    "운영 notification refresh 자격 소유자·key 회전·control-plane/customer 로컬 PG/private receiver 배치 계약"
   ],
   "next_independent_batches": [
     "승인된 고객 VM: 실제 trusted package/dependency closure·OS CA trust·PG Compose/PID1/full kit/native 전체 lifecycle·agent timer/firewall/20GB 인수",
-    "GW-51/TK-21/GW-40/TK-41/E8/H7: 기존 업무 상태·배정 후보 권한/전달·운영 owner/topology·T2/메일 envelope/재배포 보존 정책 결정 뒤 남은 source 구현",
+    "GW-40/TK-41/E8/H7: 기존 운영 owner/topology·T2/메일 envelope/재배포 보존 정책 결정 뒤 남은 source 구현",
     "기존 UI 기준 응답 뒤 정식 UI/Playwright 인수; 기존 질의 반복 없음"
   ],
   "current_progress": {
-    "implemented": 114,
-    "partial": 36,
+    "implemented": 116,
+    "partial": 34,
     "not_started": 22,
     "total": 172,
-    "remaining": 58,
+    "remaining": 56,
     "web_source_commit": "746c6b21c7b9534dd08de5e76d32e349b62e9531",
-    "talk_source_commit": "ff6d4eb706ff366e0c3babb4c8726cfed1793581",
+    "talk_source_commit": "41c6775c7cafc91090e9e1a93c56479367ab7ec9",
     "agent_source_commit": "894ddc1a2c81adbca9c9a6c1463506f5751f6ad0",
-    "console_source_commit": "998a48abe1e66f2aefd88d28fa6adda07627107c",
-    "talk_bff_source_commit": "95b4967a30012dfa7fbdcf20974e54c70d1606ff",
+    "console_source_commit": "c3284e7bff6c87f34610cc37875d558004c0bd1b",
+    "talk_bff_source_commit": "c3284e7bff6c87f34610cc37875d558004c0bd1b",
     "bundle_source_commit": "894ddc1a2c81adbca9c9a6c1463506f5751f6ad0",
     "bootstrap_source_commit": "894ddc1a2c81adbca9c9a6c1463506f5751f6ad0",
     "teardown_source_commit": "894ddc1a2c81adbca9c9a6c1463506f5751f6ad0",
@@ -1708,7 +1650,9 @@
     "native_storage_source_commit": "894ddc1a2c81adbca9c9a6c1463506f5751f6ad0",
     "mail_capture_contracts_source_commit": "92809bc96ca75e1ccfd552f7247d989f6e8f28a2",
     "web_bff_source_commit": "6b33637c096414c6031067ba168616aeb0e35b83",
-    "native_kit_source_commit": "894ddc1a2c81adbca9c9a6c1463506f5751f6ad0"
+    "native_kit_source_commit": "894ddc1a2c81adbca9c9a6c1463506f5751f6ad0",
+    "auth_assignment_source_commit": "ac59428ca612bd89b82059830bcca26f79f584d5",
+    "assignment_source_commit": "c3284e7bff6c87f34610cc37875d558004c0bd1b"
   },
   "completed_since_baseline": [
     {
@@ -2932,6 +2876,85 @@
       "verification": "actual_Node22_18_Node24_19_Talk_check2_registry1_PG_integration14_each_exit0_skip0; actual_G22_BFF_occurrence_delivery6_each_in_full191_15files_exit0_skip0; new_room_transaction_trigger_and_assignment_original_recipient_distinct_UUID_atomic_rollback_receiver_restart_ACK_failure_dedup_multi_sender_lease_compiled_main_SIGKILL_actual20sec_expiry_SSE_pass; room_seed_is_explicit_PG_fixture_not_public_visitor_producer; T2_visitor_WSS_UI_customer_VM_whole_suite_acceptance_UNRUN",
       "completion_boundary": "독립 backend 알림 송신 source 완료; T2 producer와 UI/VM 전체 인수 미완료",
       "reviewed_date": "2026-10-09"
+    },
+    {
+      "id": "GW-51",
+      "name": "고객 목록·계약 상태",
+      "service": "j-groupware",
+      "baseline_implementation": "not_started",
+      "baseline_verification": "not_run",
+      "classification": "ready",
+      "classification_label": "구현 가능",
+      "external_or_user_gate": false,
+      "additional_dependencies": [],
+      "reason": "2026-10-09 명시 승인된 정책에 따라 backend 소스와 실제 Auth/PG/HTTPS/BFF 경계를 구현·검증했다.",
+      "next_step": "소스 구현 완료; 정식 UI·고객 VM·전체 인수는 별도다.",
+      "sources": [
+        "j-groupware/docs/implementation-progress.json",
+        "j-groupware/docs/decisions.md",
+        "j-groupware/docs/suite-feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md",
+        "j-groupware/apps/console-server/src/customers.ts",
+        "j-groupware/apps/console-server/src/customer-routes.ts",
+        "j-groupware/deploy/console-migrations/003-business-contract.sql",
+        "j-groupware/tests/bff/console.integration.test.ts",
+        "j-groupware/docs/cloud-contract-assignment-verification-2026-10-09.md"
+      ],
+      "implemented_in_this_batch": true,
+      "acceptance_complete": false,
+      "current_implementation": "implemented",
+      "current_verification": "actual_Node22_18_Node24_19_GWA_check81_full_BFF194_15files_each_exit0_skip0_console20_included; actual_operator_Code_PKCE_customer_read_write_CSRF_PG_prepared_active_ended_forward_transition_current_revision_idempotence_stale_concurrent409_one_connection10_requests_safe_snapshot_and_subscription_independence_pass; formal_console_UI_Playwright_customer_VM_whole_suite_acceptance_UNRUN",
+      "implementation": "implemented",
+      "verification": "actual_Node22_18_Node24_19_GWA_check81_full_BFF194_15files_each_exit0_skip0_console20_included; actual_operator_Code_PKCE_customer_read_write_CSRF_PG_prepared_active_ended_forward_transition_current_revision_idempotence_stale_concurrent409_one_connection10_requests_safe_snapshot_and_subscription_independence_pass; formal_console_UI_Playwright_customer_VM_whole_suite_acceptance_UNRUN",
+      "completion_boundary": "승인된 backend source 완료; whole_suite_verified=false 및 UI/VM 미실행",
+      "reviewed_date": "2026-10-09"
+    },
+    {
+      "id": "TK-21",
+      "name": "배정·재배정",
+      "service": "j-talk",
+      "baseline_implementation": "not_started",
+      "baseline_verification": "not_run",
+      "classification": "ready",
+      "classification_label": "구현 가능",
+      "external_or_user_gate": false,
+      "additional_dependencies": [],
+      "reason": "2026-10-09 명시 승인된 정책에 따라 backend 소스와 실제 Auth/PG/HTTPS/BFF 경계를 구현·검증했다.",
+      "next_step": "소스 구현 완료; 정식 UI·고객 VM·전체 인수는 별도다.",
+      "sources": [
+        "j-groupware/docs/implementation-progress.json",
+        "j-talk/docs/decisions.md",
+        "j-talk/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md",
+        "j-auth/apps/server/src/app.ts",
+        "j-auth/apps/server/src/keycloak/members.ts",
+        "j-auth/apps/server/src/security/authorize.ts",
+        "j-auth/tests/integration/members.test.ts",
+        "j-talk/apps/server/src/assignment.ts",
+        "j-talk/apps/server/src/rooms.ts",
+        "j-talk/deploy/migrations/004-assignment-receipts.sql",
+        "j-talk/packages/contracts/src/index.ts",
+        "j-talk/tests/server/assignment.test.ts",
+        "j-talk/tests/integration/rooms.integration.test.ts",
+        "j-groupware/apps/server/src/talk-assignments.ts",
+        "j-groupware/apps/server/src/talk-routes.ts",
+        "j-groupware/tests/server/talk-assignments.test.ts",
+        "j-groupware/tests/bff/talk.integration.test.ts",
+        "j-groupware/tests/bff/talk-notifications.integration.test.ts",
+        "j-groupware/deploy/agent/product-environment.mjs",
+        "j-groupware/tests/agent/products.integration.test.mjs",
+        "j-groupware/docs/cloud-contract-assignment-verification-2026-10-09.md"
+      ],
+      "implemented_in_this_batch": true,
+      "acceptance_complete": false,
+      "current_implementation": "implemented",
+      "current_verification": "actual_Node22_18_Node24_19_Auth_check18_node_tests30_Vitest_full74_10files_Talk_check4_PG15_registry1_GWA_check81_full_BFF194_15files_each_exit0_skip0; actual_minimal_candidate_id_username_same_tenant_active_effective_talk_write_without_member_or_org_grants_current_caller_and_target_disable_role_revocation_BFF_session401_guard_CSRF_manual_assignment_reassignment_single_assignee_distinct_original_recipient_occurrences_and_closed409_pass; forged_scope_session_tenant_expired_proof_and_concurrent_nonce_replay409_atomic_room_outbox_receipt_rollback_pass; immutable_exact_contracts0_1_2_fresh_consumer_integrity_and_private_existing_key_derived_product_env_pass; explicit_seed_rooms_not_public_visitor_producer; ten_second_distributed_validation_commit_race_documented; T2_formal_UI_VM_whole_suite_acceptance_UNRUN",
+      "implementation": "implemented",
+      "verification": "actual_Node22_18_Node24_19_Auth_check18_node_tests30_Vitest_full74_10files_Talk_check4_PG15_registry1_GWA_check81_full_BFF194_15files_each_exit0_skip0; actual_minimal_candidate_id_username_same_tenant_active_effective_talk_write_without_member_or_org_grants_current_caller_and_target_disable_role_revocation_BFF_session401_guard_CSRF_manual_assignment_reassignment_single_assignee_distinct_original_recipient_occurrences_and_closed409_pass; forged_scope_session_tenant_expired_proof_and_concurrent_nonce_replay409_atomic_room_outbox_receipt_rollback_pass; immutable_exact_contracts0_1_2_fresh_consumer_integrity_and_private_existing_key_derived_product_env_pass; explicit_seed_rooms_not_public_visitor_producer; ten_second_distributed_validation_commit_race_documented; T2_formal_UI_VM_whole_suite_acceptance_UNRUN",
+      "completion_boundary": "승인된 backend source 완료; whole_suite_verified=false 및 UI/VM 미실행",
+      "reviewed_date": "2026-10-09"
     }
   ],
   "checkpoints": [
@@ -2958,6 +2981,15 @@
       "not_started": 22,
       "remaining": 58,
       "ready": 3,
+      "whole_suite_verified": false
+    },
+    {
+      "source_commit": "c3284e7bff6c87f34610cc37875d558004c0bd1b",
+      "implemented": 116,
+      "partial": 34,
+      "not_started": 22,
+      "remaining": 56,
+      "ready": 0,
       "whole_suite_verified": false
     }
   ],
@@ -2996,13 +3028,13 @@
     ],
     "reclassification_does_not_mean_complete": true
   },
-  "continueable_work_note": "남은58의 첫 다음 단계: 독립 소스0·서비스 선행0·제품 정책28·UI17·실제 VM13. 23차 GW-63/64/65/66의 독립 kit/native/agent/보존 소스를 연결했지만 실제 OS/PID1 인수 미실행으로 4개 모두 부분 구현을 유지한다. 집계114/36/22와 whole_suite_verified=false를 유지하며 분류 이동을 기능 완료로 계산하지 않는다.",
-  "verification_summary": "[23차 실제 증거](cloud-bootstrap-kit-verification-2026-10-09.md): Node22.18/24.19 각각 check80·전체 BFF191/15files·agent27·native3·owned root storage7·Web prepare/SFTP/FTPS/retention4·fresh unpack/kit20·실제 gateway15·JWeb check6+helper1이 exit0/skip0다. 7개 실제 archive와 Node/npm을 묶은 kit, OS metadata-only Deb 및 inactive unit/agent 준비, Mailpit Compose 실제 동일 ID 생성/중지/재시도와 retained data, 실제 helper/group receipt/Web backup hash/drift를 검증했다. 0.0.1 Deb fixture는 설치하지 않았다. 실제 OS package/PG Compose PID1 첫 기동·CA trust·전체 native 제품 lifecycle/timer·firewall traffic·20GB 고객 VM 및 정식 UI는 미실행이다. 실패 로그/임시 파일을 보존하며 23차 full activation 성공을 주장하지 않는다.",
+  "continueable_work_note": "남은56의 첫 다음 단계: 독립 소스0·서비스 선행0·제품 정책26·UI17·실제 VM13. 24차에서 승인된 GW-51/TK-21 backend 소스 구현을 완료해 집계116/34/22로 갱신했다. 정식 UI/VM·T2 공개 visitor producer와 전체 통합 인수는 별도이며 whole_suite_verified=false다.",
+  "verification_summary": "24차 Auth 전체74, Talk PG/HTTPS15·unit4·immutable registry1, GWA check81·전체 BFF194/15files(콘솔20·상담6·알림6 포함), 환경 생성 및 fresh bundle 테스트를 Node22.18/24.19에서 실제 실행해 각각 exit0·skip0를 확인했다. 초기 실패·Node26 diagnostic은 별도 보존·제외했으며 수정 후 성공 실행의 exit 파일을 근거로 삼는다. 실제 OS/PID1·UI/브라우저·고객 VM 인수는 실행하지 않았다. j-groupware/docs/cloud-contract-assignment-verification-2026-10-09.md",
   "reviewed_date": "2026-10-09",
   "next_independent_batch": {
     "ids": [],
     "bounded_recommendation": [],
-    "boundary": "23차 독립 OS kit·Web/Mailpit/notification native 제품·agent·보존 소스 연결을 마쳤다. 다음 실행은 실제 OS/PID1 고객 VM 또는 기존 정책/UI 결정이며, component fixture 성공을 전체 기능 인수로 계산하지 않는다."
+    "boundary": "24차 사용자 승인에 따라 GW-51 업무 계약과 TK-21 최소 활성 후보·신뢰 전달·배정/재배정 소스를 마쳤다. 남은 첫 단계는 T2/E8/H7/운영 알림 정책과 기존 UI 기준·실제 고객 VM 인수이며 component 성공을 전체 인수로 계산하지 않는다."
   },
   "operating_notification_contract": [
     "기존 GET /auth/tenants/<tenant>/services는 실제 operator Bearer와 console serviceKey를 요구한다. supplier 파일은 mode600, access exp<=15분·만료5초전 거절이며 j-auth가 signature/issuer/audience/role/key를 검증한다.",
