@@ -1,0 +1,549 @@
+{
+  "date": "2026-10-09",
+  "task": 27,
+  "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+  "source_push_verification": {
+    "branch": "codex/cloud-auth-foundation-20261008",
+    "authorized_existing_branch_push": true,
+    "git_remote_ref_sha": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+    "github_commit_api_sha": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+    "pull_request_merge_deploy_executed": false
+  },
+  "source_commits": {
+    "j-auth": "93375df96a1bce319df12eb62a2b9a586e82ae1d",
+    "j-groupware": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+    "j-messenger": "632c0911bac8d3ec5394f8adb4e2de544e3af425",
+    "j-talk": "f625f1ac12a1dd86f7f019c675c98593e63c5ca8",
+    "j-mail": "abd8526502a68f8d93341e02a35ac54e7b97c45d",
+    "j-customer-auth-db": "98e013dd83eaef9067a3dcba7be99cb09ac8c429",
+    "j-approval": "a29271fbc583e274b313103105b64d661b1a7afe",
+    "j-web": "dc8b5d57f0ac744b83a13453382966bb79add738"
+  },
+  "cloud_only": true,
+  "whole_suite_verified": false,
+  "acceptance_complete": false,
+  "log_root": "/workspace/.suite-runtime/j-groupware",
+  "fixture_web_image": "jweb-isolated-hosting:task26-75402e1",
+  "fixture_web_image_id": "sha256:cd6c616e3ced2d3e475f01cf0a57c8efb7a9ec06e74ed57d308e7659a2c655f1",
+  "executed_successful_runs": [
+    {
+      "kind": "check",
+      "repository": "j-groupware",
+      "node": "v22.18.0",
+      "exit_code": 0,
+      "passed": 86,
+      "failed": 0,
+      "skipped": 0,
+      "test_files": 9,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-check22-r4.log",
+      "log_sha256": "68869a90ef0f2166a3d01ae082e9032d03e463510958e6ef8b2325c274a168e0",
+      "exit_file": "/workspace/.suite-runtime/j-groupware/task27-check22-r4.exit",
+      "raw_log_committed": false,
+      "command": [
+        "npm",
+        "run",
+        "check"
+      ],
+      "cwd": "/workspace/j-groupware"
+    },
+    {
+      "kind": "bff",
+      "repository": "j-groupware",
+      "node": "v22.18.0",
+      "exit_code": 0,
+      "passed": 209,
+      "failed": 0,
+      "skipped": 0,
+      "test_files": 16,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-bff22-r3.log",
+      "log_sha256": "a99e1310461801c67c7ae4764f4f5a3b31582735bec71a41f4e48f01ac947b6f",
+      "exit_file": "/workspace/.suite-runtime/j-groupware/task27-bff22-r3.exit",
+      "raw_log_committed": false,
+      "command": [
+        "npm",
+        "run",
+        "test:integration"
+      ],
+      "cwd": "/workspace/j-groupware"
+    },
+    {
+      "kind": "agent",
+      "repository": "j-groupware",
+      "node": "v22.18.0",
+      "exit_code": 0,
+      "passed": 38,
+      "failed": 0,
+      "skipped": 0,
+      "test_files": null,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-agent22-r2.log",
+      "log_sha256": "dc8911e4d3779ba6bb09d154432c0468e164917c7f5a86a3afdfc7ddb6ca2bab",
+      "exit_file": "/workspace/.suite-runtime/j-groupware/task27-agent22-r2.exit",
+      "raw_log_committed": false,
+      "command": [
+        "npm",
+        "run",
+        "test:agent"
+      ],
+      "cwd": "/workspace/j-groupware"
+    },
+    {
+      "kind": "native_guards",
+      "repository": "j-groupware",
+      "node": "v22.18.0",
+      "exit_code": 0,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "test_files": null,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-native22.log",
+      "log_sha256": "d15e0524267739f3ba6b93210903d13cb374b5662b3f8d475a85f0eb1d4558fc",
+      "exit_file": "/workspace/.suite-runtime/j-groupware/task27-native22.exit",
+      "raw_log_committed": false,
+      "command": [
+        "npm",
+        "run",
+        "test:agent:native"
+      ],
+      "cwd": "/workspace/j-groupware"
+    },
+    {
+      "kind": "products",
+      "repository": "j-groupware",
+      "node": "v22.18.0",
+      "exit_code": 0,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "test_files": null,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-products22.log",
+      "log_sha256": "b119c98a0ecfbc7fb71083da063af4d53ee6888d5e9405e228663a4800c1facc",
+      "exit_file": "/workspace/.suite-runtime/j-groupware/task27-products22.exit",
+      "raw_log_committed": false,
+      "command": [
+        "npm",
+        "run",
+        "test:agent:products"
+      ],
+      "cwd": "/workspace/j-groupware"
+    },
+    {
+      "kind": "storage",
+      "repository": "j-groupware",
+      "node": "v22.18.0",
+      "exit_code": 0,
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0,
+      "test_files": null,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-storage22-r2.log",
+      "log_sha256": "5376a53990e8200648a06808f185ef67817fda50844aa72c0d095edb78b2db9e",
+      "exit_file": "/workspace/.suite-runtime/j-groupware/task27-storage22-r2.exit",
+      "raw_log_committed": false,
+      "command": [
+        "npm",
+        "run",
+        "test:agent:storage"
+      ],
+      "cwd": "/workspace/j-groupware"
+    },
+    {
+      "kind": "fresh_unpack",
+      "repository": "j-groupware",
+      "node": "v22.18.0",
+      "exit_code": 0,
+      "passed": 20,
+      "failed": 0,
+      "skipped": 0,
+      "test_files": null,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-unpack22-r2.log",
+      "log_sha256": "9896eefeeaa7de83ce0fca5adb2665b982842a2aa193b618645cf36928042721",
+      "exit_file": "/workspace/.suite-runtime/j-groupware/task27-unpack22-r2.exit",
+      "raw_log_committed": false,
+      "command": [
+        "npm",
+        "run",
+        "test:agent:unpack"
+      ],
+      "cwd": "/workspace/j-groupware"
+    },
+    {
+      "kind": "shared_ui_browser",
+      "repository": "j-groupware",
+      "node": "v22.18.0",
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "test_files": null,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-ui-components22.log",
+      "log_sha256": "14edcef5bac7819ed864cc5eaa6856ee5b90aca90c3db0d7b329227cdfbfbfd7",
+      "exit_file": "/workspace/.suite-runtime/j-groupware/task27-ui-components22.exit",
+      "raw_log_committed": false,
+      "command": [
+        "npm",
+        "run",
+        "test:ui"
+      ],
+      "cwd": "/workspace/j-groupware"
+    },
+    {
+      "kind": "talk_integration",
+      "repository": "j-talk",
+      "node": "v22.18.0",
+      "exit_code": 0,
+      "passed": 25,
+      "failed": 0,
+      "skipped": 0,
+      "test_files": 4,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-talk-integration22.log",
+      "log_sha256": "c4337c11eee83185f1c6cd6de092a1ffc9fd712a9b911a54f3de9be82c311cec",
+      "exit_file": "/workspace/.suite-runtime/j-groupware/task27-talk-integration22.exit",
+      "raw_log_committed": false,
+      "command": [
+        "npm",
+        "run",
+        "test:integration"
+      ],
+      "cwd": "/workspace/j-talk"
+    },
+    {
+      "kind": "web_integration",
+      "repository": "j-web",
+      "node": "v22.18.0",
+      "exit_code": 0,
+      "passed": 15,
+      "failed": 0,
+      "skipped": 0,
+      "test_files": 2,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-web-integration22.log",
+      "log_sha256": "283ea905d4971f5afaa70ce45bf79fd9ed5b38b7bf5dda4f852500ee1bee73d5",
+      "exit_file": "/workspace/.suite-runtime/j-groupware/task27-web-integration22.exit",
+      "raw_log_committed": false,
+      "command": [
+        "npm",
+        "run",
+        "test:integration"
+      ],
+      "cwd": "/workspace/j-web"
+    },
+    {
+      "kind": "check",
+      "repository": "j-groupware",
+      "node": "v24.19.0",
+      "exit_code": 0,
+      "passed": 86,
+      "failed": 0,
+      "skipped": 0,
+      "test_files": 9,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-check24-r2.log",
+      "log_sha256": "bda2c2fc4887899c80389728e1f44efa23a4bfade256fa606eb048259a6bdcd2",
+      "exit_file": "/workspace/.suite-runtime/j-groupware/task27-check24-r2.exit",
+      "raw_log_committed": false,
+      "command": [
+        "npm",
+        "run",
+        "check"
+      ],
+      "cwd": "/workspace/j-groupware"
+    },
+    {
+      "kind": "bff",
+      "repository": "j-groupware",
+      "node": "v24.19.0",
+      "exit_code": 0,
+      "passed": 209,
+      "failed": 0,
+      "skipped": 0,
+      "test_files": 16,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-bff24-r2.log",
+      "log_sha256": "1964f88efc01cc2f82cf1112b397f68a256fd85440b7bb6352b23b27753671f1",
+      "exit_file": "/workspace/.suite-runtime/j-groupware/task27-bff24-r2.exit",
+      "raw_log_committed": false,
+      "command": [
+        "npm",
+        "run",
+        "test:integration"
+      ],
+      "cwd": "/workspace/j-groupware"
+    },
+    {
+      "kind": "agent",
+      "repository": "j-groupware",
+      "node": "v24.19.0",
+      "exit_code": 0,
+      "passed": 38,
+      "failed": 0,
+      "skipped": 0,
+      "test_files": null,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-agent24.log",
+      "log_sha256": "920fdaeae66816a735527a75e21533c40c2ce14d21a474d040ab1e5c1b904b26",
+      "exit_file": "/workspace/.suite-runtime/j-groupware/task27-agent24.exit",
+      "raw_log_committed": false,
+      "command": [
+        "npm",
+        "run",
+        "test:agent"
+      ],
+      "cwd": "/workspace/j-groupware"
+    },
+    {
+      "kind": "native_guards",
+      "repository": "j-groupware",
+      "node": "v24.19.0",
+      "exit_code": 0,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "test_files": null,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-native24.log",
+      "log_sha256": "b0eb515000a696b067c1fd7124a094d6e8608ea1a90fe8382ad0d8943efe18fc",
+      "exit_file": "/workspace/.suite-runtime/j-groupware/task27-native24.exit",
+      "raw_log_committed": false,
+      "command": [
+        "npm",
+        "run",
+        "test:agent:native"
+      ],
+      "cwd": "/workspace/j-groupware"
+    },
+    {
+      "kind": "products",
+      "repository": "j-groupware",
+      "node": "v24.19.0",
+      "exit_code": 0,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "test_files": null,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-products24.log",
+      "log_sha256": "5e9caa8d07b0769c63cf10ef169a8f28e37b885d96db438a7cb3cb0b7e97d6c7",
+      "exit_file": "/workspace/.suite-runtime/j-groupware/task27-products24.exit",
+      "raw_log_committed": false,
+      "command": [
+        "npm",
+        "run",
+        "test:agent:products"
+      ],
+      "cwd": "/workspace/j-groupware"
+    },
+    {
+      "kind": "storage",
+      "repository": "j-groupware",
+      "node": "v24.19.0",
+      "exit_code": 0,
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0,
+      "test_files": null,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-storage24.log",
+      "log_sha256": "fbf3948006131897e39a820b319d13c22e28be20c340c7c268f15bd86fa0cb8d",
+      "exit_file": "/workspace/.suite-runtime/j-groupware/task27-storage24.exit",
+      "raw_log_committed": false,
+      "command": [
+        "npm",
+        "run",
+        "test:agent:storage"
+      ],
+      "cwd": "/workspace/j-groupware"
+    },
+    {
+      "kind": "fresh_unpack",
+      "repository": "j-groupware",
+      "node": "v24.19.0",
+      "exit_code": 0,
+      "passed": 20,
+      "failed": 0,
+      "skipped": 0,
+      "test_files": null,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-unpack24.log",
+      "log_sha256": "8aa6ccc16d58892c7f967bd1ecc7649e0779de8b566abc6f602d7828c42f2d2e",
+      "exit_file": "/workspace/.suite-runtime/j-groupware/task27-unpack24.exit",
+      "raw_log_committed": false,
+      "command": [
+        "npm",
+        "run",
+        "test:agent:unpack"
+      ],
+      "cwd": "/workspace/j-groupware"
+    },
+    {
+      "kind": "shared_ui_browser",
+      "repository": "j-groupware",
+      "node": "v24.19.0",
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "test_files": null,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-ui-components24.log",
+      "log_sha256": "ce7cb166c8007a62df0d25c1952298a1eb6b89db6a789911632708fcd74f0606",
+      "exit_file": "/workspace/.suite-runtime/j-groupware/task27-ui-components24.exit",
+      "raw_log_committed": false,
+      "command": [
+        "npm",
+        "run",
+        "test:ui"
+      ],
+      "cwd": "/workspace/j-groupware"
+    },
+    {
+      "kind": "talk_integration",
+      "repository": "j-talk",
+      "node": "v24.19.0",
+      "exit_code": 0,
+      "passed": 25,
+      "failed": 0,
+      "skipped": 0,
+      "test_files": 4,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-talk-integration24.log",
+      "log_sha256": "227f13c7bfcbb42f1275f942edf19e9b361c2b5d2f55226670aacf594dbac878",
+      "exit_file": "/workspace/.suite-runtime/j-groupware/task27-talk-integration24.exit",
+      "raw_log_committed": false,
+      "command": [
+        "npm",
+        "run",
+        "test:integration"
+      ],
+      "cwd": "/workspace/j-talk"
+    },
+    {
+      "kind": "web_integration",
+      "repository": "j-web",
+      "node": "v24.19.0",
+      "exit_code": 0,
+      "passed": 15,
+      "failed": 0,
+      "skipped": 0,
+      "test_files": 2,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-web-integration24.log",
+      "log_sha256": "b483ced21dbbb343e612247651330796c7e94704b4cac7b8c2250b7d7ebaa7bd",
+      "exit_file": "/workspace/.suite-runtime/j-groupware/task27-web-integration24.exit",
+      "raw_log_committed": false,
+      "command": [
+        "npm",
+        "run",
+        "test:integration"
+      ],
+      "cwd": "/workspace/j-web"
+    }
+  ],
+  "failed_runs_excluded": [
+    {
+      "name": "task27-bff22-r2",
+      "exit_code": 1,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-bff22-r2.log",
+      "log_sha256": "fde13a4eb766abc305e39f33ef2008ab4f344ea2285bb22ccaf64146a5c70b95",
+      "counted_as_pass": false,
+      "raw_log_committed": false,
+      "note": "새 부분 실패·복구 시험이 존재하지 않는 새로고침 버튼을 찾음. 현재 목록 확인 버튼으로 수정 뒤 실제 PG 실패/복구 포함 전체209 성공."
+    },
+    {
+      "name": "task27-bff22",
+      "exit_code": 1,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-bff22.log",
+      "log_sha256": "4b932b9cd03be0ff7be2170adbe49ce701adfb93300cc4a8390901579573f332",
+      "counted_as_pass": false,
+      "raw_log_committed": false,
+      "note": "초기 고객 UI 메신저 socket factory·웹 편집 reload race 및 상담 browser wait 문제. 소스/시험 수정 뒤 전체209 최종 재실행 성공."
+    },
+    {
+      "name": "task27-bff24",
+      "exit_code": 1,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-bff24.log",
+      "log_sha256": "29cc85f98c24a4fd344fd7d1258c9b895b03148b2fe4ffd0d4d5d7dff6a4246e",
+      "counted_as_pass": false,
+      "raw_log_committed": false,
+      "note": "compiled Approval fixture startup 실패: 198 pass·11 skip·1 suite fail. 실패 원인 미확정. 비밀값 없는 phase/code 진단 추가 뒤 별도11 및 전체209 재실행 성공. 첫 실패는 통과에서 제외.",
+      "passed": 198,
+      "skipped": 11,
+      "failed_suites": 1,
+      "startup_cause_confirmed": false
+    },
+    {
+      "name": "task27-check22-r2",
+      "exit_code": 2,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-check22-r2.log",
+      "log_sha256": "bc3a43989b1431c66cbc993b0624aa9f11f499317b5e7c9d53bf6ca728af459f",
+      "counted_as_pass": false,
+      "raw_log_committed": false,
+      "note": "Playwright Locator에 Vitest matcher를 사용한 시험 타입 오류. locator.waitFor로 수정 후 최종 check 성공."
+    },
+    {
+      "name": "task27-customer-ui-bff22-r2",
+      "exit_code": 1,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-customer-ui-bff22-r2.log",
+      "log_sha256": "9542887151be71e8b2fcd527a41eeb7612e1fc0b0fbaee11d9916256a6ccda78",
+      "counted_as_pass": false,
+      "raw_log_committed": false,
+      "note": "Node APIRequestContext의 fixture hostname DNS 접근 실패. 브라우저 same-origin fetch로 수정 후 최종 전체209 성공."
+    },
+    {
+      "name": "task27-customer-ui-bff22",
+      "exit_code": 1,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-customer-ui-bff22.log",
+      "log_sha256": "3f35d0de9fbaca12f1933b746e60b7bb3ad197a2dd7f1db2636307cdaa986d2f",
+      "counted_as_pass": false,
+      "raw_log_committed": false,
+      "note": "초기5개 고객 UI 시험 중 Keycloak 브라우저 흐름과 권한 시험 실패. 실제 흐름·browser fetch 수정 후 최종 전체209 성공."
+    },
+    {
+      "name": "task27-lint22-r2",
+      "exit_code": 1,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-lint22-r2.log",
+      "log_sha256": "c09fa496f8e15d318050c5c20c891fc4c7631ea563edb5d1312d374a26d09153",
+      "counted_as_pass": false,
+      "raw_log_committed": false,
+      "note": "미사용 인수 lint 오류. 수정 뒤 최종 check 성공."
+    },
+    {
+      "name": "task27-lint22",
+      "exit_code": 1,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-lint22.log",
+      "log_sha256": "9766c91785b188e1522e0e4c3627c55eecb2b0fe5782ce2856ab692bbd64180c",
+      "counted_as_pass": false,
+      "raw_log_committed": false,
+      "note": "고객 UI 미사용 import lint 오류. 제거 뒤 최종 check 성공."
+    },
+    {
+      "name": "task27-storage22",
+      "exit_code": 1,
+      "log": "/workspace/.suite-runtime/j-groupware/task27-storage22.log",
+      "log_sha256": "73044b23ae6ccbf0776380f0c21ca7a71a1fb6f1cd69e01cae17e9a1604ce5ed",
+      "counted_as_pass": false,
+      "raw_log_committed": false,
+      "note": "보존된 node_modules symlink가 격리 Docker bind 내부에서 해석되지 않아 beforeAll 실패. 실제 dependency realpath를 별도 readonly mount하여 Node22/24 저장소7 성공."
+    }
+  ],
+  "count_note": "각 runtime의 실제 실행 수이며 겹치는 suite/부분 실행을 기능 수로 합산하지 않는다.",
+  "actual_vm_target_ids": [
+    "AU-51",
+    "GW-73",
+    "MS-09",
+    "ML-32",
+    "CA-32",
+    "AP-32",
+    "TK-42",
+    "WB-33"
+  ],
+  "actual_vm_executed": 0,
+  "not_run": [
+    "실제 Hyper-V/customer VM 인수8: VM 위치·명시적 실행 승인 미공급",
+    "실제 systemd PID1 native bootstrap/install/unsubscribe/reboot/timer 활성화",
+    "실제 nft --check/적용·외부 IPv4/IPv6 SMTP 차단·loopback capture·기존 방화벽 공존",
+    "실제 고객 OS 패키지·20GB 디스크·CA 신뢰·외부 브라우저/네트워크 인수",
+    "실제 운영 owner/execution account·credential 발급/refresh/회전·private file 접근 및 projection 활성화",
+    "전체 서비스/장시간/고객 운영 인수; cloud Chromium ignoreHTTPSErrors는 fixture 전용이며 OS CA 신뢰 증거가 아님"
+  ],
+  "inherited_evidence": [
+    "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+    "j-groupware/docs/cloud-task25-test-results.json",
+    "j-groupware/docs/cloud-task26-web-image-verification-2026-10-09.md"
+  ],
+  "execution_environment": {
+    "JGW_AGENT_TEST_RUNTIME": "isolated-cloud",
+    "JWEB_TEST_IMAGE": "jweb-isolated-hosting:task26-75402e1",
+    "JWEB_TEST_COMPOSE_OVERRIDE": "unset",
+    "CHROMIUM_EXECUTABLE": "/usr/lib/chromium/chromium",
+    "jobs": "serial; preserved dependency symlinks; actual root-container fixtures only"
+  }
+}

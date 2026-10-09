@@ -1,0 +1,1096 @@
+{
+  "date": "2026-10-09",
+  "task": 27,
+  "baseline_head": "5d3b98aa818aacb6aa740a2e4f8b015ad982f2c0",
+  "baseline_summary": {
+    "implemented": 130,
+    "partial": 34,
+    "not_started": 8
+  },
+  "classification_first_checkpoint": {
+    "customer_ui_auth": [
+      "AU-02",
+      "AU-05",
+      "GW-12",
+      "GW-13",
+      "GW-14",
+      "GW-20",
+      "GW-21",
+      "GW-30",
+      "GW-31",
+      "GW-32",
+      "GW-33",
+      "GW-34",
+      "GW-35",
+      "GW-36",
+      "GW-37",
+      "GW-44"
+    ],
+    "source_specification": [
+      "TK-02",
+      "TK-03",
+      "TK-13",
+      "TK-14",
+      "TK-22",
+      "TK-23",
+      "TK-24",
+      "TK-27",
+      "TK-41",
+      "WB-13",
+      "WB-31"
+    ],
+    "install_operating_configuration": [
+      "GW-40",
+      "GW-63",
+      "GW-64",
+      "GW-65",
+      "GW-66",
+      "ML-03",
+      "ML-30"
+    ],
+    "actual_vm_acceptance": [
+      "AU-51",
+      "GW-73",
+      "MS-09",
+      "ML-32",
+      "CA-32",
+      "AP-32",
+      "TK-42",
+      "WB-33"
+    ]
+  },
+  "source_review_basis": "기능 명세·기존 producer/계약과 새 고객 UI/native 연결 소스 대조 및 Node22/24 최종 실제 서비스/Chromium/묶음/저장소 검증. 소스 구현과 실제 VM·운영 전체 인수는 구분한다.",
+  "whole_suite_verified": false,
+  "acceptance_complete": false,
+  "items": [
+    {
+      "id": "AU-02",
+      "service": "j-auth",
+      "name": "고객 realm 템플릿",
+      "initial_category": "customer_ui_auth",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-auth/apps/server/src/keycloak/realm-model.ts",
+        "j-auth/scripts/realm/templates.mjs",
+        "j-groupware/tests/bff/customer-ui.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "AU-05",
+      "service": "j-auth",
+      "name": "OIDC 로그인",
+      "initial_category": "customer_ui_auth",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-groupware/apps/web/src/app.tsx",
+        "j-groupware/apps/server/src/app.ts",
+        "j-groupware/tests/bff/customer-ui.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "GW-12",
+      "service": "j-groupware",
+      "name": "메뉴 숨김",
+      "initial_category": "customer_ui_auth",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-groupware/apps/web/src/app.tsx",
+        "j-groupware/packages/permissions/src/index.ts",
+        "j-groupware/tests/bff/customer-ui.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "GW-13",
+      "service": "j-groupware",
+      "name": "회원 목록·추가·삭제",
+      "initial_category": "customer_ui_auth",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-groupware/apps/web/src/members.tsx",
+        "j-groupware/apps/web/src/api.ts",
+        "j-groupware/tests/bff/customer-ui.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "GW-14",
+      "service": "j-groupware",
+      "name": "권한 부여·회수 화면",
+      "initial_category": "customer_ui_auth",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-groupware/apps/web/src/members.tsx",
+        "j-groupware/tests/bff/customer-ui.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "GW-20",
+      "service": "j-groupware",
+      "name": "게시판",
+      "initial_category": "customer_ui_auth",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-groupware/apps/web/src/board.tsx",
+        "j-groupware/tests/bff/customer-ui.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "GW-21",
+      "service": "j-groupware",
+      "name": "조직도 편집",
+      "initial_category": "customer_ui_auth",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-groupware/apps/web/src/organization.tsx",
+        "j-groupware/tests/bff/customer-ui.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "GW-30",
+      "service": "j-groupware",
+      "name": "메신저 화면",
+      "initial_category": "customer_ui_auth",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-groupware/apps/web/src/messenger.tsx",
+        "j-groupware/tests/bff/messenger.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "GW-31",
+      "service": "j-groupware",
+      "name": "메일 화면",
+      "initial_category": "customer_ui_auth",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-groupware/apps/web/src/mail.tsx",
+        "j-groupware/tests/bff/mail.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "GW-32",
+      "service": "j-groupware",
+      "name": "손님 관리 화면",
+      "initial_category": "customer_ui_auth",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-groupware/apps/web/src/guests.tsx",
+        "j-groupware/tests/bff/customer-auth.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "GW-33",
+      "service": "j-groupware",
+      "name": "API 키 화면",
+      "initial_category": "customer_ui_auth",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-groupware/apps/web/src/guests.tsx",
+        "j-groupware/apps/web/src/common.tsx",
+        "j-groupware/tests/bff/customer-auth.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "GW-34",
+      "service": "j-groupware",
+      "name": "결재 화면",
+      "initial_category": "customer_ui_auth",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-groupware/apps/web/src/approval.tsx",
+        "j-groupware/tests/bff/approval.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "GW-35",
+      "service": "j-groupware",
+      "name": "상담 화면",
+      "initial_category": "customer_ui_auth",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-groupware/apps/web/src/talk.tsx",
+        "j-groupware/tests/bff/talk.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "GW-36",
+      "service": "j-groupware",
+      "name": "상담 설정",
+      "initial_category": "customer_ui_auth",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-groupware/apps/web/src/talk-settings.tsx",
+        "j-groupware/tests/bff/talk.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "GW-37",
+      "service": "j-groupware",
+      "name": "웹 관리 화면",
+      "initial_category": "customer_ui_auth",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-groupware/apps/web/src/web-sites.tsx",
+        "j-groupware/tests/bff/web.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "GW-44",
+      "service": "j-groupware",
+      "name": "알림 화면",
+      "initial_category": "customer_ui_auth",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-groupware/apps/web/src/notifications.tsx",
+        "j-groupware/apps/web/src/app.tsx",
+        "j-groupware/tests/bff/notifications.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "TK-02",
+      "service": "j-talk",
+      "name": "FAB·대화창",
+      "initial_category": "source_specification",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-talk/apps/widget/src/main.ts",
+        "j-talk/apps/widget/src/style.css",
+        "j-talk/tests/integration/widget-browser.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff",
+        "talk_integration"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "TK-03",
+      "service": "j-talk",
+      "name": "표시 조건",
+      "initial_category": "source_specification",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-talk/apps/server/src/widget.ts",
+        "j-talk/apps/widget/src/main.ts",
+        "j-talk/tests/integration/widget-browser.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff",
+        "talk_integration"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "TK-13",
+      "service": "j-talk",
+      "name": "출처 검사",
+      "initial_category": "source_specification",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-talk/apps/server/src/app.ts",
+        "j-talk/apps/server/src/transport.ts",
+        "j-talk/tests/integration/visitors.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff",
+        "talk_integration"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "TK-14",
+      "service": "j-talk",
+      "name": "남용 제한",
+      "initial_category": "source_specification",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-talk/apps/server/src/visitors.ts",
+        "j-talk/apps/server/src/rooms.ts",
+        "j-talk/tests/integration/visitors.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff",
+        "talk_integration"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "TK-22",
+      "service": "j-talk",
+      "name": "답장",
+      "initial_category": "source_specification",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-talk/apps/server/src/rooms.ts",
+        "j-groupware/apps/web/src/talk.tsx",
+        "j-talk/tests/integration/rooms.integration.test.ts",
+        "j-groupware/tests/bff/talk.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff",
+        "talk_integration"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "TK-23",
+      "service": "j-talk",
+      "name": "종료",
+      "initial_category": "source_specification",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-talk/apps/server/src/rooms.ts",
+        "j-groupware/apps/web/src/talk.tsx",
+        "j-talk/tests/integration/visitors.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff",
+        "talk_integration"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "TK-24",
+      "service": "j-talk",
+      "name": "실시간 전달",
+      "initial_category": "source_specification",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-talk/apps/server/src/stream.ts",
+        "j-talk/apps/server/src/transport.ts",
+        "j-groupware/apps/web/src/talk.tsx",
+        "j-talk/tests/integration/visitors.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff",
+        "talk_integration"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "TK-27",
+      "service": "j-talk",
+      "name": "인증·tenant 격리",
+      "initial_category": "source_specification",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-talk/apps/server/src/auth.ts",
+        "j-talk/apps/server/src/visitors.ts",
+        "j-groupware/tests/bff/talk.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff",
+        "talk_integration"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "TK-41",
+      "service": "j-talk",
+      "name": "contracts",
+      "initial_category": "source_specification",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-talk/packages/contracts/src/index.ts",
+        "j-groupware/apps/server/src/talk-routes.ts",
+        "j-groupware/apps/web/src/talk.tsx",
+        "j-talk/tests/registry/contracts.test.mjs"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff",
+        "talk_integration"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "WB-13",
+      "service": "j-web",
+      "name": "위젯 스니펫 삽입",
+      "initial_category": "source_specification",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-web/apps/server/src/content.ts",
+        "j-groupware/apps/web/src/web-sites.tsx",
+        "j-web/tests/integration/hosting.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff",
+        "web_integration"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "WB-31",
+      "service": "j-web",
+      "name": "contracts",
+      "initial_category": "source_specification",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-web/packages/contracts/src/index.ts",
+        "j-groupware/apps/server/src/web-routes.ts",
+        "j-groupware/apps/web/src/web-sites.tsx",
+        "j-web/tests/registry/contracts.test.mjs"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "check",
+        "bff",
+        "web_integration"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "GW-40",
+      "service": "j-groupware",
+      "name": "알림 수신 API",
+      "initial_category": "install_operating_configuration",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-groupware/deploy/agent/notification-plan.mjs",
+        "j-groupware/deploy/agent/notification-worker.mjs",
+        "j-groupware/tests/agent/notification-plan.test.mjs",
+        "j-groupware/tests/bff/notifications.integration.test.ts"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "agent",
+        "bff",
+        "fresh_unpack"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "GW-63",
+      "service": "j-groupware",
+      "name": "부트스트랩",
+      "initial_category": "install_operating_configuration",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-groupware/deploy/agent/full-bootstrap.mjs",
+        "j-groupware/deploy/agent/build-product-bundle.mjs",
+        "j-groupware/tests/agent/unpack.integration.test.mjs"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "agent",
+        "native_guards",
+        "products",
+        "storage",
+        "fresh_unpack"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "GW-64",
+      "service": "j-groupware",
+      "name": "서비스 설치",
+      "initial_category": "install_operating_configuration",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-groupware/deploy/agent/provision-service.mjs",
+        "j-groupware/deploy/agent/native-products.mjs",
+        "j-groupware/deploy/agent/mail-egress.mjs",
+        "j-groupware/tests/agent/products.integration.test.mjs"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "agent",
+        "native_guards",
+        "products",
+        "storage",
+        "fresh_unpack"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "GW-65",
+      "service": "j-groupware",
+      "name": "서비스 해지",
+      "initial_category": "install_operating_configuration",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-groupware/deploy/agent/service-lifecycle.mjs",
+        "j-groupware/deploy/agent/product-storage.mjs",
+        "j-groupware/tests/agent/storage.integration.test.mjs"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "agent",
+        "native_guards",
+        "products",
+        "storage",
+        "fresh_unpack"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "GW-66",
+      "service": "j-groupware",
+      "name": "프로비저닝 에이전트",
+      "initial_category": "install_operating_configuration",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-groupware/deploy/agent/agent-install.mjs",
+        "j-groupware/deploy/agent/provision-agent.mjs",
+        "j-groupware/tests/agent/reconciler.test.mjs"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "agent",
+        "native_guards",
+        "products",
+        "storage",
+        "fresh_unpack"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "ML-03",
+      "service": "j-mail",
+      "name": "외부 발신 차단",
+      "initial_category": "install_operating_configuration",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-groupware/deploy/agent/mail-egress.mjs",
+        "j-groupware/deploy/agent/native-platform.mjs",
+        "j-groupware/tests/agent/mail-egress.test.mjs"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "agent",
+        "native_guards",
+        "fresh_unpack"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "ML-30",
+      "service": "j-mail",
+      "name": "저장소 골격·DB",
+      "initial_category": "install_operating_configuration",
+      "baseline_implementation": "partial",
+      "source_implemented": true,
+      "new_source_or_connected_evidence": [
+        "j-mail/deploy/migrations/001-mail-foundation.sql",
+        "j-groupware/deploy/agent/mailpit-platform.mjs",
+        "j-groupware/deploy/agent/product-storage.mjs",
+        "j-groupware/tests/agent/storage.integration.test.mjs"
+      ],
+      "acceptance_complete": false,
+      "verification_status": "bounded_cloud_checks_pass_node22_node24_actual_acceptance_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": [
+        "agent",
+        "native_guards",
+        "products",
+        "storage",
+        "fresh_unpack"
+      ],
+      "review_note": "기존 producer/계약과 새 고객 UI 또는 native 연결 소스를 대조했다. 이전 registry/realm 증거는 inherited_evidence로 구분하며 이번 실제 연결 검사는 executed_test_kinds에 기록한다."
+    },
+    {
+      "id": "AU-51",
+      "service": "j-auth",
+      "name": "VM 검증·측정",
+      "initial_category": "actual_vm_acceptance",
+      "baseline_implementation": "not_started",
+      "source_implemented": false,
+      "new_source_or_connected_evidence": [],
+      "acceptance_complete": false,
+      "verification_status": "actual_vm_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": []
+    },
+    {
+      "id": "GW-73",
+      "service": "j-groupware",
+      "name": "VM 검증·측정",
+      "initial_category": "actual_vm_acceptance",
+      "baseline_implementation": "not_started",
+      "source_implemented": false,
+      "new_source_or_connected_evidence": [],
+      "acceptance_complete": false,
+      "verification_status": "actual_vm_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": []
+    },
+    {
+      "id": "MS-09",
+      "service": "j-messenger",
+      "name": "고객 서버 검증",
+      "initial_category": "actual_vm_acceptance",
+      "baseline_implementation": "not_started",
+      "source_implemented": false,
+      "new_source_or_connected_evidence": [],
+      "acceptance_complete": false,
+      "verification_status": "actual_vm_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": []
+    },
+    {
+      "id": "ML-32",
+      "service": "j-mail",
+      "name": "고객 서버 검증",
+      "initial_category": "actual_vm_acceptance",
+      "baseline_implementation": "not_started",
+      "source_implemented": false,
+      "new_source_or_connected_evidence": [],
+      "acceptance_complete": false,
+      "verification_status": "actual_vm_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": []
+    },
+    {
+      "id": "CA-32",
+      "service": "j-customer-auth-db",
+      "name": "고객 서버 검증",
+      "initial_category": "actual_vm_acceptance",
+      "baseline_implementation": "not_started",
+      "source_implemented": false,
+      "new_source_or_connected_evidence": [],
+      "acceptance_complete": false,
+      "verification_status": "actual_vm_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": []
+    },
+    {
+      "id": "AP-32",
+      "service": "j-approval",
+      "name": "고객 서버 검증",
+      "initial_category": "actual_vm_acceptance",
+      "baseline_implementation": "not_started",
+      "source_implemented": false,
+      "new_source_or_connected_evidence": [],
+      "acceptance_complete": false,
+      "verification_status": "actual_vm_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": []
+    },
+    {
+      "id": "TK-42",
+      "service": "j-talk",
+      "name": "고객 서버 검증",
+      "initial_category": "actual_vm_acceptance",
+      "baseline_implementation": "not_started",
+      "source_implemented": false,
+      "new_source_or_connected_evidence": [],
+      "acceptance_complete": false,
+      "verification_status": "actual_vm_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": []
+    },
+    {
+      "id": "WB-33",
+      "service": "j-web",
+      "name": "고객 서버 검증",
+      "initial_category": "actual_vm_acceptance",
+      "baseline_implementation": "not_started",
+      "source_implemented": false,
+      "new_source_or_connected_evidence": [],
+      "acceptance_complete": false,
+      "verification_status": "actual_vm_not_run",
+      "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "evidence": [
+        "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-task27-test-results.json"
+      ],
+      "executed_test_kinds": []
+    }
+  ],
+  "source_commit": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+  "summary": {
+    "source_implemented": 34,
+    "actual_vm_not_run": 8,
+    "source_progress": {
+      "implemented": 164,
+      "partial": 0,
+      "not_started": 8
+    }
+  },
+  "not_run": [
+    "실제 Hyper-V/customer VM 인수8: VM 위치·명시적 실행 승인 미공급",
+    "실제 systemd PID1 native bootstrap/install/unsubscribe/reboot/timer 활성화",
+    "실제 nft --check/적용·외부 IPv4/IPv6 SMTP 차단·loopback capture·기존 방화벽 공존",
+    "실제 고객 OS 패키지·20GB 디스크·CA 신뢰·외부 브라우저/네트워크 인수",
+    "실제 운영 owner/execution account·credential 발급/refresh/회전·private file 접근 및 projection 활성화",
+    "전체 서비스/장시간/고객 운영 인수; cloud Chromium ignoreHTTPSErrors는 fixture 전용이며 OS CA 신뢰 증거가 아님"
+  ]
+}

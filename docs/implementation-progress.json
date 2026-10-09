@@ -1,20 +1,21 @@
 {
   "updated_date": "2026-10-09",
   "scope": "suite integration features only; existing messenger feature set is separate",
-  "status_basis": "source implementation and bounded cloud checks; verification describes executed coverage, not service-level acceptance completion",
+  "status_basis": "source implementation and bounded cloud checks; implemented is source scope, not customer VM/operating acceptance. See per-feature task27 source review and executed test evidence.",
   "system_installation": "forbidden on company laptop",
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 130,
-    "partial": 34,
+    "implemented": 164,
+    "partial": 0,
     "not_started": 8
   },
   "blocked_runtime": [
-    "Actual Hyper-V VM acceptance AU-51/GW-73/MS-09/ML-32/CA-32/AP-32/TK-42/WB-33 is not_run; VM location and explicit execution approval pending. No VM or OS security changes authorized.",
-    "Customer VM/20GB disk/systemd PID1/trusted offline OS packages/CA trust/firewall/native lifecycle/timer/external access acceptance remains unexecuted. Cloud fixtures and collector preparation are separate.",
-    "Operating notification refresh credential owner, service-key rotation responsibility and control-plane/customer projection/private receiver topology remain unresolved; no permanent credentials, grants or operating timer created.",
-    "Shared UI baseline and initial 14 source targets are implemented. Formal business screens and full specification acceptance for existing partial features remain; bounded component passes do not complete the whole suite."
+    "실제 Hyper-V/customer VM 인수8: VM 위치·명시적 실행 승인 미공급",
+    "실제 systemd PID1 native bootstrap/install/unsubscribe/reboot/timer 활성화",
+    "실제 nft --check/적용·외부 IPv4/IPv6 SMTP 차단·loopback capture·기존 방화벽 공존",
+    "실제 고객 OS 패키지·20GB 디스크·CA 신뢰·외부 브라우저/네트워크 인수",
+    "실제 운영 owner/execution account·credential 발급/refresh/회전·private file 접근 및 projection 활성화"
   ],
   "features": [
     {
@@ -39,18 +40,22 @@
       "items": [
         "I2"
       ],
-      "implementation": "partial",
-      "verification": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-auth/scripts/realm/templates.mjs",
         "j-auth/apps/server/src/keycloak/realm-model.ts",
         "j-auth/apps/server/src/keycloak/provisioning.ts",
         "j-auth/tests/integration/provisioning.test.ts",
         "j-auth/tests/integration/imported-mail-roles.test.ts",
-        "j-auth/docs/cloud-imported-role-compatibility-2026-10-08.md"
+        "j-auth/docs/cloud-imported-role-compatibility-2026-10-08.md",
+        "j-groupware/tests/bff/customer-ui.integration.test.ts"
       ],
       "prior_verification_before_task25": "cloud_import_and_owned_realm_generation_pass; canonical_bootstrap_user_and_claims_pass; login_theme_and_browser_acceptance_pending; actual_legacy_import_canonical_role_owner_lookup_member_201_wrong_alias_403_reduced_mail_role_pass_node22_node24; existing_fgap_catalog_hash_unchanged; corrected_new_import_scope_pass",
-      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md"
+      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "prior_verification_before_task27": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "AU-03",
@@ -89,16 +94,22 @@
         "I2",
         "I4"
       ],
-      "implementation": "partial",
-      "verification": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-auth/scripts/realm/templates.mjs",
         "j-auth/tests/integration/oidc-code.ts",
         "j-auth/tests/integration/provisioning.test.ts",
-        "j-groupware/tests/bff/bff.integration.test.ts"
+        "j-groupware/tests/bff/bff.integration.test.ts",
+        "j-groupware/apps/web/src/app.tsx",
+        "j-groupware/apps/server/src/app.ts",
+        "j-groupware/tests/bff/customer-ui.integration.test.ts"
       ],
       "prior_verification_before_task25": "actual_groupware_bff_code_pkce_state_nonce_cookie_pass; theme_playwright_bruteforce_not_run",
-      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md"
+      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "prior_verification_before_task27": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "AU-06",
@@ -669,13 +680,18 @@
       "items": [
         "G4"
       ],
-      "implementation": "partial",
-      "verification": "actual_me_menu_data_filtered_by_catalog_roles_pass; sidebar_ui_not_implemented",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-groupware/packages/permissions/src/index.ts",
         "j-groupware/apps/server/src/app.ts",
-        "j-groupware/tests/bff/bff.integration.test.ts"
-      ]
+        "j-groupware/tests/bff/bff.integration.test.ts",
+        "j-groupware/apps/web/src/app.tsx",
+        "j-groupware/tests/bff/customer-ui.integration.test.ts"
+      ],
+      "prior_verification_before_task27": "actual_me_menu_data_filtered_by_catalog_roles_pass; sidebar_ui_not_implemented",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "GW-13",
@@ -684,8 +700,8 @@
       "items": [
         "G6"
       ],
-      "implementation": "partial",
-      "verification": "actual_bff_member_list_create_delete_original_bearer_tenant_service_key_csrf_foreign_target_duplicate_concurrent_creation_pass; confirmed_delete_local_failure_retry_recovery_pass; confirmed_create_local_failure_registration_repair_pass; member_ui_playwright_pending",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-groupware/apps/server/src/members.ts",
         "j-groupware/apps/server/src/member-routes.ts",
@@ -694,8 +710,14 @@
         "j-groupware/tests/bff/bff.integration.test.ts",
         "j-groupware/apps/server/src/db/organization.ts",
         "j-groupware/apps/server/src/organization-routes.ts",
-        "j-groupware/tests/bff/organization.integration.test.ts"
-      ]
+        "j-groupware/tests/bff/organization.integration.test.ts",
+        "j-groupware/apps/web/src/members.tsx",
+        "j-groupware/apps/web/src/api.ts",
+        "j-groupware/tests/bff/customer-ui.integration.test.ts"
+      ],
+      "prior_verification_before_task27": "actual_bff_member_list_create_delete_original_bearer_tenant_service_key_csrf_foreign_target_duplicate_concurrent_creation_pass; confirmed_delete_local_failure_retry_recovery_pass; confirmed_create_local_failure_registration_repair_pass; member_ui_playwright_pending",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "GW-14",
@@ -704,14 +726,19 @@
       "items": [
         "G6"
       ],
-      "implementation": "partial",
-      "verification": "actual_bff_grantable_catalog_implication_data_and_role_grant_revoke_effective_read_write_pass; checkbox_ui_not_implemented",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-groupware/apps/server/src/members.ts",
         "j-groupware/apps/server/src/member-routes.ts",
         "j-groupware/packages/contracts/src/index.ts",
-        "j-groupware/tests/bff/bff.integration.test.ts"
-      ]
+        "j-groupware/tests/bff/bff.integration.test.ts",
+        "j-groupware/apps/web/src/members.tsx",
+        "j-groupware/tests/bff/customer-ui.integration.test.ts"
+      ],
+      "prior_verification_before_task27": "actual_bff_grantable_catalog_implication_data_and_role_grant_revoke_effective_read_write_pass; checkbox_ui_not_implemented",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "GW-15",
@@ -740,15 +767,20 @@
       "items": [
         "G5"
       ],
-      "implementation": "partial",
-      "verification": "actual_pg_board_create_read_list_tenant_isolation_cursor_and_role_input_checks_pass; board_ui_playwright_not_implemented",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-groupware/apps/server/src/db/board.ts",
         "j-groupware/apps/server/src/app.ts",
         "j-groupware/deploy/migrations/001-bff-sessions-board.sql",
         "j-groupware/packages/contracts/src/index.ts",
-        "j-groupware/tests/bff/bff.integration.test.ts"
-      ]
+        "j-groupware/tests/bff/bff.integration.test.ts",
+        "j-groupware/apps/web/src/board.tsx",
+        "j-groupware/tests/bff/customer-ui.integration.test.ts"
+      ],
+      "prior_verification_before_task27": "actual_pg_board_create_read_list_tenant_isolation_cursor_and_role_input_checks_pass; board_ui_playwright_not_implemented",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "GW-21",
@@ -757,16 +789,21 @@
       "items": [
         "G15"
       ],
-      "implementation": "partial",
-      "verification": "actual_org_crud_tree_cycles_depth_count_limits_composite_fk_tenant_csrf_revision_concurrency_failure_rollback_pass; org_ui_playwright_pending",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-groupware/apps/server/src/db/organization.ts",
         "j-groupware/apps/server/src/organization-routes.ts",
         "j-groupware/deploy/migrations/004-organization.sql",
         "j-groupware/packages/contracts/src/index.ts",
         "j-groupware/packages/permissions/src/index.ts",
-        "j-groupware/tests/bff/organization.integration.test.ts"
-      ]
+        "j-groupware/tests/bff/organization.integration.test.ts",
+        "j-groupware/apps/web/src/organization.tsx",
+        "j-groupware/tests/bff/customer-ui.integration.test.ts"
+      ],
+      "prior_verification_before_task27": "actual_org_crud_tree_cycles_depth_count_limits_composite_fk_tenant_csrf_revision_concurrency_failure_rollback_pass; org_ui_playwright_pending",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "GW-22",
@@ -812,8 +849,8 @@
       "items": [
         "G12"
       ],
-      "implementation": "partial",
-      "verification": "actual_Keycloak_PG_BFF_HTTP_WSS_receipts_sync_logout_role_revocation_registry_client_pass; multipart_5MB_attachment_bind_dedup_conflict_tenant_CSRF_download_independent_5day_14day_retention_pass_Node22_Node24; actual_full_BFF125_and_gateway14_each_Node22_Node24_pass; formal_UI_Playwright_VM_pending",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-groupware/apps/server/src/realtime-sessions.ts",
         "j-groupware/apps/server/src/realtime-routes.ts",
@@ -828,8 +865,12 @@
         "j-groupware/docs/cloud-messenger-bff-verification-2026-10-08.md",
         "j-groupware/apps/server/src/messenger-files.ts",
         "j-groupware/tests/server/messenger-files.test.ts",
-        "j-groupware/docs/cloud-messenger-files-verification-2026-10-08.md"
-      ]
+        "j-groupware/docs/cloud-messenger-files-verification-2026-10-08.md",
+        "j-groupware/apps/web/src/messenger.tsx"
+      ],
+      "prior_verification_before_task27": "actual_Keycloak_PG_BFF_HTTP_WSS_receipts_sync_logout_role_revocation_registry_client_pass; multipart_5MB_attachment_bind_dedup_conflict_tenant_CSRF_download_independent_5day_14day_retention_pass_Node22_Node24; actual_full_BFF125_and_gateway14_each_Node22_Node24_pass; formal_UI_Playwright_VM_pending",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "GW-31",
@@ -838,14 +879,18 @@
       "items": [
         "G14"
       ],
-      "implementation": "partial",
-      "verification": "actual_cookie_bff_compiled_mail_network_none_smtp_keycloak_pg_8_pass_node22_node24; source_tenant_injection_denied; role_revocation_session_end_pass; formal_ui_sandbox_playwright_pending",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-groupware/apps/server/src/mail-routes.ts",
         "j-groupware/packages/permissions/src/index.ts",
         "j-groupware/tests/server/mail-routes.test.ts",
-        "j-groupware/tests/bff/mail.integration.test.ts"
-      ]
+        "j-groupware/tests/bff/mail.integration.test.ts",
+        "j-groupware/apps/web/src/mail.tsx"
+      ],
+      "prior_verification_before_task27": "actual_cookie_bff_compiled_mail_network_none_smtp_keycloak_pg_8_pass_node22_node24; source_tenant_injection_denied; role_revocation_session_end_pass; formal_ui_sandbox_playwright_pending",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "GW-32",
@@ -854,14 +899,18 @@
       "items": [
         "G13"
       ],
-      "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-groupware/apps/server/src/customer-auth-routes.ts",
         "j-groupware/packages/permissions/src/index.ts",
         "j-groupware/tests/bff/customer-auth.integration.test.ts",
-        "j-groupware/docs/cloud-customer-relay-bundle-verification-2026-10-08.md"
-      ]
+        "j-groupware/docs/cloud-customer-relay-bundle-verification-2026-10-08.md",
+        "j-groupware/apps/web/src/guests.tsx"
+      ],
+      "prior_verification_before_task27": "actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "GW-33",
@@ -870,14 +919,19 @@
       "items": [
         "G13"
       ],
-      "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-groupware/apps/server/src/customer-auth-routes.ts",
         "j-groupware/packages/permissions/src/index.ts",
         "j-groupware/tests/bff/customer-auth.integration.test.ts",
-        "j-groupware/docs/cloud-customer-relay-bundle-verification-2026-10-08.md"
-      ]
+        "j-groupware/docs/cloud-customer-relay-bundle-verification-2026-10-08.md",
+        "j-groupware/apps/web/src/guests.tsx",
+        "j-groupware/apps/web/src/common.tsx"
+      ],
+      "prior_verification_before_task27": "actual_Node22_18_Node24_19_full_BFF174_pass_each_with_customer16_included; actual_cookie_and_compiled_BFF_guest_CRUD_paging_roles_CSRF_tenant_isolation_one_time_key_revoke_strict_JSON_and_bounded_upstream_pass; cold_CA_bundle_profile_native_Argon2_PG_TLS_readiness_stable_RSA_JWT_and_real_Nginx_publish_withdraw_internal_boundary_pass; formal_UI_Playwright_customer_VM_systemd_PID1_and_whole_suite_acceptance_pending; Node24_exit_code_tool_session_lost_after_environment_reconnect_final174_pass_log_preserved",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "GW-34",
@@ -886,13 +940,17 @@
       "items": [
         "G16"
       ],
-      "implementation": "partial",
-      "verification": "cloud_actual_bff_compiled_approval_keycloak_postgres_10_pass; overall_73_pass; UI_Playwright_VM_not_run",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-groupware/apps/server/src/approval-routes.ts",
         "j-groupware/tests/bff/approval.integration.test.ts",
-        "j-groupware/docs/cloud-approval-bff-verification-2026-10-08.md"
-      ]
+        "j-groupware/docs/cloud-approval-bff-verification-2026-10-08.md",
+        "j-groupware/apps/web/src/approval.tsx"
+      ],
+      "prior_verification_before_task27": "cloud_actual_bff_compiled_approval_keycloak_postgres_10_pass; overall_73_pass; UI_Playwright_VM_not_run",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "GW-35",
@@ -901,8 +959,8 @@
       "items": [
         "G19"
       ],
-      "implementation": "partial",
-      "verification": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-groupware/apps/server/src/talk-routes.ts",
         "j-groupware/packages/permissions/src/index.ts",
@@ -910,10 +968,14 @@
         "j-groupware/tests/server/talk-routes.test.ts",
         "j-talk/apps/server/src/rooms.ts",
         "j-groupware/tests/bff/customer-auth.integration.test.ts",
-        "j-groupware/docs/cloud-agent-guest-names-verification-2026-10-08.md"
+        "j-groupware/docs/cloud-agent-guest-names-verification-2026-10-08.md",
+        "j-groupware/apps/web/src/talk.tsx"
       ],
       "prior_verification_before_task25": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; customer19_each_includes_actual_Talk_customer_auth_PG_role_dependent_guest_names_single_aud_Bearer_deduplicated_page_lookups_anonymous_deleted_foreign_guest_null_no_guest_read_no_CA_call_no_CA_service_token_invalid_UUID_no_lookup_actual_CA_outage503_identifier_only_Talk_still_available_pass; unit77_each_includes_lookup_concurrency4_failure_cancellation_all_settled_pass; member_room_storage_seed_only_live_visitor_issuer_WSS_T2_and_formal_UI_Playwright_VM_not_run",
-      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md"
+      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "prior_verification_before_task27": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "GW-36",
@@ -922,14 +984,18 @@
       "items": [
         "G19"
       ],
-      "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_talk_BFF_5_each_exit0_skip0; origins_page_widget_key_once_and_rotation_pass; bounded_JSON_secret_field_projection_unit2_pass; signature_example_visitor_policy_and_formal_UI_not_run",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-groupware/apps/server/src/talk-routes.ts",
         "j-groupware/packages/permissions/src/index.ts",
         "j-groupware/tests/bff/talk.integration.test.ts",
-        "j-groupware/tests/server/talk-routes.test.ts"
-      ]
+        "j-groupware/tests/server/talk-routes.test.ts",
+        "j-groupware/apps/web/src/talk-settings.tsx"
+      ],
+      "prior_verification_before_task27": "actual_Node22_18_Node24_19_talk_BFF_5_each_exit0_skip0; origins_page_widget_key_once_and_rotation_pass; bounded_JSON_secret_field_projection_unit2_pass; signature_example_visitor_policy_and_formal_UI_not_run",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "GW-37",
@@ -938,8 +1004,8 @@
       "items": [
         "G20"
       ],
-      "implementation": "partial",
-      "verification": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-web/packages/contracts/src/index.ts",
         "j-web/packages/contracts/README.md",
@@ -953,10 +1019,14 @@
         "j-web/docs/cloud-content-contract-verification-2026-10-09.md",
         "j-groupware/apps/server/src/web-routes.ts",
         "j-groupware/tests/bff/web.integration.test.ts",
-        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md",
+        "j-groupware/apps/web/src/web-sites.tsx"
       ],
       "prior_verification_before_task25": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending",
-      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md"
+      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "prior_verification_before_task27": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "GW-38",
@@ -983,8 +1053,8 @@
       "items": [
         "G22"
       ],
-      "implementation": "partial",
-      "verification": "explicit_private_existing_worker_binding_actual_private_BFF_env_tenant_DB_auth_anchor_and_pre_mutation_j_auth_subscription_pass; factory_fixed_env_port_readonly_inputs_manifest_output_overlap_guards_source_implemented_owned_binding_inert_rejection_tested; actual_worker7_each_in_full_BFF191_exit0_skip0; task23_fixed_CLI_and_factory_explicit_prepared_notificationControlFile_Approval_Talk_Mail_source_connected_supplied_Web_material_separate_default_operating_owner_UNBOUND; operating_refresh_owner_key_rotation_control_plane_local_PG_receiver_topology_UNDECIDED; actual_PID1_native_factory_full_lifecycle_UNRUN; task23_fixed_CLI_explicit_existing_private_notificationControlFile_and_Mailpit_native_binding_source_connected_inert_guard_tested_default_operating_owner_still_UNBOUND",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_agent_bff_fresh_unpack_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-groupware/apps/server/src/notification-receiver.ts",
         "j-groupware/apps/server/src/db/notifications.ts",
@@ -1016,8 +1086,13 @@
         "j-groupware/deploy/agent/notification-binding.mjs",
         "j-groupware/deploy/agent/notification-binding.d.mts",
         "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md",
-        "j-groupware/docs/cloud-bootstrap-kit-verification-2026-10-09.md"
-      ]
+        "j-groupware/docs/cloud-bootstrap-kit-verification-2026-10-09.md",
+        "j-groupware/deploy/agent/notification-plan.mjs",
+        "j-groupware/tests/agent/notification-plan.test.mjs"
+      ],
+      "prior_verification_before_task27": "explicit_private_existing_worker_binding_actual_private_BFF_env_tenant_DB_auth_anchor_and_pre_mutation_j_auth_subscription_pass; factory_fixed_env_port_readonly_inputs_manifest_output_overlap_guards_source_implemented_owned_binding_inert_rejection_tested; actual_worker7_each_in_full_BFF191_exit0_skip0; task23_fixed_CLI_and_factory_explicit_prepared_notificationControlFile_Approval_Talk_Mail_source_connected_supplied_Web_material_separate_default_operating_owner_UNBOUND; operating_refresh_owner_key_rotation_control_plane_local_PG_receiver_topology_UNDECIDED; actual_PID1_native_factory_full_lifecycle_UNRUN; task23_fixed_CLI_explicit_existing_private_notificationControlFile_and_Mailpit_native_binding_source_connected_inert_guard_tested_default_operating_owner_still_UNBOUND",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "GW-41",
@@ -1077,13 +1152,18 @@
       "items": [
         "G22"
       ],
-      "implementation": "partial",
-      "verification": "actual_list_unread_and_idempotent_per_member_read_backend_pass; icon_click_navigation_formal_UI_Playwright_pending",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-groupware/apps/server/src/notification-routes.ts",
         "j-groupware/tests/bff/notifications.integration.test.ts",
-        "j-groupware/docs/cloud-notification-verification-2026-10-08.md"
-      ]
+        "j-groupware/docs/cloud-notification-verification-2026-10-08.md",
+        "j-groupware/apps/web/src/notifications.tsx",
+        "j-groupware/apps/web/src/app.tsx"
+      ],
+      "prior_verification_before_task27": "actual_list_unread_and_idempotent_per_member_read_backend_pass; icon_click_navigation_formal_UI_Playwright_pending",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "GW-50",
@@ -1234,8 +1314,8 @@
       "items": [
         "G18"
       ],
-      "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_check80_full_BFF191_15files_agent27_native3_root_storage7_Web4_fresh_unpack20_each_exit0_skip0; actual_JWeb_check6_plus_helper1_each_exit0; real_seven_archives_Node_npm_offline_OS_metadata_fixture_kit_inventory_digest_permissions_symlink_drift_pass; metadata_Deb_0_0_1_NEVER_INSTALLED; owned_root_immutable_OS_PG_Compose_gateway_agent_preparation_under_umask0077_separate_locks_no_enable_pass; pinned_Mailpit_Compose_create_same_id_retry_stop_restart_config_drift_and_retained_data_pass; actual_owned_Web_helper_sudoers_sshd_config_real_separate_64MB_disk_prepare_SFTP_FTPS_cleanup_stopped_retained_backups_PG_archive_hash_retry_drift_pass; prepared_notification_control_native_products_source_connected_without_new_operating_owner; actual_OS_package_install_CA_trust_PG_Compose_PID1_full_bootstrap_native_product_lifecycle_timer_firewall_traffic_20GB_customer_VM_UNRUN",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_agent_native_guards_products_storage_fresh_unpack_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-groupware/deploy/agent/bootstrap-files.mjs",
         "j-groupware/deploy/agent/service-database.mjs",
@@ -1306,7 +1386,10 @@
         "j-groupware/deploy/agent/native-gateway.mjs",
         "j-groupware/deploy/agent/agent-install.mjs",
         "j-groupware/tests/agent/native-install.integration.test.mjs"
-      ]
+      ],
+      "prior_verification_before_task27": "actual_Node22_18_Node24_19_check80_full_BFF191_15files_agent27_native3_root_storage7_Web4_fresh_unpack20_each_exit0_skip0; actual_JWeb_check6_plus_helper1_each_exit0; real_seven_archives_Node_npm_offline_OS_metadata_fixture_kit_inventory_digest_permissions_symlink_drift_pass; metadata_Deb_0_0_1_NEVER_INSTALLED; owned_root_immutable_OS_PG_Compose_gateway_agent_preparation_under_umask0077_separate_locks_no_enable_pass; pinned_Mailpit_Compose_create_same_id_retry_stop_restart_config_drift_and_retained_data_pass; actual_owned_Web_helper_sudoers_sshd_config_real_separate_64MB_disk_prepare_SFTP_FTPS_cleanup_stopped_retained_backups_PG_archive_hash_retry_drift_pass; prepared_notification_control_native_products_source_connected_without_new_operating_owner; actual_OS_package_install_CA_trust_PG_Compose_PID1_full_bootstrap_native_product_lifecycle_timer_firewall_traffic_20GB_customer_VM_UNRUN",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "GW-64",
@@ -1315,8 +1398,8 @@
       "items": [
         "G18"
       ],
-      "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_check80_full_BFF191_15files_agent27_native3_root_storage7_Web4_fresh_unpack20_each_exit0_skip0; actual_JWeb_check6_plus_helper1_each_exit0; real_seven_archives_Node_npm_offline_OS_metadata_fixture_kit_inventory_digest_permissions_symlink_drift_pass; metadata_Deb_0_0_1_NEVER_INSTALLED; owned_root_immutable_OS_PG_Compose_gateway_agent_preparation_under_umask0077_separate_locks_no_enable_pass; pinned_Mailpit_Compose_create_same_id_retry_stop_restart_config_drift_and_retained_data_pass; actual_owned_Web_helper_sudoers_sshd_config_real_separate_64MB_disk_prepare_SFTP_FTPS_cleanup_stopped_retained_backups_PG_archive_hash_retry_drift_pass; prepared_notification_control_native_products_source_connected_without_new_operating_owner; actual_OS_package_install_CA_trust_PG_Compose_PID1_full_bootstrap_native_product_lifecycle_timer_firewall_traffic_20GB_customer_VM_UNRUN",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_agent_native_guards_products_storage_fresh_unpack_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-groupware/deploy/agent/bootstrap-files.mjs",
         "j-groupware/deploy/agent/service-database.mjs",
@@ -1387,8 +1470,12 @@
         "j-groupware/deploy/agent/native-gateway.mjs",
         "j-groupware/deploy/agent/unit-observation.mjs",
         "j-groupware/tests/agent/native-install.integration.test.mjs",
-        "j-web/deploy/jweb-helper.mjs"
-      ]
+        "j-web/deploy/jweb-helper.mjs",
+        "j-groupware/deploy/agent/mail-egress.mjs"
+      ],
+      "prior_verification_before_task27": "actual_Node22_18_Node24_19_check80_full_BFF191_15files_agent27_native3_root_storage7_Web4_fresh_unpack20_each_exit0_skip0; actual_JWeb_check6_plus_helper1_each_exit0; real_seven_archives_Node_npm_offline_OS_metadata_fixture_kit_inventory_digest_permissions_symlink_drift_pass; metadata_Deb_0_0_1_NEVER_INSTALLED; owned_root_immutable_OS_PG_Compose_gateway_agent_preparation_under_umask0077_separate_locks_no_enable_pass; pinned_Mailpit_Compose_create_same_id_retry_stop_restart_config_drift_and_retained_data_pass; actual_owned_Web_helper_sudoers_sshd_config_real_separate_64MB_disk_prepare_SFTP_FTPS_cleanup_stopped_retained_backups_PG_archive_hash_retry_drift_pass; prepared_notification_control_native_products_source_connected_without_new_operating_owner; actual_OS_package_install_CA_trust_PG_Compose_PID1_full_bootstrap_native_product_lifecycle_timer_firewall_traffic_20GB_customer_VM_UNRUN",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "GW-65",
@@ -1397,8 +1484,8 @@
       "items": [
         "G18"
       ],
-      "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_check80_full_BFF191_15files_agent27_native3_root_storage7_Web4_fresh_unpack20_each_exit0_skip0; actual_JWeb_check6_plus_helper1_each_exit0; real_seven_archives_Node_npm_offline_OS_metadata_fixture_kit_inventory_digest_permissions_symlink_drift_pass; metadata_Deb_0_0_1_NEVER_INSTALLED; owned_root_immutable_OS_PG_Compose_gateway_agent_preparation_under_umask0077_separate_locks_no_enable_pass; pinned_Mailpit_Compose_create_same_id_retry_stop_restart_config_drift_and_retained_data_pass; actual_owned_Web_helper_sudoers_sshd_config_real_separate_64MB_disk_prepare_SFTP_FTPS_cleanup_stopped_retained_backups_PG_archive_hash_retry_drift_pass; prepared_notification_control_native_products_source_connected_without_new_operating_owner; actual_OS_package_install_CA_trust_PG_Compose_PID1_full_bootstrap_native_product_lifecycle_timer_firewall_traffic_20GB_customer_VM_UNRUN",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_agent_native_guards_products_storage_fresh_unpack_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-groupware/deploy/agent/bootstrap-files.mjs",
         "j-groupware/deploy/agent/service-database.mjs",
@@ -1460,7 +1547,10 @@
         "j-groupware/deploy/agent/native-products.mjs",
         "j-groupware/deploy/agent/native-web.mjs",
         "j-web/deploy/jweb-helper.mjs"
-      ]
+      ],
+      "prior_verification_before_task27": "actual_Node22_18_Node24_19_check80_full_BFF191_15files_agent27_native3_root_storage7_Web4_fresh_unpack20_each_exit0_skip0; actual_JWeb_check6_plus_helper1_each_exit0; real_seven_archives_Node_npm_offline_OS_metadata_fixture_kit_inventory_digest_permissions_symlink_drift_pass; metadata_Deb_0_0_1_NEVER_INSTALLED; owned_root_immutable_OS_PG_Compose_gateway_agent_preparation_under_umask0077_separate_locks_no_enable_pass; pinned_Mailpit_Compose_create_same_id_retry_stop_restart_config_drift_and_retained_data_pass; actual_owned_Web_helper_sudoers_sshd_config_real_separate_64MB_disk_prepare_SFTP_FTPS_cleanup_stopped_retained_backups_PG_archive_hash_retry_drift_pass; prepared_notification_control_native_products_source_connected_without_new_operating_owner; actual_OS_package_install_CA_trust_PG_Compose_PID1_full_bootstrap_native_product_lifecycle_timer_firewall_traffic_20GB_customer_VM_UNRUN",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "GW-66",
@@ -1469,8 +1559,8 @@
       "items": [
         "G21"
       ],
-      "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_check80_full_BFF191_15files_agent27_native3_root_storage7_Web4_fresh_unpack20_each_exit0_skip0; actual_JWeb_check6_plus_helper1_each_exit0; real_seven_archives_Node_npm_offline_OS_metadata_fixture_kit_inventory_digest_permissions_symlink_drift_pass; metadata_Deb_0_0_1_NEVER_INSTALLED; owned_root_immutable_OS_PG_Compose_gateway_agent_preparation_under_umask0077_separate_locks_no_enable_pass; pinned_Mailpit_Compose_create_same_id_retry_stop_restart_config_drift_and_retained_data_pass; actual_owned_Web_helper_sudoers_sshd_config_real_separate_64MB_disk_prepare_SFTP_FTPS_cleanup_stopped_retained_backups_PG_archive_hash_retry_drift_pass; prepared_notification_control_native_products_source_connected_without_new_operating_owner; actual_OS_package_install_CA_trust_PG_Compose_PID1_full_bootstrap_native_product_lifecycle_timer_firewall_traffic_20GB_customer_VM_UNRUN",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_agent_native_guards_products_storage_fresh_unpack_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-groupware/deploy/agent/reconciler.mjs",
         "j-groupware/deploy/agent/provision-command.mjs",
@@ -1536,7 +1626,10 @@
         "j-groupware/tests/agent/test-resources.test.mjs",
         "j-groupware/deploy/agent/agent-install.mjs",
         "j-groupware/deploy/agent/full-bootstrap.mjs"
-      ]
+      ],
+      "prior_verification_before_task27": "actual_Node22_18_Node24_19_check80_full_BFF191_15files_agent27_native3_root_storage7_Web4_fresh_unpack20_each_exit0_skip0; actual_JWeb_check6_plus_helper1_each_exit0; real_seven_archives_Node_npm_offline_OS_metadata_fixture_kit_inventory_digest_permissions_symlink_drift_pass; metadata_Deb_0_0_1_NEVER_INSTALLED; owned_root_immutable_OS_PG_Compose_gateway_agent_preparation_under_umask0077_separate_locks_no_enable_pass; pinned_Mailpit_Compose_create_same_id_retry_stop_restart_config_drift_and_retained_data_pass; actual_owned_Web_helper_sudoers_sshd_config_real_separate_64MB_disk_prepare_SFTP_FTPS_cleanup_stopped_retained_backups_PG_archive_hash_retry_drift_pass; prepared_notification_control_native_products_source_connected_without_new_operating_owner; actual_OS_package_install_CA_trust_PG_Compose_PID1_full_bootstrap_native_product_lifecycle_timer_firewall_traffic_20GB_customer_VM_UNRUN",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "GW-70",
@@ -1833,13 +1926,19 @@
         "E2",
         "E7"
       ],
-      "implementation": "partial",
-      "verification": "no_relay_network_none_capture_pass; customer_vm_egress_firewall_not_run",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_agent_native_guards_fresh_unpack_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-mail/deploy/mailpit-profile.mjs",
         "j-mail/deploy/mailpit.compose.yaml",
-        "j-mail/tests/integration/foundation.integration.test.ts"
-      ]
+        "j-mail/tests/integration/foundation.integration.test.ts",
+        "j-groupware/deploy/agent/mail-egress.mjs",
+        "j-groupware/deploy/agent/native-platform.mjs",
+        "j-groupware/tests/agent/mail-egress.test.mjs"
+      ],
+      "prior_verification_before_task27": "no_relay_network_none_capture_pass; customer_vm_egress_firewall_not_run",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "ML-10",
@@ -1930,15 +2029,21 @@
       "items": [
         "E1"
       ],
-      "implementation": "partial",
-      "verification": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_agent_native_guards_products_storage_fresh_unpack_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-mail/apps/server/src/db/migrate.ts",
         "j-mail/deploy/migrations/001-mail-foundation.sql",
-        "j-mail/deploy/postgres-init.sh"
+        "j-mail/deploy/postgres-init.sh",
+        "j-groupware/deploy/agent/mailpit-platform.mjs",
+        "j-groupware/deploy/agent/product-storage.mjs",
+        "j-groupware/tests/agent/storage.integration.test.mjs"
       ],
       "prior_verification_before_task25": "dedicated_pg_role_cross_db_denial_checksum_migration_pass; outbox_systemd_vm_pending",
-      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md"
+      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "prior_verification_before_task27": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "ML-31",
@@ -2515,18 +2620,22 @@
       "items": [
         "T6"
       ],
-      "implementation": "partial",
-      "verification": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_talk_integration_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-talk/apps/widget/vite.config.ts",
         "j-talk/apps/widget/src/main.ts",
         "j-talk/apps/widget/src/style.css",
         "j-talk/apps/server/src/widget.ts",
         "j-talk/tests/integration/rooms.integration.test.ts",
-        "j-talk/docs/cloud-member-room-widget-2026-10-08.md"
+        "j-talk/docs/cloud-member-room-widget-2026-10-08.md",
+        "j-talk/tests/integration/widget-browser.integration.test.ts"
       ],
       "prior_verification_before_task25": "actual_Vite8_3_4_library_single_embedded_CSS_widget_min_js_1199_bytes_gzip_default733_bytes; actual_https_fixed_v1_cache300_sha256_ETag_304_each_node22_node24_in_14_pass_exit0_skip0; built_script_no_DOM_when_visitor_transport_unavailable; actual_browser_chat_UI_visitor_producer_WSS_not_run",
-      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md"
+      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "prior_verification_before_task27": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "TK-03",
@@ -2535,18 +2644,22 @@
       "items": [
         "T6"
       ],
-      "implementation": "partial",
-      "verification": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_talk_integration_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-talk/apps/widget/vite.config.ts",
         "j-talk/apps/widget/src/main.ts",
         "j-talk/apps/widget/src/style.css",
         "j-talk/apps/server/src/widget.ts",
         "j-talk/tests/integration/rooms.integration.test.ts",
-        "j-talk/docs/cloud-member-room-widget-2026-10-08.md"
+        "j-talk/docs/cloud-member-room-widget-2026-10-08.md",
+        "j-talk/tests/integration/widget-browser.integration.test.ts"
       ],
       "prior_verification_before_task25": "actual_Vite8_3_4_library_single_embedded_CSS_widget_min_js_1199_bytes_gzip_default733_bytes; actual_https_fixed_v1_cache300_sha256_ETag_304_each_node22_node24_in_14_pass_exit0_skip0; built_script_no_DOM_when_visitor_transport_unavailable; actual_browser_chat_UI_visitor_producer_WSS_not_run",
-      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md"
+      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "prior_verification_before_task27": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "TK-04",
@@ -2701,15 +2814,20 @@
       "items": [
         "T4"
       ],
-      "implementation": "partial",
-      "verification": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_talk_integration_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-talk/apps/server/src/settings.ts",
         "j-talk/apps/server/src/app.ts",
-        "j-talk/tests/integration/settings.integration.test.ts"
+        "j-talk/tests/integration/settings.integration.test.ts",
+        "j-talk/apps/server/src/transport.ts",
+        "j-talk/tests/integration/visitors.integration.test.ts"
       ],
       "prior_verification_before_task25": "actual_db_exact_origin_http_get_options_cors_registered_only_pass_node22_node24; visitor_http_and_wss_auth_transport_not_implemented",
-      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md"
+      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "prior_verification_before_task27": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "TK-14",
@@ -2718,17 +2836,22 @@
       "items": [
         "T5"
       ],
-      "implementation": "partial",
-      "verification": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_talk_integration_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-talk/apps/server/src/rooms.ts",
         "j-talk/apps/server/src/app.ts",
         "j-talk/deploy/migrations/002-member-rooms.sql",
         "j-talk/tests/integration/rooms.integration.test.ts",
-        "j-talk/docs/cloud-member-room-widget-2026-10-08.md"
+        "j-talk/docs/cloud-member-room-widget-2026-10-08.md",
+        "j-talk/apps/server/src/visitors.ts",
+        "j-talk/tests/integration/visitors.integration.test.ts"
       ],
       "prior_verification_before_task25": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
-      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md"
+      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "prior_verification_before_task27": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "TK-20",
@@ -2789,17 +2912,22 @@
       "items": [
         "T5"
       ],
-      "implementation": "partial",
-      "verification": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_talk_integration_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-talk/apps/server/src/rooms.ts",
         "j-talk/apps/server/src/app.ts",
         "j-talk/deploy/migrations/002-member-rooms.sql",
         "j-talk/tests/integration/rooms.integration.test.ts",
-        "j-talk/docs/cloud-member-room-widget-2026-10-08.md"
+        "j-talk/docs/cloud-member-room-widget-2026-10-08.md",
+        "j-groupware/apps/web/src/talk.tsx",
+        "j-groupware/tests/bff/talk.integration.test.ts"
       ],
       "prior_verification_before_task25": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
-      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md"
+      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "prior_verification_before_task27": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "TK-23",
@@ -2808,17 +2936,22 @@
       "items": [
         "T5"
       ],
-      "implementation": "partial",
-      "verification": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_talk_integration_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-talk/apps/server/src/rooms.ts",
         "j-talk/apps/server/src/app.ts",
         "j-talk/deploy/migrations/002-member-rooms.sql",
         "j-talk/tests/integration/rooms.integration.test.ts",
-        "j-talk/docs/cloud-member-room-widget-2026-10-08.md"
+        "j-talk/docs/cloud-member-room-widget-2026-10-08.md",
+        "j-groupware/apps/web/src/talk.tsx",
+        "j-talk/tests/integration/visitors.integration.test.ts"
       ],
       "prior_verification_before_task25": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
-      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md"
+      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "prior_verification_before_task27": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "TK-24",
@@ -2827,17 +2960,24 @@
       "items": [
         "T5"
       ],
-      "implementation": "partial",
-      "verification": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_talk_integration_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-talk/apps/server/src/rooms.ts",
         "j-talk/apps/server/src/app.ts",
         "j-talk/deploy/migrations/002-member-rooms.sql",
         "j-talk/tests/integration/rooms.integration.test.ts",
-        "j-talk/docs/cloud-member-room-widget-2026-10-08.md"
+        "j-talk/docs/cloud-member-room-widget-2026-10-08.md",
+        "j-talk/apps/server/src/stream.ts",
+        "j-talk/apps/server/src/transport.ts",
+        "j-groupware/apps/web/src/talk.tsx",
+        "j-talk/tests/integration/visitors.integration.test.ts"
       ],
       "prior_verification_before_task25": "actual_j_auth_code_pkce_single_jtalk_aud_read_write_no_role_real_PG_member_rooms_self_assign_message_outbox_atomic_rollback_dedup_UTF8_4096_sequence_pagination_close_14_each_node22_18_node24_19_exit0_skip0; visitor_rooms_explicit_PG_seed_not_actual_visitor_producer; visitor_policy_guest_delivery_WSS_sync_notifications_full_UI_BFF_VM_not_run",
-      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md"
+      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "prior_verification_before_task27": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "TK-25",
@@ -2878,15 +3018,20 @@
       "items": [
         "T4"
       ],
-      "implementation": "partial",
-      "verification": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_talk_integration_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-talk/apps/server/src/auth.ts",
         "j-talk/apps/server/src/app.ts",
-        "j-talk/tests/integration/settings.integration.test.ts"
+        "j-talk/tests/integration/settings.integration.test.ts",
+        "j-talk/apps/server/src/visitors.ts",
+        "j-groupware/tests/bff/talk.integration.test.ts"
       ],
       "prior_verification_before_task25": "actual_member_single_jtalk_aud_azp_tenant_sid_role_cookie_refusal_401_403_404_409_real_jwks_and_db503_pass_node22_node24; visitor_token_lifetime_rotation_rebinding_wss_and_rate_limit_not_implemented",
-      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md"
+      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "prior_verification_before_task27": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "TK-30",
@@ -2942,8 +3087,8 @@
       "items": [
         "T2"
       ],
-      "implementation": "partial",
-      "verification": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_talk_integration_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-talk/packages/contracts/src/index.ts",
         "j-talk/packages/contracts/package.json",
@@ -2951,10 +3096,14 @@
         "j-groupware/apps/server/src/talk-routes.ts",
         "j-groupware/apps/server/package.json",
         "j-groupware/package-lock.json",
-        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md",
+        "j-groupware/apps/web/src/talk.tsx"
       ],
       "prior_verification_before_task25": "immutable_first_private_registry_Talk_contracts0_1_0_exact_lock_pack_integrity_fresh_consumer1_each_node22_node24_exit0; shared_member_settings_DTO_UUID_schema_occurrence_dedup_BFF_consumption_pass; visitor_WSS_signed_sync_cursor_contract_T2_UNDECIDED; actual_Node22_18_Node24_19_Talk_check2_registry1_PG_integration14_each_exit0_skip0; actual_G22_BFF_occurrence_delivery6_each_in_full191_15files_exit0_skip0; new_room_transaction_trigger_and_assignment_original_recipient_distinct_UUID_atomic_rollback_receiver_restart_ACK_failure_dedup_multi_sender_lease_compiled_main_SIGKILL_actual20sec_expiry_SSE_pass; room_seed_is_explicit_PG_fixture_not_public_visitor_producer; T2_visitor_WSS_UI_customer_VM_whole_suite_acceptance_UNRUN",
-      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md"
+      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "prior_verification_before_task27": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "TK-42",
@@ -3210,8 +3359,8 @@
       "items": [
         "H7"
       ],
-      "implementation": "partial",
-      "verification": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_web_integration_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-web/packages/contracts/src/index.ts",
         "j-web/packages/contracts/README.md",
@@ -3225,10 +3374,14 @@
         "j-web/docs/cloud-content-contract-verification-2026-10-09.md",
         "j-groupware/apps/server/src/web-routes.ts",
         "j-groupware/tests/bff/web.integration.test.ts",
-        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md",
+        "j-groupware/apps/web/src/web-sites.tsx"
       ],
       "prior_verification_before_task25": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending; preview_contains_exact_always_anonymous_widget_snippet_pass; every_public_deployed_template_binding_UNRUN_H7_pending",
-      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md"
+      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "prior_verification_before_task27": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "WB-20",
@@ -3395,8 +3548,8 @@
       "items": [
         "H2"
       ],
-      "implementation": "partial",
-      "verification": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "implementation": "implemented",
+      "verification": "task27_source_spec_review_and_bounded_cloud_check_bff_web_integration_pass_node22_node24; actual_vm_and_operating_acceptance_not_run; j-groupware/docs/cloud-task27-verification-2026-10-09.md",
       "code": [
         "j-web/packages/contracts/src/index.ts",
         "j-web/packages/contracts/README.md",
@@ -3410,10 +3563,14 @@
         "j-web/docs/cloud-content-contract-verification-2026-10-09.md",
         "j-groupware/apps/server/src/web-routes.ts",
         "j-groupware/tests/bff/web.integration.test.ts",
-        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md",
+        "j-groupware/apps/web/src/web-sites.tsx"
       ],
       "prior_verification_before_task25": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending; site_content_DNS_account_error_readonly_DTO_published; deployment_request_state_contract_H7_unapproved_not_defined",
-      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md"
+      "task25_connected_evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "prior_verification_before_task27": "task25_bounded_connected_source_checks_pass_node22_node24; dependency_gate_resolved; existing_partial_status_retained_for_full_feature_specification_scope_review; j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+      "source_completed_batch": 27,
+      "acceptance_complete": false
     },
     {
       "id": "WB-32",
@@ -3454,7 +3611,7 @@
       "acceptance_complete": false
     }
   ],
-  "verification_environment": "isolated cloud /workspace; real Keycloak/j-auth and dedicated j-groupware/j-approval/j-messenger PostgreSQL; messenger legacy SQLite preserved and tested; production subscription/key projection not activated; company laptop restriction unchanged; isolated official nginx gateway protocol fixtures tested on Node22/24 without host installation; actual dedicated customer-auth PG/member APIs and service-user TLS permission/fresh-process trust in isolated containers verified; no cloud-host OS account or trust changes; actual Talk occurrence notifications/G22 SSE and managed account removal in owned root containers verified; default host installer notification binding remains inactive",
+  "verification_environment": "isolated cloud /workspace; real Keycloak/j-auth and dedicated j-groupware/j-approval/j-messenger PostgreSQL; messenger legacy SQLite preserved and tested; production subscription/key projection not activated; company laptop restriction unchanged; isolated official nginx gateway protocol fixtures tested on Node22/24 without host installation; actual dedicated customer-auth PG/member APIs and service-user TLS permission/fresh-process trust in isolated containers verified; no cloud-host OS account or trust changes; actual Talk occurrence notifications/G22 SSE and managed account removal in owned root containers verified; default host installer notification binding remains inactive; Task27 real customer React browser/Keycloak/BFF/PG/WSS/SSE verified on Node22/24; UI supplied in cold native bundles; notification plan and mail egress native source prepared inertly, no operating activation",
   "verification_evidence": [
     "j-auth/docs/cloud-verification-2026-10-08.md",
     "j-auth/docs/cloud-provisioning-verification-2026-10-08.md",
@@ -3498,19 +3655,19 @@
     "j-groupware/docs/cloud-task25-test-results.json",
     "j-groupware/docs/cloud-acceptance-collector-verification-2026-10-09.md",
     "j-groupware/docs/cloud-task26-web-image-verification-2026-10-09.md",
-    "j-groupware/docs/cloud-task26-web-image-results.json"
+    "j-groupware/docs/cloud-task26-web-image-results.json",
+    "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+    "j-groupware/docs/cloud-task27-test-results.json",
+    "j-groupware/docs/cloud-task27-source-review.json",
+    "j-groupware/docs/cloud-task27-operating-preparation-2026-10-09.md"
   ],
   "pending_implementation": [
-    "Existing partial34 require feature-specification scope review against executed evidence. Task25 resolved H7 guarded template deployment/Origin registration, T2 visitor credential/message/WSS/cursor recovery, E8 full SMTP envelope capture/outbox and shared UI source gates; operating/customer acceptance remains separate.",
-    "G6/G15 formal member/organization/repair UI and Playwright; G16 formal approval UI and Playwright (actual BFF business API and snapshot already verified)",
-    "G2/G9 formal sidebar/board business screens remain after implemented UI guidelines, shared components and actual Chromium checks. I2 full login-flow/brute-force acceptance remains after implemented Keycloak theme and actual Chromium rendering.",
-    "Messenger formal UI/app product-path freezing and Talk formal business screens/browser acceptance remain; actual messenger PG/BFF HTTP/client transport/WSS, Talk member/visitor WSS and approval notification delivery are independently verified.",
-    "G18 OS bootstrap kit/native lifecycle/retained teardown and G21 agent source connected (23rd batch), with TK-21 derived Talk assignment binding added (24th). Actual OS package/CA trust/systemd PID1/full native lifecycle/timer/firewall/customer VM acceptance unrun; operating credential/topology remains unapproved.",
-    "G22 formal notification UI/Playwright and all product notification delivery acceptance; production source credential renewal/topology and worker/timer activation remain separate from verified short-lived credential file binding and explicit CLI",
-    "Per-feature remaining audit: docs/cloud-remaining-feature-audit-2026-10-08.json. Remaining choices concern actual Hyper-V VM location/execution approval and operating notification credential owner/rotation/topology; completed source-policy gates are not pending user decisions.",
-    "GW-51 manual business contract and TK-21 current active talk:write candidate/trusted assignment source are implemented under explicit user approval. Formal UI/customer VM and T2 visitor production remain unrun; assignment validation-to-commit race is bounded by the ten-second proof lifetime."
+    "미착수8은 실제 VM 인수 항목이다: AU-51, GW-73, MS-09, ML-32, CA-32, AP-32, TK-42, WB-33. VM 위치·명시적 실행 승인 전에는 실행하지 않는다.",
+    "GW-40 customer-local topology/명시적 owner·executor·private path 검증/render 소스는 구현됨. 실제 운영 담당·계정·refresh credential·service key 회전 및 접근 준비/활성화 검증은 미실행이다.",
+    "ML-03 native Mailpit host-network SMTP output 차단 연결 소스는 구현됨. 실제 nft 적용·IPv4/IPv6·loopback·재부팅·기존 방화벽 공존은 미실행이다.",
+    "소스 partial34는 기능 명세/소스 연결/Node22·24 근거를 대조하여 구현으로 갱신했다. 전체 suite/customer 운영 인수·장시간 실행 검증은 별도이며 whole_suite_verified=false를 유지한다."
   ],
-  "latest_bounded_verification_report": "j-groupware/docs/cloud-task26-web-image-verification-2026-10-09.md",
+  "latest_bounded_verification_report": "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
   "task25": {
     "source_target_ids": [
       "AU-09",
@@ -3560,7 +3717,10 @@
   "task26_web_image_verification": {
     "source_commit": "237bfeb1833f4dc7b27e578dfc01ff8d649bd300",
     "image_id": "sha256:cd6c616e3ced2d3e475f01cf0a57c8efb7a9ec06e74ed57d308e7659a2c655f1",
-    "host_runtimes": ["v22.18.0", "v24.19.0"],
+    "host_runtimes": [
+      "v22.18.0",
+      "v24.19.0"
+    ],
     "fresh_image_hosting_passed_each": 5,
     "fresh_image_web_postgres_https_passed_each": 15,
     "groupware_web_bff_passed_each": 6,
@@ -3574,5 +3734,130 @@
     "actual_vm_acceptance_executed": false,
     "whole_suite_verified": false,
     "evidence": "j-groupware/docs/cloud-task26-web-image-results.json"
+  },
+  "task27": {
+    "baseline_summary": {
+      "implemented": 130,
+      "partial": 34,
+      "not_started": 8
+    },
+    "classification_first_checkpoint": {
+      "customer_ui_auth": [
+        "AU-02",
+        "AU-05",
+        "GW-12",
+        "GW-13",
+        "GW-14",
+        "GW-20",
+        "GW-21",
+        "GW-30",
+        "GW-31",
+        "GW-32",
+        "GW-33",
+        "GW-34",
+        "GW-35",
+        "GW-36",
+        "GW-37",
+        "GW-44"
+      ],
+      "source_specification": [
+        "TK-02",
+        "TK-03",
+        "TK-13",
+        "TK-14",
+        "TK-22",
+        "TK-23",
+        "TK-24",
+        "TK-27",
+        "TK-41",
+        "WB-13",
+        "WB-31"
+      ],
+      "install_operating_configuration": [
+        "GW-40",
+        "GW-63",
+        "GW-64",
+        "GW-65",
+        "GW-66",
+        "ML-03",
+        "ML-30"
+      ],
+      "actual_vm_acceptance": [
+        "AU-51",
+        "GW-73",
+        "MS-09",
+        "ML-32",
+        "CA-32",
+        "AP-32",
+        "TK-42",
+        "WB-33"
+      ]
+    },
+    "source_target_ids": [
+      "AU-02",
+      "AU-05",
+      "GW-12",
+      "GW-13",
+      "GW-14",
+      "GW-20",
+      "GW-21",
+      "GW-30",
+      "GW-31",
+      "GW-32",
+      "GW-33",
+      "GW-34",
+      "GW-35",
+      "GW-36",
+      "GW-37",
+      "GW-44",
+      "TK-02",
+      "TK-03",
+      "TK-13",
+      "TK-14",
+      "TK-22",
+      "TK-23",
+      "TK-24",
+      "TK-27",
+      "TK-41",
+      "WB-13",
+      "WB-31",
+      "GW-40",
+      "GW-63",
+      "GW-64",
+      "GW-65",
+      "GW-66",
+      "ML-03",
+      "ML-30"
+    ],
+    "source_target_count": 34,
+    "source_target_implemented": 34,
+    "actual_vm_target_ids": [
+      "AU-51",
+      "GW-73",
+      "MS-09",
+      "ML-32",
+      "CA-32",
+      "AP-32",
+      "TK-42",
+      "WB-33"
+    ],
+    "actual_vm_executed": 0,
+    "source_commits_at_checkpoint": {
+      "j-auth": "93375df96a1bce319df12eb62a2b9a586e82ae1d",
+      "j-groupware": "1d8e1a53092a004edd2353feb9f61a17696db2fe",
+      "j-messenger": "632c0911bac8d3ec5394f8adb4e2de544e3af425",
+      "j-talk": "f625f1ac12a1dd86f7f019c675c98593e63c5ca8",
+      "j-mail": "abd8526502a68f8d93341e02a35ac54e7b97c45d",
+      "j-customer-auth-db": "98e013dd83eaef9067a3dcba7be99cb09ac8c429",
+      "j-approval": "a29271fbc583e274b313103105b64d661b1a7afe",
+      "j-web": "dc8b5d57f0ac744b83a13453382966bb79add738"
+    },
+    "evidence": [
+      "j-groupware/docs/cloud-task27-verification-2026-10-09.md",
+      "j-groupware/docs/cloud-task27-test-results.json",
+      "j-groupware/docs/cloud-task27-source-review.json"
+    ],
+    "acceptance_complete": false,
+    "whole_suite_verified": false
   }
 }
