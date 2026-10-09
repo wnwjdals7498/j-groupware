@@ -33,6 +33,7 @@ import { registerMessengerRoutes } from "./messenger-routes.js";
 import { registerMailRoutes } from "./mail-routes.js";
 import { registerTalkRoutes } from "./talk-routes.js";
 import { registerCustomerAuthRoutes } from "./customer-auth-routes.js";
+import { registerWebRoutes } from "./web-routes.js";
 import { NotificationStore } from "./db/notifications.js";
 import { registerNotificationRoutes } from "./notification-routes.js";
 
@@ -399,6 +400,7 @@ export function createApp(options: {
     identities.get(request)!.roles.includes("guest:read"),
   );
   registerCustomerAuthRoutes(app, services);
+  registerWebRoutes(app, services, options.config.tenant);
   app.register(websocket, {
     options: { maxPayload: 1048576, perMessageDeflate: false },
     errorHandler: (_error, socket) => socket.terminate(),

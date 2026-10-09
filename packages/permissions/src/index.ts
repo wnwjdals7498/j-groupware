@@ -6,6 +6,21 @@ export type Access =
   | { readonly kind: "session"; readonly role?: FunctionalRoleName };
 
 export const ROUTES = {
+  "GET /api/web/sites": { kind: "session", role: "web:read" },
+  "GET /api/web/sites/hosting": { kind: "session", role: "web:read" },
+  "GET /api/web/sites/:id": { kind: "session", role: "web:read" },
+  "GET /api/web/sites/:id/hosting": { kind: "session", role: "web:read" },
+  "GET /api/web/sites/:id/dns": { kind: "session", role: "web:read" },
+  "GET /api/web/sites/:id/content": { kind: "session", role: "web:read" },
+  "PUT /api/web/sites/:id/content": { kind: "session", role: "web:write" },
+  "POST /api/web/sites/:id/preview": { kind: "session", role: "web:write" },
+  "POST /api/web/sites": { kind: "session", role: "web:write" },
+  "POST /api/web/sites/:id/retry": { kind: "session", role: "web:write" },
+  "POST /api/web/sites/:id/account-password": {
+    kind: "session",
+    role: "web:write",
+  },
+  "DELETE /api/web/sites/:id": { kind: "session", role: "web:write" },
   "GET /api/customer-auth/guests": { kind: "session", role: "guest:read" },
   "GET /api/customer-auth/guests/:id": { kind: "session", role: "guest:read" },
   "POST /api/customer-auth/guests": { kind: "session", role: "guest:write" },
