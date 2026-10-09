@@ -19,6 +19,7 @@ async function main() {
     const app = createApp({
       pool,
       config,
+      requireWebAssets: true,
       serviceEndpoints: config.serviceEndpoints,
       memberAuth: { origin: config.authOrigin, serviceKey: config.serviceKey },
       https: { cert, key, minVersion: "TLSv1.2" },

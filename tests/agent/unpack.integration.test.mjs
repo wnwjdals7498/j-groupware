@@ -102,6 +102,26 @@ test("installs base and Talk from fresh runtime archives, npm ci and local works
         `await import(${JSON.stringify(target + "/deploy/agent/bundle-install.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/base-environment.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/notification-worker.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/provision-agent.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/tls-credentials.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/launch-service.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/product-storage.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/mailpit-platform.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/provision-service.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/bootstrap-runtime.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/base-bootstrap.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/native-accounts.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/notification-binding.mjs")});`,
       ]);
     if (service === "j-groupware") {
+      const html = await readFile(target + "/apps/web/dist/index.html", "utf8");
+      const assets = await readdir(target + "/apps/web/dist/app-assets");
+      assert(assets.some((name) => name.endsWith(".js")));
+      assert(assets.some((name) => name.endsWith(".css")));
+      for (const name of assets) {
+        assert(html.includes("/app-assets/" + name));
+        assert.equal(
+          digest(await readFile(target + "/apps/web/dist/app-assets/" + name)),
+          digest(
+            await readFile(
+              "/workspace/j-groupware/apps/web/dist/app-assets/" + name,
+            ),
+          ),
+        );
+      }
+      await execute(process.execPath, [
+        "--input-type=module",
+        "-e",
+        `await import(${JSON.stringify(target + "/deploy/agent/mail-egress.mjs")}); await import(${JSON.stringify(target + "/deploy/agent/notification-plan.mjs")});`,
+      ]);
       assert.equal(
         (await stat(target + "/deploy/provision-service")).mode & 0o777,
         0o755,

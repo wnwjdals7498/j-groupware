@@ -7,6 +7,7 @@ import { createHmac, randomBytes, randomUUID } from "node:crypto";
 import { Pool } from "pg";
 import { Browser, integrationRuntime } from "./runtime.js";
 import type { Runtime } from "./runtime.js";
+import { customerBrowser } from "./customer-browser.js";
 import { createApp as createWebApp } from "../../../j-web/apps/server/dist/app.js";
 import { migrate } from "../../../j-web/apps/server/dist/db/migrate.js";
 import { hostingRuntime } from "../../../j-web/tests/hosting/runtime.mjs";
@@ -461,6 +462,59 @@ describe("actual member BFF → exact Web contract → owned PG and isolated hos
       hostsEntry: "192.0.2.77 bff-web.jgw.test",
     });
     expect(JSON.stringify(site)).not.toContain(password);
+  });
+  it("uses real Web business screens to edit, sandbox preview and deploy the saved revision with separate origin registration", async () => {
+    const ui = await customerBrowser(rt, owner);
+    try {
+      await ui.page.goto(ui.origin + "/web");
+      const hosted = await owner.request(
+        "/api/web/sites/" + talkSiteId + "/hosting",
+      );
+      const domain = ((await hosted.json()) as { domain: string }).domain;
+      await ui.page.getByRole("button", { name: domain, exact: true }).click();
+      const form = ui.page.getByRole("form", { name: "사이트 콘텐츠 편집" });
+      await form.getByLabel("회사 이름").fill("브라우저 회사");
+      await form
+        .getByLabel("소개")
+        .fill("<script>window.__webUnsafe=true</script>");
+      await form.getByLabel("공개 연락처").fill("published-contact");
+      await form
+        .getByRole("button", { name: "콘텐츠 저장", exact: true })
+        .click();
+      await ui.page
+        .getByRole("status")
+        .filter({ hasText: "변경 사항이 반영되었습니다." })
+        .first()
+        .waitFor();
+      await ui.page
+        .getByRole("button", { name: "미리보기", exact: true })
+        .click();
+      await ui.page
+        .frameLocator('iframe[title="사이트 미리보기"]')
+        .getByText("브라우저 회사", { exact: true })
+        .waitFor();
+      expect(await ui.page.evaluate(() => "__webUnsafe" in window)).toBe(false);
+      await ui.page
+        .getByRole("button", { name: "저장한 버전 배포", exact: true })
+        .click();
+      await ui.page
+        .getByRole("dialog", { name: "사이트 배포 확인" })
+        .getByRole("button", { name: "확인", exact: true })
+        .click();
+      await ui.page
+        .getByRole("status")
+        .filter({ hasText: "사이트 배포 완료:" })
+        .waitFor();
+      const saved = await owner.request(
+        "/api/web/sites/" + talkSiteId + "/content",
+      );
+      expect(
+        ((await saved.json()) as { content: { name: string } }).content.name,
+      ).toBe("브라우저 회사");
+      expect(ui.pageErrors).toEqual([]);
+    } finally {
+      await ui.close();
+    }
   });
   it("resets the actual account and removes owned routes/files through the existing helper without retaining passwords in PG", async () => {
     const reset = await owner.change(

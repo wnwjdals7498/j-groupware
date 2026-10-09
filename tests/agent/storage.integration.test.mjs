@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp, rm, realpath } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { createServer } from "node:net";
 import { fileURLToPath } from "node:url";
@@ -70,6 +70,10 @@ before(async () => {
     "--mount",
     "type=bind,src=" + source + ",dst=/code,readonly",
     "--mount",
+    "type=bind,src=" +
+      (await realpath(new URL("../../node_modules", import.meta.url))) +
+      ",dst=/code-dependencies,readonly",
+    "--mount",
     "type=bind,src=" + process.execPath + ",dst=/test-node/node,readonly",
     "--mount",
     "type=bind,src=/usr/local/bin/docker,dst=/test-docker/docker,readonly",
@@ -93,7 +97,7 @@ before(async () => {
     "/test-node/node",
     "--input-type=module",
     "-e",
-    "import {copyFile,chmod,chown,mkdir,cp} from 'node:fs/promises';await copyFile('/test-node/node','/usr/local/bin/node');await chmod('/usr/local/bin/node',0o555);await chown('/usr/local/bin/node',0,0);await copyFile('/test-docker/docker','/usr/bin/docker');await chmod('/usr/bin/docker',0o555);await mkdir('/usr/libexec/docker/cli-plugins',{recursive:true});await copyFile('/test-compose/docker-compose','/usr/libexec/docker/cli-plugins/docker-compose');await chmod('/usr/libexec/docker/cli-plugins/docker-compose',0o555);await mkdir('/opt/jgw/test-agent/tests/agent',{recursive:true});await cp('/code/deploy','/opt/jgw/test-agent/deploy',{recursive:true});await cp('/code/tests/agent/storage-fixture.mjs','/opt/jgw/test-agent/tests/agent/storage-fixture.mjs');await mkdir('/opt/jgw/test-agent/node_modules/@j-auth',{recursive:true});await mkdir('/opt/jgw/test-agent/node_modules/@j-mail',{recursive:true});await cp('/code/node_modules/@j-auth/contracts','/opt/jgw/test-agent/node_modules/@j-auth/contracts',{recursive:true});await cp('/code/node_modules/@j-mail/contracts','/opt/jgw/test-agent/node_modules/@j-mail/contracts',{recursive:true});for(const p of ['undici','pg','pg-pool','pg-protocol','pg-types','pg-int8','pg-connection-string','pgpass','split2','postgres-array','postgres-bytea','postgres-date','postgres-interval','xtend','pg-cloudflare'])await cp('/code/node_modules/'+p,'/opt/jgw/test-agent/node_modules/'+p,{recursive:true});",
+    "import {copyFile,chmod,chown,mkdir,cp} from 'node:fs/promises';await copyFile('/test-node/node','/usr/local/bin/node');await chmod('/usr/local/bin/node',0o555);await chown('/usr/local/bin/node',0,0);await copyFile('/test-docker/docker','/usr/bin/docker');await chmod('/usr/bin/docker',0o555);await mkdir('/usr/libexec/docker/cli-plugins',{recursive:true});await copyFile('/test-compose/docker-compose','/usr/libexec/docker/cli-plugins/docker-compose');await chmod('/usr/libexec/docker/cli-plugins/docker-compose',0o555);await mkdir('/opt/jgw/test-agent/tests/agent',{recursive:true});await cp('/code/deploy','/opt/jgw/test-agent/deploy',{recursive:true});await cp('/code/tests/agent/storage-fixture.mjs','/opt/jgw/test-agent/tests/agent/storage-fixture.mjs');await mkdir('/opt/jgw/test-agent/node_modules/@j-auth',{recursive:true});await mkdir('/opt/jgw/test-agent/node_modules/@j-mail',{recursive:true});await cp('/code-dependencies/@j-auth/contracts','/opt/jgw/test-agent/node_modules/@j-auth/contracts',{recursive:true});await cp('/code-dependencies/@j-mail/contracts','/opt/jgw/test-agent/node_modules/@j-mail/contracts',{recursive:true});for(const p of ['undici','pg','pg-pool','pg-protocol','pg-types','pg-int8','pg-connection-string','pgpass','split2','postgres-array','postgres-bytea','postgres-date','postgres-interval','xtend','pg-cloudflare'])await cp('/code-dependencies/'+p,'/opt/jgw/test-agent/node_modules/'+p,{recursive:true});",
   ]);
   await docker([
     "exec",

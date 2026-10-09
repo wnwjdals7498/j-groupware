@@ -18,6 +18,7 @@ import { OidcClient } from "../../apps/server/src/oidc.js";
 import { digest } from "../../apps/server/src/security.js";
 import { createApplication } from "../../../j-messenger/apps/server/dist/bootstrap/application.js";
 import { createGroupwareMessengerClient } from "@j-messenger/client-core";
+import { customerBrowser } from "./customer-browser.js";
 import { loadConfig } from "../../../j-messenger/apps/server/dist/platform/config/index.js";
 
 describe("actual messenger j-auth HTTP/WSS + BFF relay with selected storage", () => {
@@ -887,6 +888,43 @@ describe("actual messenger j-auth HTTP/WSS + BFF relay with selected storage", (
     expect(
       (await second.request(`${prefix}/files/${file.id}/content`)).status,
     ).toBe(404);
+  });
+  it("embeds the published React messenger using the actual cookie BFF and sends a message visible to another member", async () => {
+    const ui = await customerBrowser(rt, browsers[0]!);
+    const other = await customerBrowser(rt, second);
+    try {
+      await ui.page.goto(ui.origin + "/messenger");
+      await other.page.goto(other.origin + "/messenger");
+      await ui.page
+        .getByRole("button")
+        .filter({ hasText: "BFF 실제 HTTP" })
+        .first()
+        .click();
+      await other.page
+        .getByRole("button")
+        .filter({ hasText: "BFF 실제 HTTP" })
+        .first()
+        .click();
+      await ui.page
+        .getByLabel("메시지 입력", { exact: true })
+        .fill("브라우저 메신저 메시지");
+      await ui.page.getByRole("button", { name: "전송", exact: true }).click();
+      await other.page
+        .locator(".message-text")
+        .filter({ hasText: "브라우저 메신저 메시지" })
+        .waitFor();
+      expect(
+        await ui.page.evaluate(() => ({
+          local: localStorage.length,
+          session: sessionStorage.length,
+        })),
+      ).toEqual({ local: 0, session: 0 });
+      expect(ui.pageErrors).toEqual([]);
+      expect(other.pageErrors).toEqual([]);
+    } finally {
+      await other.close();
+      await ui.close();
+    }
   });
   it("returns a bounded native unavailable envelope for an actual downstream outage without ending the BFF session", async () => {
     await apps[0]!.close();

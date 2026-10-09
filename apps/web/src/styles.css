@@ -1,0 +1,130 @@
+body {
+  margin: 0;
+}
+fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+form {
+  margin-block: var(--jgw-space-3);
+}
+form fieldset {
+  display: grid;
+  gap: var(--jgw-space-3);
+}
+.jgw-main > div {
+  display: grid;
+  gap: var(--jgw-space-4);
+}
+.jgw-main h1 {
+  font-size: 1.6rem;
+  margin: 0;
+}
+.jgw-field textarea,
+.jgw-field select {
+  color: var(--jgw-color-text);
+  background: var(--jgw-color-surface);
+  border: 1px solid var(--jgw-color-border);
+  border-radius: var(--jgw-radius-control);
+  padding: var(--jgw-space-3);
+  font: inherit;
+  min-width: 0;
+  max-width: 100%;
+}
+.jgw-field textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+textarea:focus-visible,
+select:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--jgw-color-focus);
+  outline-offset: 3px;
+}
+.role-check {
+  display: flex;
+  gap: var(--jgw-space-2);
+  align-items: center;
+}
+.role-check input {
+  width: 20px;
+  height: 20px;
+}
+.actions {
+  display: flex;
+  gap: var(--jgw-space-2);
+  flex-wrap: wrap;
+}
+.plain-body {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+.secret {
+  background: var(--jgw-color-background);
+  padding: var(--jgw-space-4);
+  user-select: all;
+}
+.html-preview {
+  width: 100%;
+  min-height: 24rem;
+  border: 1px solid var(--jgw-color-border);
+  background: white;
+  box-sizing: border-box;
+}
+.logo-preview {
+  width: auto;
+  max-width: 160px;
+  height: auto;
+  max-height: 160px;
+}
+.login-page {
+  max-width: 480px;
+  padding: var(--jgw-space-6);
+  margin: 12vh auto 0;
+}
+.messenger-embed {
+  min-width: 0;
+  height: 70vh;
+}
+.messenger-embed .app {
+  height: 100%;
+  min-height: 0;
+}
+.message-list {
+  padding-left: var(--jgw-space-4);
+}
+.customer-header {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--jgw-space-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--jgw-space-4);
+}
+.jgw-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+@media (max-width: 720px) {
+  .login-page {
+    padding: var(--jgw-space-4);
+  }
+  .jgw-main {
+    min-width: 0;
+  }
+  .jgw-table td .jgw-button {
+    display: block;
+    margin-block: 4px;
+  }
+}

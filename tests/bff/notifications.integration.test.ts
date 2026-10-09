@@ -10,6 +10,7 @@ import { Browser, integrationRuntime, type Runtime } from "./runtime.js";
 import { NotificationStore } from "../../apps/server/src/db/notifications.js";
 import { createNotificationReceiver } from "../../apps/server/src/notification-receiver.js";
 import { digest } from "../../apps/server/src/security.js";
+import { customerBrowser } from "./customer-browser.js";
 import type {
   NotificationInput,
   NotificationPage,
@@ -767,6 +768,47 @@ describe("actual notification receipt + approval outbox delivery + SSE and recov
     expect((await page(actors[0]!.b)).items.length).toBeGreaterThan(0);
   });
 
+  it("shows a real SSE notification, marks it read and follows only the allowed customer route", async () => {
+    const ui = await customerBrowser(rt, admin);
+    try {
+      const unreadBefore = (await page(admin)).unread;
+      await ui.page.goto(ui.origin + "/board");
+      await ui.page
+        .getByRole("link", { name: `알림 (${unreadBefore})`, exact: true })
+        .waitFor();
+      const payload = {
+        ...input([(await admin.me()).subject]),
+        title: "브라우저 수신 알림",
+      };
+      const response = await post(payload);
+      expect(response.status).toBe(200);
+      const received = (await response.json()) as { id: string };
+      await ui.page
+        .getByRole("link", { name: `알림 (${unreadBefore + 1})`, exact: true })
+        .click();
+      await ui.page
+        .getByRole("button", { name: "열기 브라우저 수신 알림", exact: true })
+        .click();
+      await ui.page
+        .getByRole("heading", { name: "결재", exact: true })
+        .waitFor();
+      expect(new URL(ui.page.url()).pathname).toBe(payload.link);
+      await ui.page
+        .getByRole("link", { name: `알림 (${unreadBefore})`, exact: true })
+        .waitFor();
+      expect(
+        (
+          await rt.pool.query(
+            "SELECT count(*)::int AS n FROM notification_reads WHERE tenant_id=$1 AND notification_id=$2 AND member_id=$3",
+            [rt.fixtures[0]!.tenant, received.id, (await admin.me()).subject],
+          )
+        ).rows[0]?.n,
+      ).toBe(1);
+      expect(ui.pageErrors).toEqual([]);
+    } finally {
+      await ui.close();
+    }
+  });
   it("runs compiled receiver and automatic sender through startup, actual receipt, and clean shutdown", async () => {
     await drain();
     const doc = await make();

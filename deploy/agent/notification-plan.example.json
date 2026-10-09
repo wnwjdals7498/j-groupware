@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "tenant": "example",
+  "ownerId": "replace-with-credential-owner",
+  "executionUser": "replace_with_executor",
+  "executionGroup": "replace_with_executor",
+  "topology": "customer-local",
+  "authOrigin": "https://jauth.jgw.test",
+  "bundleRoot": "/opt/jgw/bundles",
+  "controlFile": "/etc/jgw/notification/control.json",
+  "caFile": "/etc/jgw/notification/auth-ca.crt",
+  "credentialsFile": "/etc/jgw/notification/credentials.json",
+  "databaseFile": "/etc/jgw/notification/database.json",
+  "manifestRoot": "/var/lib/jgw/provision/notification"
+}

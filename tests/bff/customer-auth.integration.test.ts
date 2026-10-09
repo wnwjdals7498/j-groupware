@@ -20,6 +20,7 @@ import Fastify from "fastify";
 import type { FastifyInstance } from "fastify";
 import { Browser, integrationRuntime } from "./runtime.js";
 import type { Runtime } from "./runtime.js";
+import { customerBrowser } from "./customer-browser.js";
 import { OidcClient } from "../../apps/server/src/oidc.js";
 import { SESSION_POLICY } from "@j-groupware/contracts";
 import { digest } from "../../apps/server/src/security.js";
@@ -2121,6 +2122,76 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
         "DELETE FROM visitors WHERE tenant_id=$1 AND id=$2",
         [fixture.tenant, visitor],
       );
+    }
+  });
+  it("creates and edits a guest, displays an API key once and confirms revocation through the real business screens", async () => {
+    const ui = await customerBrowser(rt, ownerBrowser);
+    try {
+      await ui.page.goto(ui.origin + "/guests");
+      const form = ui.page.getByRole("form", { name: "손님 등록" });
+      await form.getByLabel("손님 이름").fill("화면 손님");
+      await form.getByLabel("로그인 ID").fill("browser-guest");
+      await form.getByLabel("연락처").fill("public-display");
+      await form.getByLabel("손님 비밀번호").fill(guestPassword);
+      await form
+        .getByRole("button", { name: "손님 등록", exact: true })
+        .click();
+      await ui.page
+        .getByRole("button", { name: "수정 화면 손님", exact: true })
+        .click();
+      const editing = ui.page.getByRole("dialog", { name: "손님 수정" });
+      await editing.getByLabel("손님 이름").fill("수정된 화면 손님");
+      await editing
+        .getByRole("button", { name: "수정 저장", exact: true })
+        .click();
+      await ui.page
+        .getByRole("button", { name: "수정 수정된 화면 손님", exact: true })
+        .waitFor();
+      const keyForm = ui.page.getByRole("form", { name: "API 키 발급" });
+      await keyForm.getByLabel("API 키 이름").fill("브라우저 키");
+      await keyForm
+        .getByRole("button", { name: "키 발급", exact: true })
+        .click();
+      const secretDialog = ui.page.getByRole("dialog", {
+        name: "발급된 API 키",
+      });
+      await secretDialog.waitFor();
+      const secret = await secretDialog.locator("pre").textContent();
+      expect(typeof secret).toBe("string");
+      if (secret) rt.secretValues.add(secret);
+      await secretDialog
+        .getByRole("button", { name: "보관 완료", exact: true })
+        .click();
+      expect(
+        await ui.page.getByRole("dialog", { name: "발급된 API 키" }).count(),
+      ).toBe(0);
+      const storage = await ui.page.evaluate(() => ({
+        local: localStorage.length,
+        session: sessionStorage.length,
+      }));
+      expect(storage).toEqual({ local: 0, session: 0 });
+      await ui.page
+        .getByRole("button", { name: "회수 브라우저 키", exact: true })
+        .click();
+      await ui.page
+        .getByRole("dialog", { name: "API 키 회수 확인" })
+        .getByRole("button", { name: "확인", exact: true })
+        .click();
+      await ui.page
+        .getByRole("row")
+        .filter({ hasText: "브라우저 키" })
+        .getByText("회수됨", { exact: true })
+        .waitFor();
+      await ui.page.reload();
+      expect(
+        await ui.page
+          .locator("body")
+          .textContent()
+          .then((text) => !!secret && text?.includes(secret)),
+      ).toBe(false);
+      expect(ui.pageErrors).toEqual([]);
+    } finally {
+      await ui.close();
     }
   });
   it("reports actual DB outage separately and keeps compiled logs free of secrets", async () => {

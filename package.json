@@ -11,7 +11,9 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspace=@j-groupware/contracts && npm run build --workspace=@j-groupware/permissions && npm run build --workspace=@j-groupware/bff-auth && npm run build --workspace=@j-groupware/ui && npm run build --workspace=@j-groupware/server && npm run build --workspace=@j-groupware/console-server",
+    "build": "npm run build --workspace=@j-groupware/contracts && npm run build --workspace=@j-groupware/permissions && npm run build --workspace=@j-groupware/bff-auth && npm run build --workspace=@j-groupware/ui && npm run build --workspace=@j-groupware/web && npm run build --workspace=@j-groupware/server && npm run build --workspace=@j-groupware/console-server",
+    "typecheck:web": "npm run typecheck --workspace=@j-groupware/web",
+    "test:web": "node scripts/run-isolated-tests.mjs customer-ui",
     "check:ui": "npm run check --workspace=@j-groupware/ui",
     "check": "node scripts/run-isolated-tests.mjs check",
     "typecheck": "tsc --noEmit -p tsconfig.test.json",

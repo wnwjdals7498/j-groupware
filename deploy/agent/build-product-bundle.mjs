@@ -176,9 +176,11 @@ export async function buildProductBundle({
       if (entry.isDirectory()) await tree(name, kind);
       else if (
         entry.isFile() &&
-        (kind === "sql"
-          ? /^\d+[a-z0-9_-]*\.sql$/.test(entry.name)
-          : /(?:\.js|\.mjs|\.cjs|\.json|\.d\.ts)$/.test(entry.name))
+        (kind === "web"
+          ? /^[A-Za-z0-9_-]+\.(?:js|css)$/.test(entry.name)
+          : kind === "sql"
+            ? /^\d+[a-z0-9_-]*\.sql$/.test(entry.name)
+            : /(?:\.js|\.mjs|\.cjs|\.json|\.d\.ts)$/.test(entry.name))
       )
         await copy(name);
       else if (
@@ -259,6 +261,8 @@ export async function buildProductBundle({
         await copy(name);
     }
     if (service === "j-groupware") {
+      await copy("apps/web/dist/index.html");
+      await tree("apps/web/dist/app-assets", "web");
       for (const name of [
         "bootstrap-files",
         "base-environment",
@@ -282,12 +286,14 @@ export async function buildProductBundle({
         "notification-manifest",
         "notification-binding",
         "notification-worker",
+        "notification-plan",
         "private-files",
         "product-environment",
         "product-gateway",
         "product-cleanup",
         "product-storage",
         "mailpit-platform",
+        "mail-egress",
         "product-readiness",
         "provision-command",
         "provision-agent",

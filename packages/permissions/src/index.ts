@@ -6,6 +6,21 @@ export type Access =
   | { readonly kind: "session"; readonly role?: FunctionalRoleName };
 
 export const ROUTES = {
+  "GET /app-assets/:file": { kind: "public" },
+  "GET /board": { kind: "session", role: "board:read" },
+  "GET /members": { kind: "session", role: "member:manage" },
+  "GET /organization": { kind: "session", role: "org:manage" },
+  "GET /messenger": { kind: "session", role: "messenger:use" },
+  "GET /mail": { kind: "session", role: "mail:read" },
+  "GET /mail/messages/:id": { kind: "session", role: "mail:read" },
+  "GET /guests": { kind: "session", role: "guest:read" },
+  "GET /approval": { kind: "session", role: "approval:use" },
+  "GET /approval/documents/:id": { kind: "session", role: "approval:use" },
+  "GET /talk": { kind: "session", role: "talk:read" },
+  "GET /talk/rooms/:id": { kind: "session", role: "talk:read" },
+  "GET /talk/settings": { kind: "session", role: "talk:write" },
+  "GET /web": { kind: "session", role: "web:read" },
+  "GET /notifications": { kind: "session" },
   "GET /api/web/sites": { kind: "session", role: "web:read" },
   "GET /api/web/sites/hosting": { kind: "session", role: "web:read" },
   "GET /api/web/sites/:id": { kind: "session", role: "web:read" },

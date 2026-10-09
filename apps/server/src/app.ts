@@ -37,6 +37,7 @@ import { registerCustomerAuthRoutes } from "./customer-auth-routes.js";
 import { registerWebRoutes } from "./web-routes.js";
 import { NotificationStore } from "./db/notifications.js";
 import { registerNotificationRoutes } from "./notification-routes.js";
+import { registerWebAssets } from "./web-assets.js";
 
 export function createApp(options: {
   pool: Pool;
@@ -51,6 +52,8 @@ export function createApp(options: {
   serviceEndpoints?: ServiceEndpoints;
   serviceFetch?: typeof globalThis.fetch;
   memberAuth?: MemberAuth;
+  webRoot?: string;
+  requireWebAssets?: boolean;
 }) {
   const app = Fastify({
     exposeHeadRoutes: false,
@@ -160,6 +163,13 @@ export function createApp(options: {
       ]?.kind === "session"
     )
       reply.header("Set-Cookie", cookie(SESSION_POLICY.cookie, "", 0));
+    if (
+      safe.status === 401 &&
+      request.headers.accept?.includes("text/html") &&
+      !request.routeOptions.url?.startsWith("/api/") &&
+      !request.routeOptions.url?.startsWith("/auth/")
+    )
+      return reply.code(303).redirect("/");
     // Only a safe code is logged. URLs, headers, bodies and exception messages may contain secrets.
     if (safe.status === 503)
       request.log.warn(
@@ -171,16 +181,11 @@ export function createApp(options: {
       .send({ code: safe.code, message: safe.message, requestId: request.id });
   });
   app.get("/health/live", async () => ({ status: "ok" }));
-  app.get("/", async (_request, reply) =>
-    reply
-      .type("text/html; charset=utf-8")
-      .header(
-        "Content-Security-Policy",
-        "default-src 'none'; base-uri 'none'; frame-ancestors 'none'",
-      )
-      .send(
-        '<!doctype html><html lang="ko"><meta charset="utf-8"><title>j-groupware</title><h1>j-groupware</h1><a href="/auth/login">로그인</a></html>',
-      ),
+  registerWebAssets(
+    app,
+    options.config.origin,
+    options.webRoot,
+    options.requireWebAssets,
   );
   app.get("/health/ready", async () => {
     await options.pool.query("SELECT 1");
@@ -286,6 +291,8 @@ export function createApp(options: {
       cookieValue(request.headers.cookie, SESSION_POLICY.cookie)!,
     );
     reply.header("Set-Cookie", cookie(SESSION_POLICY.cookie, "", 0));
+    if (request.headers.accept === "application/json")
+      return { logoutUrl: oidc.logoutUrl() };
     return reply.code(303).redirect(oidc.logoutUrl());
   });
   app.post<{ Body: { logout_token: string } }>(

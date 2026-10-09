@@ -3,7 +3,7 @@ export default tseslint.config(
   { ignores: ["**/dist/**", "**/node_modules/**"] },
   ...tseslint.configs.recommended,
   {
-    files: ["**/*.ts"],
+    files: ["**/*.ts", "**/*.tsx"],
     rules: {
       "@typescript-eslint/no-explicit-any": "error",
       "@typescript-eslint/no-unused-vars": [

@@ -45,7 +45,7 @@ export function renderServiceUnit(service, bundleRoot, environmentRoot) {
   serviceDatabase(service);
   externalPath(bundleRoot);
   externalPath(environmentRoot);
-  return `[Unit]\nDescription=J Groupware ${service}\nAfter=network.target jgw-postgres.service\n\n[Service]\nType=simple\nUser=${user(service)}\nGroup=${user(service)}\nWorkingDirectory=${bundleRoot}/${service}\nEnvironmentFile=${environmentRoot}/${service}.env\n${serviceCredentialVariables(
+  return `[Unit]\nDescription=J Groupware ${service}\nAfter=network.target jgw-postgres.service${service === "j-mail" ? " jgw-mail-egress.service" : ""}\n${service === "j-mail" ? "Requires=jgw-mail-egress.service\n" : ""}\n[Service]\nType=simple\nUser=${user(service)}\nGroup=${user(service)}\nWorkingDirectory=${bundleRoot}/${service}\nEnvironmentFile=${environmentRoot}/${service}.env\n${serviceCredentialVariables(
     service,
   )
     .map(

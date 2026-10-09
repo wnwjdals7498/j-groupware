@@ -277,6 +277,13 @@ const allowedSource = (service, name) => {
   );
   if (compiled) return true;
   if (
+    service === "j-groupware" &&
+    /^apps\/web\/dist\/(?:index\.html|app-assets\/[A-Za-z0-9_-]+\.(?:js|css))$/.test(
+      name,
+    )
+  )
+    return true;
+  if (
     new RegExp(
       "^deploy/" +
         (service === "j-messenger" ? "postgres-migrations" : "migrations") +

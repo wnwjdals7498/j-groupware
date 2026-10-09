@@ -10,6 +10,7 @@ import WebSocket from "ws";
 import { SESSION_POLICY } from "@j-groupware/contracts";
 import { Browser, integrationRuntime, required } from "./runtime.js";
 import type { Runtime } from "./runtime.js";
+import { customerBrowser } from "./customer-browser.js";
 describe("actual BFF talk member relay", () => {
   let rt: Runtime,
     pool: Pool,
@@ -531,6 +532,68 @@ describe("actual BFF talk member relay", () => {
       expect((await viewer.request("/api/talk/sync")).status).toBe(403);
     } finally {
       connection.socket.terminate();
+    }
+  });
+  it("uses the actual consultation and settings screens for reply, origins and one-time widget key", async () => {
+    const ui = await customerBrowser(rt, owner);
+    try {
+      await ui.page.goto(ui.origin + "/talk/rooms/" + ids[0]);
+      await ui.page
+        .getByRole("status")
+        .filter({ hasText: "상담 실시간 연결됨" })
+        .waitFor();
+      const form = ui.page.getByRole("form", { name: "상담 답장" });
+      await form.getByLabel("답장 내용").fill("브라우저 상담 답장");
+      await form
+        .getByRole("button", { name: "답장 보내기", exact: true })
+        .click();
+      await ui.page
+        .locator(".message-list")
+        .getByText("브라우저 상담 답장", { exact: true })
+        .waitFor();
+      expect(
+        (
+          await pool.query(
+            "SELECT count(*)::int AS n FROM messages WHERE tenant_id=$1 AND room_id=$2 AND text=$3",
+            [rt.fixtures[0]!.tenant, ids[0], "브라우저 상담 답장"],
+          )
+        ).rows[0]?.n,
+      ).toBe(1);
+      await ui.page
+        .getByRole("link", { name: "상담 설정", exact: true })
+        .click();
+      const origin = `https://browser.${rt.fixtures[0]!.tenant}.jgw.test`;
+      const origins = ui.page.getByRole("form", { name: "허용 출처 추가" });
+      await origins.getByLabel("HTTPS 출처").fill(origin);
+      await origins
+        .getByRole("button", { name: "출처 추가", exact: true })
+        .click();
+      await ui.page
+        .getByRole("table", { name: "위젯 허용 출처" })
+        .getByText(origin, { exact: true })
+        .waitFor();
+      await ui.page
+        .getByRole("button", { name: /위젯 키 (발급|교체)/ })
+        .click();
+      await ui.page
+        .getByRole("dialog", { name: "위젯 키 발급·교체 확인" })
+        .getByRole("button", { name: "확인", exact: true })
+        .click();
+      const secret = ui.page.getByRole("dialog", { name: "위젯 서명 키" });
+      await secret.waitFor();
+      const value = await secret.locator("pre").textContent();
+      if (value) rt.secretValues.add(value);
+      await secret
+        .getByRole("button", { name: "보관 완료", exact: true })
+        .click();
+      expect(
+        await ui.page.evaluate(
+          () => localStorage.length + sessionStorage.length,
+        ),
+      ).toBe(0);
+      expect(ui.pageErrors).toEqual([]);
+    } finally {
+      await ui.close();
     }
   });
   it("relays close and preserves downstream conflicts, then fails closed on real service outage", async () => {

@@ -14,6 +14,7 @@ import type {
 } from "@j-approval/contracts";
 import { Browser, integrationRuntime, type Runtime } from "./runtime.js";
 import { digest } from "../../apps/server/src/security.js";
+import { customerBrowser } from "./customer-browser.js";
 
 describe("actual BFF + compiled approval + Keycloak + two tenant databases", () => {
   let rt: Runtime, pool: Pool, admin: Browser, second: Browser;
@@ -78,6 +79,10 @@ describe("actual BFF + compiled approval + Keycloak + two tenant databases", () 
         [
           "--import",
           root + "tests/integration/resolve-test-hosts.mjs",
+          "--import",
+          fileURLToPath(
+            new URL("./approval-startup-diagnostics.mjs", import.meta.url),
+          ),
           root + "apps/server/dist/main.js",
         ],
         {
@@ -97,8 +102,33 @@ describe("actual BFF + compiled approval + Keycloak + two tenant databases", () 
       child.stderr?.on("data", (b: Buffer) => logs.push(b.toString()));
       let ready = false;
       for (let i = 0; i < 50; i++) {
-        if (child.exitCode !== null)
-          throw new Error("Actual compiled approval startup failed.");
+        if (child.exitCode !== null) {
+          const diagnostics = logs
+            .join("")
+            .split("\n")
+            .flatMap((line) => {
+              try {
+                const row = JSON.parse(line) as {
+                  kind?: unknown;
+                  phase?: unknown;
+                  code?: unknown;
+                };
+                return row.kind === "approval_fixture_startup" &&
+                  typeof row.phase === "string" &&
+                  ["database", "private_file", "listen"].includes(row.phase) &&
+                  typeof row.code === "string" &&
+                  /^[A-Z0-9_]{3,40}$/.test(row.code)
+                  ? [row.phase + ":" + row.code]
+                  : [];
+              } catch {
+                return [];
+              }
+            });
+          throw new Error(
+            "Actual compiled approval startup failed. Safe diagnostics: " +
+              (diagnostics.slice(-4).join(",") || "UNCLASSIFIED"),
+          );
+        }
         try {
           ready = (
             await rt.fetchLoopback(
@@ -452,6 +482,59 @@ describe("actual BFF + compiled approval + Keycloak + two tenant databases", () 
         )
       ).rows[0].n,
     ).toBe(1);
+  });
+  it("submits an edited line and records a real sequential browser decision and history", async () => {
+    const author = await customerBrowser(rt, admin);
+    const approver = await customerBrowser(rt, actors[0]!.browser);
+    try {
+      await author.page.goto(author.origin + "/approval");
+      const form = author.page.getByRole("form", { name: "문서 상신" });
+      await author.page.getByLabel("결재자 후보").selectOption(actors[0]!.id);
+      await author.page
+        .getByRole("button", { name: "결재자 추가", exact: true })
+        .click();
+      await form.getByLabel("결재 제목").fill("화면 상신 문서");
+      await form.getByLabel("결재 본문").fill("화면 본문");
+      await form.getByRole("button", { name: "상신", exact: true }).click();
+      await author.page
+        .getByRole("heading", { name: "문서 상세", exact: true })
+        .waitFor();
+      const row = (
+        await pool.query(
+          "SELECT id,status,revision FROM approval_documents WHERE tenant_id=$1 AND title=$2",
+          [rt.fixtures[0]!.tenant, "화면 상신 문서"],
+        )
+      ).rows[0]!;
+      expect(row.status).toBe("pending");
+      await approver.page.goto(
+        approver.origin + "/approval/documents/" + row.id,
+      );
+      await approver.page
+        .getByRole("button", { name: "승인", exact: true })
+        .click();
+      await approver.page
+        .getByRole("status")
+        .filter({ hasText: "변경 사항이 반영되었습니다." })
+        .first()
+        .waitFor();
+      expect(
+        (
+          await pool.query(
+            "SELECT status FROM approval_documents WHERE tenant_id=$1 AND id=$2",
+            [rt.fixtures[0]!.tenant, row.id],
+          )
+        ).rows[0]?.status,
+      ).toBe("approved");
+      await approver.page
+        .getByRole("table", { name: "문서 처리 이력" })
+        .getByText("approved", { exact: true })
+        .waitFor();
+      expect(author.pageErrors).toEqual([]);
+      expect(approver.pageErrors).toEqual([]);
+    } finally {
+      await approver.close();
+      await author.close();
+    }
   });
   it("requires a live cookie after logout and releases all compiled approval processes safely", async () => {
     const b = actors[2]!.browser,

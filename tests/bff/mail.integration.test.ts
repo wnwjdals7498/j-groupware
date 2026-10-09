@@ -10,6 +10,7 @@ import { parseMailPage, parseMailDetail } from "@j-mail/contracts";
 import { Browser, integrationRuntime } from "./runtime.js";
 import type { Runtime } from "./runtime.js";
 import { createCapture } from "./mail-capture.js";
+import { customerBrowser } from "./customer-browser.js";
 describe("actual BFF, compiled mail, network-none SMTP capture and reduced tokens", () => {
   let rt: Runtime,
     capture: Awaited<ReturnType<typeof createCapture>>,
@@ -252,6 +253,35 @@ describe("actual BFF, compiled mail, network-none SMTP capture and reduced token
     expect(await response.text()).not.toContain("private mail body");
     await start(0);
     expect((await admin.request("/api/mail/messages")).status).toBe(200);
+  });
+  it("renders actual SMTP HTML in the customer screen without script execution or direct Mailpit browser requests", async () => {
+    const ui = await customerBrowser(rt, member);
+    const sources: string[] = [];
+    ui.page.on("request", (request) =>
+      sources.push(new URL(request.url()).origin),
+    );
+    try {
+      await ui.page.goto(ui.origin + "/mail/messages/" + own[0]);
+      await ui.page
+        .getByRole("heading", { name: "메일", exact: true })
+        .waitFor();
+      await ui.page
+        .frameLocator('iframe[title="메일 HTML 본문"]')
+        .getByText("private mail body", { exact: true })
+        .waitFor();
+      expect(await ui.page.locator("iframe").getAttribute("sandbox")).toBe("");
+      expect(await ui.page.locator("iframe").getAttribute("srcdoc")).toContain(
+        "script-src 'none'",
+      );
+      expect(await ui.page.evaluate(() => "mailUnsafe" in window)).toBe(false);
+      expect(
+        await ui.page.frames()[1]!.evaluate(() => "mailUnsafe" in window),
+      ).toBe(false);
+      expect(sources.every((origin) => origin === ui.origin)).toBe(true);
+      expect(ui.pageErrors).toEqual([]);
+    } finally {
+      await ui.close();
+    }
   });
   it("revoking mail:read ends the actual target BFF session and future login has no mail access", async () => {
     expect(

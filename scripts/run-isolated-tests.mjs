@@ -149,6 +149,8 @@ const files = {
     "preparation.test",
     "base-bootstrap.test",
     "test-resources.test",
+    "notification-plan.test",
+    "mail-egress.test",
   ],
   storage: ["storage.integration.test"],
   unpack: ["unpack.integration.test"],
@@ -180,6 +182,15 @@ export function isolatedCommands(kind, npmCli) {
     return [
       npm("build"),
       [process.execPath, "scripts/run-bff-integration.mjs"],
+    ];
+  if (kind === "customer-ui")
+    return [
+      npm("build"),
+      [
+        process.execPath,
+        "scripts/run-bff-integration.mjs",
+        "tests/bff/customer-ui.integration.test.ts",
+      ],
     ];
   if (files[kind])
     return [

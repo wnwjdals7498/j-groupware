@@ -18,6 +18,7 @@ import { NativeGateway } from "./native-gateway.mjs";
 import { NativeProductsPlatform } from "./native-products.mjs";
 import { NativeWebHosting } from "./native-web.mjs";
 import { MailpitPlatform } from "./mailpit-platform.mjs";
+import { NativeMailEgress } from "./mail-egress.mjs";
 import { WebServiceCleanup } from "./web-cleanup.mjs";
 import { ProductGateway } from "./product-gateway.mjs";
 import { ProductCleanup } from "./product-cleanup.mjs";
@@ -416,6 +417,13 @@ export function createProvisionServiceRuntime(
   const platform = new NativeProductsPlatform({
     web,
     mailpit,
+    mailEgress: mailpit
+      ? new NativeMailEgress({
+          bundleRoot: roots.bundleRoot,
+          stateRoot: roots.environmentRoot + "/mail-egress",
+          unitRoot: roots.unitRoot,
+        })
+      : undefined,
     bundleRoot: roots.bundleRoot,
     environmentRoot: roots.environmentRoot,
     unitRoot: roots.unitRoot,

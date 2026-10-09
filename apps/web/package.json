@@ -1,0 +1,20 @@
+{
+  "name": "@j-groupware/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc --noEmit -p tsconfig.json && vite build",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run --root ."
+  },
+  "dependencies": {
+    "@j-groupware/contracts": "0.1.0",
+    "@j-groupware/permissions": "0.1.0",
+    "@j-groupware/ui": "0.1.0",
+    "@j-messenger/client-core": "0.2.0",
+    "@j-messenger/client-react": "0.2.2",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  }
+}

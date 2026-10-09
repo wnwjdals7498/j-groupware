@@ -4,9 +4,9 @@ import { ProvisionError } from "./provision-error.mjs";
 // Product auxiliaries share the native service/account lifecycle. Prepared
 // bindings do not activate anything at construction time.
 export class NativeProductsPlatform extends NativeSystemdPlatform {
-  constructor({ web, mailpit, ...options }) {
+  constructor({ web, mailpit, mailEgress, ...options }) {
     super(options);
-    Object.assign(this, { web, mailpit });
+    Object.assign(this, { web, mailpit, mailEgress });
   }
   auxiliary(service) {
     return service === "j-web"
@@ -24,18 +24,23 @@ export class NativeProductsPlatform extends NativeSystemdPlatform {
     }
     if (service === "j-mail") {
       if (!this.mailpit) throw new ProvisionError("mailpit_adapter_unbound");
+      if (!this.mailEgress) throw new ProvisionError("mail_egress_unbound");
+      await this.mailEgress.preflight();
       await this.mailpit.image();
     }
   }
   async install(service) {
     await super.install(service);
     if (service === "j-web") await this.web.prepare();
+    if (service === "j-mail") await this.mailEgress.prepare();
   }
   async start(service) {
+    if (service === "j-mail") await this.mailEgress.start();
     await this.auxiliary(service)?.start();
     await super.start(service);
   }
   async ready(service) {
+    if (service === "j-mail") await this.mailEgress.ready();
     await this.auxiliary(service)?.ready();
     await super.ready(service);
   }
