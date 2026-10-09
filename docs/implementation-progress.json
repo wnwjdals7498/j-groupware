@@ -3493,19 +3493,22 @@
     "j-talk/docs/cloud-notification-contract-verification-2026-10-09.md",
     "j-groupware/docs/cloud-talk-notification-bff-2026-10-09.md",
     "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md",
-    "j-groupware/docs/cloud-contract-assignment-verification-2026-10-09.md"
+    "j-groupware/docs/cloud-contract-assignment-verification-2026-10-09.md",
+    "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+    "j-groupware/docs/cloud-task25-test-results.json",
+    "j-groupware/docs/cloud-acceptance-collector-verification-2026-10-09.md"
   ],
   "pending_implementation": [
-    "H7 Web public deployment/manual-file overwrite/version policy and subsequent Talk allowed-origin registration; T2 visitor/WSS and E8 mail envelope/outbox. Existing member/guest/mail/approval/Web BFF APIs are connected in bounded cloud coverage.",
+    "Existing partial34 require feature-specification scope review against executed evidence. Task25 resolved H7 guarded template deployment/Origin registration, T2 visitor credential/message/WSS/cursor recovery, E8 full SMTP envelope capture/outbox and shared UI source gates; operating/customer acceptance remains separate.",
     "G6/G15 formal member/organization/repair UI and Playwright; G16 formal approval UI and Playwright (actual BFF business API and snapshot already verified)",
-    "G2/G9 canonical UI guidelines/sidebar/board UI; I2 formal theme/Playwright/brute-force acceptance",
-    "Messenger formal UI/app product-path freezing and talk business WSS; actual messenger PG/BFF HTTP/client transport/WSS and approval notification delivery independently verified",
+    "G2/G9 formal sidebar/board business screens remain after implemented UI guidelines, shared components and actual Chromium checks. I2 full login-flow/brute-force acceptance remains after implemented Keycloak theme and actual Chromium rendering.",
+    "Messenger formal UI/app product-path freezing and Talk formal business screens/browser acceptance remain; actual messenger PG/BFF HTTP/client transport/WSS, Talk member/visitor WSS and approval notification delivery are independently verified.",
     "G18 OS bootstrap kit/native lifecycle/retained teardown and G21 agent source connected (23rd batch), with TK-21 derived Talk assignment binding added (24th). Actual OS package/CA trust/systemd PID1/full native lifecycle/timer/firewall/customer VM acceptance unrun; operating credential/topology remains unapproved.",
     "G22 formal notification UI/Playwright and all product notification delivery acceptance; production source credential renewal/topology and worker/timer activation remain separate from verified short-lived credential file binding and explicit CLI",
-    "Per-feature remaining audit: docs/cloud-remaining-feature-audit-2026-10-08.json; technical contracts and service predecessors remain implementable; E8/visitor ownership/template manual-file replacement choices and existing UI guideline answer remain gates",
+    "Per-feature remaining audit: docs/cloud-remaining-feature-audit-2026-10-08.json. Remaining choices concern actual Hyper-V VM location/execution approval and operating notification credential owner/rotation/topology; completed source-policy gates are not pending user decisions.",
     "GW-51 manual business contract and TK-21 current active talk:write candidate/trusted assignment source are implemented under explicit user approval. Formal UI/customer VM and T2 visitor production remain unrun; assignment validation-to-commit race is bounded by the ten-second proof lifetime."
   ],
-  "latest_bounded_verification_report": "j-groupware/docs/cloud-contract-assignment-verification-2026-10-09.md",
+  "latest_bounded_verification_report": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
   "task25": {
     "source_target_ids": [
       "AU-09",
@@ -3545,6 +3548,9 @@
       "j-customer-auth-db": "98e013dd83eaef9067a3dcba7be99cb09ac8c429",
       "j-approval": "a29271fbc583e274b313103105b64d661b1a7afe",
       "j-web": "328cd137d661dd6fe79104a2ca3f206b4422446c"
+    },
+    "supplemental_test_commits": {
+      "j-web": "471d869f172fd308237db43479f8b08407300c59"
     },
     "evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
     "whole_suite_verified": false

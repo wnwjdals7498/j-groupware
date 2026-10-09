@@ -617,7 +617,7 @@
       "retained": true
     }
   ],
-  "customer_startup_transient_root_cause": "unidentified; subsequent targeted run and both final full BFF runs executed all19 customer tests successfully",
+  "customer_startup_transient_root_cause": "unidentified; both final full BFF runs executed all19 customer tests successfully; earlier targeted18_passed_1_contract_mismatch retained separately",
   "vm_not_run": [
     "AU-51",
     "GW-73",
@@ -637,6 +637,9 @@
     "j-customer-auth-db": "98e013dd83eaef9067a3dcba7be99cb09ac8c429",
     "j-approval": "a29271fbc583e274b313103105b64d661b1a7afe",
     "j-web": "328cd137d661dd6fe79104a2ca3f206b4422446c"
+  },
+  "supplemental_test_commits": {
+    "j-web": "471d869f172fd308237db43479f8b08407300c59"
   },
   "no_lost_result_counted_as_success": true
 }

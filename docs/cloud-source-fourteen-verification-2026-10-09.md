@@ -41,3 +41,5 @@ Groupware 최종 `check`는 Node 22/24에서 각 서버 unit 83개·UI unit 3개
 회사 노트북·운영 계정·새 영구 credential·CA trust·방화벽·systemd/timer·PR/main 병합·운영 배포는 변경하지 않았다. Windows PMT 상태 경로와 해당 start/note/verify/end 도구는 이 클라우드에서 없어 그 기록만 미실행이다. 저장소 지침과 실제 소스·시험 증거는 저장소 문서에 남긴다.
 
 실제 VM AU-51·GW-73·MS-09·ML-32·CA-32·AP-32·TK-42·WB-33은 모두 `not_run`이다. [collector 준비 기록](cloud-acceptance-collector-verification-2026-10-09.md)의 11개 HTTPS fixture 시험은 VM 인수 통과를 뜻하지 않는다. 정식 업무 화면·운영 notification owner/회전/topology와 첫 고객 bootstrap 인수도 별도다.
+
+최종 git 확인에서 Web journal 복구 시험 파일의 staging 누락을 확인했다. 저장된 두 hosting 로그의 다섯 번째 시험과 일치하는 파일을 `j-web` 추가 커밋 `471d869f172fd308237db43479f8b08407300c59`에 포함하고 push·원격 branch SHA·GitHub commit API를 확인했다. 기존 helper 소스 checkpoint `328cd13`은 유지하고 진척·감사·실행 증거 JSON의 `supplemental_test_commits`에 추가 시험 커밋을 기록했다.

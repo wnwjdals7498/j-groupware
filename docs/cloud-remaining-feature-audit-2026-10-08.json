@@ -3162,6 +3162,9 @@
       "j-approval": "a29271fbc583e274b313103105b64d661b1a7afe",
       "j-web": "328cd137d661dd6fe79104a2ca3f206b4422446c"
     },
+    "supplemental_test_commits": {
+      "j-web": "471d869f172fd308237db43479f8b08407300c59"
+    },
     "evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
     "whole_suite_verified": false
   }
