@@ -72,6 +72,15 @@ export class BaseBootstrap {
     });
   }
   async run(signal) {
+    if (signal?.aborted) fail("bootstrap_cancelled");
+    try {
+      await this.preflight();
+    } catch (error) {
+      throw new ProvisionError(
+        error instanceof ProvisionError ? error.code : "bootstrap_failed",
+      );
+    }
+    if (signal?.aborted) fail("bootstrap_cancelled");
     const release = await this.lock.acquire();
     if (!release) fail("busy");
     let state,
@@ -100,7 +109,6 @@ export class BaseBootstrap {
       )
         fail("bootstrap_state_conflict");
       // Unbound prerequisites and changed intent fail before state/DB/OS mutation.
-      await this.preflight();
       cancelled();
       phase = "bundles";
       await record("installing");

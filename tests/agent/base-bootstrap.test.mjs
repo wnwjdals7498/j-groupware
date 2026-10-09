@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtemp, rm, readFile } from "node:fs/promises";
+import { mkdtemp, rm, readFile, lstat } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { BaseBootstrap } from "../../deploy/agent/base-bootstrap.mjs";
 import { ServiceStateFiles } from "../../deploy/agent/service-lifecycle.mjs";
@@ -103,11 +103,13 @@ test("base preparation resumes a failed gateway with the same private credential
       assert(!publicState.includes(v));
   }));
 test("unbound prerequisites and changed bundle intent refuse mutation and preserve existing durable intent", async () =>
-  fixture(async ({ options, state, events, fail }) => {
+  fixture(async ({ root, options, state, events, fail }) => {
     fail("preflight");
     await assert.rejects(new BaseBootstrap(options).run(), {
       code: "fixture_failure",
     });
+    await assert.rejects(lstat(root + "/state"), { code: "ENOENT" });
+    await assert.rejects(lstat(root + "/lock"), { code: "ENOENT" });
     assert.equal(await state.read("j-groupware"), null);
     fail(null);
     await new BaseBootstrap(options).run();
@@ -126,7 +128,7 @@ test("unbound prerequisites and changed bundle intent refuse mutation and preser
       { code: "bootstrap_state_conflict" },
     );
     assert.deepEqual(await state.read("j-groupware"), prior);
-    assert.deepEqual(events, []);
+    assert.deepEqual(events, ["preflight"]);
   }));
 test("bundle failure stops before database allocation and does not publish active base", async () =>
   fixture(async ({ options, state, events }) => {

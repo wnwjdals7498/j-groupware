@@ -36,3 +36,8 @@ OS 패키지 설치·PG 서버 설치·OS CA trust·agent config/timer 등록은
 나머지 제품 OS binding은 미완료다. GW-63/64/66을 전체 완료로 바꾸지 않았다.
 로그는 `/workspace/.suite-runtime/j-groupware/base-*.log`와 대응 `.exit`다.
 최종 root는 `base-root-final2`, 최종 check는 `base-check-final`이다.
+
+최종 검토에서 전제 검사 전에 state/lock 디렉터리가 생성될 수 있는 순서를
+수정했다. preflight·초기 취소는 잠금/state 접근 전에 검사하며 실제 두 경로가
+ENOENT로 유지되는 것을 두 Node의 coordinator4로 확인했다.
+로그는 `base-preflight-final-node{22,24}`다. OS 설치 성공 주장은 추가하지 않는다.
