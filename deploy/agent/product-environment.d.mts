@@ -23,6 +23,7 @@ export class ProductEnvironment {
     keycloakOrigin: string;
     profiles: Record<string, ProductProfile>;
     notificationOrigin?: string;
+    serviceKey?: string;
   });
   tenant: string;
   profile(

@@ -32,6 +32,7 @@ import { registerApprovalRoutes } from "./approval-routes.js";
 import { registerMessengerRoutes } from "./messenger-routes.js";
 import { registerMailRoutes } from "./mail-routes.js";
 import { registerTalkRoutes } from "./talk-routes.js";
+import { TalkAssignments } from "./talk-assignments.js";
 import { registerCustomerAuthRoutes } from "./customer-auth-routes.js";
 import { registerWebRoutes } from "./web-routes.js";
 import { NotificationStore } from "./db/notifications.js";
@@ -396,8 +397,12 @@ export function createApp(options: {
   );
   registerMessengerRoutes(app, services, (request) => identities.get(request)!);
   registerMailRoutes(app, services);
-  registerTalkRoutes(app, services, (request) =>
-    identities.get(request)!.roles.includes("guest:read"),
+  registerTalkRoutes(
+    app,
+    services,
+    (request) => identities.get(request)!.roles.includes("guest:read"),
+    new TalkAssignments(options.config.tenant, options.memberAuth),
+    (request) => identities.get(request)!,
   );
   registerCustomerAuthRoutes(app, services);
   registerWebRoutes(app, services, options.config.tenant);

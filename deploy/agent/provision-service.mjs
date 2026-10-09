@@ -151,6 +151,7 @@ export async function loadProvisionServiceControl(file = INSTALLER_CONTROL) {
     ...products,
     tenant: bootstrap.tenant,
     keycloakOrigin: bootstrap.keycloakOrigin,
+    serviceKey: bootstrap.serviceKey,
   });
   const postgres = await readControlJson(input.postgresFile, 8192);
   if (

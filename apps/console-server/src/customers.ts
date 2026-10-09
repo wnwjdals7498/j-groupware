@@ -104,7 +104,7 @@ export class ConsoleCustomers {
   async list(limit: number, after?: string) {
     const rows = (
       await this.pool.query(
-        'SELECT tenant_id AS tenant,registration,auth_state AS "authState",created_at AS "createdAt" FROM customers WHERE ($1::text IS NULL OR tenant_id>$1) ORDER BY tenant_id LIMIT $2',
+        'SELECT tenant_id AS tenant,registration,contract_status AS "contractStatus",contract_revision AS "contractRevision",auth_state AS "authState",created_at AS "createdAt" FROM customers WHERE ($1::text IS NULL OR tenant_id>$1) ORDER BY tenant_id LIMIT $2',
         [after ?? null, limit + 1],
       )
     ).rows;
@@ -147,23 +147,68 @@ export class ConsoleCustomers {
       };
     });
   }
-  async detail(tenant: string) {
+  async detail(tenant: string, reader: Pool | PoolClient = this.pool) {
     assertCustomerTenantId(tenant);
     const row = (
-      await this.pool.query(
-        'SELECT tenant_id AS tenant,registration,desired_services AS "desiredServices",desired_revision AS "desiredRevision",auth_services AS "authServices",auth_state AS "authState",auth_checked_at AS "authCheckedAt" FROM customers WHERE tenant_id=$1',
+      await reader.query(
+        'SELECT tenant_id AS tenant,registration,contract_status AS "contractStatus",contract_revision AS "contractRevision",contract_changed_at AS "contractChangedAt",desired_services AS "desiredServices",desired_revision AS "desiredRevision",auth_services AS "authServices",auth_state AS "authState",auth_checked_at AS "authCheckedAt" FROM customers WHERE tenant_id=$1',
         [tenant],
       )
     ).rows[0];
     if (!row) throw new ApiError(404, "not_found", "Customer not found.");
     const report =
       (
-        await this.pool.query(
+        await reader.query(
           'SELECT desired_revision AS "desiredRevision",report,received_at AS "receivedAt" FROM agent_reports WHERE tenant_id=$1',
           [tenant],
         )
       ).rows[0] ?? null;
     return { ...row, installation: report };
+  }
+  async changeContract(
+    tenant: string,
+    status: "prepared" | "active" | "ended",
+    revision: number,
+  ) {
+    return this.locked(tenant, async (client) => {
+      const row = (
+        await client.query(
+          "SELECT contract_status,contract_revision FROM customers WHERE tenant_id=$1",
+          [tenant],
+        )
+      ).rows[0];
+      if (!row) throw new ApiError(404, "not_found", "Customer not found.");
+      if (row.contract_revision !== revision)
+        throw new ApiError(
+          409,
+          "revision_conflict",
+          "Contract revision changed.",
+        );
+      if (row.contract_status !== status) {
+        const next = {
+          prepared: "active",
+          active: "ended",
+          ended: null,
+        } as const;
+        if (next[row.contract_status as keyof typeof next] !== status)
+          throw new ApiError(
+            409,
+            "invalid_transition",
+            "Contract transition is not allowed.",
+          );
+        const updated = await client.query(
+          "UPDATE customers SET contract_status=$2,contract_revision=contract_revision+1,contract_changed_at=now() WHERE tenant_id=$1 AND contract_revision=$3",
+          [tenant, status, revision],
+        );
+        if (!updated.rowCount)
+          throw new ApiError(
+            409,
+            "revision_conflict",
+            "Contract revision changed.",
+          );
+      }
+      return this.detail(tenant, client);
+    });
   }
   async reconcile(
     token: string,
@@ -235,7 +280,7 @@ export class ConsoleCustomers {
           "Desired state saved; authentication projection failed.",
         );
       }
-      return this.detail(tenant);
+      return this.detail(tenant, c);
     });
   }
   async rotateAgent(tenant: string) {

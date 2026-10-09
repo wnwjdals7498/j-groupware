@@ -53,6 +53,7 @@ j-groupware는 기본 서비스다. 고객 서버에 항상 설치되고, 모든
   - **앱 구성:** 같은 저장소에서 앱을 나눈다. 고객 서버용은 `apps/server`, `apps/web`이고, control plane용은 `apps/console-server`, `apps/console-web`이다. 공유 코드는 `packages/*`다.
   - **로그인:** 콘솔은 운영사 realm의 `j-console` client로 Authorization Code + PKCE 로그인한다(결정 1과 같은 BFF 방식).
   - **데이터:** 고객·계약·가입 서비스·고객 서버 상태는 control plane PostgreSQL의 콘솔 database에 둔다. 운영사 계정(`customer:read`/`customer:write`)이 보고 바꾼다.
+  - **업무 계약 상태 (GW-51, 2026-10-09 사용자 승인):** 새 고객은 준비(`prepared`)이며 운영자가 준비 → 유효(`active`) → 종료(`ended`) 순서로 수동 기록한다. 같은 상태 요청은 현재 리비전에서 멱등이고, 역행·건너뛰기·지난 리비전은 409다. `PUT /console/api/customers/:tenant/contract`의 `{status,revision}`은 계약 전용 리비전만 변경한다. 기존 고객도 migration 기본값은 준비다. 서비스 가입·해지·인증 반영·설치 보고는 계약 상태와 독립이며 종료가 자동 해지를 만들지 않는다.
   - **고객 등록 (G17):**
     1. 운영자가 tenant ID, 고객 관리자 username·초기 비밀번호를 입력한다.
     2. 콘솔이 j-auth realm 생성 API(j-auth 결정 20)를 콘솔 서비스 키와 함께 호출한다.

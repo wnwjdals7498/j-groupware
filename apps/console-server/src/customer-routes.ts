@@ -77,6 +77,29 @@ export function registerCustomerRoutes(
         .send(await store.register(identity(r).access_token, r.body)),
   );
   app.put<{
+    Params: { tenant: string };
+    Body: { status: "prepared" | "active" | "ended"; revision: number };
+  }>(
+    "/console/api/customers/:tenant/contract",
+    {
+      schema: {
+        params,
+        querystring: empty,
+        body: {
+          type: "object",
+          additionalProperties: false,
+          required: ["status", "revision"],
+          properties: {
+            status: { type: "string", enum: ["prepared", "active", "ended"] },
+            revision: positive,
+          },
+        },
+      },
+    },
+    (r) =>
+      store.changeContract(r.params.tenant, r.body.status, r.body.revision),
+  );
+  app.put<{
     Params: { tenant: string; service: string };
     Body: { revision: number; enabled: boolean };
   }>(

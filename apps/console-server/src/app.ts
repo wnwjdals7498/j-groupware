@@ -28,6 +28,7 @@ const ROUTES: Record<string, "public" | "session" | "write" | "agent"> = {
   "GET /console/api/customers": "session",
   "GET /console/api/customers/:tenant": "session",
   "POST /console/api/customers": "write",
+  "PUT /console/api/customers/:tenant/contract": "write",
   "PUT /console/api/customers/:tenant/services/:service": "write",
   "POST /console/api/customers/:tenant/reconcile": "write",
   "POST /console/api/customers/:tenant/agent-key": "write",

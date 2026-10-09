@@ -18,7 +18,7 @@
     "@j-groupware/permissions": "0.1.0",
     "@j-mail/contracts": "0.1.1",
     "@j-messenger/contracts": "0.2.0",
-    "@j-talk/contracts": "0.1.0",
+    "@j-talk/contracts": "0.1.2",
     "@j-web/contracts": "0.1.0",
     "fastify": "5.12.5",
     "jose": "6.2.12",

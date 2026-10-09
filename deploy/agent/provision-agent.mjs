@@ -37,6 +37,7 @@ export async function loadProvisionAgentControl(file) {
     ...products,
     tenant: bootstrap.tenant,
     keycloakOrigin: bootstrap.keycloakOrigin,
+    serviceKey: bootstrap.serviceKey,
   });
   return {
     bootstrap,

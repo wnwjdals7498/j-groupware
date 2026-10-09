@@ -17,6 +17,7 @@ import { execFileSync } from "node:child_process";
 import { Pool } from "pg";
 import { randomBytes, randomUUID, createHash } from "node:crypto";
 import { AuthControlClient } from "../../apps/console-server/src/auth-control.js";
+import { ConsoleCustomers } from "../../apps/console-server/src/customers.js";
 import { ConsoleAgentClient } from "../../deploy/agent/console-client.mjs";
 import { BootstrapFiles } from "../../deploy/agent/bootstrap-files.mjs";
 import {
@@ -662,6 +663,8 @@ describe("actual isolated operator console Code/PKCE BFF", () => {
         await pool.query("SELECT * FROM customers WHERE tenant_id=$1", [tenant])
       ).rows[0];
       expect(row.registration).toBe("ready");
+      expect(row.contract_status).toBe("prepared");
+      expect(row.contract_revision).toBe(1);
       expect(row.agent_key_hash).toBe(digest(data.agentKey));
       for (const value of [
         password,
@@ -733,6 +736,137 @@ describe("actual isolated operator console Code/PKCE BFF", () => {
         )
       ).status,
     ).toBe(400);
+  });
+  it("manually advances prepared/active/ended business contracts with independent revisions, permissions and no subscription side effects", async () => {
+    const b = await login(),
+      path = `/console/api/customers/${customer}/contract`;
+    const before = (await (
+      await b.request(`/console/api/customers/${customer}`)
+    ).json()) as Record<string, unknown>;
+    expect(before).toMatchObject({
+      contractStatus: "prepared",
+      contractRevision: 1,
+    });
+    expect(
+      (await write(b, path, { status: "ended", revision: 1 }, "PUT")).status,
+    ).toBe(409);
+    expect(
+      (await write(b, path, { status: "unknown", revision: 1 }, "PUT")).status,
+    ).toBe(400);
+    expect(
+      (
+        await write(
+          b,
+          path,
+          { status: "active", revision: 1, enabled: true },
+          "PUT",
+        )
+      ).status,
+    ).toBe(400);
+    expect(
+      (
+        await b.request(path, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status: "active", revision: 1 }),
+        })
+      ).status,
+    ).toBe(403);
+    const concurrent = await Promise.all(
+      [1, 2].map(() =>
+        write(b, path, { status: "active", revision: 1 }, "PUT"),
+      ),
+    );
+    expect(concurrent.map((x) => x.status).sort()).toEqual([200, 409]);
+    expect(
+      (await write(b, path, { status: "active", revision: 2 }, "PUT")).status,
+    ).toBe(200);
+    const ended = await write(b, path, { status: "ended", revision: 2 }, "PUT");
+    expect(ended.status).toBe(200);
+    const result = (await ended.json()) as Record<string, unknown>;
+    expect(result).toMatchObject({
+      contractStatus: "ended",
+      contractRevision: 3,
+    });
+    for (const field of [
+      "registration",
+      "desiredServices",
+      "desiredRevision",
+      "authServices",
+      "authState",
+      "authCheckedAt",
+      "installation",
+    ])
+      expect(result[field]).toEqual(before[field]);
+    expect(
+      (await write(b, path, { status: "active", revision: 3 }, "PUT")).status,
+    ).toBe(409);
+    expect(
+      (
+        await write(
+          b,
+          `/console/api/customers/nonexistent/contract`,
+          { status: "active", revision: 1 },
+          "PUT",
+        )
+      ).status,
+    ).toBe(404);
+    await pool.query(
+      "UPDATE sessions SET roles=ARRAY['customer:read']::text[] WHERE session_hash=$1",
+      [hash(b)],
+    );
+    expect((await b.request(`/console/api/customers/${customer}`)).status).toBe(
+      200,
+    );
+    expect(
+      (await write(b, path, { status: "ended", revision: 3 }, "PUT")).status,
+    ).toBe(403);
+    const listed = (await (
+      await b.request("/console/api/customers")
+    ).json()) as { items: Record<string, unknown>[] };
+    expect(listed.items.find((x) => x.tenant === customer)).toMatchObject({
+      contractStatus: "ended",
+      contractRevision: 3,
+    });
+  });
+  it("returns a locked contract snapshot without requiring a second database connection", async () => {
+    const tenant = "contract-" + randomUUID().slice(0, 8),
+      single = new Pool({
+        ...pool.options,
+        password: pool.options.password,
+        max: 1,
+        connectionTimeoutMillis: 1000,
+      });
+    try {
+      await single.query(
+        "INSERT INTO customers(tenant_id,registration) VALUES ($1,'ready')",
+        [tenant],
+      );
+      const store = new ConsoleCustomers(single, origin);
+      const results = await Promise.all(
+        Array.from({ length: 10 }, () =>
+          store.changeContract(tenant, "active", 1).then(
+            (value) => ({ status: 200, value }),
+            (error: { status: number }) => ({ status: error.status }),
+          ),
+        ),
+      );
+      expect(results.filter((row) => row.status === 200)).toHaveLength(1);
+      expect(results.filter((row) => row.status === 409)).toHaveLength(9);
+      expect(await store.detail(tenant)).toMatchObject({
+        contractStatus: "active",
+        contractRevision: 2,
+        desiredServices: [],
+      });
+    } finally {
+      try {
+        await single.query("DELETE FROM customers WHERE tenant_id=$1", [
+          tenant,
+        ]);
+      } finally {
+        await single.end();
+      }
+    }
   });
   it("projects desired service changes through real j-auth while preserving separate installed reports", async () => {
     const b = await login();
@@ -1098,6 +1232,7 @@ describe("actual isolated operator console Code/PKCE BFF", () => {
         ...products,
         tenant: secondCustomer,
         keycloakOrigin: required("KC_PUBLIC_URL"),
+        serviceKey: secondBootstrap.serviceKey,
       }),
       readiness = new ProductReadiness({ environment });
     const occupied = await new Promise<boolean>((resolve) => {

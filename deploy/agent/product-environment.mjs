@@ -1,4 +1,5 @@
 import { assertCustomerTenantId } from "@j-auth/contracts";
+import { createHmac } from "node:crypto";
 import { isIP } from "node:net";
 import { parseEnv } from "node:util";
 import { ProvisionError, serviceDatabase } from "./service-database.mjs";
@@ -73,9 +74,16 @@ export class ProductEnvironment {
     keycloakOrigin,
     profiles,
     notificationOrigin,
+    serviceKey,
   }) {
     assertCustomerTenantId(tenant);
     this.tenant = tenant;
+    this.assignmentKey =
+      serviceKey === undefined
+        ? undefined
+        : createHmac("sha256", Buffer.from(secret(serviceKey), "base64url"))
+            .update("jgw-talk-assignment-v1:" + tenant)
+            .digest("base64url");
     this.databasePort = port(databasePort);
     this.keycloakOrigin = origin(keycloakOrigin, "keycloak");
     this.notificationOrigin =
@@ -199,6 +207,8 @@ export class ProductEnvironment {
           JT_NOTIFICATION_URL: this.notificationOrigin,
           JT_NOTIFICATION_KEY: value.notificationKey,
         });
+      if (service === "j-talk" && this.assignmentKey)
+        variables.JT_ASSIGNMENT_KEY = this.assignmentKey;
       if (service === "j-mail") variables.JML_MAILPIT_URL = p.mailpitOrigin;
       if (service === "j-customer-auth-db") {
         const cursorSigningKey = secret(value.cursorSigningKey);

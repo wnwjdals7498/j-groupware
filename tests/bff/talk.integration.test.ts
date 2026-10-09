@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import { parseEnv } from "node:util";
 import { spawn } from "node:child_process";
 import { once } from "node:events";
-import { randomBytes, randomUUID } from "node:crypto";
+import { createHmac, randomBytes, randomUUID } from "node:crypto";
 import { Pool } from "pg";
 import { decodeJwt } from "jose";
 import { Browser, integrationRuntime } from "./runtime.js";
@@ -70,6 +70,12 @@ describe("actual BFF talk member relay", () => {
             ...env,
             JT_TENANT: f.tenant,
             JT_PORT: String(55058 + i),
+            JT_ASSIGNMENT_KEY: createHmac(
+              "sha256",
+              Buffer.from(f.memberAuth.serviceKey, "base64url"),
+            )
+              .update("jgw-talk-assignment-v1:" + f.tenant)
+              .digest("base64url"),
           },
           shell: false,
           stdio: ["ignore", "pipe", "pipe"],
@@ -150,6 +156,7 @@ describe("actual BFF talk member relay", () => {
       for (const f of rt.fixtures) {
         for (const table of [
           "event_outbox",
+          "assignment_receipts",
           "messages",
           "rooms",
           "visitors",
@@ -217,6 +224,138 @@ describe("actual BFF talk member relay", () => {
       400,
     );
   });
+  it("validates current same-tenant active talk writers for manual assignment/reassignment without management rights", async () => {
+    const name = "relay-writer",
+      password = randomBytes(24).toString("base64url");
+    rt.secretValues.add(password);
+    const created = await owner.change("/api/members", {
+      username: name,
+      password,
+      roles: ["talk:write"],
+    });
+    expect(created.status).toBe(201);
+    const target = (await created.json()) as { id: string };
+    const writer = new Browser(rt.fetch, rt.fixtures[0]!.origin);
+    await writer.login(password, name);
+    const candidates = await writer.request("/api/talk/assignees");
+    expect(candidates.status).toBe(200);
+    const page = (await candidates.json()) as {
+      items: { id: string; username: string }[];
+    };
+    expect(page.items).toContainEqual({ id: target.id, username: name });
+    expect(
+      page.items.every(
+        (x) => Object.keys(x).sort().join(",") === "id,username",
+      ),
+    ).toBe(true);
+    expect((await writer.request("/api/members")).status).toBe(403);
+    expect((await reader.request("/api/talk/assignees")).status).toBe(403);
+    const path = `/api/talk/rooms/${ids[0]}/assign`;
+    expect((await reader.change(path, { memberId: target.id })).status).toBe(
+      403,
+    );
+    expect(
+      (await owner.change(path, { memberId: (await foreign.me()).subject }))
+        .status,
+    ).toBe(404);
+    expect(
+      (await owner.change(path, { memberId: (await reader.me()).subject }))
+        .status,
+    ).toBe(404);
+    expect(
+      (
+        await owner.change(path, {
+          memberId: target.id,
+          authorization: "browser-forgery",
+        })
+      ).status,
+    ).toBe(400);
+    expect(
+      (
+        await writer.request(path, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ memberId: target.id }),
+        })
+      ).status,
+    ).toBe(403);
+    const assigned = await writer.change(path, { memberId: target.id });
+    expect(assigned.status).toBe(200);
+    const first = (await assigned.json()) as {
+      assignedMemberId: string;
+      occurrenceId: string;
+    };
+    expect(first.assignedMemberId).toBe(target.id);
+    const ownerId = (await owner.me()).subject;
+    const reassigned = await writer.change(path, { memberId: ownerId });
+    expect(reassigned.status).toBe(200);
+    const second = (await reassigned.json()) as typeof first;
+    expect(second.assignedMemberId).toBe(ownerId);
+    expect(second.occurrenceId).not.toBe(first.occurrenceId);
+    expect(
+      (
+        await pool.query(
+          "SELECT recipient_member_id FROM event_outbox WHERE tenant_id=$1 AND id=ANY($2::uuid[]) ORDER BY recipient_member_id",
+          [rt.fixtures[0]!.tenant, [first.occurrenceId, second.occurrenceId]],
+        )
+      ).rows
+        .map((x) => x.recipient_member_id)
+        .sort(),
+    ).toEqual([target.id, ownerId].sort());
+    expect(
+      (
+        await rt.admin(
+          `/admin/realms/tenant-${rt.fixtures[0]!.tenant}/users/${target.id}`,
+          { method: "PUT", body: JSON.stringify({ enabled: false }) },
+        )
+      ).status,
+    ).toBe(204);
+    expect((await owner.change(path, { memberId: target.id })).status).toBe(
+      404,
+    );
+    expect((await writer.request("/api/talk/assignees")).status).toBe(403);
+    expect((await writer.change(path, { memberId: ownerId })).status).toBe(403);
+    expect(
+      (await writer.change(`/api/talk/rooms/${ids[0]}/assign-self`, {})).status,
+    ).toBe(403);
+    expect(
+      (
+        await rt.admin(
+          `/admin/realms/tenant-${rt.fixtures[0]!.tenant}/users/${target.id}`,
+          { method: "PUT", body: JSON.stringify({ enabled: true }) },
+        )
+      ).status,
+    ).toBe(204);
+    expect(
+      (
+        await owner.change(
+          `/api/members/${target.id}/roles/talk:write`,
+          undefined,
+          "DELETE",
+        )
+      ).status,
+    ).toBe(200);
+    expect((await owner.change(path, { memberId: target.id })).status).toBe(
+      404,
+    );
+    expect(
+      (
+        await writer.request(path, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ memberId: ownerId }),
+        })
+      ).status,
+    ).toBe(401);
+    expect(
+      (
+        await pool.query(
+          "SELECT assigned_member_id FROM rooms WHERE tenant_id=$1 AND id=$2",
+          [rt.fixtures[0]!.tenant, ids[0]],
+        )
+      ).rows[0].assigned_member_id,
+    ).toBe(ownerId);
+  });
   it("relays actual atomic message/dedup/page and keeps delivery pending", async () => {
     const url = `/api/talk/rooms/${ids[0]}/messages`,
       body = { requestId: randomUUID(), text: "actual BFF plain-text reply" };
@@ -274,6 +413,13 @@ describe("actual BFF talk member relay", () => {
     expect(
       (await owner.change(`/api/talk/rooms/${ids[0]}/close`, {})).status,
     ).toBe(200);
+    expect(
+      (
+        await owner.change(`/api/talk/rooms/${ids[0]}/assign`, {
+          memberId: (await owner.me()).subject,
+        })
+      ).status,
+    ).toBe(409);
     expect(
       (
         await owner.change(`/api/talk/rooms/${ids[0]}/messages`, {

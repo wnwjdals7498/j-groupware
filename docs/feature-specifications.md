@@ -71,7 +71,7 @@ T2 정책·정식 화면 인수는 별도 미완료다.
 | GW-43 | G22 | GET /api/notifications/stream SSE→새 알림 | 현재 회원 권한·대상만, 세션 종료 닫힘 | GW-T13 |
 | GW-44 | G22 | unread 수·목록·클릭 이동/읽음 | 카운트도 동일 권한 필터, 외부 link 불허 | GW-T13 |
 | GW-50 | G7 | operator OIDC→콘솔 BFF 세션 | 고객/하위 회원 콘솔 접근 거절 | GW-T14 |
-| GW-51 | G7 | 고객·계약 조회/변경→콘솔 저장 | customer:read/write, 상태값은 콘솔 계약에 고정 | GW-T14 |
+| GW-51 | G7 | 고객·계약 조회/변경→콘솔 저장 | customer:read/write, 준비→유효→종료 수동·별도 리비전, 서비스 가입/해지 독립 | GW-T14 |
 | GW-52 | G17 | tenant/관리자→realm 생성→에이전트 키·bootstrap1회 | customer:write, 키 해시만·부분 실패/secret 유실 구별 | GW-T15 |
 | GW-53 | G17 | 가입·해지 기록→j-auth 반영·비교·재시도 | 원하는/인증/설치 상태를 하나의 성공으로 합치지 않음 | GW-T15 |
 | GW-54 | G21 | desired-state GET·status POST→가입 목록·설치 보고 | 에이전트 Bearer 키의 tenant만, 사용자 세션과 구별 | GW-T15 |

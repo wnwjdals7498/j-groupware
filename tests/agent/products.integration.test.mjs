@@ -18,6 +18,7 @@ import { planActions } from "../../deploy/agent/reconciler.mjs";
 
 const tenant = "installer-products-fixture",
   secret = () => randomBytes(32).toString("base64url");
+const fixtureServiceKey = secret();
 const children = [],
   logs = [];
 let root, talk, web, adapter, environment, readiness, server, tls;
@@ -54,6 +55,7 @@ before(async () => {
   });
   adapter = new ProductEnvironment({
     tenant,
+    serviceKey: fixtureServiceKey,
     databasePort: Number(talk.JT_DB_PORT),
     keycloakOrigin: talk.KC_PUBLIC_URL,
     notificationOrigin: "https://127.0.0.1:54233",
@@ -138,6 +140,14 @@ test("renders five fixed product env files consumed by the actual compiled confi
       `/workspace/${service}/apps/server/dist/${file}`
     );
     const config = loadConfig(env);
+    if (service === "j-talk") {
+      assert.match(config.assignmentKey, /^[A-Za-z0-9_-]{43}$/);
+      assert.notEqual(config.assignmentKey, fixtureServiceKey);
+      assert.equal(text.includes(fixtureServiceKey), false);
+      assert.throws(() =>
+        adapter.read(service, text.replace(config.assignmentKey, secret())),
+      );
+    } else assert.equal(env.JT_ASSIGNMENT_KEY, undefined);
     if (service === "j-messenger") {
       assert.equal(config.authMode, "j-auth");
       assert.equal(config.jAuth.tenantId, tenant);
@@ -186,6 +196,7 @@ test("rejects reserved/nonloopback origins, unbound products, shared service por
     profiles: { "j-talk": p },
   };
   for (const changed of [
+    { serviceKey: "invalid" },
     { keycloakOrigin: "https://keycloak.jgw.test:3001" },
     { profiles: { "j-talk": { ...p, port: 3001 } } },
     { profiles: { "j-talk": p, "j-web": p } },

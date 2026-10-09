@@ -12,6 +12,8 @@ import type {
   TalkAssignmentResult,
 } from "@j-talk/contracts";
 import type { ServiceClient } from "./services.js";
+import type { TalkAssignments } from "./talk-assignments.js";
+import type { SessionRow } from "./db/sessions.js";
 import { cookieValue } from "./security.js";
 import { ApiError, unavailable } from "./errors.js";
 import {
@@ -128,6 +130,8 @@ export function registerTalkRoutes(
   app: FastifyInstance,
   services: Pick<ServiceClient, "request">,
   canReadGuests: (request: FastifyRequest) => boolean = () => false,
+  assignments?: TalkAssignments,
+  identity?: (request: FastifyRequest) => SessionRow,
 ) {
   const session = (r: FastifyRequest) =>
     cookieValue(r.headers.cookie, SESSION_POLICY.cookie);
@@ -194,6 +198,53 @@ export function registerTalkRoutes(
       method,
       ...(body === undefined ? {} : { body }),
     });
+  app.get<{ Querystring: { cursor?: string } }>(
+    "/api/talk/assignees",
+    {
+      schema: { querystring: TALK_MEMBER_SCHEMAS.assignees },
+    },
+    (r) => {
+      if (!assignments || !identity) throw unavailable();
+      return assignments.list(identity(r), r.query.cursor);
+    },
+  );
+  app.post<{ Params: { id: string }; Body: { memberId: string } }>(
+    "/api/talk/rooms/:id/assign",
+    {
+      schema: {
+        params,
+        querystring: empty,
+        body: TALK_MEMBER_SCHEMAS.assign,
+      },
+    },
+    async (r) => {
+      if (!assignments || !identity) throw unavailable();
+      const proof = await assignments.authorize(
+        identity(r),
+        r.params.id,
+        r.body.memberId,
+      );
+      return decodeTalkResponse(
+        await call(r, "/talk/rooms/" + r.params.id + "/assign", proof, "POST"),
+        200,
+        (value) => {
+          const v = record(value);
+          if (
+            id(v.id) !== r.params.id ||
+            v.status !== "in_progress" ||
+            id(v.assignedMemberId) !== r.body.memberId
+          )
+            throw unavailable();
+          return {
+            id: r.params.id,
+            status: "in_progress" as const,
+            assignedMemberId: r.body.memberId,
+            occurrenceId: id(v.occurrenceId),
+          };
+        },
+      );
+    },
+  );
   app.get<{ Querystring: { limit: number; after?: string; status?: string } }>(
     "/api/talk/rooms",
     {
@@ -258,12 +309,23 @@ export function registerTalkRoutes(
     app.post<{ Params: { id: string } }>(
       "/api/talk/rooms/:id/" + action,
       { schema: { params, querystring: empty, body: empty } },
-      async (r) =>
-        decodeTalkResponse(
+      async (r) => {
+        let body: unknown = {},
+          downstream = action as string;
+        if (action === "assign-self") {
+          if (!assignments || !identity) throw unavailable();
+          body = await assignments.authorize(
+            identity(r),
+            r.params.id,
+            identity(r).subject,
+          );
+          downstream = "assign";
+        }
+        return decodeTalkResponse(
           await call(
             r,
-            "/talk/rooms/" + r.params.id + "/" + action,
-            {},
+            "/talk/rooms/" + r.params.id + "/" + downstream,
+            body,
             "POST",
           ),
           200,
@@ -283,7 +345,8 @@ export function registerTalkRoutes(
                   occurrenceId: id(row.occurrenceId),
                 } satisfies TalkAssignmentResult);
           },
-        ),
+        );
+      },
     );
   app.post<{
     Params: { id: string };

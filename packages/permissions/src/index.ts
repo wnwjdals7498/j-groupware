@@ -39,6 +39,8 @@ export const ROUTES = {
     role: "guest:write",
   },
   "GET /api/talk/rooms": { kind: "session", role: "talk:read" },
+  "GET /api/talk/assignees": { kind: "session", role: "talk:write" },
+  "POST /api/talk/rooms/:id/assign": { kind: "session", role: "talk:write" },
   "GET /api/talk/rooms/:id": { kind: "session", role: "talk:read" },
   "GET /api/talk/rooms/:id/messages": { kind: "session", role: "talk:read" },
   "POST /api/talk/rooms/:id/assign-self": {

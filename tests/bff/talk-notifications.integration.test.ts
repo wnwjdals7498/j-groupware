@@ -1,7 +1,7 @@
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import { readFile } from "node:fs/promises";
 import { parseEnv } from "node:util";
-import { randomBytes, randomUUID } from "node:crypto";
+import { createHmac, randomBytes, randomUUID } from "node:crypto";
 import { spawn } from "node:child_process";
 import { once } from "node:events";
 import { Pool } from "pg";
@@ -117,6 +117,12 @@ describe("actual Talk occurrences to G22 with atomicity, role visibility and dur
         pool,
         tenant: f.tenant,
         keycloakOrigin: f.config.keycloakOrigin,
+        assignmentKey: createHmac(
+          "sha256",
+          Buffer.from(f.memberAuth.serviceKey, "base64url"),
+        )
+          .update("jgw-talk-assignment-v1:" + f.tenant)
+          .digest("base64url"),
         fetch: rt.fetchLoopback,
         https: {
           cert: await readFile(env.JT_TLS_CERTIFICATE!),
@@ -189,7 +195,13 @@ describe("actual Talk occurrences to G22 with atomicity, role visibility and dur
     for (const app of apps) await app.close();
     if (pool && rt) {
       for (const f of rt.fixtures)
-        for (const table of ["event_outbox", "messages", "rooms", "visitors"])
+        for (const table of [
+          "event_outbox",
+          "assignment_receipts",
+          "messages",
+          "rooms",
+          "visitors",
+        ])
           await pool.query(`DELETE FROM ${table} WHERE tenant_id=$1`, [
             f.tenant,
           ]);
@@ -316,6 +328,14 @@ describe("actual Talk occurrences to G22 with atomicity, role visibility and dur
     try {
       const pending = await make();
       await drain();
+      const receiptsBefore = (
+        await pool.query(
+          "SELECT nonce FROM assignment_receipts WHERE tenant_id=$1",
+          [tenant()],
+        )
+      ).rows
+        .map((row) => row.nonce)
+        .sort();
       expect(
         (await owner.change(`/api/talk/rooms/${pending.room}/assign-self`, {}))
           .status,
@@ -328,6 +348,17 @@ describe("actual Talk occurrences to G22 with atomicity, role visibility and dur
           )
         ).rows[0],
       ).toEqual({ status: "waiting", assigned_member_id: null });
+      // The trusted proof must roll back together with the room/outbox on failure.
+      expect(
+        (
+          await pool.query(
+            "SELECT nonce FROM assignment_receipts WHERE tenant_id=$1",
+            [tenant()],
+          )
+        ).rows
+          .map((row) => row.nonce)
+          .sort(),
+      ).toEqual(receiptsBefore);
     } finally {
       await pool.query(
         "DROP TRIGGER talk_test_refuse_occurrence ON event_outbox",
