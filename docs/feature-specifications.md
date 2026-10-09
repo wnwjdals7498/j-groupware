@@ -29,10 +29,12 @@ G6 서버 API·원래 Bearer/서비스 키·대상 세션 종료·미배치 저�
 GW-35의 현재 room 목록/상세 중계는 `guestId`를 보존한다. `guest:read`가
 있는 회원에 한해 기존 customer-auth UUID 조회로 `guestName`을 추가하며,
 권한이 없으면 이름 필드·조회·customer-auth 토큰 교환이 없다. 익명이나
-삭제/다른 tenant 손님은 이름 null이고, 조회 장애·무효 UUID는 503이다.
+삭제/다른 tenant 손님 및 정상 형식의 UUID 아닌 사이트 구분자는 이름 null이다.
+조회 장애·허용 문자가 아닌 저장 구분자는 503이고 customer-auth에 전달하지 않는다.
 목록은 UUID를 중복 제거하고 동시 조회 4개·전체 10초를 제한한다. 실제
-Talk/customer-auth/PG 연결은 storage fixture로 검증했고 방문자 발급·WSS·
-T2 정책·정식 화면 인수는 별도 미완료다.
+Talk/customer-auth/PG 연결과 방문자/WSS·서명 cursor는 실제 isolated fixture로
+검증한다. 소스 UI 기준과 재사용 컴포넌트는 [UI 기준](ui-guidelines.md)을
+따르며 정식 업무 화면과 고객 VM 인수는 별도다.
 
 ## 기능별 계약
 

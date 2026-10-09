@@ -14,6 +14,7 @@ export const ROUTES = {
   "GET /api/web/sites/:id/content": { kind: "session", role: "web:read" },
   "PUT /api/web/sites/:id/content": { kind: "session", role: "web:write" },
   "POST /api/web/sites/:id/preview": { kind: "session", role: "web:write" },
+  "POST /api/web/sites/:id/deploy": { kind: "session", role: "web:write" },
   "POST /api/web/sites": { kind: "session", role: "web:write" },
   "POST /api/web/sites/:id/retry": { kind: "session", role: "web:write" },
   "POST /api/web/sites/:id/account-password": {
@@ -39,6 +40,8 @@ export const ROUTES = {
     role: "guest:write",
   },
   "GET /api/talk/rooms": { kind: "session", role: "talk:read" },
+  "GET /api/talk/sync": { kind: "session", role: "talk:read" },
+  "GET /api/talk/ws": { kind: "session", role: "talk:read" },
   "GET /api/talk/assignees": { kind: "session", role: "talk:write" },
   "POST /api/talk/rooms/:id/assign": { kind: "session", role: "talk:write" },
   "GET /api/talk/rooms/:id": { kind: "session", role: "talk:read" },

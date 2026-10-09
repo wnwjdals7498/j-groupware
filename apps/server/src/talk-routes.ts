@@ -5,6 +5,7 @@ import {
   TALK_UUID_PATTERN,
   TALK_ROOM_STATUSES,
   TALK_MEMBER_LIMITS,
+  TALK_VISITOR_POLICY,
 } from "@j-talk/contracts";
 import type {
   TalkRoomStatus,
@@ -59,6 +60,8 @@ function room(value: unknown, summary = false) {
     assignedMemberId: nullableId(row.assignedMemberId),
   };
   const guestId = row.guestId === null ? null : string(row.guestId, 128);
+  if (guestId !== null && !/^[A-Za-z0-9._-]{1,128}$/.test(guestId))
+    throw unavailable();
   return summary
     ? { ...base, guestId, createdAt: date(row.createdAt) }
     : { ...base, guestId };
@@ -67,10 +70,18 @@ function message(value: unknown) {
   const row = record(value),
     text = string(row.text, 4096);
   if (!text || Buffer.byteLength(text) > 4096) throw unavailable();
+  const senderMemberId = nullableId(row.senderMemberId),
+    senderVisitorId =
+      row.senderVisitorId === undefined
+        ? null
+        : nullableId(row.senderVisitorId);
+  if ((senderMemberId === null) === (senderVisitorId === null))
+    throw unavailable();
   return {
     id: id(row.id),
     text,
-    senderMemberId: id(row.senderMemberId),
+    senderMemberId,
+    senderVisitorId,
     createdAt: date(row.createdAt),
   };
 }
@@ -135,6 +146,63 @@ export function registerTalkRoutes(
 ) {
   const session = (r: FastifyRequest) =>
     cookieValue(r.headers.cookie, SESSION_POLICY.cookie);
+  app.get<{ Querystring: { cursor?: string } }>(
+    "/api/talk/sync",
+    {
+      schema: {
+        querystring: {
+          ...empty,
+          properties: {
+            cursor: { type: "string", minLength: 1, maxLength: 2048 },
+          },
+        },
+      },
+    },
+    async (r) => {
+      const suffix = r.query.cursor
+        ? "?" + new URLSearchParams({ cursor: r.query.cursor })
+        : "";
+      return decodeTalkResponse(
+        await services.request(session(r), "j-talk", "/talk/sync" + suffix),
+        200,
+        (v) => {
+          const row = record(v),
+            cursor = string(row.cursor, 2048);
+          if (
+            !/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]{43}$/.test(cursor) ||
+            typeof row.hasMore !== "boolean" ||
+            !Array.isArray(row.items) ||
+            row.items.length > TALK_VISITOR_POLICY.page
+          )
+            throw unavailable();
+          return {
+            cursor,
+            hasMore: row.hasMore,
+            items: row.items.map((value) => {
+              const event = record(value),
+                type = string(event.type, 16);
+              if (
+                ![
+                  "talk.new",
+                  "talk.assigned",
+                  "talk.message",
+                  "talk.closed",
+                ].includes(type) ||
+                (type === "talk.message") !== (event.message !== null)
+              )
+                throw unavailable();
+              return {
+                id: id(event.id),
+                roomId: id(event.roomId),
+                type,
+                message: event.message === null ? null : message(event.message),
+              };
+            }),
+          };
+        },
+      );
+    },
+  );
   async function guestNames<T extends { guestId: string | null }>(
     request: FastifyRequest,
     rooms: T[],
@@ -143,7 +211,8 @@ export function registerTalkRoutes(
     if (!canReadGuests(request)) return rooms;
     const names = new Map<string, string | null>();
     for (const room of rooms)
-      if (room.guestId !== null) names.set(id(room.guestId), null);
+      if (room.guestId !== null && new RegExp(uuidPattern).test(room.guestId))
+        names.set(room.guestId, null);
     const ids = [...names.keys()],
       controller = new AbortController(),
       signal = AbortSignal.any([controller.signal, AbortSignal.timeout(10000)]);
@@ -185,7 +254,8 @@ export function registerTalkRoutes(
       throw unavailable();
     return rooms.map((room) => ({
       ...room,
-      guestName: room.guestId === null ? null : names.get(room.guestId)!,
+      guestName:
+        room.guestId === null ? null : (names.get(room.guestId) ?? null),
     }));
   }
   const call = (

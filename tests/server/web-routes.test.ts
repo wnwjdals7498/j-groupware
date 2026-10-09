@@ -110,3 +110,115 @@ it("refuses arbitrary queries, malformed ids and extra content fields before inv
     await app.close();
   }
 });
+it("keeps deployment success while the Talk origin side effect reports registered, pending permission, or retryable failure", async () => {
+  const origin = "https://site.jgw.test";
+  let talkStatus: number | "missing-role" = "missing-role";
+  let jwebStatus = 200;
+  const calls: { service: string; path: string; method: string }[] = [];
+  const app = Fastify();
+  app.setErrorHandler((error, _, reply) =>
+    reply
+      .code(error instanceof ApiError ? error.status : 503)
+      .send({ code: error instanceof ApiError ? error.code : "unavailable" }),
+  );
+  registerWebRoutes(
+    app,
+    {
+      request: async (_session, service, path, options = {}) => {
+        calls.push({ service, path, method: options.method ?? "GET" });
+        if (service === "j-web")
+          return Response.json(
+            {
+              siteId,
+              revision: 3,
+              origin,
+              deployed: false,
+              previousVersion: null,
+            },
+            { status: jwebStatus },
+          );
+        if (talkStatus === "missing-role")
+          throw new Error("Talk must not be called without permission.");
+        if (talkStatus === 201)
+          return Response.json({ origin }, { status: 201 });
+        if (talkStatus === 409)
+          return Response.json(
+            { code: "origin_exists", message: "safe duplicate" },
+            { status: 409 },
+          );
+        return new Response("downstream failure", { status: talkStatus });
+      },
+    },
+    "route-fixture",
+    () => talkStatus !== "missing-role",
+  );
+  try {
+    const path = `/api/web/sites/${siteId}/deploy`;
+    const pending = await app.inject({
+      method: "POST",
+      url: path,
+      payload: { expectedRevision: 3 },
+    });
+    expect(pending.statusCode).toBe(200);
+    expect(pending.json()).toMatchObject({
+      siteId,
+      revision: 3,
+      deployed: false,
+      originRegistration: {
+        status: "pending_permission",
+        message: expect.stringContaining("talk:write"),
+      },
+    });
+    expect(calls.map((call) => call.service)).toEqual(["j-web"]);
+
+    talkStatus = 201;
+    const registered = await app.inject({
+      method: "POST",
+      url: path,
+      payload: { expectedRevision: 3 },
+    });
+    expect(registered.statusCode).toBe(200);
+    expect(registered.json()).toMatchObject({
+      deployed: false,
+      originRegistration: { status: "registered" },
+    });
+    expect(calls.at(-1)).toEqual({
+      service: "j-talk",
+      path: "/talk/settings/origins",
+      method: "POST",
+    });
+
+    talkStatus = 503;
+    const failedOrigin = await app.inject({
+      method: "POST",
+      url: path,
+      payload: { expectedRevision: 3 },
+    });
+    expect(failedOrigin.statusCode).toBe(200);
+    expect(failedOrigin.json()).toMatchObject({
+      deployed: false,
+      originRegistration: { status: "failed" },
+    });
+
+    talkStatus = 409;
+    const repeated = await app.inject({
+      method: "POST",
+      url: path,
+      payload: { expectedRevision: 3 },
+    });
+    expect(repeated.json()).toMatchObject({
+      originRegistration: { status: "registered" },
+    });
+
+    jwebStatus = 409;
+    const deploymentConflict = await app.inject({
+      method: "POST",
+      url: path,
+      payload: { expectedRevision: 3 },
+    });
+    expect(deploymentConflict.statusCode).toBe(409);
+    expect(deploymentConflict.json()).toEqual({ code: "conflict" });
+  } finally {
+    await app.close();
+  }
+});

@@ -6,7 +6,9 @@ import { once } from "node:events";
 import { createHmac, randomBytes, randomUUID } from "node:crypto";
 import { Pool } from "pg";
 import { decodeJwt } from "jose";
-import { Browser, integrationRuntime } from "./runtime.js";
+import WebSocket from "ws";
+import { SESSION_POLICY } from "@j-groupware/contracts";
+import { Browser, integrationRuntime, required } from "./runtime.js";
 import type { Runtime } from "./runtime.js";
 describe("actual BFF talk member relay", () => {
   let rt: Runtime,
@@ -162,6 +164,8 @@ describe("actual BFF talk member relay", () => {
           "visitors",
           "allowed_origins",
           "widget_keys",
+          "visitor_rate_limits",
+          "realtime_cursor_keys",
         ])
           await pool.query(`DELETE FROM ${table} WHERE tenant_id=$1`, [
             f.tenant,
@@ -408,6 +412,126 @@ describe("actual BFF talk member relay", () => {
       (await owner.change("/api/talk/settings/origins", { origin }, "DELETE"))
         .status,
     ).toBe(204);
+  });
+  it("recovers committed Talk events through opaque session WSS/sync and closes a live socket on role revocation", async () => {
+    const password = randomBytes(24).toString("base64url");
+    rt.secretValues.add(password);
+    const created = await owner.change("/api/members", {
+      username: "stream-reader",
+      password,
+      roles: ["talk:read"],
+    });
+    expect(created.status).toBe(201);
+    const member = (await created.json()) as { id: string };
+    const viewer = new Browser(rt.fetch, rt.fixtures[0]!.origin);
+    await viewer.login(password, "stream-reader");
+    const ca = await readFile(required("JGW_TLS_CERTIFICATE"));
+    const connect = (browser: Browser, query = "", origin = browser.origin) => {
+      const endpoint = new URL("/api/talk/ws" + query, browser.origin);
+      endpoint.protocol = "wss:";
+      const socket = new WebSocket(endpoint, {
+        ca,
+        lookup: (_host, options, callback) => {
+          const address = required("JGW_TEST_BIND_IP");
+          if (options.all) callback(null, [{ address, family: 4 }]);
+          else callback(null, address, 4);
+        },
+        headers: {
+          Origin: origin,
+          Cookie:
+            SESSION_POLICY.cookie +
+            "=" +
+            browser.cookies.get(browser.origin)!.get(SESSION_POLICY.cookie)!,
+        },
+        handshakeTimeout: 5000,
+      });
+      socket.on("error", () => {});
+      const opened = new Promise<number>((resolve) => {
+        socket.once("open", () => resolve(101));
+        socket.once("unexpected-response", (_request, response) => {
+          response.resume();
+          resolve(response.statusCode!);
+          socket.terminate();
+        });
+        socket.once("error", () => resolve(0));
+      });
+      return { socket, opened };
+    };
+    expect(await connect(denied).opened).toBe(403);
+    expect(await connect(viewer, "?token=never-in-url").opened).toBe(400);
+    expect(
+      await connect(viewer, "", "https://unregistered.example.test").opened,
+    ).toBe(403);
+    const connection = connect(viewer),
+      frames: { items: { id: string; message: { text: string } | null }[] }[] =
+        [];
+    connection.socket.on("message", (data) =>
+      frames.push(JSON.parse(data.toString())),
+    );
+    try {
+      expect(await connection.opened).toBe(101);
+      const wait = async (check: () => boolean) => {
+        for (let n = 0; n < 70; n++) {
+          if (check()) return;
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+        throw new Error("Actual Talk stream event was not observed.");
+      };
+      await wait(() => frames.length > 0);
+      const before = await viewer.request("/api/talk/sync");
+      expect(before.status).toBe(200);
+      const cursor = ((await before.json()) as { cursor: string }).cursor;
+      const requestId = randomUUID(),
+        text = "actual session WSS committed message";
+      expect(
+        (
+          await owner.change(`/api/talk/rooms/${ids[0]}/messages`, {
+            requestId,
+            text,
+          })
+        ).status,
+      ).toBe(200);
+      await wait(() =>
+        frames.some((f) => f.items.some((e) => e.message?.text === text)),
+      );
+      const recovered = await viewer.request(
+        "/api/talk/sync?" + new URLSearchParams({ cursor }),
+      );
+      expect(recovered.status).toBe(200);
+      expect(await recovered.json()).toMatchObject({
+        items: [{ type: "talk.message", message: { text } }],
+      });
+      expect(
+        (
+          await owner.request(
+            "/api/talk/sync?" + new URLSearchParams({ cursor }),
+          )
+        ).status,
+      ).toBe(400);
+      const closed = new Promise<number>((resolve) =>
+        connection.socket.once("close", resolve),
+      );
+      expect(
+        (
+          await owner.change(
+            "/api/members/" + member.id + "/roles/talk:read",
+            undefined,
+            "DELETE",
+          )
+        ).status,
+      ).toBe(200);
+      expect(
+        await Promise.race([
+          closed,
+          new Promise<number>((resolve) => setTimeout(() => resolve(-1), 7000)),
+        ]),
+      ).toBe(1008);
+      expect((await viewer.request("/api/talk/sync")).status).toBe(401);
+      await viewer.login(password, "stream-reader");
+      expect((await viewer.request("/api/talk/sync")).status).toBe(403);
+    } finally {
+      connection.socket.terminate();
+    }
   });
   it("relays close and preserves downstream conflicts, then fails closed on real service outage", async () => {
     expect(

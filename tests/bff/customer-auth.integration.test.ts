@@ -977,7 +977,7 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
       );
     }
   });
-  it("rejects non-UUID stored guest identifiers before lookup while preserving identifier-only access", async () => {
+  it("rejects malformed stored guest identifiers before lookup", async () => {
     const fixture = rt.fixtures[0]!,
       visitor = randomUUID(),
       room = randomUUID();
@@ -996,7 +996,7 @@ describe("actual customer-auth PostgreSQL and member/site authentication", () =>
       expect(await deniedLookup.text()).not.toContain("private=fixture");
       expect(
         (await talkOnlyBrowser.request("/api/talk/rooms/" + room)).status,
-      ).toBe(200);
+      ).toBe(503);
       expect(
         rt.serviceCalls
           .slice(before)

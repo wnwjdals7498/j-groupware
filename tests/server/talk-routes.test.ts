@@ -6,6 +6,45 @@ import {
 } from "../../apps/server/src/talk-routes.js";
 import { ApiError } from "../../apps/server/src/errors.js";
 describe("bounded talk downstream projection", () => {
+  it("keeps signed opaque site guest IDs readable without a customer-auth lookup", async () => {
+    const roomId = "00000000-0000-4000-8000-000000000001",
+      app = Fastify({ exposeHeadRoutes: false });
+    let customerCalls = 0;
+    registerTalkRoutes(
+      app,
+      {
+        request: async (_session, service) => {
+          if (service !== "j-talk") {
+            customerCalls++;
+            throw new Error(
+              "Opaque website IDs must not be sent to customer-auth.",
+            );
+          }
+          return new Response(
+            JSON.stringify({
+              id: roomId,
+              status: "waiting",
+              assignedMemberId: null,
+              guestId: "signed-site-user-42",
+            }),
+            { headers: { "Content-Type": "application/json" } },
+          );
+        },
+      },
+      () => true,
+    );
+    try {
+      const response = await app.inject({ url: "/api/talk/rooms/" + roomId });
+      expect(response.statusCode).toBe(200);
+      expect(response.json()).toMatchObject({
+        guestId: "signed-site-user-42",
+        guestName: null,
+      });
+      expect(customerCalls).toBe(0);
+    } finally {
+      await app.close();
+    }
+  });
   it("strips unknown private fields from a room response", async () => {
     const id = "00000000-0000-4000-8000-000000000001",
       app = Fastify({ exposeHeadRoutes: false });

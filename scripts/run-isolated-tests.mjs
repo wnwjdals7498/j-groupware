@@ -165,6 +165,7 @@ export function isolatedCommands(kind, npmCli) {
     return [
       npm("build"),
       npm("typecheck"),
+      npm("check:ui"),
       [
         process.execPath,
         "node_modules/vitest/vitest.mjs",

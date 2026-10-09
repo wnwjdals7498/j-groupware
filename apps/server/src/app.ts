@@ -102,7 +102,9 @@ export function createApp(options: {
       throw new ApiError(400, "invalid_input", "Unregistered host.");
     if (
       request.headers.upgrade?.toLowerCase() === "websocket" &&
-      request.routeOptions.url !== "/api/messenger/ws"
+      !["/api/messenger/ws", "/api/talk/ws"].includes(
+        request.routeOptions.url ?? "",
+      )
     )
       throw new ApiError(400, "invalid_input", "Unregistered websocket path.");
   });
@@ -405,7 +407,9 @@ export function createApp(options: {
     (request) => identities.get(request)!,
   );
   registerCustomerAuthRoutes(app, services);
-  registerWebRoutes(app, services, options.config.tenant);
+  registerWebRoutes(app, services, options.config.tenant, (request) =>
+    identities.get(request)!.roles.includes("talk:write"),
+  );
   app.register(websocket, {
     options: { maxPayload: 1048576, perMessageDeflate: false },
     errorHandler: (_error, socket) => socket.terminate(),

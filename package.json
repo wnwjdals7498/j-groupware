@@ -11,10 +11,13 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspace=@j-groupware/contracts && npm run build --workspace=@j-groupware/permissions && npm run build --workspace=@j-groupware/bff-auth && npm run build --workspace=@j-groupware/server && npm run build --workspace=@j-groupware/console-server",
+    "build": "npm run build --workspace=@j-groupware/contracts && npm run build --workspace=@j-groupware/permissions && npm run build --workspace=@j-groupware/bff-auth && npm run build --workspace=@j-groupware/ui && npm run build --workspace=@j-groupware/server && npm run build --workspace=@j-groupware/console-server",
+    "check:ui": "npm run check --workspace=@j-groupware/ui",
     "check": "node scripts/run-isolated-tests.mjs check",
     "typecheck": "tsc --noEmit -p tsconfig.test.json",
     "test": "vitest run --config vitest.config.ts",
+    "test:ui": "node --test tests/ui/browser.test.mjs",
+    "test:customer-acceptance": "node --test tools/customer-acceptance/test/collector.test.mjs",
     "test:integration": "node scripts/run-isolated-tests.mjs integration",
     "test:registry": "node --test tests/registry/registry.integration.test.mjs",
     "test:gateway": "node --test tests/gateway/gateway.integration.test.mjs",
@@ -33,7 +36,10 @@
     "test:agent:native": "node scripts/run-isolated-tests.mjs native"
   },
   "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "vite": "8.3.4",
     "@j-messenger/client-core": "0.2.0",
+    "@j-messenger/client-react": "0.2.2",
     "typescript": "5.9.3",
     "@types/node": "22.20.4",
     "@types/pg": "8.23.1",

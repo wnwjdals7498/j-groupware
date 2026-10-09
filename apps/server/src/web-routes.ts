@@ -1,5 +1,6 @@
 import type { FastifyInstance, FastifyRequest } from "fastify";
 import { CONTENT_LIMITS, WEB_PATHS, isSiteDomain } from "@j-web/contracts";
+import type { DeploymentView } from "@j-web/contracts";
 import { SESSION_POLICY } from "@j-groupware/contracts";
 import { cookieValue } from "./security.js";
 import { ApiError, unavailable } from "./errors.js";
@@ -201,10 +202,106 @@ export async function decodeWebResponse<T>(
     reader.releaseLock();
   }
 }
+type OriginRegistrationStatus = "registered" | "pending_permission" | "failed";
+const originRegistrationMessage: Record<OriginRegistrationStatus, string> = {
+  registered: "상담 허용 출처에 등록했습니다.",
+  pending_permission:
+    "배포는 완료됐습니다. talk:write 권한을 받은 뒤 같은 revision을 다시 배포해 출처를 등록하세요.",
+  failed:
+    "배포는 완료됐습니다. 상담 허용 출처 등록에 실패했습니다. 같은 revision을 다시 배포해 재시도하세요.",
+};
+function deployment(
+  v: unknown,
+  siteId: string,
+  tenant: string,
+): DeploymentView {
+  const row = record(v),
+    origin = text(row.origin, 261);
+  if (
+    row.siteId !== siteId ||
+    !Number.isSafeInteger(row.revision) ||
+    Number(row.revision) < 1 ||
+    Number(row.revision) > 2147483647 ||
+    typeof row.deployed !== "boolean" ||
+    !isSiteDomain(
+      origin.startsWith("https://") ? origin.slice(8) : "",
+      tenant,
+    ) ||
+    origin !== "https://" + origin.slice(8) ||
+    (row.previousVersion !== null &&
+      (typeof row.previousVersion !== "string" ||
+        !new RegExp(uuidPattern).test(row.previousVersion)))
+  )
+    throw unavailable();
+  return {
+    siteId,
+    revision: Number(row.revision),
+    origin,
+    deployed: row.deployed,
+    previousVersion: row.previousVersion as string | null,
+  };
+}
+async function talkOriginRegistration(
+  services: Pick<ServiceClient, "request">,
+  session: string | undefined,
+  origin: string,
+): Promise<OriginRegistrationStatus> {
+  try {
+    const response = await services.request(
+      session,
+      "j-talk",
+      "/talk/settings/origins",
+      { method: "POST", body: { origin } },
+    );
+    if (response.status !== 201 && response.status !== 409) {
+      await response.body?.cancel();
+      return "failed";
+    }
+    const contentType = response.headers.get("content-type") ?? "";
+    if (!contentType.startsWith("application/json")) {
+      await response.body?.cancel();
+      return "failed";
+    }
+    const reader = response.body?.getReader();
+    if (!reader) return "failed";
+    const chunks: Uint8Array[] = [];
+    let size = 0;
+    try {
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        size += value.byteLength;
+        if (size > 8192) {
+          await reader.cancel();
+          return "failed";
+        }
+        chunks.push(value);
+      }
+    } finally {
+      reader.releaseLock();
+    }
+    let value: Record<string, unknown>;
+    try {
+      value = record(JSON.parse(Buffer.concat(chunks).toString()));
+    } catch {
+      return "failed";
+    }
+    if (response.status === 201)
+      return value.origin === origin ? "registered" : "failed";
+    // Repeated deployment can race/retry an origin registered by the earlier
+    // successful attempt. j-talk's conflict code is the exact idempotent case.
+    if (response.status === 409 && value.code === "origin_exists")
+      return "registered";
+    return "failed";
+  } catch {
+    return "failed";
+  }
+}
 export function registerWebRoutes(
   app: FastifyInstance,
   services: Pick<ServiceClient, "request">,
   tenant: string,
+  canRegisterOrigin: (request: FastifyRequest) => boolean = () => false,
 ) {
   const base = "/api/web/sites";
   const call = (
@@ -386,6 +483,52 @@ export function registerWebRoutes(
           return { siteId: r.params.id, origin, html, widgetSnippet };
         },
       ),
+  );
+  app.post<{ Params: { id: string }; Body: { expectedRevision: number } }>(
+    base + "/:id/deploy",
+    {
+      schema: {
+        params,
+        querystring: empty,
+        body: {
+          ...empty,
+          required: ["expectedRevision"],
+          properties: {
+            expectedRevision: {
+              type: "integer",
+              minimum: 1,
+              maximum: 2147483647,
+            },
+          },
+        },
+      },
+    },
+    async (r) => {
+      const result = await decodeWebResponse(
+        await call(
+          r,
+          WEB_PATHS.sites + "/" + r.params.id + "/deploy",
+          "POST",
+          r.body,
+        ),
+        200,
+        (v) => deployment(v, r.params.id, tenant),
+      );
+      const status = canRegisterOrigin(r)
+        ? await talkOriginRegistration(
+            services,
+            cookieValue(r.headers.cookie, SESSION_POLICY.cookie),
+            result.origin,
+          )
+        : "pending_permission";
+      return {
+        ...result,
+        originRegistration: {
+          status,
+          message: originRegistrationMessage[status],
+        },
+      };
+    },
   );
   const password = { type: "string", minLength: 12, maxLength: 256 };
   const mapPassword = (v: unknown) => {
