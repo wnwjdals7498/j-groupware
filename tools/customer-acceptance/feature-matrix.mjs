@@ -1,0 +1,211 @@
+export const FEATURE_MATRIX = Object.freeze([
+  {
+    serviceId: "j-auth",
+    featureId: "AU-51",
+    acceptanceTestId: "AU-T10",
+    targetRoles: ["oidc-discovery", "jwks"],
+    configEvidenceIds: [
+      "AU-T10.login-flow",
+      "AU-T10.management-api",
+      "AU-T10.backchannel",
+      "AU-T10.nginx-allowlist",
+      "AU-T10.resources",
+    ],
+    resourceScopes: ["customer-vm"],
+    resourceMetrics: ["cpu_percent", "memory_rss_bytes", "disk_free_bytes"],
+  },
+  {
+    serviceId: "j-groupware",
+    featureId: "GW-73",
+    acceptanceTestId: "GW-T19",
+    targetRoles: ["control-health", "customer-health"],
+    configEvidenceIds: [
+      "GW-T19.control-vm",
+      "GW-T19.customer-vm",
+      "GW-T19.gateway-and-relay",
+      "GW-T19.g8-services",
+    ],
+    resourceScopes: ["control-vm", "customer-vm"],
+    resourceMetrics: ["cpu_percent", "memory_rss_bytes", "disk_free_bytes"],
+  },
+  {
+    serviceId: "j-messenger",
+    featureId: "MS-09",
+    acceptanceTestId: "MS-T04",
+    targetRoles: ["service-health"],
+    configEvidenceIds: [
+      "MS-T04.two-member-flow",
+      "MS-T04.sync-and-reconnect",
+      "MS-T04.auth-revocation",
+      "MS-T04.internal-ports",
+      "MS-T04.postgres-isolation",
+      "MS-T04.install-removal-backup",
+    ],
+    resourceScopes: ["customer-vm"],
+    resourceMetrics: ["cpu_percent", "memory_rss_bytes", "disk_free_bytes"],
+  },
+  {
+    serviceId: "j-mail",
+    featureId: "ML-32",
+    acceptanceTestId: "ML-T05",
+    targetRoles: ["service-health"],
+    configEvidenceIds: [
+      "ML-T05.mailpit-ui",
+      "ML-T05.egress-denied",
+      "ML-T05.systemd",
+      "ML-T05.install-removal-volume-backup",
+      "ML-T05.internal-ports",
+    ],
+    resourceScopes: ["customer-vm"],
+    resourceMetrics: ["cpu_percent", "memory_rss_bytes", "disk_free_bytes"],
+  },
+  {
+    serviceId: "j-customer-auth-db",
+    featureId: "CA-32",
+    acceptanceTestId: "CA-T05",
+    targetRoles: ["service-health", "customer-auth-exception"],
+    configEvidenceIds: [
+      "CA-T05.screen-registration",
+      "CA-T05.site-server-login",
+      "CA-T05.external-query",
+      "CA-T05.internal-api-private",
+      "CA-T05.install-removal-backup",
+    ],
+    resourceScopes: ["customer-vm"],
+    resourceMetrics: ["cpu_percent", "memory_rss_bytes", "disk_free_bytes"],
+  },
+  {
+    serviceId: "j-approval",
+    featureId: "AP-32",
+    acceptanceTestId: "AP-T06",
+    targetRoles: ["service-health"],
+    configEvidenceIds: [
+      "AP-T06.systemd-and-https",
+      "AP-T06.screen-submit",
+      "AP-T06.sequential-approval-history",
+      "AP-T06.internal-api-private",
+      "AP-T06.install-removal",
+    ],
+    resourceScopes: ["customer-vm"],
+    resourceMetrics: ["cpu_percent", "memory_rss_bytes", "disk_free_bytes"],
+  },
+  {
+    serviceId: "j-talk",
+    featureId: "TK-42",
+    acceptanceTestId: "TK-T06",
+    targetRoles: ["service-health", "talk-exception"],
+    configEvidenceIds: [
+      "TK-T06.widget-to-talk-screen",
+      "TK-T06.ext-only",
+      "TK-T06.allowed-origin",
+      "TK-T06.uninstall-empty-widget",
+      "TK-T06.install-removal",
+    ],
+    resourceScopes: ["customer-vm"],
+    resourceMetrics: ["cpu_percent", "memory_rss_bytes", "disk_free_bytes"],
+  },
+  {
+    serviceId: "j-web",
+    featureId: "WB-33",
+    acceptanceTestId: "WB-T05",
+    targetRoles: ["service-health", "site-root"],
+    configEvidenceIds: [
+      "WB-T05.site-https",
+      "WB-T05.separate-sshd-sftp",
+      "WB-T05.explicit-tls-ftps",
+      "WB-T05.widget-origin-registration",
+      "WB-T05.remove-all-and-backup",
+    ],
+    resourceScopes: ["customer-vm"],
+    resourceMetrics: ["cpu_percent", "memory_rss_bytes", "disk_free_bytes"],
+  },
+]);
+
+export const TARGET_PATHS = Object.freeze({
+  "service-health": /^\/health\/ready$/,
+  "control-health": /^\/health\/ready$/,
+  "customer-health": /^\/health\/ready$/,
+  "mailpit-health": /^\/readyz$/,
+  "oidc-discovery":
+    /^\/realms\/[a-z][a-z0-9-]{1,48}\/\.well-known\/openid-configuration$/,
+  jwks: /^\/realms\/[a-z][a-z0-9-]{1,48}\/protocol\/openid-connect\/certs$/,
+  "customer-auth-exception": /^\/ext\/customer-auth\/$/,
+  "talk-exception": /^\/ext\/talk\/$/,
+  "site-root": /^\/$/,
+});
+
+export const RESOURCE_METRIC_NAMES = Object.freeze([
+  "cpu_percent",
+  "memory_rss_bytes",
+  "memory_total_bytes",
+  "disk_free_bytes",
+  "disk_total_bytes",
+  "db_bytes",
+  "wal_bytes",
+  "outbox_pending",
+  "p95_ms",
+  "sample_count",
+]);
+
+export const ALL_ACCEPTANCE_TEST_IDS = Object.freeze(
+  FEATURE_MATRIX.map(({ acceptanceTestId }) => acceptanceTestId),
+);
+
+export const OPERATIONS_GATES = Object.freeze([
+  {
+    id: "O01",
+    name: "mail, TLS, approved network and release integration",
+    evidenceIds: [
+      "mail-auth",
+      "tls-chain",
+      "network-allowlist",
+      "release-id",
+      "rollback-compatibility",
+    ],
+  },
+  {
+    id: "O02",
+    name: "resource protection and load judgment",
+    evidenceIds: [
+      "cpu-rss-p95",
+      "db-wal-space",
+      "disk-protection",
+      "load-fixture",
+      "outbox-recovery",
+    ],
+  },
+  {
+    id: "O03",
+    name: "journal retention, access and audit separation",
+    evidenceIds: [
+      "secret-redaction",
+      "rotation-reboot-retention",
+      "read-access",
+      "audit-separation",
+      "bounded-export",
+    ],
+  },
+  {
+    id: "O04",
+    name: "consistent backup and retention",
+    evidenceIds: [
+      "db-snapshot-consistency",
+      "file-manifest-coverage",
+      "retention-pruning",
+      "last-good-preserved",
+      "restoreability",
+    ],
+  },
+  {
+    id: "O05",
+    name: "restore, current policy and session invalidation",
+    evidenceIds: [
+      "service-block-order",
+      "db-file-integrity",
+      "current-policy",
+      "session-cursor-invalidation",
+      "functional-resume",
+      "rpo-rto",
+    ],
+  },
+]);
