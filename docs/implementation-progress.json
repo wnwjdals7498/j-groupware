@@ -12,7 +12,7 @@
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal UI and Playwright acceptance pending",
-    "Independent first source steps remain GW-63 full OS bootstrap kit, GW-64 Web/remaining native product bindings, GW-66 complete kit/agent integration. Managed account removal/retry, fixed bootstrap wrapper and explicit prepared notification factory binding are implemented and isolated-tested. GW-51 business contract enum/transitions and TK-21 candidate permission/eligibility/trusted handoff need product decisions; GW-40 operating renewal owner/topology is separate. Actual PID1/OS installation/timer/customer VM acceptance remains unrun.",
+    "23차 OS bootstrap kit, pinned customer PG Compose, owned gateway, explicit Web/Mailpit/prepared notification native bindings, retained Web teardown and agent preparation sources are connected and isolated-tested. Actual trusted offline package/dependency installation, OS CA trust, systemd PID1 first bootstrap/native lifecycle, timer, firewall traffic and customer VM acceptance remain unrun. GW-51/TK-21/GW-40/T2/E8/H7 and formal UI decisions remain unchanged.",
     "Actual customer VM/20GB data disk/systemd/firewall/OS CA trust and external deployment acceptance not executed in the cloud fixture runtime",
     "Mail E8 needs FS-U07 pre-webhook loss criteria and full SMTP envelope recipient preservation contract; no outbox/ingress recovery policy invented"
   ],
@@ -956,7 +956,7 @@
         "G22"
       ],
       "implementation": "partial",
-      "verification": "explicit_private_existing_worker_binding_actual_private_BFF_env_tenant_DB_auth_anchor_and_pre_mutation_j_auth_subscription_pass; factory_fixed_env_port_readonly_inputs_manifest_output_overlap_guards_source_implemented_owned_binding_inert_rejection_tested; actual_worker7_each_in_full_BFF191_exit0_skip0; immutable_owned_binding_factory_source_connected_Approval_Talk_default_CLI_still_unbound_Mail_Web_unbound; operating_refresh_owner_key_rotation_control_plane_local_PG_receiver_topology_UNDECIDED; actual_PID1_native_factory_full_lifecycle_UNRUN",
+      "verification": "explicit_private_existing_worker_binding_actual_private_BFF_env_tenant_DB_auth_anchor_and_pre_mutation_j_auth_subscription_pass; factory_fixed_env_port_readonly_inputs_manifest_output_overlap_guards_source_implemented_owned_binding_inert_rejection_tested; actual_worker7_each_in_full_BFF191_exit0_skip0; task23_fixed_CLI_and_factory_explicit_prepared_notificationControlFile_Approval_Talk_Mail_source_connected_supplied_Web_material_separate_default_operating_owner_UNBOUND; operating_refresh_owner_key_rotation_control_plane_local_PG_receiver_topology_UNDECIDED; actual_PID1_native_factory_full_lifecycle_UNRUN; task23_fixed_CLI_explicit_existing_private_notificationControlFile_and_Mailpit_native_binding_source_connected_inert_guard_tested_default_operating_owner_still_UNBOUND",
       "code": [
         "j-groupware/apps/server/src/notification-receiver.ts",
         "j-groupware/apps/server/src/db/notifications.ts",
@@ -987,7 +987,8 @@
         "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
         "j-groupware/deploy/agent/notification-binding.mjs",
         "j-groupware/deploy/agent/notification-binding.d.mts",
-        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-bootstrap-kit-verification-2026-10-09.md"
       ]
     },
     {
@@ -1204,7 +1205,7 @@
         "G18"
       ],
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF191_15files_check80_agent26_cold_unpack19_root_storage6_each_exit0_skip0; managed_owned_container_account_receipt_ensure_userdel_groupdel_live_UID_drift_shared_UID_unmanaged_refusal_private_backup_preservation_account_already_deleted_retry_pass; durable_cleanupComplete_retained_reverification_before_account_env_retry_pass; fixed_bootstrap_wrapper_inventory_0755_tamper_guard_inert_native_binding_import_pass; actual_PID1_native_all_products_OS_packages_PG_server_CA_trust_operating_owner_credentials_timer_customer_VM_acceptance_UNRUN",
+      "verification": "actual_Node22_18_Node24_19_check80_full_BFF191_15files_agent27_native3_root_storage7_Web4_fresh_unpack20_each_exit0_skip0; actual_JWeb_check6_plus_helper1_each_exit0; real_seven_archives_Node_npm_offline_OS_metadata_fixture_kit_inventory_digest_permissions_symlink_drift_pass; metadata_Deb_0_0_1_NEVER_INSTALLED; owned_root_immutable_OS_PG_Compose_gateway_agent_preparation_under_umask0077_separate_locks_no_enable_pass; pinned_Mailpit_Compose_create_same_id_retry_stop_restart_config_drift_and_retained_data_pass; actual_owned_Web_helper_sudoers_sshd_config_real_separate_64MB_disk_prepare_SFTP_FTPS_cleanup_stopped_retained_backups_PG_archive_hash_retry_drift_pass; prepared_notification_control_native_products_source_connected_without_new_operating_owner; actual_OS_package_install_CA_trust_PG_Compose_PID1_full_bootstrap_native_product_lifecycle_timer_firewall_traffic_20GB_customer_VM_UNRUN",
       "code": [
         "j-groupware/deploy/agent/bootstrap-files.mjs",
         "j-groupware/deploy/agent/service-database.mjs",
@@ -1263,7 +1264,18 @@
         "j-groupware/docs/cloud-base-bootstrap-composition-2026-10-09.md",
         "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md",
         "j-groupware/deploy/bootstrap",
-        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md",
+        "j-groupware/deploy/agent/install-files.mjs",
+        "j-groupware/deploy/agent/bootstrap-kit.md",
+        "j-groupware/docs/cloud-bootstrap-kit-verification-2026-10-09.md",
+        "j-groupware/scripts/run-isolated-tests.mjs",
+        "j-groupware/tests/agent/test-resources.test.mjs",
+        "j-groupware/deploy/agent/bootstrap-kit.mjs",
+        "j-groupware/deploy/agent/full-bootstrap.mjs",
+        "j-groupware/deploy/agent/os-bootstrap.mjs",
+        "j-groupware/deploy/agent/native-gateway.mjs",
+        "j-groupware/deploy/agent/agent-install.mjs",
+        "j-groupware/tests/agent/native-install.integration.test.mjs"
       ]
     },
     {
@@ -1274,7 +1286,7 @@
         "G18"
       ],
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF191_15files_check80_agent26_cold_unpack19_root_storage6_each_exit0_skip0; managed_owned_container_account_receipt_ensure_userdel_groupdel_live_UID_drift_shared_UID_unmanaged_refusal_private_backup_preservation_account_already_deleted_retry_pass; durable_cleanupComplete_retained_reverification_before_account_env_retry_pass; fixed_bootstrap_wrapper_inventory_0755_tamper_guard_inert_native_binding_import_pass; actual_PID1_native_all_products_OS_packages_PG_server_CA_trust_operating_owner_credentials_timer_customer_VM_acceptance_UNRUN; explicit_private_existing_worker_binding_actual_private_BFF_env_tenant_DB_auth_anchor_and_pre_mutation_j_auth_subscription_pass; factory_fixed_env_port_readonly_inputs_manifest_output_overlap_guards_source_implemented_owned_binding_inert_rejection_tested; actual_worker7_each_in_full_BFF191_exit0_skip0; immutable_owned_binding_factory_source_connected_Approval_Talk_default_CLI_still_unbound_Mail_Web_unbound; operating_refresh_owner_key_rotation_control_plane_local_PG_receiver_topology_UNDECIDED; actual_PID1_native_factory_full_lifecycle_UNRUN",
+      "verification": "actual_Node22_18_Node24_19_check80_full_BFF191_15files_agent27_native3_root_storage7_Web4_fresh_unpack20_each_exit0_skip0; actual_JWeb_check6_plus_helper1_each_exit0; real_seven_archives_Node_npm_offline_OS_metadata_fixture_kit_inventory_digest_permissions_symlink_drift_pass; metadata_Deb_0_0_1_NEVER_INSTALLED; owned_root_immutable_OS_PG_Compose_gateway_agent_preparation_under_umask0077_separate_locks_no_enable_pass; pinned_Mailpit_Compose_create_same_id_retry_stop_restart_config_drift_and_retained_data_pass; actual_owned_Web_helper_sudoers_sshd_config_real_separate_64MB_disk_prepare_SFTP_FTPS_cleanup_stopped_retained_backups_PG_archive_hash_retry_drift_pass; prepared_notification_control_native_products_source_connected_without_new_operating_owner; actual_OS_package_install_CA_trust_PG_Compose_PID1_full_bootstrap_native_product_lifecycle_timer_firewall_traffic_20GB_customer_VM_UNRUN",
       "code": [
         "j-groupware/deploy/agent/bootstrap-files.mjs",
         "j-groupware/deploy/agent/service-database.mjs",
@@ -1334,7 +1346,18 @@
         "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md",
         "j-groupware/deploy/agent/notification-binding.mjs",
         "j-groupware/deploy/agent/native-accounts.mjs",
-        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md",
+        "j-groupware/deploy/agent/install-files.mjs",
+        "j-groupware/deploy/agent/bootstrap-kit.md",
+        "j-groupware/docs/cloud-bootstrap-kit-verification-2026-10-09.md",
+        "j-groupware/scripts/run-isolated-tests.mjs",
+        "j-groupware/tests/agent/test-resources.test.mjs",
+        "j-groupware/deploy/agent/native-products.mjs",
+        "j-groupware/deploy/agent/native-web.mjs",
+        "j-groupware/deploy/agent/native-gateway.mjs",
+        "j-groupware/deploy/agent/unit-observation.mjs",
+        "j-groupware/tests/agent/native-install.integration.test.mjs",
+        "j-web/deploy/jweb-helper.mjs"
       ]
     },
     {
@@ -1345,7 +1368,7 @@
         "G18"
       ],
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF191_15files_check80_agent26_cold_unpack19_root_storage6_each_exit0_skip0; managed_owned_container_account_receipt_ensure_userdel_groupdel_live_UID_drift_shared_UID_unmanaged_refusal_private_backup_preservation_account_already_deleted_retry_pass; durable_cleanupComplete_retained_reverification_before_account_env_retry_pass; fixed_bootstrap_wrapper_inventory_0755_tamper_guard_inert_native_binding_import_pass; actual_PID1_native_all_products_OS_packages_PG_server_CA_trust_operating_owner_credentials_timer_customer_VM_acceptance_UNRUN",
+      "verification": "actual_Node22_18_Node24_19_check80_full_BFF191_15files_agent27_native3_root_storage7_Web4_fresh_unpack20_each_exit0_skip0; actual_JWeb_check6_plus_helper1_each_exit0; real_seven_archives_Node_npm_offline_OS_metadata_fixture_kit_inventory_digest_permissions_symlink_drift_pass; metadata_Deb_0_0_1_NEVER_INSTALLED; owned_root_immutable_OS_PG_Compose_gateway_agent_preparation_under_umask0077_separate_locks_no_enable_pass; pinned_Mailpit_Compose_create_same_id_retry_stop_restart_config_drift_and_retained_data_pass; actual_owned_Web_helper_sudoers_sshd_config_real_separate_64MB_disk_prepare_SFTP_FTPS_cleanup_stopped_retained_backups_PG_archive_hash_retry_drift_pass; prepared_notification_control_native_products_source_connected_without_new_operating_owner; actual_OS_package_install_CA_trust_PG_Compose_PID1_full_bootstrap_native_product_lifecycle_timer_firewall_traffic_20GB_customer_VM_UNRUN",
       "code": [
         "j-groupware/deploy/agent/bootstrap-files.mjs",
         "j-groupware/deploy/agent/service-database.mjs",
@@ -1398,7 +1421,15 @@
         "j-groupware/tests/agent/storage-fixture.mjs",
         "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
         "j-groupware/deploy/agent/native-accounts.mjs",
-        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md",
+        "j-groupware/deploy/agent/install-files.mjs",
+        "j-groupware/deploy/agent/bootstrap-kit.md",
+        "j-groupware/docs/cloud-bootstrap-kit-verification-2026-10-09.md",
+        "j-groupware/scripts/run-isolated-tests.mjs",
+        "j-groupware/tests/agent/test-resources.test.mjs",
+        "j-groupware/deploy/agent/native-products.mjs",
+        "j-groupware/deploy/agent/native-web.mjs",
+        "j-web/deploy/jweb-helper.mjs"
       ]
     },
     {
@@ -1409,7 +1440,7 @@
         "G21"
       ],
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF191_15files_check80_agent26_cold_unpack19_root_storage6_each_exit0_skip0; managed_owned_container_account_receipt_ensure_userdel_groupdel_live_UID_drift_shared_UID_unmanaged_refusal_private_backup_preservation_account_already_deleted_retry_pass; durable_cleanupComplete_retained_reverification_before_account_env_retry_pass; fixed_bootstrap_wrapper_inventory_0755_tamper_guard_inert_native_binding_import_pass; actual_PID1_native_all_products_OS_packages_PG_server_CA_trust_operating_owner_credentials_timer_customer_VM_acceptance_UNRUN; explicit_private_existing_worker_binding_actual_private_BFF_env_tenant_DB_auth_anchor_and_pre_mutation_j_auth_subscription_pass; factory_fixed_env_port_readonly_inputs_manifest_output_overlap_guards_source_implemented_owned_binding_inert_rejection_tested; actual_worker7_each_in_full_BFF191_exit0_skip0; immutable_owned_binding_factory_source_connected_Approval_Talk_default_CLI_still_unbound_Mail_Web_unbound; operating_refresh_owner_key_rotation_control_plane_local_PG_receiver_topology_UNDECIDED; actual_PID1_native_factory_full_lifecycle_UNRUN",
+      "verification": "actual_Node22_18_Node24_19_check80_full_BFF191_15files_agent27_native3_root_storage7_Web4_fresh_unpack20_each_exit0_skip0; actual_JWeb_check6_plus_helper1_each_exit0; real_seven_archives_Node_npm_offline_OS_metadata_fixture_kit_inventory_digest_permissions_symlink_drift_pass; metadata_Deb_0_0_1_NEVER_INSTALLED; owned_root_immutable_OS_PG_Compose_gateway_agent_preparation_under_umask0077_separate_locks_no_enable_pass; pinned_Mailpit_Compose_create_same_id_retry_stop_restart_config_drift_and_retained_data_pass; actual_owned_Web_helper_sudoers_sshd_config_real_separate_64MB_disk_prepare_SFTP_FTPS_cleanup_stopped_retained_backups_PG_archive_hash_retry_drift_pass; prepared_notification_control_native_products_source_connected_without_new_operating_owner; actual_OS_package_install_CA_trust_PG_Compose_PID1_full_bootstrap_native_product_lifecycle_timer_firewall_traffic_20GB_customer_VM_UNRUN",
       "code": [
         "j-groupware/deploy/agent/reconciler.mjs",
         "j-groupware/deploy/agent/provision-command.mjs",
@@ -1467,7 +1498,14 @@
         "j-groupware/deploy/bootstrap",
         "j-groupware/deploy/agent/notification-binding.mjs",
         "j-groupware/deploy/agent/native-accounts.mjs",
-        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md",
+        "j-groupware/deploy/agent/install-files.mjs",
+        "j-groupware/deploy/agent/bootstrap-kit.md",
+        "j-groupware/docs/cloud-bootstrap-kit-verification-2026-10-09.md",
+        "j-groupware/scripts/run-isolated-tests.mjs",
+        "j-groupware/tests/agent/test-resources.test.mjs",
+        "j-groupware/deploy/agent/agent-install.mjs",
+        "j-groupware/deploy/agent/full-bootstrap.mjs"
       ]
     },
     {
@@ -3014,7 +3052,7 @@
         "H6"
       ],
       "implementation": "implemented",
-      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run; task23_actual_Groupware_owned_Web_helper_retained_state_backup_ID_readonly_retention_hash_retry_drift_root_prepare_SFTP_FTPS_cleanup_Node22_Node24_4_each_exit0; full_customer_VM_PID1_UNRUN",
       "code": [
         "j-web/apps/server/src/hosting.ts",
         "j-web/apps/server/src/hosting-helper.ts",
@@ -3025,7 +3063,9 @@
         "j-web/deploy/hosting/jweb.sudoers",
         "j-web/tests/hosting/hosting.test.mjs",
         "j-web/tests/integration/hosting.integration.test.ts",
-        "j-web/docs/cloud-hosting-implementation-2026-10-08.md"
+        "j-web/docs/cloud-hosting-implementation-2026-10-08.md",
+        "j-groupware/docs/cloud-bootstrap-kit-verification-2026-10-09.md",
+        "j-groupware/deploy/agent/web-cleanup.mjs"
       ]
     },
     {
@@ -3129,7 +3169,7 @@
         "H6"
       ],
       "implementation": "implemented",
-      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run",
+      "verification": "actual_j_auth_code_pkce_single_jweb_aud_exchange_member_read_write_real_PG_helper_site_create_retry_reset_delete_11_each_node22_18_and_node24_19_exit0_skip0; actual_root_sudo_fixed_commands_env_injection_denial_ext4_mount_du_sftp_ftps_https_chroot_shell_forward_symlink_denial_nginx_validation_reload_rollback_password_replacement_backup_remove_all_4_each_exit0_skip0; customer_VM20GB_disk_firewall_systemd_CA_trust_and_formal_UI_BFF_not_run; task23_actual_Groupware_owned_Web_helper_retained_state_backup_ID_readonly_retention_hash_retry_drift_root_prepare_SFTP_FTPS_cleanup_Node22_Node24_4_each_exit0; full_customer_VM_PID1_UNRUN",
       "code": [
         "j-web/apps/server/src/hosting.ts",
         "j-web/apps/server/src/hosting-helper.ts",
@@ -3140,7 +3180,9 @@
         "j-web/deploy/hosting/jweb.sudoers",
         "j-web/tests/hosting/hosting.test.mjs",
         "j-web/tests/integration/hosting.integration.test.ts",
-        "j-web/docs/cloud-hosting-implementation-2026-10-08.md"
+        "j-web/docs/cloud-hosting-implementation-2026-10-08.md",
+        "j-groupware/docs/cloud-bootstrap-kit-verification-2026-10-09.md",
+        "j-groupware/deploy/agent/web-cleanup.mjs"
       ]
     },
     {
@@ -3268,5 +3310,6 @@
     "G22 formal notification UI/Playwright and all product notification delivery acceptance; production source credential renewal/topology and worker/timer activation remain separate from verified short-lived credential file binding and explicit CLI",
     "Per-feature remaining audit: docs/cloud-remaining-feature-audit-2026-10-08.json; technical contracts and service predecessors remain implementable; E8/visitor ownership/template manual-file replacement choices and existing UI guideline answer remain gates",
     "GW-51 business contract status enum/initial state/transitions/subscription effects and TK-21 minimal candidate-read permission/eligibility plus trusted BFF-to-Talk target handoff need explicit decisions; existing customer registration/authState and member:manage/org:manage APIs do not define them."
-  ]
+  ],
+  "latest_bounded_verification_report": "j-groupware/docs/cloud-bootstrap-kit-verification-2026-10-09.md"
 }

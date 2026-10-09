@@ -9,9 +9,11 @@
 파일 생성·DB 연결·계정/서비스/타이머 등록을 하지 않는다.
 
 현재 concrete runtime은 `j-customer-auth-db`와 `j-messenger`를 연결한다.
-Approval/Talk/Mail은 `notification_operating_owner_unbound`, Web은
+명시적 Web material/native profile, Mailpit port/data profile, 기존 prepared
+notification binding을 통해 나머지 제품의 소스 조합도 연결했다. 준비 입력이
+없는 Approval/Talk/Mail은 `notification_operating_owner_unbound`, Web은
 `web_native_installation_unbound`로 state/DB/OS 변경 전에 거절한다.
-이 거절을 설치 성공이나 해당 서비스 구현 완료로 취급하지 않는다.
+실제 PID1 전체 설치나 운영 owner 계약 완료를 뜻하지 않는다.
 
 명시적 `loadNotificationInstallerBinding`으로 준비된 기존 worker control과
 private 기본 BFF env를 읽은 호출자는 factory에 binding을 전달해 Approval/Talk
@@ -21,14 +23,16 @@ manifest를 연결할 수 있다. tenant·auth origin·PG port/DB/user/password�
 control 입력과 manifest/native 출력의 겹침 및 임의 binding 객체를 거절한다.
 binding의 Pool/HTTPS agent는 호출자가 `close()`한다. import와 factory 생성은
 inert다. 이 API는 운영 owner를 선택하거나 자격을 발급·갱신하지 않으며,
-고정 CLI와 Mail/Web 연결 관문은 위와 같이 유지한다.
+고정 CLI는 선택 nativeBindingsFile의 기존 notificationControlFile을 읽어 같은
+binding을 만들고 종료 시 close한다. Mail은 추가로 명시적 pinned Mailpit Compose
+profile, Web은 기존 CA/FTPS/SSH key와 native profile을 요구한다.
 
 ## 입력과 선행 조건
 
 control은 root 소유 mode-600 canonical JSON 한 줄과 마지막 개행이어야 한다.
 symlink·쓰기 가능한 ancestry·추가 필드·중복/비정규 JSON을 거부한다.
 정확한 필드는 `bootstrapRoot`, `productProfileFile`, `postgresFile`,
-`gatewayProfileFile`, `roots`, `storageProfiles`다.
+`gatewayProfileFile`, `roots`, `storageProfiles`이며 선택 `nativeBindingsFile`을 받는다.
 
 - bootstrap은 기존 봉인 자격과 현재 유효한 공개 CA다. 재발급하지 않는다.
 - product profile은 기존 ProductEnvironment의 `databasePort`, `profiles`,
@@ -42,21 +46,22 @@ symlink·쓰기 가능한 ancestry·추가 필드·중복/비정규 JSON을 거�
   서로 겹치지 않고 입력 파일을 쓰기 대상 안에 두지 않는다.
 - gateway profile은 기존 gateway 계약이다. DB·gateway·제품 port 충돌과
   customer-auth upstream port/HTTPS/CA 불일치를 설치 전에 거절한다.
-- storageProfiles는 현재 Messenger의 `{root,maxBytes,maxEntries}`를 받는다.
+- storageProfiles는 Messenger/Mail의 `{root,maxBytes,maxEntries}`를 받는다.
   root는 product profile의 dataRoot와 같아야 한다. 백업 상한은 운영자가
   명시하고 자동 보관 주기·자동 purge 정책을 만들지 않는다.
 
 데이터 allocation 부모는 미리 준비된 root 소유 traversal 경로여야 하며
 private state/backup 경로와 분리한다. 이미 검증·해제된 root 소유 제품 번들, 준비된 전용 PostgreSQL 기반과
 `/usr/lib/postgresql/18/bin/pg_dump`, Nginx, systemd가 선행 조건이다.
-이 진입점은 OS 패키지 설치·PG 설치·OS CA trust·기본 BFF bootstrap을
-완료하는 전체 설치기가 아니다. 현재 CLI 검증은 inert 조합과 거절 경계다.
-실제 systemd PID1에서 CA/Messenger 설치·해지 전체 흐름은 미실행이다.
+이 진입점은 제품 lifecycle이며 OS 기반 단계는 별도
+[bootstrap kit](bootstrap-kit.md)가 연결한다. 현재 CLI 검증은 inert 조합과
+거절 경계다. 실제 systemd PID1에서 전체 제품 설치·해지 흐름은 미실행이다.
 
 [기본 bootstrap 연결](../../docs/cloud-base-bootstrap-composition-2026-10-09.md)은
 별도 고정 private control에서 봉인 번들·기본 PG·BFF env·native platform과
 gateway를 연결한다. 동일 control/state/lock/PG를 CA/Messenger와 공유하며
-성공은 `base_ready`다. OS package/trust/timer 설치나 전체 GW-63 완료를 뜻하지 않는다.
+성공은 `base_ready`다. kit의 activation 경로가 OS package/전용 PG Compose와
+이 기본 조합을 연결하지만 실제 OS trust/timer 설치나 전체 GW-63 인수는 미실행이다.
 
 기본 번들의 `deploy/bootstrap` wrapper는 `/usr/bin/node`와 고정 설치 경로의
 `bootstrap-runtime.mjs`를 실행하며 argv를 받지 않는다. 해제 시 hash 검증된
@@ -113,8 +118,10 @@ cap drop과 no-new-privileges를 확인한 뒤 자기 컨테이너만 시작/정
 daemon 실패를 없는 컨테이너로 취급하지 않고 다른 이름/설정/볼륨은 거절한다.
 HTTP/SMTP는 명시적 loopback 포트이며 3001은 금지다. 준비 확인은 공식
 [Mailpit healthcheck](https://mailpit.axllent.org/docs/integration/healthcheck/)의
-`/readyz`를 사용한다. 이 owner는 독립 격리 검증됐으며 운영 Mail installer
-조합은 알림 owner 계약이 없어 연결하지 않았다. 고객 VM의 SMTP egress 방화벽은 미실행이다.
+`/readyz`를 사용한다. native factory는 pinned Compose와 기존 명시적 prepared
+notification binding을 통해 연결한다. 실제 Compose 생성/동일 container 재시도/
+중지/재기동과 config drift 거절은 owned fixture에서 검증했다. 운영 알림 owner
+계약과 고객 VM의 SMTP egress 방화벽은 미완료다.
 
 기본 번들은 native/storage/account/binding 모듈과 고정 wrapper를 포함한다. 안전 해제는 검증된 기본
 번들의 wrapper에만 0755를 복원하고, 재시도 때 실행 권한 변조를 거절한다.
@@ -137,8 +144,9 @@ j-auth가 검사한다. private 파일 교체·만료 비활성화·동일 manif
 
 일반 회원 세션이나 임의의 영구 service account/token으로 대신하지 않는다.
 새 grant·긴 TTL·비밀번호 보관·운영 갱신/timer를 임의 도입하지 않는다.
-전체 기본 bootstrap과 나머지 서비스 조합의 독립 소스 작업, T2/E8/H7·UI
-정책 대기와 실제 OS/고객 VM 인수는 각각 다른 미완료 단계다.
+전체 기본 kit와 나머지 서비스 조합 소스를 연결한 범위는
+[23차 기록](../../docs/cloud-bootstrap-kit-verification-2026-10-09.md)을 따른다.
+T2/E8/H7·UI 정책 대기와 실제 OS/고객 VM 인수는 각각 다른 미완료 단계다.
 
 격리 재현: `JGW_AGENT_TEST_RUNTIME=isolated-cloud npm run test:agent:storage`.
 root/account/파일 권한 시험은 owned 임시 컨테이너에서만 실행한다.

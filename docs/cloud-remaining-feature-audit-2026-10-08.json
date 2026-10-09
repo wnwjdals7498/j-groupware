@@ -20,12 +20,12 @@
     "excluded": "현재 최소 범위 제외"
   },
   "summary": {
-    "ready": 3,
+    "ready": 0,
     "contract": 0,
-    "service": 1,
+    "service": 0,
     "ui": 17,
     "policy": 28,
-    "vm": 9,
+    "vm": 13,
     "excluded": 0
   },
   "items": [
@@ -541,14 +541,15 @@
         "j-groupware/docs/decisions.md",
         "j-groupware/docs/suite-feature-specifications.md",
         "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
-        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-bootstrap-kit-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "explicit_private_existing_worker_binding_actual_private_BFF_env_tenant_DB_auth_anchor_and_pre_mutation_j_auth_subscription_pass; factory_fixed_env_port_readonly_inputs_manifest_output_overlap_guards_source_implemented_owned_binding_inert_rejection_tested; actual_worker7_each_in_full_BFF191_exit0_skip0; immutable_owned_binding_factory_source_connected_Approval_Talk_default_CLI_still_unbound_Mail_Web_unbound; operating_refresh_owner_key_rotation_control_plane_local_PG_receiver_topology_UNDECIDED; actual_PID1_native_factory_full_lifecycle_UNRUN",
+      "current_verification": "explicit_private_existing_worker_binding_actual_private_BFF_env_tenant_DB_auth_anchor_and_pre_mutation_j_auth_subscription_pass; factory_fixed_env_port_readonly_inputs_manifest_output_overlap_guards_source_implemented_owned_binding_inert_rejection_tested; actual_worker7_each_in_full_BFF191_exit0_skip0; task23_fixed_CLI_and_factory_explicit_prepared_notificationControlFile_Approval_Talk_Mail_source_connected_supplied_Web_material_separate_default_operating_owner_UNBOUND; operating_refresh_owner_key_rotation_control_plane_local_PG_receiver_topology_UNDECIDED; actual_PID1_native_factory_full_lifecycle_UNRUN; task23_fixed_CLI_explicit_existing_private_notificationControlFile_and_Mailpit_native_binding_source_connected_inert_guard_tested_default_operating_owner_still_UNBOUND",
       "implementation": "partial",
-      "verification": "explicit_private_existing_worker_binding_actual_private_BFF_env_tenant_DB_auth_anchor_and_pre_mutation_j_auth_subscription_pass; factory_fixed_env_port_readonly_inputs_manifest_output_overlap_guards_source_implemented_owned_binding_inert_rejection_tested; actual_worker7_each_in_full_BFF191_exit0_skip0; immutable_owned_binding_factory_source_connected_Approval_Talk_default_CLI_still_unbound_Mail_Web_unbound; operating_refresh_owner_key_rotation_control_plane_local_PG_receiver_topology_UNDECIDED; actual_PID1_native_factory_full_lifecycle_UNRUN",
+      "verification": "explicit_private_existing_worker_binding_actual_private_BFF_env_tenant_DB_auth_anchor_and_pre_mutation_j_auth_subscription_pass; factory_fixed_env_port_readonly_inputs_manifest_output_overlap_guards_source_implemented_owned_binding_inert_rejection_tested; actual_worker7_each_in_full_BFF191_exit0_skip0; task23_fixed_CLI_and_factory_explicit_prepared_notificationControlFile_Approval_Talk_Mail_source_connected_supplied_Web_material_separate_default_operating_owner_UNBOUND; operating_refresh_owner_key_rotation_control_plane_local_PG_receiver_topology_UNDECIDED; actual_PID1_native_factory_full_lifecycle_UNRUN; task23_fixed_CLI_explicit_existing_private_notificationControlFile_and_Mailpit_native_binding_source_connected_inert_guard_tested_default_operating_owner_still_UNBOUND",
       "completion_boundary": "독립 소스 기여와 전체 기능 완료를 구별; 첫 다음 단계는 제품 정책 결정 필요",
       "reviewed_date": "2026-10-09"
     },
@@ -613,30 +614,31 @@
       "service": "j-groupware",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
-      "external_or_user_gate": false,
+      "classification": "vm",
+      "classification_label": "외부 VM 인수",
+      "external_or_user_gate": true,
       "additional_dependencies": [
         "GW-52",
         "GW-54"
       ],
-      "reason": "준비된 기본 조합과 고정 bootstrap wrapper/hash·권한 검증은 구현했다. 전체 OS 기반 설치/배포 kit의 소스가 남았다.",
-      "next_step": "OS package/전용 PG/CA trust/full bootstrap kit의 소스·준비 입력을 계속 구현한다. 실제 호스트 설치·계정·trust/timer 활성화는 별도 승인/VM 인수다.",
+      "reason": "offline package/Node/archive 검증·PG Compose·CA trust·full kit/bootstrap·agent 준비 소스를 연결하고 owned metadata/실제 archive fixture를 검증했다. 실제 OS 설치/PID1 첫 기동은 미실행이다.",
+      "next_step": "신뢰한 실제 offline package와 dependency closure·기존 private 입력을 준비해 승인된 고객 VM에서 첫 bootstrap/CA trust/PG Compose/전체 인수를 실행한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
         "j-groupware/docs/suite-feature-specifications.md",
         "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
         "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md",
-        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-bootstrap-kit-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_full_BFF191_15files_check80_agent26_cold_unpack19_root_storage6_each_exit0_skip0; managed_owned_container_account_receipt_ensure_userdel_groupdel_live_UID_drift_shared_UID_unmanaged_refusal_private_backup_preservation_account_already_deleted_retry_pass; durable_cleanupComplete_retained_reverification_before_account_env_retry_pass; fixed_bootstrap_wrapper_inventory_0755_tamper_guard_inert_native_binding_import_pass; actual_PID1_native_all_products_OS_packages_PG_server_CA_trust_operating_owner_credentials_timer_customer_VM_acceptance_UNRUN",
+      "current_verification": "actual_Node22_18_Node24_19_check80_full_BFF191_15files_agent27_native3_root_storage7_Web4_fresh_unpack20_each_exit0_skip0; actual_JWeb_check6_plus_helper1_each_exit0; real_seven_archives_Node_npm_offline_OS_metadata_fixture_kit_inventory_digest_permissions_symlink_drift_pass; metadata_Deb_0_0_1_NEVER_INSTALLED; owned_root_immutable_OS_PG_Compose_gateway_agent_preparation_under_umask0077_separate_locks_no_enable_pass; pinned_Mailpit_Compose_create_same_id_retry_stop_restart_config_drift_and_retained_data_pass; actual_owned_Web_helper_sudoers_sshd_config_real_separate_64MB_disk_prepare_SFTP_FTPS_cleanup_stopped_retained_backups_PG_archive_hash_retry_drift_pass; prepared_notification_control_native_products_source_connected_without_new_operating_owner; actual_OS_package_install_CA_trust_PG_Compose_PID1_full_bootstrap_native_product_lifecycle_timer_firewall_traffic_20GB_customer_VM_UNRUN",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF191_15files_check80_agent26_cold_unpack19_root_storage6_each_exit0_skip0; managed_owned_container_account_receipt_ensure_userdel_groupdel_live_UID_drift_shared_UID_unmanaged_refusal_private_backup_preservation_account_already_deleted_retry_pass; durable_cleanupComplete_retained_reverification_before_account_env_retry_pass; fixed_bootstrap_wrapper_inventory_0755_tamper_guard_inert_native_binding_import_pass; actual_PID1_native_all_products_OS_packages_PG_server_CA_trust_operating_owner_credentials_timer_customer_VM_acceptance_UNRUN",
-      "completion_boundary": "독립 소스 기여와 전체 기능 완료를 구별; 첫 다음 단계는 구현 가능",
+      "verification": "actual_Node22_18_Node24_19_check80_full_BFF191_15files_agent27_native3_root_storage7_Web4_fresh_unpack20_each_exit0_skip0; actual_JWeb_check6_plus_helper1_each_exit0; real_seven_archives_Node_npm_offline_OS_metadata_fixture_kit_inventory_digest_permissions_symlink_drift_pass; metadata_Deb_0_0_1_NEVER_INSTALLED; owned_root_immutable_OS_PG_Compose_gateway_agent_preparation_under_umask0077_separate_locks_no_enable_pass; pinned_Mailpit_Compose_create_same_id_retry_stop_restart_config_drift_and_retained_data_pass; actual_owned_Web_helper_sudoers_sshd_config_real_separate_64MB_disk_prepare_SFTP_FTPS_cleanup_stopped_retained_backups_PG_archive_hash_retry_drift_pass; prepared_notification_control_native_products_source_connected_without_new_operating_owner; actual_OS_package_install_CA_trust_PG_Compose_PID1_full_bootstrap_native_product_lifecycle_timer_firewall_traffic_20GB_customer_VM_UNRUN",
+      "completion_boundary": "독립 source 연결/owned component 검증과 실제 OS/PID1 전체 기능 인수를 구별; 첫 다음 단계는 외부 VM 인수",
       "reviewed_date": "2026-10-09"
     },
     {
@@ -645,32 +647,33 @@
       "service": "j-groupware",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
-      "external_or_user_gate": false,
+      "classification": "vm",
+      "classification_label": "외부 VM 인수",
+      "external_or_user_gate": true,
       "additional_dependencies": [
         "GW-63",
         "GW-40",
         "WB-20",
         "TK-40"
       ],
-      "reason": "기존 CA/Messenger와 명시적 Approval/Talk 알림 binding, 관리 계정 lifecycle을 연결했다. Web을 포함한 나머지 native 설치 조합의 소스가 남았다.",
-      "next_step": "Web privileged helper/SFTP·FTPS·gateway와 나머지 native 설치 입력/실패 경계를 연결한다. Mail E8·운영 알림 owner·H7 관문은 별도이며 임의 CLI 활성화하지 않는다.",
+      "reason": "Web privileged helper/SFTP·FTPS·group receipt·owned gateway/firewall, Mailpit Compose와 기존 prepared notification 입력의 native factory 소스를 연결했다. 실제 PID1 전체 제품 설치는 미실행이다.",
+      "next_step": "승인된 고객 VM의 기존 준비 입력으로 전체 native 설치·중지/재시도·gateway/방화벽 traffic 인수를 실행한다. 운영 owner·E8/H7 계약은 별도다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
         "j-groupware/docs/suite-feature-specifications.md",
         "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
         "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md",
-        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-bootstrap-kit-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_full_BFF191_15files_check80_agent26_cold_unpack19_root_storage6_each_exit0_skip0; managed_owned_container_account_receipt_ensure_userdel_groupdel_live_UID_drift_shared_UID_unmanaged_refusal_private_backup_preservation_account_already_deleted_retry_pass; durable_cleanupComplete_retained_reverification_before_account_env_retry_pass; fixed_bootstrap_wrapper_inventory_0755_tamper_guard_inert_native_binding_import_pass; actual_PID1_native_all_products_OS_packages_PG_server_CA_trust_operating_owner_credentials_timer_customer_VM_acceptance_UNRUN; explicit_private_existing_worker_binding_actual_private_BFF_env_tenant_DB_auth_anchor_and_pre_mutation_j_auth_subscription_pass; factory_fixed_env_port_readonly_inputs_manifest_output_overlap_guards_source_implemented_owned_binding_inert_rejection_tested; actual_worker7_each_in_full_BFF191_exit0_skip0; immutable_owned_binding_factory_source_connected_Approval_Talk_default_CLI_still_unbound_Mail_Web_unbound; operating_refresh_owner_key_rotation_control_plane_local_PG_receiver_topology_UNDECIDED; actual_PID1_native_factory_full_lifecycle_UNRUN",
+      "current_verification": "actual_Node22_18_Node24_19_check80_full_BFF191_15files_agent27_native3_root_storage7_Web4_fresh_unpack20_each_exit0_skip0; actual_JWeb_check6_plus_helper1_each_exit0; real_seven_archives_Node_npm_offline_OS_metadata_fixture_kit_inventory_digest_permissions_symlink_drift_pass; metadata_Deb_0_0_1_NEVER_INSTALLED; owned_root_immutable_OS_PG_Compose_gateway_agent_preparation_under_umask0077_separate_locks_no_enable_pass; pinned_Mailpit_Compose_create_same_id_retry_stop_restart_config_drift_and_retained_data_pass; actual_owned_Web_helper_sudoers_sshd_config_real_separate_64MB_disk_prepare_SFTP_FTPS_cleanup_stopped_retained_backups_PG_archive_hash_retry_drift_pass; prepared_notification_control_native_products_source_connected_without_new_operating_owner; actual_OS_package_install_CA_trust_PG_Compose_PID1_full_bootstrap_native_product_lifecycle_timer_firewall_traffic_20GB_customer_VM_UNRUN",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF191_15files_check80_agent26_cold_unpack19_root_storage6_each_exit0_skip0; managed_owned_container_account_receipt_ensure_userdel_groupdel_live_UID_drift_shared_UID_unmanaged_refusal_private_backup_preservation_account_already_deleted_retry_pass; durable_cleanupComplete_retained_reverification_before_account_env_retry_pass; fixed_bootstrap_wrapper_inventory_0755_tamper_guard_inert_native_binding_import_pass; actual_PID1_native_all_products_OS_packages_PG_server_CA_trust_operating_owner_credentials_timer_customer_VM_acceptance_UNRUN; explicit_private_existing_worker_binding_actual_private_BFF_env_tenant_DB_auth_anchor_and_pre_mutation_j_auth_subscription_pass; factory_fixed_env_port_readonly_inputs_manifest_output_overlap_guards_source_implemented_owned_binding_inert_rejection_tested; actual_worker7_each_in_full_BFF191_exit0_skip0; immutable_owned_binding_factory_source_connected_Approval_Talk_default_CLI_still_unbound_Mail_Web_unbound; operating_refresh_owner_key_rotation_control_plane_local_PG_receiver_topology_UNDECIDED; actual_PID1_native_factory_full_lifecycle_UNRUN",
-      "completion_boundary": "독립 소스 기여와 전체 기능 완료를 구별; 첫 다음 단계는 구현 가능",
+      "verification": "actual_Node22_18_Node24_19_check80_full_BFF191_15files_agent27_native3_root_storage7_Web4_fresh_unpack20_each_exit0_skip0; actual_JWeb_check6_plus_helper1_each_exit0; real_seven_archives_Node_npm_offline_OS_metadata_fixture_kit_inventory_digest_permissions_symlink_drift_pass; metadata_Deb_0_0_1_NEVER_INSTALLED; owned_root_immutable_OS_PG_Compose_gateway_agent_preparation_under_umask0077_separate_locks_no_enable_pass; pinned_Mailpit_Compose_create_same_id_retry_stop_restart_config_drift_and_retained_data_pass; actual_owned_Web_helper_sudoers_sshd_config_real_separate_64MB_disk_prepare_SFTP_FTPS_cleanup_stopped_retained_backups_PG_archive_hash_retry_drift_pass; prepared_notification_control_native_products_source_connected_without_new_operating_owner; actual_OS_package_install_CA_trust_PG_Compose_PID1_full_bootstrap_native_product_lifecycle_timer_firewall_traffic_20GB_customer_VM_UNRUN",
+      "completion_boundary": "독립 source 연결/owned component 검증과 실제 OS/PID1 전체 기능 인수를 구별; 첫 다음 단계는 외부 VM 인수",
       "reviewed_date": "2026-10-09"
     },
     {
@@ -679,28 +682,29 @@
       "service": "j-groupware",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "service",
-      "classification_label": "서비스 구현 선행",
-      "external_or_user_gate": false,
+      "classification": "vm",
+      "classification_label": "외부 VM 인수",
+      "external_or_user_gate": true,
       "additional_dependencies": [
         "GW-64"
       ],
-      "reason": "관리 계정 삭제·이미 삭제된 계정 뒤 실패 재시도와 보존 bytes 재검증을 실제 owned root 컨테이너 및 coordinator로 구현·검증했다. 다음 전체 해지는 GW-64의 Web/남은 native 조합이 선행이다.",
-      "next_step": "GW-64 native 설치 조합을 완성한 뒤 Web/알림 포함 전체 해지 조합·PID1/고객 VM 인수를 실행한다. source fixture를 전체 기능 완료로 계산하지 않는다.",
+      "reason": "Web retained-state/backup receipt·PG archive/hash/중지 상태 재검증을 연결했다. 기존 Messenger/Mail/관리 계정 보존·제거/retry와 함께 owned fixture가 통과했다. 전체 PID1 해지 인수는 미실행이다.",
+      "next_step": "고객 VM에서 native 제품 전체 해지·실패/retry·PG/files/backup 보존과 gateway/account/env 순서 인수를 실행한다. 자동 purge는 하지 않는다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
         "j-groupware/docs/suite-feature-specifications.md",
         "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
-        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-bootstrap-kit-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_full_BFF191_15files_check80_agent26_cold_unpack19_root_storage6_each_exit0_skip0; managed_owned_container_account_receipt_ensure_userdel_groupdel_live_UID_drift_shared_UID_unmanaged_refusal_private_backup_preservation_account_already_deleted_retry_pass; durable_cleanupComplete_retained_reverification_before_account_env_retry_pass; fixed_bootstrap_wrapper_inventory_0755_tamper_guard_inert_native_binding_import_pass; actual_PID1_native_all_products_OS_packages_PG_server_CA_trust_operating_owner_credentials_timer_customer_VM_acceptance_UNRUN",
+      "current_verification": "actual_Node22_18_Node24_19_check80_full_BFF191_15files_agent27_native3_root_storage7_Web4_fresh_unpack20_each_exit0_skip0; actual_JWeb_check6_plus_helper1_each_exit0; real_seven_archives_Node_npm_offline_OS_metadata_fixture_kit_inventory_digest_permissions_symlink_drift_pass; metadata_Deb_0_0_1_NEVER_INSTALLED; owned_root_immutable_OS_PG_Compose_gateway_agent_preparation_under_umask0077_separate_locks_no_enable_pass; pinned_Mailpit_Compose_create_same_id_retry_stop_restart_config_drift_and_retained_data_pass; actual_owned_Web_helper_sudoers_sshd_config_real_separate_64MB_disk_prepare_SFTP_FTPS_cleanup_stopped_retained_backups_PG_archive_hash_retry_drift_pass; prepared_notification_control_native_products_source_connected_without_new_operating_owner; actual_OS_package_install_CA_trust_PG_Compose_PID1_full_bootstrap_native_product_lifecycle_timer_firewall_traffic_20GB_customer_VM_UNRUN",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF191_15files_check80_agent26_cold_unpack19_root_storage6_each_exit0_skip0; managed_owned_container_account_receipt_ensure_userdel_groupdel_live_UID_drift_shared_UID_unmanaged_refusal_private_backup_preservation_account_already_deleted_retry_pass; durable_cleanupComplete_retained_reverification_before_account_env_retry_pass; fixed_bootstrap_wrapper_inventory_0755_tamper_guard_inert_native_binding_import_pass; actual_PID1_native_all_products_OS_packages_PG_server_CA_trust_operating_owner_credentials_timer_customer_VM_acceptance_UNRUN",
-      "completion_boundary": "독립 소스 기여와 전체 기능 완료를 구별; 첫 다음 단계는 서비스 구현 선행",
+      "verification": "actual_Node22_18_Node24_19_check80_full_BFF191_15files_agent27_native3_root_storage7_Web4_fresh_unpack20_each_exit0_skip0; actual_JWeb_check6_plus_helper1_each_exit0; real_seven_archives_Node_npm_offline_OS_metadata_fixture_kit_inventory_digest_permissions_symlink_drift_pass; metadata_Deb_0_0_1_NEVER_INSTALLED; owned_root_immutable_OS_PG_Compose_gateway_agent_preparation_under_umask0077_separate_locks_no_enable_pass; pinned_Mailpit_Compose_create_same_id_retry_stop_restart_config_drift_and_retained_data_pass; actual_owned_Web_helper_sudoers_sshd_config_real_separate_64MB_disk_prepare_SFTP_FTPS_cleanup_stopped_retained_backups_PG_archive_hash_retry_drift_pass; prepared_notification_control_native_products_source_connected_without_new_operating_owner; actual_OS_package_install_CA_trust_PG_Compose_PID1_full_bootstrap_native_product_lifecycle_timer_firewall_traffic_20GB_customer_VM_UNRUN",
+      "completion_boundary": "독립 source 연결/owned component 검증과 실제 OS/PID1 전체 기능 인수를 구별; 첫 다음 단계는 외부 VM 인수",
       "reviewed_date": "2026-10-09"
     },
     {
@@ -709,27 +713,28 @@
       "service": "j-groupware",
       "baseline_implementation": "partial",
       "baseline_verification": "cloud_internal_reconciler_actual_fixture_files_and_processes_node22_node24_14_each_pass; cross_process_lock_idempotence_observation_failure_retry_cancellation_descendant_stop_pass; actual_bff_regression_114_pass; console_wire_auth_installer_probe_real_os_wiring_and_timer_activation_not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
-      "external_or_user_gate": false,
+      "classification": "vm",
+      "classification_label": "외부 VM 인수",
+      "external_or_user_gate": true,
       "additional_dependencies": [],
-      "reason": "고정 bootstrap와 account/binding 모듈을 새 기본 번들에 포함해 cold unpack/import/권한 변조를 검증했다. 전체 kit/남은 제품 조합의 소스가 남았다.",
-      "next_step": "기존 one-shot agent와 full kit/남은 제품 installer 연결을 계속 구현한다. operating agent config/timer/고객 VM 활성화는 별도다.",
+      "reason": "기존 one-shot agent와 full kit/native installer를 연결하고 private control·비활성 unit/timer·별도 lock·immutable receipt를 준비했다. 실제 OS timer 활성화/고객 VM 인수는 미실행이다.",
+      "next_step": "고객 VM에서 기존 준비 입력의 agent control/unit·실제 installer 호출·timer 실행과 실패/retry를 인수한다. 알림 refresh owner/회전/topology는 임의 지정하지 않는다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
         "j-groupware/docs/suite-feature-specifications.md",
         "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
         "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md",
-        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-independent-nine-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-bootstrap-kit-verification-2026-10-09.md"
       ],
       "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_full_BFF191_15files_check80_agent26_cold_unpack19_root_storage6_each_exit0_skip0; managed_owned_container_account_receipt_ensure_userdel_groupdel_live_UID_drift_shared_UID_unmanaged_refusal_private_backup_preservation_account_already_deleted_retry_pass; durable_cleanupComplete_retained_reverification_before_account_env_retry_pass; fixed_bootstrap_wrapper_inventory_0755_tamper_guard_inert_native_binding_import_pass; actual_PID1_native_all_products_OS_packages_PG_server_CA_trust_operating_owner_credentials_timer_customer_VM_acceptance_UNRUN; explicit_private_existing_worker_binding_actual_private_BFF_env_tenant_DB_auth_anchor_and_pre_mutation_j_auth_subscription_pass; factory_fixed_env_port_readonly_inputs_manifest_output_overlap_guards_source_implemented_owned_binding_inert_rejection_tested; actual_worker7_each_in_full_BFF191_exit0_skip0; immutable_owned_binding_factory_source_connected_Approval_Talk_default_CLI_still_unbound_Mail_Web_unbound; operating_refresh_owner_key_rotation_control_plane_local_PG_receiver_topology_UNDECIDED; actual_PID1_native_factory_full_lifecycle_UNRUN",
+      "current_verification": "actual_Node22_18_Node24_19_check80_full_BFF191_15files_agent27_native3_root_storage7_Web4_fresh_unpack20_each_exit0_skip0; actual_JWeb_check6_plus_helper1_each_exit0; real_seven_archives_Node_npm_offline_OS_metadata_fixture_kit_inventory_digest_permissions_symlink_drift_pass; metadata_Deb_0_0_1_NEVER_INSTALLED; owned_root_immutable_OS_PG_Compose_gateway_agent_preparation_under_umask0077_separate_locks_no_enable_pass; pinned_Mailpit_Compose_create_same_id_retry_stop_restart_config_drift_and_retained_data_pass; actual_owned_Web_helper_sudoers_sshd_config_real_separate_64MB_disk_prepare_SFTP_FTPS_cleanup_stopped_retained_backups_PG_archive_hash_retry_drift_pass; prepared_notification_control_native_products_source_connected_without_new_operating_owner; actual_OS_package_install_CA_trust_PG_Compose_PID1_full_bootstrap_native_product_lifecycle_timer_firewall_traffic_20GB_customer_VM_UNRUN",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF191_15files_check80_agent26_cold_unpack19_root_storage6_each_exit0_skip0; managed_owned_container_account_receipt_ensure_userdel_groupdel_live_UID_drift_shared_UID_unmanaged_refusal_private_backup_preservation_account_already_deleted_retry_pass; durable_cleanupComplete_retained_reverification_before_account_env_retry_pass; fixed_bootstrap_wrapper_inventory_0755_tamper_guard_inert_native_binding_import_pass; actual_PID1_native_all_products_OS_packages_PG_server_CA_trust_operating_owner_credentials_timer_customer_VM_acceptance_UNRUN; explicit_private_existing_worker_binding_actual_private_BFF_env_tenant_DB_auth_anchor_and_pre_mutation_j_auth_subscription_pass; factory_fixed_env_port_readonly_inputs_manifest_output_overlap_guards_source_implemented_owned_binding_inert_rejection_tested; actual_worker7_each_in_full_BFF191_exit0_skip0; immutable_owned_binding_factory_source_connected_Approval_Talk_default_CLI_still_unbound_Mail_Web_unbound; operating_refresh_owner_key_rotation_control_plane_local_PG_receiver_topology_UNDECIDED; actual_PID1_native_factory_full_lifecycle_UNRUN",
-      "completion_boundary": "독립 소스 기여와 전체 기능 완료를 구별; 첫 다음 단계는 구현 가능",
+      "verification": "actual_Node22_18_Node24_19_check80_full_BFF191_15files_agent27_native3_root_storage7_Web4_fresh_unpack20_each_exit0_skip0; actual_JWeb_check6_plus_helper1_each_exit0; real_seven_archives_Node_npm_offline_OS_metadata_fixture_kit_inventory_digest_permissions_symlink_drift_pass; metadata_Deb_0_0_1_NEVER_INSTALLED; owned_root_immutable_OS_PG_Compose_gateway_agent_preparation_under_umask0077_separate_locks_no_enable_pass; pinned_Mailpit_Compose_create_same_id_retry_stop_restart_config_drift_and_retained_data_pass; actual_owned_Web_helper_sudoers_sshd_config_real_separate_64MB_disk_prepare_SFTP_FTPS_cleanup_stopped_retained_backups_PG_archive_hash_retry_drift_pass; prepared_notification_control_native_products_source_connected_without_new_operating_owner; actual_OS_package_install_CA_trust_PG_Compose_PID1_full_bootstrap_native_product_lifecycle_timer_firewall_traffic_20GB_customer_VM_UNRUN",
+      "completion_boundary": "독립 source 연결/owned component 검증과 실제 OS/PID1 전체 기능 인수를 구별; 첫 다음 단계는 외부 VM 인수",
       "reviewed_date": "2026-10-09"
     },
     {
@@ -1674,9 +1679,9 @@
     "TK-21: talk:write 담당자의 최소 같은-tenant 배정 후보 조회 권한·대상 자격/가용성 및 BFF 검증 대상의 Talk 전달 계약. 기존 member:manage/org:manage 권한을 임의 추가하지 않는다."
   ],
   "next_independent_batches": [
-    "GW-63/64/66: OS 기반 bootstrap kit·Web 포함 남은 native 설치·full kit/agent 연결 소스를 계속 구현; 실제 호스트 설치·계정·trust/timer는 보류",
-    "GW-65: 관리 계정 제거/retry는 구현·검증했고 전체 해지는 GW-64 native 설치 조합 선행",
-    "GW-51/TK-21/GW-40/TK-41: 각 업무 상태·배정 후보 권한/전달·운영 owner/topology·T2 정책 뒤 남은 소스 구현"
+    "승인된 고객 VM: 실제 trusted package/dependency closure·OS CA trust·PG Compose/PID1/full kit/native 전체 lifecycle·agent timer/firewall/20GB 인수",
+    "GW-51/TK-21/GW-40/TK-41/E8/H7: 기존 업무 상태·배정 후보 권한/전달·운영 owner/topology·T2/메일 envelope/재배포 보존 정책 결정 뒤 남은 source 구현",
+    "기존 UI 기준 응답 뒤 정식 UI/Playwright 인수; 기존 질의 반복 없음"
   ],
   "current_progress": {
     "implemented": 114,
@@ -1684,14 +1689,14 @@
     "not_started": 22,
     "total": 172,
     "remaining": 58,
-    "web_source_commit": "2a1753fa4dffa048deadfa261014c8cb24e316b2",
+    "web_source_commit": "746c6b21c7b9534dd08de5e76d32e349b62e9531",
     "talk_source_commit": "ff6d4eb706ff366e0c3babb4c8726cfed1793581",
-    "agent_source_commit": "a1f9d0be005ed2c0bc7af9d5e6b59c0a610d2d36",
+    "agent_source_commit": "894ddc1a2c81adbca9c9a6c1463506f5751f6ad0",
     "console_source_commit": "998a48abe1e66f2aefd88d28fa6adda07627107c",
     "talk_bff_source_commit": "95b4967a30012dfa7fbdcf20974e54c70d1606ff",
-    "bundle_source_commit": "a1f9d0be005ed2c0bc7af9d5e6b59c0a610d2d36",
-    "bootstrap_source_commit": "a1f9d0be005ed2c0bc7af9d5e6b59c0a610d2d36",
-    "teardown_source_commit": "a1f9d0be005ed2c0bc7af9d5e6b59c0a610d2d36",
+    "bundle_source_commit": "894ddc1a2c81adbca9c9a6c1463506f5751f6ad0",
+    "bootstrap_source_commit": "894ddc1a2c81adbca9c9a6c1463506f5751f6ad0",
+    "teardown_source_commit": "894ddc1a2c81adbca9c9a6c1463506f5751f6ad0",
     "notification_worker_source_commit": "a1f9d0be005ed2c0bc7af9d5e6b59c0a610d2d36",
     "customer_auth_source_commit": "6cbfdc8b4ec6b104f9cf6cc0e96eb73d7229db35",
     "customer_auth_test_source_commit": "b15b53bb32942eee832413729940af02c1950edf",
@@ -1700,9 +1705,10 @@
     "customer_auth_contracts_source_commit": "6cbfdc8b4ec6b104f9cf6cc0e96eb73d7229db35",
     "customer_auth_bff_source_commit": "4acce86650d3ccc8f0e8f5f6bb68558e4a455739",
     "customer_auth_bundle_gateway_source_commit": "b15b53bb32942eee832413729940af02c1950edf",
-    "native_storage_source_commit": "a1f9d0be005ed2c0bc7af9d5e6b59c0a610d2d36",
+    "native_storage_source_commit": "894ddc1a2c81adbca9c9a6c1463506f5751f6ad0",
     "mail_capture_contracts_source_commit": "92809bc96ca75e1ccfd552f7247d989f6e8f28a2",
-    "web_bff_source_commit": "6b33637c096414c6031067ba168616aeb0e35b83"
+    "web_bff_source_commit": "6b33637c096414c6031067ba168616aeb0e35b83",
+    "native_kit_source_commit": "894ddc1a2c81adbca9c9a6c1463506f5751f6ad0"
   },
   "completed_since_baseline": [
     {
@@ -2990,21 +2996,13 @@
     ],
     "reclassification_does_not_mean_complete": true
   },
-  "continueable_work_note": "남은58의 첫 다음 단계: 독립 소스3·서비스 선행1·제품 정책28·UI17·실제 VM9. 22차 기능 source 완료는 TK-30 한 개이고 TK-41은 미착수에서 부분으로 전환했다. 관리 계정 삭제/retry·prepared 알림 binding·bootstrap wrapper 소스 기여 및 분류 변경을 전체 기능 완료와 구별한다.",
-  "verification_summary": "[22차 실제 증거](cloud-independent-nine-verification-2026-10-09.md): Node22.18/24.19 전체 BFF191/15files·check80·agent26·fresh unpack19·owned root storage/native6 각각exit0/skip0. Talk check2·실제 PG integration14/2files·registry1 각각exit0. focused Talk/G22 6과 worker7은 전체191에 포함하며 중복 합산하지 않는다. 실제 원래 담당자·서로 다른 occurrence/SSE·receiver/ACK 장애·compiled sender 강제 종료/실제20초 lease 복구와 owned 컨테이너 계정 실제 제거/보존 bytes/실패 재시도를 검증했다. 실제 OS package/PG 설치·systemd PID1 전체 native 흐름·CA trust/agent config/timer/VM·정식 UI/브라우저와 H7/T2/E8는 미실행이다. 초기 실패 로그는 보존하고 16차 receiver startup 원인은 미확정이다.",
+  "continueable_work_note": "남은58의 첫 다음 단계: 독립 소스0·서비스 선행0·제품 정책28·UI17·실제 VM13. 23차 GW-63/64/65/66의 독립 kit/native/agent/보존 소스를 연결했지만 실제 OS/PID1 인수 미실행으로 4개 모두 부분 구현을 유지한다. 집계114/36/22와 whole_suite_verified=false를 유지하며 분류 이동을 기능 완료로 계산하지 않는다.",
+  "verification_summary": "[23차 실제 증거](cloud-bootstrap-kit-verification-2026-10-09.md): Node22.18/24.19 각각 check80·전체 BFF191/15files·agent27·native3·owned root storage7·Web prepare/SFTP/FTPS/retention4·fresh unpack/kit20·실제 gateway15·JWeb check6+helper1이 exit0/skip0다. 7개 실제 archive와 Node/npm을 묶은 kit, OS metadata-only Deb 및 inactive unit/agent 준비, Mailpit Compose 실제 동일 ID 생성/중지/재시도와 retained data, 실제 helper/group receipt/Web backup hash/drift를 검증했다. 0.0.1 Deb fixture는 설치하지 않았다. 실제 OS package/PG Compose PID1 첫 기동·CA trust·전체 native 제품 lifecycle/timer·firewall traffic·20GB 고객 VM 및 정식 UI는 미실행이다. 실패 로그/임시 파일을 보존하며 23차 full activation 성공을 주장하지 않는다.",
   "reviewed_date": "2026-10-09",
   "next_independent_batch": {
-    "ids": [
-      "GW-63",
-      "GW-64",
-      "GW-66"
-    ],
-    "bounded_recommendation": [
-      "GW-63",
-      "GW-64",
-      "GW-66"
-    ],
-    "boundary": "22차 독립9 중 TK-30 source 완료, TK-41 member/settings 계약·GW-65 계정 제거/retry·GW-40 명시적 prepared binding·bootstrap wrapper 연결을 구현했다. 9개 전체 기능 완료로 계산하지 않는다. 첫 다음 단계 3개는 독립 소스, 4개는 정책, 1개는 서비스 선행으로 이동했으며 기존 UI/VM 관문은 유지한다."
+    "ids": [],
+    "bounded_recommendation": [],
+    "boundary": "23차 독립 OS kit·Web/Mailpit/notification native 제품·agent·보존 소스 연결을 마쳤다. 다음 실행은 실제 OS/PID1 고객 VM 또는 기존 정책/UI 결정이며, component fixture 성공을 전체 기능 인수로 계산하지 않는다."
   },
   "operating_notification_contract": [
     "기존 GET /auth/tenants/<tenant>/services는 실제 operator Bearer와 console serviceKey를 요구한다. supplier 파일은 mode600, access exp<=15분·만료5초전 거절이며 j-auth가 signature/issuer/audience/role/key를 검증한다.",

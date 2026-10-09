@@ -4,16 +4,16 @@
 
 현재 소스 기준: 구현 114, 부분 36, 미착수 22 / 총 172. 남은 58개. 전체 통합 인수: 미완료.
 
-남은58의 첫 다음 단계: 독립 소스3·서비스 선행1·제품 정책28·UI17·실제 VM9. 22차 기능 source 완료는 TK-30 한 개이고 TK-41은 미착수에서 부분으로 전환했다. 관리 계정 삭제/retry·prepared 알림 binding·bootstrap wrapper 소스 기여 및 분류 변경을 전체 기능 완료와 구별한다.
+남은58의 첫 다음 단계: 독립 소스0·서비스 선행0·제품 정책28·UI17·실제 VM13. 23차 GW-63/64/65/66의 독립 kit/native/agent/보존 소스를 연결했지만 실제 OS/PID1 인수 미실행으로 4개 모두 부분 구현을 유지한다. 집계114/36/22와 whole_suite_verified=false를 유지하며 분류 이동을 기능 완료로 계산하지 않는다.
 
 | 분류 | 남은 수 |
 |---|---:|
-| 구현 가능 | 3 |
+| 구현 가능 | 0 |
 | 기술 계약 확정 선행 | 0 |
-| 서비스 구현 선행 | 1 |
+| 서비스 구현 선행 | 0 |
 | UI 기준 선행 | 17 |
 | 제품 정책 결정 필요 | 28 |
-| 외부 VM 인수 | 9 |
+| 외부 VM 인수 | 13 |
 | 현재 최소 범위 제외 | 0 |
 
 | ID | 서비스 | 기능 | 분류 | 현재 소스 | 다음 단계 |
@@ -39,10 +39,10 @@
 | GW-40 | j-groupware | 알림 수신 API | 제품 정책 결정 필요 | partial | 운영 owner/갱신·key 회전·배치/전달 책임 확정 뒤 고정 CLI/실제 고객 설치와 연결한다. 새 영구 자격·grant·timer를 임의 도입하지 않는다. |
 | GW-44 | j-groupware | 알림 화면 | UI 기준 선행 | partial | 정식 UI와 기존 알림 계약을 연결한다. |
 | GW-51 | j-groupware | 고객 목록·계약 상태 | 제품 정책 결정 필요 | partial | 업무 계약 상태·초기값·전이/권한·구독 영향을 확정한 뒤 콘솔 PG/변경 API를 구현한다. |
-| GW-63 | j-groupware | 부트스트랩 | 구현 가능 | partial | OS package/전용 PG/CA trust/full bootstrap kit의 소스·준비 입력을 계속 구현한다. 실제 호스트 설치·계정·trust/timer 활성화는 별도 승인/VM 인수다. |
-| GW-64 | j-groupware | 서비스 설치 | 구현 가능 | partial | Web privileged helper/SFTP·FTPS·gateway와 나머지 native 설치 입력/실패 경계를 연결한다. Mail E8·운영 알림 owner·H7 관문은 별도이며 임의 CLI 활성화하지 않는다. |
-| GW-65 | j-groupware | 서비스 해지 | 서비스 구현 선행 | partial | GW-64 native 설치 조합을 완성한 뒤 Web/알림 포함 전체 해지 조합·PID1/고객 VM 인수를 실행한다. source fixture를 전체 기능 완료로 계산하지 않는다. |
-| GW-66 | j-groupware | 프로비저닝 에이전트 | 구현 가능 | partial | 기존 one-shot agent와 full kit/남은 제품 installer 연결을 계속 구현한다. operating agent config/timer/고객 VM 활성화는 별도다. |
+| GW-63 | j-groupware | 부트스트랩 | 외부 VM 인수 | partial | 신뢰한 실제 offline package와 dependency closure·기존 private 입력을 준비해 승인된 고객 VM에서 첫 bootstrap/CA trust/PG Compose/전체 인수를 실행한다. |
+| GW-64 | j-groupware | 서비스 설치 | 외부 VM 인수 | partial | 승인된 고객 VM의 기존 준비 입력으로 전체 native 설치·중지/재시도·gateway/방화벽 traffic 인수를 실행한다. 운영 owner·E8/H7 계약은 별도다. |
+| GW-65 | j-groupware | 서비스 해지 | 외부 VM 인수 | partial | 고객 VM에서 native 제품 전체 해지·실패/retry·PG/files/backup 보존과 gateway/account/env 순서 인수를 실행한다. 자동 purge는 하지 않는다. |
+| GW-66 | j-groupware | 프로비저닝 에이전트 | 외부 VM 인수 | partial | 고객 VM에서 기존 준비 입력의 agent control/unit·실제 installer 호출·timer 실행과 실패/retry를 인수한다. 알림 refresh owner/회전/topology는 임의 지정하지 않는다. |
 | GW-71 | j-groupware | UI 기준 | UI 기준 선행 | not_started | 추가 질의를 반복하지 않고 기존 응답을 기다린다. |
 | GW-73 | j-groupware | VM 검증·측정 | 외부 VM 인수 | not_started | 설치자 연결 후 지정 VM에서 통합 인수한다. |
 | MS-07 | j-messenger | UI 토큰 적용 | UI 기준 선행 | not_started | 확정된 groupware UI token을 통합 client 화면에 적용한다. |
@@ -79,11 +79,11 @@
 
 ## 독립 구현과 기능 완료의 경계
 
-22차 독립9 중 TK-30 source 완료, TK-41 member/settings 계약·GW-65 계정 제거/retry·GW-40 명시적 prepared binding·bootstrap wrapper 연결을 구현했다. 9개 전체 기능 완료로 계산하지 않는다. 첫 다음 단계 3개는 독립 소스, 4개는 정책, 1개는 서비스 선행으로 이동했으며 기존 UI/VM 관문은 유지한다.
+23차 독립 OS kit·Web/Mailpit/notification native 제품·agent·보존 소스 연결을 마쳤다. 다음 실행은 실제 OS/PID1 고객 VM 또는 기존 정책/UI 결정이며, component fixture 성공을 전체 기능 인수로 계산하지 않는다.
 
-독립 소스의 첫 다음 단계 3개: GW-63, GW-64, GW-66.
+독립 소스의 첫 다음 단계 0개: .
 
-다음 유한 묶음 권고: GW-63, GW-64, GW-66.
+다음 유한 묶음 권고: .
 
 ## 운영 알림 연결에 필요한 계약
 
@@ -113,24 +113,24 @@ FS-U07의 현 최소 범위를 유지: webhook 수신 전 누락 허용, 수신�
 
 ## 실제 검증 범위
 
-[22차 실제 증거](cloud-independent-nine-verification-2026-10-09.md): Node22.18/24.19 전체 BFF191/15files·check80·agent26·fresh unpack19·owned root storage/native6 각각exit0/skip0. Talk check2·실제 PG integration14/2files·registry1 각각exit0. focused Talk/G22 6과 worker7은 전체191에 포함하며 중복 합산하지 않는다. 실제 원래 담당자·서로 다른 occurrence/SSE·receiver/ACK 장애·compiled sender 강제 종료/실제20초 lease 복구와 owned 컨테이너 계정 실제 제거/보존 bytes/실패 재시도를 검증했다. 실제 OS package/PG 설치·systemd PID1 전체 native 흐름·CA trust/agent config/timer/VM·정식 UI/브라우저와 H7/T2/E8는 미실행이다. 초기 실패 로그는 보존하고 16차 receiver startup 원인은 미확정이다.
+[23차 실제 증거](cloud-bootstrap-kit-verification-2026-10-09.md): Node22.18/24.19 각각 check80·전체 BFF191/15files·agent27·native3·owned root storage7·Web prepare/SFTP/FTPS/retention4·fresh unpack/kit20·실제 gateway15·JWeb check6+helper1이 exit0/skip0다. 7개 실제 archive와 Node/npm을 묶은 kit, OS metadata-only Deb 및 inactive unit/agent 준비, Mailpit Compose 실제 동일 ID 생성/중지/재시도와 retained data, 실제 helper/group receipt/Web backup hash/drift를 검증했다. 0.0.1 Deb fixture는 설치하지 않았다. 실제 OS package/PG Compose PID1 첫 기동·CA trust·전체 native 제품 lifecycle/timer·firewall traffic·20GB 고객 VM 및 정식 UI는 미실행이다. 실패 로그/임시 파일을 보존하며 23차 full activation 성공을 주장하지 않는다.
 
 작업 브랜치의 마지막 소스 커밋:
 
-- web_source_commit: `2a1753fa4dffa048deadfa261014c8cb24e316b2`
-- agent_source_commit: `a1f9d0be005ed2c0bc7af9d5e6b59c0a610d2d36`
+- web_source_commit: `746c6b21c7b9534dd08de5e76d32e349b62e9531`
+- agent_source_commit: `894ddc1a2c81adbca9c9a6c1463506f5751f6ad0`
 - talk_source_commit: `ff6d4eb706ff366e0c3babb4c8726cfed1793581`
 - console_source_commit: `998a48abe1e66f2aefd88d28fa6adda07627107c`
 - talk_bff_source_commit: `95b4967a30012dfa7fbdcf20974e54c70d1606ff`
-- bundle_source_commit: `a1f9d0be005ed2c0bc7af9d5e6b59c0a610d2d36`
-- bootstrap_source_commit: `a1f9d0be005ed2c0bc7af9d5e6b59c0a610d2d36`
-- teardown_source_commit: `a1f9d0be005ed2c0bc7af9d5e6b59c0a610d2d36`
+- bundle_source_commit: `894ddc1a2c81adbca9c9a6c1463506f5751f6ad0`
+- bootstrap_source_commit: `894ddc1a2c81adbca9c9a6c1463506f5751f6ad0`
+- teardown_source_commit: `894ddc1a2c81adbca9c9a6c1463506f5751f6ad0`
 - notification_worker_source_commit: `a1f9d0be005ed2c0bc7af9d5e6b59c0a610d2d36`
 - customer_auth_source_commit: `6cbfdc8b4ec6b104f9cf6cc0e96eb73d7229db35`
 - customer_auth_test_source_commit: `b15b53bb32942eee832413729940af02c1950edf`
 - tls_credentials_source_commit: `64b1d89702e4641f34ed6b24ee7b6254c270b81d`
 - tls_credentials_test_source_commit: `66e41b2070ed2aa7c0efcb5e684891b3926db0b6`
-- native_storage_source_commit: `a1f9d0be005ed2c0bc7af9d5e6b59c0a610d2d36`
+- native_storage_source_commit: `894ddc1a2c81adbca9c9a6c1463506f5751f6ad0`
 - mail_capture_contracts_source_commit: `92809bc96ca75e1ccfd552f7247d989f6e8f28a2`
 - web_bff_source_commit: `6b33637c096414c6031067ba168616aeb0e35b83`
 
