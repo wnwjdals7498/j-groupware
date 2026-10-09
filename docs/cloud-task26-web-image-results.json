@@ -1,0 +1,496 @@
+{
+  "date": "2026-10-09",
+  "scope": "Task26 final source Web test-image build and affected hosting validation; customer-auth resource diagnosis; no new feature or VM acceptance",
+  "whole_suite_verified": false,
+  "actual_vm_acceptance_executed": false,
+  "new_features_implemented": false,
+  "evidence_root": "/workspace/.suite-runtime/j-groupware",
+  "web_source_commit": "237bfeb1833f4dc7b27e578dfc01ff8d649bd300",
+  "web_image_creation_source_commit": "75402e1f7a3133acef97b3db8c0c86e3dc05eb36",
+  "final_image_id": "sha256:cd6c616e3ced2d3e475f01cf0a57c8efb7a9ec06e74ed57d308e7659a2c655f1",
+  "final_image_tag": "jweb-isolated-hosting:task26-75402e1",
+  "container_node": "v22.18.0",
+  "host_runtimes": ["v22.18.0", "v24.19.0"],
+  "old_overlay_image_id": "sha256:f56fc0347a04254317c97886ad21a3986182f48e1e53c4c1c082381b6217e93e",
+  "overlay_used_for_final_validation": false,
+  "installed_files_count": 42,
+  "installed_source_sha256_match": true,
+  "image_input_sha256": {
+    "deploy/hosting/Dockerfile.test": "aa64188df9f646edec77f249cd0587fc5260ce1e4c72ee14554c906143ade232",
+    ".dockerignore": "e8c898b88f0ec1c08a4ca94ae59033eb70cdc72a2eb79ca1a82c641398799578",
+    "deploy/jweb-helper.mjs": "48532a680a17860e06f00bc2cf9230ab32eaff9747c29b8040413a4d430c839d",
+    "deploy/hosting/jweb.sudoers": "5c62ae3975f46a0c72b2c2ff8b60ec713a2773458538af851dd8f3e8dfc50f88",
+    "deploy/hosting/sshd_config": "ceb8be12a509f7edb3eb79896f9cfb9105fca2d1f894fe48ba92b787311a663f",
+    "deploy/hosting/vsftpd.conf": "c24cb799a1985877410b3641d1272e4b70b935829c28fff41ffa643fcac470da",
+    "tests/hosting/entrypoint.mjs": "cb12ab53a09bd7e6bb29707783ec39a655e9a27c48c76fb65ab993002c3005e1",
+    "tests/hosting/protocols.py": "5ca68c523dca93daedb88bca77d44788eee30db94de7faab4d89521d4a24271d",
+    "apps/server/dist/app.d.ts": "809efc2eb0dd96bcd061e4e64ab9f8ad5b81e6c70740f6f68aeda2dbd2c20bb7",
+    "apps/server/dist/app.js": "177e431618d3beb97de2c5742b250ac28e00640dcf054b902637c8c8a8bf58bf",
+    "apps/server/dist/app.js.map": "32342ff5567ee1869502c42a50507b40c14c333a2c21d4765cdc291bd24e8d5e",
+    "apps/server/dist/auth.d.ts": "c1f983fd2b8e94e88be5e495caf744202c6fe71522b362a2cb054bd24957fe3d",
+    "apps/server/dist/auth.js": "2aa72c947e0b4c8dcc5bb8b818f52b585df74a84ffe4078c801e5c2607c92fc9",
+    "apps/server/dist/auth.js.map": "05e2b515e25bd879d0477898de64f8f3c49742e620520593256960cfcf696bbf",
+    "apps/server/dist/config.d.ts": "9a43a7c68b98a3f2c5c202deb87d479b4734e0e6f2063214b9169e44572d3560",
+    "apps/server/dist/config.js": "cb935447411b29287db57b72c764548d6dfc2237dfc682e8fd31ff96624d5649",
+    "apps/server/dist/config.js.map": "e2591792d5d6eb1abba6c00988552bb8b05719227f0e90f366ed35c09a0c0d84",
+    "apps/server/dist/content.d.ts": "c01ed7957de21169f1ffdc5821569653109c61e2158db954efb6a47371064b1a",
+    "apps/server/dist/content.js": "c80bd26ac43ff3d94ded8c0761fe739de3e462b5fc5b2d5f7ffdf16f80ffb64e",
+    "apps/server/dist/content.js.map": "f07bd2089ad411de438d2b057598c7f7b79448483a42c15ba98c464c11d08898",
+    "apps/server/dist/db/migrate.d.ts": "a1eee144501844021861e843edafb25ba8a0a5942ad6412c9e7b13ffe54c0ded",
+    "apps/server/dist/db/migrate.js": "543972fd826dbe0e11e38b2d1b4e63e52708b1641d67fc162252a5e0c97bc7aa",
+    "apps/server/dist/db/migrate.js.map": "cd7de9050e713663c00c096ec867740aa10e21cefc35fff349fae329762be089",
+    "apps/server/dist/db/pool.d.ts": "1b2d290bd131b50cccbae6c13939fcc6a9a82632b65f69f7a30c393f7bf000f3",
+    "apps/server/dist/db/pool.js": "ccf75f06e11b8a4370137693e1be48535fd6513032cbcd3a1eaca4a390e6f306",
+    "apps/server/dist/db/pool.js.map": "adc3bae1c46ffb4c69e6b7e0a340e034b9a0da4354906945a20db5c715c1a07c",
+    "apps/server/dist/disk-cli.d.ts": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+    "apps/server/dist/disk-cli.js": "8c024e89bb7321f4277a00a100756deaa011273b352b8aa896628329510f286c",
+    "apps/server/dist/disk-cli.js.map": "1062b426c7ef07ea303b53d433929c60b213ce4949927f0483062f71c4c44525",
+    "apps/server/dist/disk.d.ts": "e233f2944fbf7f2bbd11d52e572f1c7b4758b84257bc230723e9dcf79beff2aa",
+    "apps/server/dist/disk.js": "f8b776d3dd516503268f10e2058bf995c912f66d943006e9597ffeed7a428146",
+    "apps/server/dist/disk.js.map": "bb594acec413168fac834922c7f9dac8970d1f232a70844bf16c0a07a74c4759",
+    "apps/server/dist/errors.d.ts": "4c5ed619b31f11855675f91de651c7bdb46e7f4fd6540d893df6a0112040e61c",
+    "apps/server/dist/errors.js": "602430b6969a2246f98e6e5406c8b76b87f12eb665209126e60e3a623b37dd61",
+    "apps/server/dist/errors.js.map": "a6477ee02845ce84681f17f045de5559ca6eab2c1c4988b50f2bbf3ff0380453",
+    "apps/server/dist/hosting-helper.d.ts": "02d2504f7014efefaa6e7c53b5d420113973e12d17b02e48b468c4f47eb7ecf5",
+    "apps/server/dist/hosting-helper.js": "b8d21cf3d4cb6de2fd20f42b2f9d97739e35837e080384161f4f84dd7bfad32e",
+    "apps/server/dist/hosting-helper.js.map": "d0c940162d17d16b08e6dad16fa2fc5d4feb071b1ccc147175c522f66b38e2a8",
+    "apps/server/dist/hosting.d.ts": "a5dcd05d1831a5f6f6e7ef54bde56cab9524cf4a78fb78d4eebb842797265bf4",
+    "apps/server/dist/hosting.js": "ccc8fe9397373c133ddc80c033827144d9fbde058be15ffaa281146244188d85",
+    "apps/server/dist/hosting.js.map": "a25c16ceb282498345337c41d496c283d48d7f8b92bbcfa43bd50d4939f1235b",
+    "apps/server/dist/main.d.ts": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+    "apps/server/dist/main.js": "0fb311c70d19dfa00a9d5558dc764df1e2bd5679df92f97933480f36c1e5529f",
+    "apps/server/dist/main.js.map": "2c935492492d00af9194f1c5ee9a71ac820bc33881804846dab271e369f15f2d"
+  },
+  "build": {
+    "final_build_exit": 0,
+    "final_build_log": "task26-web-image-final-build.log",
+    "final_build_log_sha256": "5e228c4d9fca14c77fc70299d94f3b1a232fdadd700089b177fcdd79cf6b0d09",
+    "committed_source_rebuild_log": "task26-web-committed-rebuild.log",
+    "committed_source_rebuild_log_sha256": "38d39178aa5b21d6a53f4aec9662782ef39df4014ca0b384e5126007088d1f55",
+    "committed_source_rebuild_exit": 0,
+    "committed_source_rebuild_same_image_id": true,
+    "source_dirty": false,
+    "pinned_os_layer_cached": true,
+    "file_install_layer_executed_during_new_image_build": true
+  },
+  "successful_final_runs": [
+    {
+      "log": "task26-web-final-check22.log",
+      "exit_file": "task26-web-final-check22.exit",
+      "exit_code": 0,
+      "runtime": "v22.18.0",
+      "kind": "web_build_type_unit_lint_format",
+      "observed_pass_counts": {
+        "unit": 7,
+        "helper": 1
+      },
+      "log_sha256": "8d0bd438e5ea59197bbfef119a86aff055a6960b578841f6fe42f894b3238545"
+    },
+    {
+      "log": "task26-web-final-image-proof22.log",
+      "exit_file": "task26-web-final-image-proof22.exit",
+      "exit_code": 0,
+      "runtime": "v22.18.0",
+      "kind": "fresh_image_integrity_and_negative_protocol_guards",
+      "observed_pass_counts": {},
+      "log_sha256": "8bcf8acaea51ac84576d0b0918de0b0cdad62069c15746009e75e4b15a27e7f4",
+      "proof_file": "task26-web-image-proof-node22.json"
+    },
+    {
+      "log": "task26-web-final-image-hosting22.log",
+      "exit_file": "task26-web-final-image-hosting22.exit",
+      "exit_code": 0,
+      "runtime": "v22.18.0",
+      "kind": "fresh_image_root_hosting_tls_protocols_and_journal",
+      "observed_pass_counts": {
+        "hosting": 5
+      },
+      "log_sha256": "d16ec581a9acd506c2983d4d38ae0e4952c140569877e9ff47b343c67db991a4"
+    },
+    {
+      "log": "task26-web-final-image-integration-r3-22.log",
+      "exit_file": "task26-web-final-image-integration-r3-22.exit",
+      "exit_code": 0,
+      "runtime": "v22.18.0",
+      "kind": "fresh_image_web_postgres_https",
+      "observed_pass_counts": {
+        "integration": 15
+      },
+      "log_sha256": "5482912ba6dec879d41ae1ef03dd4476cd8411b56c00974ddad6987ea923271d"
+    },
+    {
+      "log": "task26-web-bff-final22.log",
+      "exit_file": "task26-web-bff-final22.exit",
+      "exit_code": 0,
+      "runtime": "v22.18.0",
+      "kind": "fresh_image_groupware_web_bff",
+      "observed_pass_counts": {
+        "integration": 6
+      },
+      "log_sha256": "f447e7d399b09017944bc04ba296e7a37b01245b9cbf9732069c490c3440a01c",
+      "resource_samples": {
+        "before": {
+          "utc": "2026-10-09T09:14:46.830567+00:00",
+          "workspace_available_bytes": 1211867136,
+          "tmp_available_bytes": 2924974080
+        },
+        "runtime": "v22.18.0",
+        "selected_binary": "/workspace/.cloud-setup/node22/bin/node",
+        "kind": "web",
+        "image_tag": "jweb-isolated-hosting:task26-75402e1",
+        "overlay_used": false,
+        "command": [
+          "/workspace/.cloud-setup/node22/bin/node",
+          "/workspace/.suite-runtime/j-groupware/run-bff-target.mjs",
+          "tests/bff/web.integration.test.ts"
+        ],
+        "exit_code": 0,
+        "minimum_sampled_available_bytes": {
+          "workspace_available_bytes": 589520896,
+          "tmp_available_bytes": 2924969984
+        },
+        "after": {
+          "utc": "2026-10-09T09:15:02.353959+00:00",
+          "workspace_available_bytes": 1211617280,
+          "tmp_available_bytes": 2925006848
+        },
+        "sample_interval_seconds": 0.5,
+        "cgroup_memory_events": "low 0\nhigh 0\nmax 163706\noom 0\noom_kill 0\noom_group_kill 0\n",
+        "cgroup_pids_events": "max 0\n"
+      }
+    },
+    {
+      "log": "task26-customer-auth-bff-final22-r2.log",
+      "exit_file": "task26-customer-auth-bff-final22-r2.exit",
+      "exit_code": 0,
+      "runtime": "v22.18.0",
+      "kind": "separate_customer_auth_resource_diagnosis",
+      "observed_pass_counts": {
+        "integration": 19
+      },
+      "log_sha256": "c59274a0c3b99b7d4f72cf2967ddaff3fd002f0fd2d00d30d541854baf91da68",
+      "resource_samples": {
+        "before": {
+          "utc": "2026-10-09T09:31:11.000068+00:00",
+          "workspace_available_bytes": 2134970368,
+          "tmp_available_bytes": 2405052416
+        },
+        "runtime": "v22.18.0",
+        "selected_binary": "/workspace/.cloud-setup/node22/bin/node",
+        "kind": "customer-auth",
+        "image_tag": "jweb-isolated-hosting:task26-75402e1",
+        "overlay_used": false,
+        "command": [
+          "/workspace/.cloud-setup/node22/bin/node",
+          "/workspace/.suite-runtime/j-groupware/run-bff-target.mjs",
+          "tests/bff/customer-auth.integration.test.ts"
+        ],
+        "exit_code": 0,
+        "minimum_sampled_available_bytes": {
+          "workspace_available_bytes": 484392960,
+          "tmp_available_bytes": 2386190336
+        },
+        "after": {
+          "utc": "2026-10-09T09:31:47.034725+00:00",
+          "workspace_available_bytes": 2134654976,
+          "tmp_available_bytes": 2386198528
+        },
+        "sample_interval_seconds": 0.5,
+        "cgroup_memory_events": "low 0\nhigh 0\nmax 165834\noom 0\noom_kill 0\noom_group_kill 0\n",
+        "cgroup_pids_events": "max 0\n"
+      }
+    },
+    {
+      "log": "task26-web-final-check24.log",
+      "exit_file": "task26-web-final-check24.exit",
+      "exit_code": 0,
+      "runtime": "v24.19.0",
+      "kind": "web_build_type_unit_lint_format",
+      "observed_pass_counts": {
+        "unit": 7,
+        "helper": 1
+      },
+      "log_sha256": "057a0c623742b8da6ed0569fac29611139d71a71c87f9779e232169f1a2c6dfd"
+    },
+    {
+      "log": "task26-web-final-image-proof24.log",
+      "exit_file": "task26-web-final-image-proof24.exit",
+      "exit_code": 0,
+      "runtime": "v24.19.0",
+      "kind": "fresh_image_integrity_and_negative_protocol_guards",
+      "observed_pass_counts": {},
+      "log_sha256": "48a70d2a774b5a57d1b6df6885ffecea7107ef2a91c952406f6cd64ff72d34c9",
+      "proof_file": "task26-web-image-proof-node24.json"
+    },
+    {
+      "log": "task26-web-final-image-hosting24.log",
+      "exit_file": "task26-web-final-image-hosting24.exit",
+      "exit_code": 0,
+      "runtime": "v24.19.0",
+      "kind": "fresh_image_root_hosting_tls_protocols_and_journal",
+      "observed_pass_counts": {
+        "hosting": 5
+      },
+      "log_sha256": "d29ddeb7c915d28d9cc3c8807b7f7c78aa8e095f75ff28b07dfe22e1d172f15b"
+    },
+    {
+      "log": "task26-web-final-image-integration-r3-24.log",
+      "exit_file": "task26-web-final-image-integration-r3-24.exit",
+      "exit_code": 0,
+      "runtime": "v24.19.0",
+      "kind": "fresh_image_web_postgres_https",
+      "observed_pass_counts": {
+        "integration": 15
+      },
+      "log_sha256": "8a1dc96ca05beec8c50da6dcf2d08912c3c62959e142643a3bce117a46b0863a"
+    },
+    {
+      "log": "task26-web-bff-final24.log",
+      "exit_file": "task26-web-bff-final24.exit",
+      "exit_code": 0,
+      "runtime": "v24.19.0",
+      "kind": "fresh_image_groupware_web_bff",
+      "observed_pass_counts": {
+        "integration": 6
+      },
+      "log_sha256": "22fd7da9ea71582d4209b9490c07b988a7bf413aa8437d58ce40048ad7f9834c",
+      "resource_samples": {
+        "before": {
+          "utc": "2026-10-09T09:15:29.625805+00:00",
+          "workspace_available_bytes": 1211580416,
+          "tmp_available_bytes": 2925006848
+        },
+        "runtime": "v24.19.0",
+        "selected_binary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "kind": "web",
+        "image_tag": "jweb-isolated-hosting:task26-75402e1",
+        "overlay_used": false,
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+          "/workspace/.suite-runtime/j-groupware/run-bff-target.mjs",
+          "tests/bff/web.integration.test.ts"
+        ],
+        "exit_code": 0,
+        "minimum_sampled_available_bytes": {
+          "workspace_available_bytes": 589172736,
+          "tmp_available_bytes": 2924969984
+        },
+        "after": {
+          "utc": "2026-10-09T09:15:44.637787+00:00",
+          "workspace_available_bytes": 1211281408,
+          "tmp_available_bytes": 2925006848
+        },
+        "sample_interval_seconds": 0.5,
+        "cgroup_memory_events": "low 0\nhigh 0\nmax 163706\noom 0\noom_kill 0\noom_group_kill 0\n",
+        "cgroup_pids_events": "max 0\n"
+      }
+    },
+    {
+      "log": "task26-customer-auth-bff-final24-r2.log",
+      "exit_file": "task26-customer-auth-bff-final24-r2.exit",
+      "exit_code": 0,
+      "runtime": "v24.19.0",
+      "kind": "separate_customer_auth_resource_diagnosis",
+      "observed_pass_counts": {
+        "integration": 19
+      },
+      "log_sha256": "4f9d7d440478c6fa71df5ef88f63039d13f78f5448cc54ee3ada0b7bf1d6966b",
+      "resource_samples": {
+        "before": {
+          "utc": "2026-10-09T09:32:06.795414+00:00",
+          "workspace_available_bytes": 2134650880,
+          "tmp_available_bytes": 2386198528
+        },
+        "runtime": "v24.19.0",
+        "selected_binary": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "kind": "customer-auth",
+        "image_tag": "jweb-isolated-hosting:task26-75402e1",
+        "overlay_used": false,
+        "command": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+          "/workspace/.suite-runtime/j-groupware/run-bff-target.mjs",
+          "tests/bff/customer-auth.integration.test.ts"
+        ],
+        "exit_code": 0,
+        "minimum_sampled_available_bytes": {
+          "workspace_available_bytes": 472842240,
+          "tmp_available_bytes": 2386124800
+        },
+        "after": {
+          "utc": "2026-10-09T09:32:39.342106+00:00",
+          "workspace_available_bytes": 2134618112,
+          "tmp_available_bytes": 2386145280
+        },
+        "sample_interval_seconds": 0.5,
+        "cgroup_memory_events": "low 0\nhigh 0\nmax 165834\noom 0\noom_kill 0\noom_group_kill 0\n",
+        "cgroup_pids_events": "max 0\n"
+      }
+    }
+  ],
+  "failed_runs_retained": [
+    {
+      "log": "task26-web-new-image-integration22.log",
+      "exit_code": 1,
+      "passed": 14,
+      "failed": 1,
+      "reason": "public_contact_incorrectly_expected_absent_in_test",
+      "log_sha256": "77eda9be079fbfae036228ede75924e475d5cf050a869511e4723040bf6999f1",
+      "retained": true,
+      "counted_as_success": false
+    },
+    {
+      "log": "task26-web-final-image-integration22.log",
+      "exit_code": 1,
+      "passed": 14,
+      "failed": 1,
+      "reason": "test_assumed_first_random_uuid_page_is_earliest_site",
+      "log_sha256": "a130bc6e52dfcaa7f54011c11017396169a5c0673111036bf4cba610b1a223f5",
+      "retained": true,
+      "counted_as_success": false
+    },
+    {
+      "log": "task26-web-final-image-integration-r2-22.log",
+      "exit_code": 1,
+      "passed": 14,
+      "failed": 1,
+      "reason": "new_pagination_probe_used_cursor_instead_of_published_after",
+      "log_sha256": "8df6e9b572a414ed37c7faa3543abb28fa724f8edd23f845efd1b3eedf825b07",
+      "retained": true,
+      "counted_as_success": false
+    },
+    {
+      "log": "task26-web-final-image-integration-r2-24.log",
+      "exit_code": 1,
+      "passed": 14,
+      "failed": 1,
+      "reason": "new_pagination_probe_used_cursor_instead_of_published_after",
+      "log_sha256": "d678e9323fc8fffcabfb6304901ba6632863b3a799543fcf44f2cf6cecece2a9",
+      "retained": true,
+      "counted_as_success": false
+    },
+    {
+      "log": "task26-customer-auth-bff-final22.log",
+      "exit_code": 1,
+      "passed": 18,
+      "failed": 1,
+      "reason": "gateway_ENOSPC_with_sampled_available_disk_zero_after_successful_startup",
+      "log_sha256": "83b9bdcec7c2419dcffcc9c140e6eb80db7a4a442341499c44fdec55a60d39d1",
+      "retained": true,
+      "counted_as_success": false
+    }
+  ],
+  "original_failed_web_build": {
+    "record": "61rhprtbmfu2i4k17r5uvk9ml",
+    "status": "failed",
+    "error": "ResourceExhausted at COPY vsftpd.conf: no space left on device",
+    "preserved_build_export": "task26-original-failed-build.dockerbuild",
+    "preserved_build_export_sha256": "46cf35dd0530417c143b3e37e7bbede61c63e6d60d034f83b626000ec13f3592"
+  },
+  "targeted_cache_reclamation": {
+    "before_available_bytes": 1211518976,
+    "scope": "Only three immutable unshared regular COPY cache records of the owned failed j-web Task25 build. No image/container/volume/source/user-data removal.",
+    "preserved_failed_build_export": "/workspace/.suite-runtime/j-groupware/task26-original-failed-build.dockerbuild",
+    "preserved_failed_build_inspect": "/workspace/.suite-runtime/j-groupware/task26-original-web-build-inspect.json",
+    "preserved_failed_build_log": "/workspace/.suite-runtime/j-groupware/task26-original-web-build-logs.log",
+    "records": [
+      {
+        "id": "p8ejhn1t5lijsuaj7h1pb5stm",
+        "description": "[ 5/10] COPY deploy/hosting/sshd_config /etc/jweb/sshd_config",
+        "command": [
+          "docker",
+          "buildx",
+          "prune",
+          "--force",
+          "--verbose",
+          "--filter",
+          "id=p8ejhn1t5lijsuaj7h1pb5stm"
+        ],
+        "exit_code": 0
+      },
+      {
+        "id": "uh7iqtohjx2x87w5wia3f4vy1",
+        "description": "[ 4/10] COPY deploy/hosting/jweb.sudoers /etc/sudoers.d/jweb",
+        "command": [
+          "docker",
+          "buildx",
+          "prune",
+          "--force",
+          "--verbose",
+          "--filter",
+          "id=uh7iqtohjx2x87w5wia3f4vy1"
+        ],
+        "exit_code": 0
+      },
+      {
+        "id": "0kzi71r5av7uhn4en2mc763z3",
+        "description": "[ 3/10] COPY deploy/jweb-helper.mjs /usr/local/sbin/jweb-helper",
+        "command": [
+          "docker",
+          "buildx",
+          "prune",
+          "--force",
+          "--verbose",
+          "--filter",
+          "id=0kzi71r5av7uhn4en2mc763z3"
+        ],
+        "exit_code": 0
+      }
+    ],
+    "after_available_bytes": 2134974464,
+    "finished_utc": "2026-10-09T09:30:10.519897+00:00",
+    "broad_prune_executed": false
+  },
+  "cache_preservation": {
+    "utc": "2026-10-09T09:24:10.220668+00:00",
+    "workspace_available_before": 1211531264,
+    "workspace_available_after": 1211531264,
+    "prune_executed": false,
+    "data_loss": false,
+    "records": [
+      {
+        "cache": "pub",
+        "original": "/workspace/.cloud-setup/cache/pub",
+        "preserved_at": "/tmp/task26-cache-preserved-xr4eav8_/pub",
+        "original_path_symlink": "/tmp/task26-cache-preserved-xr4eav8_/pub",
+        "files": 21996,
+        "bytes": 345496142,
+        "sha256_metadata_identical": true,
+        "manifest_sha256": "5983993acfb975aa99c4c6e33360c48f47d8ed6824d05823ebc40f33eb7d58b5"
+      },
+      {
+        "cache": "analyzer",
+        "original": "/workspace/.cloud-setup/cache/analyzer",
+        "preserved_at": "/tmp/task26-cache-preserved-xr4eav8_/analyzer",
+        "original_path_symlink": "/tmp/task26-cache-preserved-xr4eav8_/analyzer",
+        "files": 2344,
+        "bytes": 53717998,
+        "sha256_metadata_identical": true,
+        "manifest_sha256": "bf064159739b48793c1ac6d6171a61c937615e404e9d2e7957b2042a7c51bfdd"
+      },
+      {
+        "cache": "node22",
+        "original": "/workspace/.cloud-setup/cache/node22",
+        "preserved_at": "/tmp/task26-cache-preserved-xr4eav8_/node22",
+        "original_path_symlink": "/tmp/task26-cache-preserved-xr4eav8_/node22",
+        "files": 2,
+        "bytes": 30454069,
+        "sha256_metadata_identical": true,
+        "manifest_sha256": "d5991be808237829d23348fc002eedaead7869abc614d9c9f7d753058526c0b5"
+      }
+    ]
+  },
+  "old_overlay_coverage_correction": "Old image protocols.py lacked contains/notContains checks. Prior pass counts do not prove those HTTP body assertions. Fresh image includes current protocol source and negative guards execute on both runtimes.",
+  "historical_customer_startup_root_cause": "unidentified; no preserved phase/errno or contemporaneous disk snapshot; new gateway ENOSPC is a distinct later failure",
+  "current_customer_auth_results": {
+    "node22": 19,
+    "node24": 19,
+    "skip": 0,
+    "minimum_sampled_workspace_available_bytes": {
+      "node22": 484392960,
+      "node24": 472842240
+    }
+  },
+  "full196_bff_rerun_in_task26": false,
+  "prior_full196_evidence": "docs/cloud-task25-test-results.json",
+  "no_lost_or_failed_result_counted_as_success": true
+}

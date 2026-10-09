@@ -641,5 +641,11 @@
   "supplemental_test_commits": {
     "j-web": "471d869f172fd308237db43479f8b08407300c59"
   },
+  "web_overlay_coverage_correction": {
+    "old_image_protocol_contains_notContains_checks_present": false,
+    "old_pass_counts_do_not_prove_those_body_assertions": true,
+    "superseded_by_fresh_source_image_verification": "docs/cloud-task26-web-image-results.json",
+    "historical_log_hashes_and_failed_runs_preserved": true
+  },
   "no_lost_result_counted_as_success": true
 }

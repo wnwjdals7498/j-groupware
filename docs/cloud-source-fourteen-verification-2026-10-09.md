@@ -38,6 +38,8 @@ Groupware 최종 `check`는 Node 22/24에서 각 서버 unit 83개·UI unit 3개
 
 마지막 연결 review에서 Talk가 gateway 뒤의 발급 IP를 loopback 하나로 묶는 문제를 고쳤다. 즉시 IPv4 loopback 첫 hop만 신뢰하고 기존 gateway의 전달 IP 덮어쓰기와 맞췄다. 실제 HTTPS·PG에서 IP별 10회/11회, 다른 IP의 독립 발급, 위조된 앞쪽 chain과 다른 peer의 전달 header 우회 거절을 검증했다. 추가된 하나를 포함한 최종 Talk 25개와 package check는 `task25-talk-gateway-check22/24`, `task25-talk-gateway-integration22/24`에서 각각 exit 0이다. 이는 OS/VM 보안 설정 변경이 아니다.
 
+Task26에서 이전 Web overlay 이미지의 protocols.py에 contains/notContains가 없었음을 확인했다. 위 이전 pass 수는 해당 HTTP 내용 검사의 실제 실행을 증명하지 못한다. 최종 소스 새 이미지의 설치42개 file hash·helper 권한·runtime mount 없음·두 HTTPS 음성 검사를 확인한 뒤 hosting5/Web PG15/GWA Web BFF6을 Node22/24에서 다시 통과했다. [Task26 보고](cloud-task26-web-image-verification-2026-10-09.md)와 [실행 증거](cloud-task26-web-image-results.json)에 새 이미지·선별 cache 회수·기존 시작 실패와 새 gateway ENOSPC의 구분·중간 시험 기대값/probe 오류를 기록한다. Task25 로그와 실패 기록은 그대로 보존한다.
+
 회사 노트북·운영 계정·새 영구 credential·CA trust·방화벽·systemd/timer·PR/main 병합·운영 배포는 변경하지 않았다. Windows PMT 상태 경로와 해당 start/note/verify/end 도구는 이 클라우드에서 없어 그 기록만 미실행이다. 저장소 지침과 실제 소스·시험 증거는 저장소 문서에 남긴다.
 
 실제 VM AU-51·GW-73·MS-09·ML-32·CA-32·AP-32·TK-42·WB-33은 모두 `not_run`이다. [collector 준비 기록](cloud-acceptance-collector-verification-2026-10-09.md)의 11개 HTTPS fixture 시험은 VM 인수 통과를 뜻하지 않는다. 정식 업무 화면·운영 notification owner/회전/topology와 첫 고객 bootstrap 인수도 별도다.

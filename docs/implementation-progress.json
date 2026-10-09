@@ -3496,7 +3496,9 @@
     "j-groupware/docs/cloud-contract-assignment-verification-2026-10-09.md",
     "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
     "j-groupware/docs/cloud-task25-test-results.json",
-    "j-groupware/docs/cloud-acceptance-collector-verification-2026-10-09.md"
+    "j-groupware/docs/cloud-acceptance-collector-verification-2026-10-09.md",
+    "j-groupware/docs/cloud-task26-web-image-verification-2026-10-09.md",
+    "j-groupware/docs/cloud-task26-web-image-results.json"
   ],
   "pending_implementation": [
     "Existing partial34 require feature-specification scope review against executed evidence. Task25 resolved H7 guarded template deployment/Origin registration, T2 visitor credential/message/WSS/cursor recovery, E8 full SMTP envelope capture/outbox and shared UI source gates; operating/customer acceptance remains separate.",
@@ -3508,7 +3510,7 @@
     "Per-feature remaining audit: docs/cloud-remaining-feature-audit-2026-10-08.json. Remaining choices concern actual Hyper-V VM location/execution approval and operating notification credential owner/rotation/topology; completed source-policy gates are not pending user decisions.",
     "GW-51 manual business contract and TK-21 current active talk:write candidate/trusted assignment source are implemented under explicit user approval. Formal UI/customer VM and T2 visitor production remain unrun; assignment validation-to-commit race is bounded by the ten-second proof lifetime."
   ],
-  "latest_bounded_verification_report": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
+  "latest_bounded_verification_report": "j-groupware/docs/cloud-task26-web-image-verification-2026-10-09.md",
   "task25": {
     "source_target_ids": [
       "AU-09",
@@ -3554,5 +3556,23 @@
     },
     "evidence": "j-groupware/docs/cloud-source-fourteen-verification-2026-10-09.md",
     "whole_suite_verified": false
+  },
+  "task26_web_image_verification": {
+    "source_commit": "237bfeb1833f4dc7b27e578dfc01ff8d649bd300",
+    "image_id": "sha256:cd6c616e3ced2d3e475f01cf0a57c8efb7a9ec06e74ed57d308e7659a2c655f1",
+    "host_runtimes": ["v22.18.0", "v24.19.0"],
+    "fresh_image_hosting_passed_each": 5,
+    "fresh_image_web_postgres_https_passed_each": 15,
+    "groupware_web_bff_passed_each": 6,
+    "separate_customer_auth_diagnostic_passed_each": 19,
+    "old_overlay_body_assertion_coverage_corrected": true,
+    "targeted_owned_failed_build_cache_records_reclaimed": 3,
+    "broad_prune_executed": false,
+    "historical_customer_startup_root_cause": "unidentified",
+    "new_gateway_ENOSPC_reproduced_then_capacity_recovered": true,
+    "new_features_implemented": false,
+    "actual_vm_acceptance_executed": false,
+    "whole_suite_verified": false,
+    "evidence": "j-groupware/docs/cloud-task26-web-image-results.json"
   }
 }
