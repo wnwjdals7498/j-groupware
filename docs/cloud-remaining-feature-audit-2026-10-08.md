@@ -2,17 +2,17 @@
 
 기존 명세/결정과 실제 소스·실행 증거 대조. 각 기능의 첫 미완료 단계 기준이며 구현 완료·제품 인수 완료를 뜻하지 않는다. 기술 계약과 선행 서비스는 구현자가 계속할 수 있는 작업이며 사용자/외부 환경 차단으로 취급하지 않는다.
 
-현재 소스 기준: 구현 109, 부분 32, 미착수 31 / 총 172. 남은 63개. 전체 통합 인수: 미완료.
+현재 소스 기준: 구현 113, 부분 35, 미착수 24 / 총 172. 남은 59개. 전체 통합 인수: 미완료.
 
-남은63의 첫 다음 단계 재감사: 독립 소스 작업16, T2/E8/H7 정책 선행21, 기존 UI 기준 응답 선행17, 실제 고객 VM 인수9. ready16은 기능 완료16을 뜻하지 않는다. native control/CA·Messenger 조합과 Messenger/Mailpit storage/PG·SQLite·파일 복원은 격리 검증했지만 전체 bootstrap·나머지 운영 binding·OS account 제거·systemd/CA trust/timer·VM 인수는 남았다. 운영 notification 자격 갱신 주체와 control-plane→고객 로컬 PG/private receiver 토폴로지를 임의 결정하지 않는다.
+남은59의 첫 다음 단계: 독립 소스9·T2/E8/H7 정책24·UI17·실제 VM9. 독립4개 backend 기능을 새 API/PG/호스팅/BFF 코드와 실행으로 완료하고,3개는 preview/공개 계약을 구현하되 H7 공개 배포 관문 때문에 partial을 유지했다. 준비된 base/native 조합은 source 구현이며 OS 설치·신뢰·agent/timer 인수는 미실행이다.
 
 | 분류 | 남은 수 |
 |---|---:|
-| 구현 가능 | 16 |
+| 구현 가능 | 9 |
 | 기술 계약 확정 선행 | 0 |
 | 서비스 구현 선행 | 0 |
 | UI 기준 선행 | 17 |
-| 제품 정책 결정 필요 | 21 |
+| 제품 정책 결정 필요 | 24 |
 | 외부 VM 인수 | 9 |
 | 현재 최소 범위 제외 | 0 |
 
@@ -34,15 +34,15 @@
 | GW-34 | j-groupware | 결재 화면 | UI 기준 선행 | partial | 기존 결재 계약으로 상신·승인·반려 화면을 구현한다. |
 | GW-35 | j-groupware | 상담 화면 | 제품 정책 결정 필요 | partial | T2 답변 뒤 실제 visitor/WSS 상담 전달을 연결하고 정식 UI 기준 아래 상담 화면을 구현한다. guest:read 조건의 UUID 이름 조합과 무권한 무조회는 검증 완료다. |
 | GW-36 | j-groupware | 상담 설정 | UI 기준 선행 | partial | 정식 UI 기준 아래 상담 설정 화면을 연결하고 확정된 visitor 서명 계약을 예제로 제공한다. |
-| GW-37 | j-groupware | 웹 관리 화면 | 구현 가능 | not_started | H2 readonly/사이트/콘텐츠 계약과 기존 helper 공개 인터페이스를 먼저 고정해 API/BFF를 연결한다. 정식 화면은 UI 기준 뒤다. |
+| GW-37 | j-groupware | 웹 관리 화면 | 제품 정책 결정 필요 | partial | 조회·사이트/계정·콘텐츠·preview BFF API는 구현했다. H7 뒤 배포/출처 연결을 완성하고 기존 UI 기준 응답 뒤 정식 화면을 구현한다. |
 | GW-38 | j-groupware | 배포 후 허용 출처 등록 | 제품 정책 결정 필요 | not_started | 각 backend 완성 후 성공/후속 origin 실패를 분리한 BFF 연결을 구현한다. |
 | GW-40 | j-groupware | 알림 수신 API | 구현 가능 | partial | 기존 manifest/worker와 남은 installer 조합의 입력·실패 경계를 연결한다. 운영 operator 자격 공급/갱신 주체와 로컬 PG/receiver 배치는 별도 결정한다. |
 | GW-44 | j-groupware | 알림 화면 | UI 기준 선행 | partial | 정식 UI와 기존 알림 계약을 연결한다. |
 | GW-51 | j-groupware | 고객 목록·계약 상태 | 구현 가능 | partial | 명세의 G7 계약 상태 enum·전이·변경 DTO/API를 고정하고 기존 콘솔 PG/권한과 연결한다. 단순 고객 조회 완료로 계약 변경을 완료 처리하지 않는다. |
-| GW-63 | j-groupware | 부트스트랩 | 구현 가능 | partial | 준비된 번들·기본 BFF·PG·CA·agent를 연결하는 전체 bootstrap 소스와 재시작 경계를 완성한다. 실제 OS trust/systemd/timer 설치 인수는 별도다. |
-| GW-64 | j-groupware | 서비스 설치 | 구현 가능 | partial | 검증된 CA/Messenger 조합을 전체 bootstrap에 연결하고 나머지 제품의 trusted adapter 입력을 고정한다. operating notification owner/topology와 실제 OS 설치는 별도다. |
+| GW-63 | j-groupware | 부트스트랩 | 구현 가능 | partial | 준비된 base BFF/PG/native/gateway 조합과 durable retry는 구현했다. OS 기반 설치/kit·CA trust·agent config 제공의 소스 경계를 완성하고 실제 systemd/timer/VM 인수를 별도 실행한다. |
+| GW-64 | j-groupware | 서비스 설치 | 구현 가능 | partial | base BFF와 CA/Messenger가 같은 native control/state/PG/gateway를 사용한다. 나머지 제품 trusted binding 입력/실패 경계를 구현한다. operating notification owner/topology와 실제 OS 설치는 별도다. |
 | GW-65 | j-groupware | 서비스 해지 | 구현 가능 | partial | 기존 Web helper와 새 storage/DB 정리의 전체 조합·account 제거 재시도 계약을 연결한다. OS account 실제 제거/제품 의미적 복원/VM 인수를 소스 시험으로 대체하지 않는다. |
-| GW-66 | j-groupware | 프로비저닝 에이전트 | 구현 가능 | partial | 고정 agent와 native 설치자의 나머지 제품 binding/실패 보고를 연결한다. 운영 알림 자격·timer 활성화·VM 인수는 별도다. |
+| GW-66 | j-groupware | 프로비저닝 에이전트 | 구현 가능 | partial | 기존 one-shot agent와 새 base/native composition의 남은 제품 binding/kit 조합을 연결한다. 운영 알림 자격·timer/고객 VM 활성화는 별도다. |
 | GW-71 | j-groupware | UI 기준 | UI 기준 선행 | not_started | 추가 질의를 반복하지 않고 기존 응답을 기다린다. |
 | GW-73 | j-groupware | VM 검증·측정 | 외부 VM 인수 | not_started | 설치자 연결 후 지정 VM에서 통합 인수한다. |
 | MS-07 | j-messenger | UI 토큰 적용 | UI 기준 선행 | not_started | 확정된 groupware UI token을 통합 client 화면에 적용한다. |
@@ -73,22 +73,18 @@
 | TK-30 | j-talk | 상담 알림 송신 | 구현 가능 | not_started | 회원 배정 occurrence ID와 고정 dedupKey·PG outbox/retry를 먼저 연결한다. talk.new visitor producer는 T2 뒤다. |
 | TK-41 | j-talk | contracts | 구현 가능 | not_started | 관리/회원의 현재 DTO와 사건 계약을 정확 버전으로 고정한다. visitor 발급/WSS 계약은 T2 뒤다. |
 | TK-42 | j-talk | 고객 서버 검증 | 외부 VM 인수 | not_started | 상담 구현 후 지정 VM에서 설치·해지·외부 widget 흐름을 검증한다. |
-| WB-01 | j-web | 사이트 목록·상태 | 구현 가능 | not_started | H2 상태 DTO와 기존 helper의 owned 공개 probe를 연결해 저장 상태·실제 준비 결과·실패를 구별한다. |
-| WB-02 | j-web | DNS 안내 | 구현 가능 | not_started | H2 도메인/tenant 검증과 A-record/hosts 안내 DTO를 고정한다. DNS 쓰기는 추가하지 않는다. |
-| WB-10 | j-web | 콘텐츠 입력 | 구현 가능 | not_started | H2 콘텐츠 필드·로고 MIME/bytes 상한을 기술 계약으로 고정하고 HTML escape/저장을 구현한다. 수동 파일 교체는 H7 뒤다. |
-| WB-11 | j-web | 미리보기 | 구현 가능 | not_started | H2 입력 검증·HTML escape로 readonly 미리보기를 구현한다. 실제 public-root 교체는 H7 뒤다. |
 | WB-12 | j-web | 배포 | 제품 정책 결정 필요 | not_started | 수동 파일 보존·교체 범위를 결정한 뒤 원자 배포와 rollback을 구현한다. |
-| WB-13 | j-web | 위젯 스니펫 삽입 | 구현 가능 | not_started | 확정된 tenant gateway widget 주소 한 줄을 항상 넣는 snippet 계약·escape를 구현한다. visitor 엔진·배포 덮어쓰기 정책과 구별한다. |
-| WB-31 | j-web | contracts | 구현 가능 | not_started | H2 사이트/콘텐츠/계정/오류/배포 DTO를 정확 버전으로 고정하고 immutable registry 소비를 검증한다. 실행 정책 H7은 별도다. |
+| WB-13 | j-web | 위젯 스니펫 삽입 | 제품 정책 결정 필요 | partial | preview의 고정 익명 widget 한 줄은 구현했다. H7 확정 뒤 실제 생성·배포 페이지 모두에 연결해 검증한다. |
+| WB-31 | j-web | contracts | 제품 정책 결정 필요 | partial | site/content/DNS/account/error/readonly contracts0.1.0은 최초 immutable 게시·exact 소비했다. H7 뒤 deployment request/state DTO를 고정한다. |
 | WB-33 | j-web | 고객 서버 검증 | 외부 VM 인수 | not_started | 웹 구현 후 지정 VM에서 HTTPS·SFTP·FTPS·해지를 검증한다. |
 
 ## 독립 구현과 기능 완료의 경계
 
-H2 contracts/readonly 조회·검증·미리보기/snippet과 BFF 공개 계약까지만. H7 public-root 교체, T2 visitor 엔진, UI/VM 인수로 확장하지 않는다. 설치의 나머지 조합과 console/Talk 회원 계약도 독립 소스 미완료이며 환경 차단으로 숨기지 않는다.
+준비된 기본 bootstrap/native 연결과 Web backend/API 소스 작업을 실제로 구현했다. WB-01/02/10/11은 독립 source 완료, WB-13/31·GW-37은 부분 구현이며 H7 실제 공개 배포 선행이다. 다음 독립 작업은 OS 기반/남은 binding·console 계약·Talk 회원 배정/occurrence이고 운영 변경·T2/E8/H7/UI·VM 인수로 확장하지 않는다.
 
-독립 소스의 첫 다음 단계 16개: GW-37, GW-40, GW-51, GW-63, GW-64, GW-65, GW-66, TK-21, TK-30, TK-41, WB-01, WB-02, WB-10, WB-11, WB-13, WB-31.
+독립 소스의 첫 다음 단계 9개: GW-40, GW-51, GW-63, GW-64, GW-65, GW-66, TK-21, TK-30, TK-41.
 
-다음 유한 묶음 권고: WB-31, WB-02, WB-10, WB-11, WB-13, WB-01, GW-37.
+다음 유한 묶음 권고: TK-41, TK-21, TK-30.
 
 ## 운영 알림 연결에 필요한 계약
 
@@ -116,17 +112,17 @@ FS-U07의 현 최소 범위를 유지: webhook 수신 전 누락 허용, 수신�
 
 ## 실제 검증 범위
 
-[20차 native/storage 증거](cloud-native-storage-verification-2026-10-09.md): Node22/24 전체 BFF179 각각13files/exit0/skip0, root storage/native5·agent core21·cold unpack19·groupware check77·mail check9unit+3deploy·mail registry1 각각exit0이다. 실제 파일 권한·정지/재시작 거절·PG custom dump restore·Mailpit SMTP/SQLite 동일 ID/본문 복원과 native control/factory/wrapper inert/거절 검증이다. 실제 systemd 설치·Messenger 공개 모듈 의미적 복원·운영 갱신/토폴로지·OS account 제거·timer·20GB/VM·방화벽·UI/전체 인수는 미실행이다. 첫 cold 허용경로 누락과 전체 BFF175pass/4skip/exit1, fixture 준비와 object-field-order 비교 실패의 로그를 보존한다. 이전 receiver startup 원인은 여전히 미확정이다.
+[21차 실제 증거](cloud-web-bff-verification-2026-10-09.md): Node22.18/24.19 전체 BFF184/14files 각각exit0/skip0, agent25·fresh unpack19·check80·root storage/native5, Web check6unit+1helper·실제 PG/owned hosting integration14/2files·registry1 각각exit0다. focused Web BFF5는 전체184에 포함하며 중복 합산하지 않는다. preflight 이전 state/lock 경로 ENOENT 증명 coordinator4도 각각exit0다. 실제 OS package/PG 서버 설치·systemd/CA trust/agent config/timer/VM·정식 UI/브라우저와 H7 공개 배포·T2 visitor/E8 outbox는 미실행이다. 이전 실패 로그를 유지하고 이전 receiver startup 실패 원인은 미확정이다.
 
 작업 브랜치의 마지막 소스 커밋:
 
-- web_source_commit: `13861dd835362992f6ba0ee8bd237e30db8ca0ba`
-- agent_source_commit: `b4e4310919edd2189c6f45e8768c7aa19dc29821`
+- web_source_commit: `2a1753fa4dffa048deadfa261014c8cb24e316b2`
+- agent_source_commit: `90e2c46683040954b831edd60ce90475b36a1c4c`
 - talk_source_commit: `41f84030119d8deaa7eff94079f95da1a4a7d23b`
 - console_source_commit: `998a48abe1e66f2aefd88d28fa6adda07627107c`
 - talk_bff_source_commit: `8525b5804fe6aa5ffff3d438612a1b0353c3af1d`
-- bundle_source_commit: `b4e4310919edd2189c6f45e8768c7aa19dc29821`
-- bootstrap_source_commit: `aa2a2f13e88fa1e6959ccb08c276434a8e7c831f`
+- bundle_source_commit: `90e2c46683040954b831edd60ce90475b36a1c4c`
+- bootstrap_source_commit: `d2239666535bc2c6b00bd5e1aa5d47d6a8779d07`
 - teardown_source_commit: `b4e4310919edd2189c6f45e8768c7aa19dc29821`
 - notification_worker_source_commit: `ea24dd34636bcfebbf89ec26d87c79831a577ece`
 - customer_auth_source_commit: `6cbfdc8b4ec6b104f9cf6cc0e96eb73d7229db35`
@@ -135,5 +131,6 @@ FS-U07의 현 최소 범위를 유지: webhook 수신 전 누락 허용, 수신�
 - tls_credentials_test_source_commit: `66e41b2070ed2aa7c0efcb5e684891b3926db0b6`
 - native_storage_source_commit: `b4e4310919edd2189c6f45e8768c7aa19dc29821`
 - mail_capture_contracts_source_commit: `92809bc96ca75e1ccfd552f7247d989f6e8f28a2`
+- web_bff_source_commit: `6b33637c096414c6031067ba168616aeb0e35b83`
 
 재생성: `python3 scripts/render-feature-audit.py`. JSON·진행표·baseline·분류·ready 집계가 서로 맞아야 생성한다.

@@ -6,13 +6,13 @@
   "docker_apply_executed": true,
   "whole_suite_verified": false,
   "summary": {
-    "implemented": 109,
-    "partial": 32,
-    "not_started": 31
+    "implemented": 113,
+    "partial": 35,
+    "not_started": 24
   },
   "blocked_runtime": [
     "Canonical j-groupware/docs/ui-guidelines.md is absent; formal UI and Playwright acceptance pending",
-    "Independent source work remains: complete base bootstrap and remaining native bindings, Web readonly/content contracts, console contract state and Talk member assignment/occurrence contracts. Owned Messenger/Mailpit storage preparation, private PG/file snapshots, actual PG/SQLite/file restoration and fixed CA/Messenger native control/factory/wrapper guards pass in isolated containers. Production notification renewal owner/topology, actual systemd/OS accounts removal/timer/customer VM acceptance remain separate; the native installer has not performed real systemd installation.",
+    "Independent source work remains: full OS base/bootstrap kit and remaining native product bindings, console contract state, Talk tenant member assignment/occurrence contracts and notification installer inputs. Prepared base BFF/native CA/Messenger composition and Web readonly/content API/BFF are implemented. Production notification renewal owner/topology, actual systemd/OS account removal/timer/customer VM acceptance are separate gates.",
     "Actual customer VM/20GB data disk/systemd/firewall/OS CA trust and external deployment acceptance not executed in the cloud fixture runtime",
     "Mail E8 needs FS-U07 pre-webhook loss criteria and full SMTP envelope recipient preservation contract; no outbox/ingress recovery policy invented"
   ],
@@ -919,9 +919,23 @@
       "items": [
         "G20"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending",
+      "code": [
+        "j-web/packages/contracts/src/index.ts",
+        "j-web/packages/contracts/README.md",
+        "j-web/apps/server/src/app.ts",
+        "j-web/apps/server/src/hosting.ts",
+        "j-web/apps/server/src/content.ts",
+        "j-web/deploy/migrations/003-page-content.sql",
+        "j-web/tests/server/content.test.ts",
+        "j-web/tests/integration/hosting.integration.test.ts",
+        "j-web/tests/registry/contracts.test.mjs",
+        "j-web/docs/cloud-content-contract-verification-2026-10-09.md",
+        "j-groupware/apps/server/src/web-routes.ts",
+        "j-groupware/tests/bff/web.integration.test.ts",
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
+      ]
     },
     {
       "id": "GW-38",
@@ -1186,7 +1200,7 @@
         "G18"
       ],
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending; prepared_base_bootstrap_coordinator4_durable_credentials_lock_plan_mismatch_retry_pass_each; native_private_control_factory_inert_and_CLI_guard_root5_and_fresh_unpack19_each_pass; fixed_base_BFF_PG_gateway_native_source_composition_implemented; OS_package_PG_server_CA_trust_agent_config_timer_and_actual_systemd_bootstrap_UNRUN; actual_complete_BFF184_each_14files_exit0_skip0_agent25_cold_unpack19_final_pass; bootstrap_preflight_before_lock_state_write_proof4_each_pass",
       "code": [
         "j-groupware/deploy/agent/bootstrap-files.mjs",
         "j-groupware/deploy/agent/service-database.mjs",
@@ -1238,7 +1252,12 @@
         "j-groupware/deploy/agent/native-installer.md",
         "j-groupware/tests/agent/storage.integration.test.mjs",
         "j-groupware/tests/agent/storage-fixture.mjs",
-        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
+        "j-groupware/deploy/agent/base-bootstrap.mjs",
+        "j-groupware/deploy/agent/bootstrap-runtime.mjs",
+        "j-groupware/tests/agent/base-bootstrap.test.mjs",
+        "j-groupware/docs/cloud-base-bootstrap-composition-2026-10-09.md",
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
       ]
     },
     {
@@ -1249,7 +1268,7 @@
         "G18"
       ],
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending; prepared_base_bootstrap_coordinator4_durable_credentials_lock_plan_mismatch_retry_pass_each; native_private_control_factory_inert_and_CLI_guard_root5_and_fresh_unpack19_each_pass; fixed_base_BFF_PG_gateway_native_source_composition_implemented; OS_package_PG_server_CA_trust_agent_config_timer_and_actual_systemd_bootstrap_UNRUN; actual_complete_BFF184_each_14files_exit0_skip0_agent25_cold_unpack19_final_pass; bootstrap_preflight_before_lock_state_write_proof4_each_pass",
       "code": [
         "j-groupware/deploy/agent/bootstrap-files.mjs",
         "j-groupware/deploy/agent/service-database.mjs",
@@ -1301,7 +1320,12 @@
         "j-groupware/deploy/agent/native-installer.md",
         "j-groupware/tests/agent/storage.integration.test.mjs",
         "j-groupware/tests/agent/storage-fixture.mjs",
-        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
+        "j-groupware/deploy/agent/base-bootstrap.mjs",
+        "j-groupware/deploy/agent/bootstrap-runtime.mjs",
+        "j-groupware/tests/agent/base-bootstrap.test.mjs",
+        "j-groupware/docs/cloud-base-bootstrap-composition-2026-10-09.md",
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
       ]
     },
     {
@@ -1374,7 +1398,7 @@
         "G21"
       ],
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending; prepared_base_bootstrap_coordinator4_durable_credentials_lock_plan_mismatch_retry_pass_each; native_private_control_factory_inert_and_CLI_guard_root5_and_fresh_unpack19_each_pass; fixed_base_BFF_PG_gateway_native_source_composition_implemented; OS_package_PG_server_CA_trust_agent_config_timer_and_actual_systemd_bootstrap_UNRUN; actual_complete_BFF184_each_14files_exit0_skip0_agent25_cold_unpack19_final_pass; bootstrap_preflight_before_lock_state_write_proof4_each_pass",
       "code": [
         "j-groupware/deploy/agent/reconciler.mjs",
         "j-groupware/deploy/agent/provision-command.mjs",
@@ -1423,7 +1447,12 @@
         "j-groupware/deploy/agent/native-installer.md",
         "j-groupware/tests/agent/storage.integration.test.mjs",
         "j-groupware/tests/agent/storage-fixture.mjs",
-        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
+        "j-groupware/deploy/agent/base-bootstrap.mjs",
+        "j-groupware/deploy/agent/bootstrap-runtime.mjs",
+        "j-groupware/tests/agent/base-bootstrap.test.mjs",
+        "j-groupware/docs/cloud-base-bootstrap-composition-2026-10-09.md",
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
       ]
     },
     {
@@ -2700,9 +2729,23 @@
       "items": [
         "H6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending",
+      "code": [
+        "j-web/packages/contracts/src/index.ts",
+        "j-web/packages/contracts/README.md",
+        "j-web/apps/server/src/app.ts",
+        "j-web/apps/server/src/hosting.ts",
+        "j-web/apps/server/src/content.ts",
+        "j-web/deploy/migrations/003-page-content.sql",
+        "j-web/tests/server/content.test.ts",
+        "j-web/tests/integration/hosting.integration.test.ts",
+        "j-web/tests/registry/contracts.test.mjs",
+        "j-web/docs/cloud-content-contract-verification-2026-10-09.md",
+        "j-groupware/apps/server/src/web-routes.ts",
+        "j-groupware/tests/bff/web.integration.test.ts",
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
+      ]
     },
     {
       "id": "WB-02",
@@ -2711,9 +2754,23 @@
       "items": [
         "H6"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending",
+      "code": [
+        "j-web/packages/contracts/src/index.ts",
+        "j-web/packages/contracts/README.md",
+        "j-web/apps/server/src/app.ts",
+        "j-web/apps/server/src/hosting.ts",
+        "j-web/apps/server/src/content.ts",
+        "j-web/deploy/migrations/003-page-content.sql",
+        "j-web/tests/server/content.test.ts",
+        "j-web/tests/integration/hosting.integration.test.ts",
+        "j-web/tests/registry/contracts.test.mjs",
+        "j-web/docs/cloud-content-contract-verification-2026-10-09.md",
+        "j-groupware/apps/server/src/web-routes.ts",
+        "j-groupware/tests/bff/web.integration.test.ts",
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
+      ]
     },
     {
       "id": "WB-03",
@@ -2834,9 +2891,23 @@
       "items": [
         "H7"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending",
+      "code": [
+        "j-web/packages/contracts/src/index.ts",
+        "j-web/packages/contracts/README.md",
+        "j-web/apps/server/src/app.ts",
+        "j-web/apps/server/src/hosting.ts",
+        "j-web/apps/server/src/content.ts",
+        "j-web/deploy/migrations/003-page-content.sql",
+        "j-web/tests/server/content.test.ts",
+        "j-web/tests/integration/hosting.integration.test.ts",
+        "j-web/tests/registry/contracts.test.mjs",
+        "j-web/docs/cloud-content-contract-verification-2026-10-09.md",
+        "j-groupware/apps/server/src/web-routes.ts",
+        "j-groupware/tests/bff/web.integration.test.ts",
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
+      ]
     },
     {
       "id": "WB-11",
@@ -2845,9 +2916,23 @@
       "items": [
         "H7"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "implemented",
+      "verification": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending",
+      "code": [
+        "j-web/packages/contracts/src/index.ts",
+        "j-web/packages/contracts/README.md",
+        "j-web/apps/server/src/app.ts",
+        "j-web/apps/server/src/hosting.ts",
+        "j-web/apps/server/src/content.ts",
+        "j-web/deploy/migrations/003-page-content.sql",
+        "j-web/tests/server/content.test.ts",
+        "j-web/tests/integration/hosting.integration.test.ts",
+        "j-web/tests/registry/contracts.test.mjs",
+        "j-web/docs/cloud-content-contract-verification-2026-10-09.md",
+        "j-groupware/apps/server/src/web-routes.ts",
+        "j-groupware/tests/bff/web.integration.test.ts",
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
+      ]
     },
     {
       "id": "WB-12",
@@ -2867,9 +2952,23 @@
       "items": [
         "H7"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending; preview_contains_exact_always_anonymous_widget_snippet_pass; every_public_deployed_template_binding_UNRUN_H7_pending",
+      "code": [
+        "j-web/packages/contracts/src/index.ts",
+        "j-web/packages/contracts/README.md",
+        "j-web/apps/server/src/app.ts",
+        "j-web/apps/server/src/hosting.ts",
+        "j-web/apps/server/src/content.ts",
+        "j-web/deploy/migrations/003-page-content.sql",
+        "j-web/tests/server/content.test.ts",
+        "j-web/tests/integration/hosting.integration.test.ts",
+        "j-web/tests/registry/contracts.test.mjs",
+        "j-web/docs/cloud-content-contract-verification-2026-10-09.md",
+        "j-groupware/apps/server/src/web-routes.ts",
+        "j-groupware/tests/bff/web.integration.test.ts",
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
+      ]
     },
     {
       "id": "WB-20",
@@ -3032,9 +3131,23 @@
       "items": [
         "H2"
       ],
-      "implementation": "not_started",
-      "verification": "not_run",
-      "code": []
+      "implementation": "partial",
+      "verification": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending; site_content_DNS_account_error_readonly_DTO_published; deployment_request_state_contract_H7_unapproved_not_defined",
+      "code": [
+        "j-web/packages/contracts/src/index.ts",
+        "j-web/packages/contracts/README.md",
+        "j-web/apps/server/src/app.ts",
+        "j-web/apps/server/src/hosting.ts",
+        "j-web/apps/server/src/content.ts",
+        "j-web/deploy/migrations/003-page-content.sql",
+        "j-web/tests/server/content.test.ts",
+        "j-web/tests/integration/hosting.integration.test.ts",
+        "j-web/tests/registry/contracts.test.mjs",
+        "j-web/docs/cloud-content-contract-verification-2026-10-09.md",
+        "j-groupware/apps/server/src/web-routes.ts",
+        "j-groupware/tests/bff/web.integration.test.ts",
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
+      ]
     },
     {
       "id": "WB-32",
@@ -3102,14 +3215,17 @@
     "j-web/docs/cloud-hosting-implementation-2026-10-08.md",
     "j-talk/docs/cloud-member-room-widget-2026-10-08.md",
     "j-groupware/docs/cloud-bootstrap-worker-verification-2026-10-08.md",
-    "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md"
+    "j-groupware/docs/cloud-customer-auth-tls-verification-2026-10-08.md",
+    "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md",
+    "j-groupware/docs/cloud-base-bootstrap-composition-2026-10-09.md",
+    "j-web/docs/cloud-content-contract-verification-2026-10-09.md"
   ],
   "pending_implementation": [
-    "Remaining mail/talk/customer/web BFF business API relays using the verified G23 helper and actual downstream services",
+    "H7 Web public deployment/manual-file overwrite/version policy and subsequent Talk allowed-origin registration; T2 visitor/WSS and E8 mail envelope/outbox. Existing member/guest/mail/approval/Web BFF APIs are connected in bounded cloud coverage.",
     "G6/G15 formal member/organization/repair UI and Playwright; G16 formal approval UI and Playwright (actual BFF business API and snapshot already verified)",
     "G2/G9 canonical UI guidelines/sidebar/board UI; I2 formal theme/Playwright/brute-force acceptance",
     "Messenger formal UI/app product-path freezing and talk business WSS; actual messenger PG/BFF HTTP/client transport/WSS and approval notification delivery independently verified",
-    "G18 complete bootstrap/installer/agent entrypoint, actual systemd credential delivery, customer-auth bundle/profile/gateway and Messenger/Mailpit storage cleanup; G21 production notification renewal/topology and operating timer/customer VM acceptance. Customer-auth backend, TLS dedicated-user container permissions, cold safe unpack and worker CLI independently verified",
+    "G18 full OS base/bootstrap kit, remaining native product bindings and actual systemd credentials/OS account removal; G21 production notification owner/topology and operating agent config/timer/customer VM acceptance. Prepared base BFF coordinator and CA/Messenger control/factory are source-implemented, actual systemd installation unrun.",
     "G22 formal notification UI/Playwright and all product notification delivery acceptance; production source credential renewal/topology and worker/timer activation remain separate from verified short-lived credential file binding and explicit CLI",
     "Per-feature remaining audit: docs/cloud-remaining-feature-audit-2026-10-08.json; technical contracts and service predecessors remain implementable; E8/visitor ownership/template manual-file replacement choices and existing UI guideline answer remain gates"
   ]

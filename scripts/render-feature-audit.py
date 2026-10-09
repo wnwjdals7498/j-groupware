@@ -35,7 +35,7 @@ for item in remaining:
 if 'next_independent_batch' in audit:
     batch = audit['next_independent_batch']
     lines += ['', '## 독립 구현과 기능 완료의 경계', '', batch['boundary'], '',
-              '독립 소스의 첫 다음 단계 16개: ' + ', '.join(batch['ids']) + '.', '',
+              f"독립 소스의 첫 다음 단계 {len(batch['ids'])}개: " + ', '.join(batch['ids']) + '.', '',
               '다음 유한 묶음 권고: ' + ', '.join(batch['bounded_recommendation']) + '.']
 if 'operating_notification_contract' in audit:
     lines += ['', '## 운영 알림 연결에 필요한 계약', '']
@@ -53,6 +53,8 @@ lines += ['- ' + key + ': `' + audit['current_progress'][key] + '`'
 lines += ['- ' + key + ': `' + audit['current_progress'][key] + '`'
           for key in ['native_storage_source_commit', 'mail_capture_contracts_source_commit']
           if key in audit['current_progress']]
+lines += ['- ' + key + ': `' + audit['current_progress'][key] + '`'
+          for key in ['web_bff_source_commit'] if key in audit['current_progress']]
 lines += ['', '재생성: `python3 scripts/render-feature-audit.py`. JSON·진행표·baseline·분류·ready 집계가 서로 맞아야 생성한다.', '']
 (repo / 'docs/cloud-remaining-feature-audit-2026-10-08.md').write_text('\n'.join(lines))
 print(json.dumps({'features': len(features), 'remaining': len(remaining), 'summary': dict(counts)}, ensure_ascii=False))

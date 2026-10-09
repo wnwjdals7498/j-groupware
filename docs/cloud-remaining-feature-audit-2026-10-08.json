@@ -20,11 +20,11 @@
     "excluded": "현재 최소 범위 제외"
   },
   "summary": {
-    "ready": 16,
+    "ready": 9,
     "contract": 0,
     "service": 0,
     "ui": 17,
-    "policy": 21,
+    "policy": 24,
     "vm": 9,
     "excluded": 0
   },
@@ -472,27 +472,29 @@
       "service": "j-groupware",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
-      "external_or_user_gate": false,
+      "classification": "policy",
+      "classification_label": "제품 정책 결정 필요",
+      "external_or_user_gate": true,
       "additional_dependencies": [
-        "ui"
+        "ui",
+        "vm"
       ],
-      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. web DB·회원 조회 backend는 구현했다. helper·사이트/계정 변경·정식 웹 관리 UI가 없다.",
-      "next_step": "H2 readonly/사이트/콘텐츠 계약과 기존 helper 공개 인터페이스를 먼저 고정해 API/BFF를 연결한다. 정식 화면은 UI 기준 뒤다.",
+      "reason": "독립 H2 콘텐츠/readonly/스니펫과 실제 API/BFF는 구현·검증했다. 다음 완료 단계는 미승인 H7 공개 배포 정책이다.",
+      "next_step": "조회·사이트/계정·콘텐츠·preview BFF API는 구현했다. H7 뒤 배포/출처 연결을 완성하고 기존 UI 기준 응답 뒤 정식 화면을 구현한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
         "j-groupware/docs/suite-feature-specifications.md",
-        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
       ],
-      "implemented_in_this_batch": false,
+      "implemented_in_this_batch": true,
       "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
-      "implementation": "not_started",
-      "verification": "not_run",
-      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
+      "current_implementation": "partial",
+      "current_verification": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending",
+      "implementation": "partial",
+      "verification": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending",
+      "completion_boundary": "H7 실제 공개 배포·수동 파일 교체/보관 정책 선행; preview/source 계약을 전체 배포 완료로 대체하지 않음",
       "reviewed_date": "2026-10-09"
     },
     {
@@ -617,19 +619,20 @@
         "GW-54"
       ],
       "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. 새 storage/PG/SQLite 복원과 native control/factory/wrapper guard는 격리 검증됐고 전체 bootstrap/운영 연결·인수는 남았다.",
-      "next_step": "준비된 번들·기본 BFF·PG·CA·agent를 연결하는 전체 bootstrap 소스와 재시작 경계를 완성한다. 실제 OS trust/systemd/timer 설치 인수는 별도다.",
+      "next_step": "준비된 base BFF/PG/native/gateway 조합과 durable retry는 구현했다. OS 기반 설치/kit·CA trust·agent config 제공의 소스 경계를 완성하고 실제 systemd/timer/VM 인수를 별도 실행한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
         "j-groupware/docs/suite-feature-specifications.md",
-        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
       ],
-      "implemented_in_this_batch": false,
+      "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending; prepared_base_bootstrap_coordinator4_durable_credentials_lock_plan_mismatch_retry_pass_each; native_private_control_factory_inert_and_CLI_guard_root5_and_fresh_unpack19_each_pass; fixed_base_BFF_PG_gateway_native_source_composition_implemented; OS_package_PG_server_CA_trust_agent_config_timer_and_actual_systemd_bootstrap_UNRUN; actual_complete_BFF184_each_14files_exit0_skip0_agent25_cold_unpack19_final_pass; bootstrap_preflight_before_lock_state_write_proof4_each_pass",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending; prepared_base_bootstrap_coordinator4_durable_credentials_lock_plan_mismatch_retry_pass_each; native_private_control_factory_inert_and_CLI_guard_root5_and_fresh_unpack19_each_pass; fixed_base_BFF_PG_gateway_native_source_composition_implemented; OS_package_PG_server_CA_trust_agent_config_timer_and_actual_systemd_bootstrap_UNRUN; actual_complete_BFF184_each_14files_exit0_skip0_agent25_cold_unpack19_final_pass; bootstrap_preflight_before_lock_state_write_proof4_each_pass",
       "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
       "reviewed_date": "2026-10-09"
     },
@@ -649,19 +652,20 @@
         "TK-40"
       ],
       "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. 새 storage/PG/SQLite 복원과 native control/factory/wrapper guard는 격리 검증됐고 전체 bootstrap/운영 연결·인수는 남았다.",
-      "next_step": "검증된 CA/Messenger 조합을 전체 bootstrap에 연결하고 나머지 제품의 trusted adapter 입력을 고정한다. operating notification owner/topology와 실제 OS 설치는 별도다.",
+      "next_step": "base BFF와 CA/Messenger가 같은 native control/state/PG/gateway를 사용한다. 나머지 제품 trusted binding 입력/실패 경계를 구현한다. operating notification owner/topology와 실제 OS 설치는 별도다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
         "j-groupware/docs/suite-feature-specifications.md",
-        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
       ],
-      "implemented_in_this_batch": false,
+      "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending; prepared_base_bootstrap_coordinator4_durable_credentials_lock_plan_mismatch_retry_pass_each; native_private_control_factory_inert_and_CLI_guard_root5_and_fresh_unpack19_each_pass; fixed_base_BFF_PG_gateway_native_source_composition_implemented; OS_package_PG_server_CA_trust_agent_config_timer_and_actual_systemd_bootstrap_UNRUN; actual_complete_BFF184_each_14files_exit0_skip0_agent25_cold_unpack19_final_pass; bootstrap_preflight_before_lock_state_write_proof4_each_pass",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending; prepared_base_bootstrap_coordinator4_durable_credentials_lock_plan_mismatch_retry_pass_each; native_private_control_factory_inert_and_CLI_guard_root5_and_fresh_unpack19_each_pass; fixed_base_BFF_PG_gateway_native_source_composition_implemented; OS_package_PG_server_CA_trust_agent_config_timer_and_actual_systemd_bootstrap_UNRUN; actual_complete_BFF184_each_14files_exit0_skip0_agent25_cold_unpack19_final_pass; bootstrap_preflight_before_lock_state_write_proof4_each_pass",
       "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
       "reviewed_date": "2026-10-09"
     },
@@ -706,19 +710,20 @@
       "external_or_user_gate": false,
       "additional_dependencies": [],
       "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. 새 storage/PG/SQLite 복원과 native control/factory/wrapper guard는 격리 검증됐고 전체 bootstrap/운영 연결·인수는 남았다.",
-      "next_step": "고정 agent와 native 설치자의 나머지 제품 binding/실패 보고를 연결한다. 운영 알림 자격·timer 활성화·VM 인수는 별도다.",
+      "next_step": "기존 one-shot agent와 새 base/native composition의 남은 제품 binding/kit 조합을 연결한다. 운영 알림 자격·timer/고객 VM 활성화는 별도다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-groupware/docs/decisions.md",
         "j-groupware/docs/suite-feature-specifications.md",
-        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
       ],
-      "implemented_in_this_batch": false,
+      "implemented_in_this_batch": true,
       "acceptance_complete": false,
       "current_implementation": "partial",
-      "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
+      "current_verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending; prepared_base_bootstrap_coordinator4_durable_credentials_lock_plan_mismatch_retry_pass_each; native_private_control_factory_inert_and_CLI_guard_root5_and_fresh_unpack19_each_pass; fixed_base_BFF_PG_gateway_native_source_composition_implemented; OS_package_PG_server_CA_trust_agent_config_timer_and_actual_systemd_bootstrap_UNRUN; actual_complete_BFF184_each_14files_exit0_skip0_agent25_cold_unpack19_final_pass; bootstrap_preflight_before_lock_state_write_proof4_each_pass",
       "implementation": "partial",
-      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending",
+      "verification": "actual_Node22_18_Node24_19_full_BFF179_each_13_files_exit0_skip0_final_log_and_exit_file_preserved; console18_each_includes_explicit_one_shot_sealed_bootstrap_private_control_pinned_console_TLS_fixed_installer_argv_owned_Talk_process_real_PG_inventory_accepted_report_busy_no_override_retry_wrong_CA_incomplete_and_remove_pass; installer_is_private_fixture_not_native_OS_installation; safe_unpack19_each_fresh_base_Talk_npm_ci_provision_agent_inert_import_pass; core20_and_root_check77_each_build_type_lint_format_pass; previous_isolated_TLS_credentials3_PG6_product5_optional_cold_bundle4_Nginx15_Web_cleanup2_proofs_retained_not_independently_rerun_here; full_native_bootstrap_installer_Messenger_Mailpit_storage_prepare_cleanup_production_notification_renewal_topology_actual_systemd_PID1_OS_account_CA_VM_timer_activation_and_whole_suite_acceptance_pending; owned_storage_prepare_quiescent_pg_archive_file_snapshot_retry_tamper_restart_rejection_pass_node22_node24; actual_fixture_pg_restore_mailpit_sqlite_capture_identity_body_restore_pass; fixed_native_ca_messenger_control_factory_wrapper_inert_guards_pass; fresh_bundle_wrapper_permissions_and_import_pass; actual_systemd_installation_operating_notification_owner_account_removal_full_bootstrap_pending; prepared_base_bootstrap_coordinator4_durable_credentials_lock_plan_mismatch_retry_pass_each; native_private_control_factory_inert_and_CLI_guard_root5_and_fresh_unpack19_each_pass; fixed_base_BFF_PG_gateway_native_source_composition_implemented; OS_package_PG_server_CA_trust_agent_config_timer_and_actual_systemd_bootstrap_UNRUN; actual_complete_BFF184_each_14files_exit0_skip0_agent25_cold_unpack19_final_pass; bootstrap_preflight_before_lock_state_write_proof4_each_pass",
       "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
       "reviewed_date": "2026-10-09"
     },
@@ -1553,114 +1558,6 @@
       "reviewed_date": "2026-10-09"
     },
     {
-      "id": "WB-01",
-      "name": "사이트 목록·상태",
-      "service": "j-web",
-      "baseline_implementation": "not_started",
-      "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
-      "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. 사이트 상태 조회 요구는 확정됐고 H1/H2·helper probe가 없다.",
-      "next_step": "H2 상태 DTO와 기존 helper의 owned 공개 probe를 연결해 저장 상태·실제 준비 결과·실패를 구별한다.",
-      "sources": [
-        "j-groupware/docs/implementation-progress.json",
-        "j-web/docs/decisions.md",
-        "j-web/docs/feature-specifications.md",
-        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
-      ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
-      "implementation": "not_started",
-      "verification": "not_run",
-      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
-      "reviewed_date": "2026-10-09"
-    },
-    {
-      "id": "WB-02",
-      "name": "DNS 안내",
-      "service": "j-web",
-      "baseline_implementation": "not_started",
-      "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
-      "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. hosts/DNS 안내 요구는 확정됐고 구체 응답 DTO는 H2에서 고정한다.",
-      "next_step": "H2 도메인/tenant 검증과 A-record/hosts 안내 DTO를 고정한다. DNS 쓰기는 추가하지 않는다.",
-      "sources": [
-        "j-groupware/docs/implementation-progress.json",
-        "j-web/docs/decisions.md",
-        "j-web/docs/feature-specifications.md",
-        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
-      ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
-      "implementation": "not_started",
-      "verification": "not_run",
-      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
-      "reviewed_date": "2026-10-09"
-    },
-    {
-      "id": "WB-10",
-      "name": "콘텐츠 입력",
-      "service": "j-web",
-      "baseline_implementation": "not_started",
-      "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
-      "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. 콘텐츠 필드와 HTML escape는 확정됐고 로고 MIME·bytes·필드 상한은 H2 기술 계약이다.",
-      "next_step": "H2 콘텐츠 필드·로고 MIME/bytes 상한을 기술 계약으로 고정하고 HTML escape/저장을 구현한다. 수동 파일 교체는 H7 뒤다.",
-      "sources": [
-        "j-groupware/docs/implementation-progress.json",
-        "j-web/docs/decisions.md",
-        "j-web/docs/feature-specifications.md",
-        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
-      ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
-      "implementation": "not_started",
-      "verification": "not_run",
-      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
-      "reviewed_date": "2026-10-09"
-    },
-    {
-      "id": "WB-11",
-      "name": "미리보기",
-      "service": "j-web",
-      "baseline_implementation": "not_started",
-      "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
-      "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. 단일 템플릿 미리보기 요구는 확정돼 있다.",
-      "next_step": "H2 입력 검증·HTML escape로 readonly 미리보기를 구현한다. 실제 public-root 교체는 H7 뒤다.",
-      "sources": [
-        "j-groupware/docs/implementation-progress.json",
-        "j-web/docs/decisions.md",
-        "j-web/docs/feature-specifications.md",
-        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
-      ],
-      "implemented_in_this_batch": false,
-      "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
-      "implementation": "not_started",
-      "verification": "not_run",
-      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
-      "reviewed_date": "2026-10-09"
-    },
-    {
       "id": "WB-12",
       "name": "배포",
       "service": "j-web",
@@ -1693,25 +1590,28 @@
       "service": "j-web",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
-      "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. 고정 widget snippet을 항상 포함하도록 결정돼 있다.",
-      "next_step": "확정된 tenant gateway widget 주소 한 줄을 항상 넣는 snippet 계약·escape를 구현한다. visitor 엔진·배포 덮어쓰기 정책과 구별한다.",
+      "classification": "policy",
+      "classification_label": "제품 정책 결정 필요",
+      "external_or_user_gate": true,
+      "additional_dependencies": [
+        "vm"
+      ],
+      "reason": "독립 H2 콘텐츠/readonly/스니펫과 실제 API/BFF는 구현·검증했다. 다음 완료 단계는 미승인 H7 공개 배포 정책이다.",
+      "next_step": "preview의 고정 익명 widget 한 줄은 구현했다. H7 확정 뒤 실제 생성·배포 페이지 모두에 연결해 검증한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-web/docs/decisions.md",
         "j-web/docs/feature-specifications.md",
-        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
       ],
-      "implemented_in_this_batch": false,
+      "implemented_in_this_batch": true,
       "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
-      "implementation": "not_started",
-      "verification": "not_run",
-      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
+      "current_implementation": "partial",
+      "current_verification": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending; preview_contains_exact_always_anonymous_widget_snippet_pass; every_public_deployed_template_binding_UNRUN_H7_pending",
+      "implementation": "partial",
+      "verification": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending; preview_contains_exact_always_anonymous_widget_snippet_pass; every_public_deployed_template_binding_UNRUN_H7_pending",
+      "completion_boundary": "H7 실제 공개 배포·수동 파일 교체/보관 정책 선행; preview/source 계약을 전체 배포 완료로 대체하지 않음",
       "reviewed_date": "2026-10-09"
     },
     {
@@ -1720,25 +1620,28 @@
       "service": "j-web",
       "baseline_implementation": "not_started",
       "baseline_verification": "not_run",
-      "classification": "ready",
-      "classification_label": "구현 가능",
-      "external_or_user_gate": false,
-      "additional_dependencies": [],
-      "reason": "첫 다음 소스 단계는 확정 명세/기존 공개 인터페이스로 독립 구현 가능하다. 사이트·배포·계정 상태/DTO는 H2에서 구현자가 고정한다.",
-      "next_step": "H2 사이트/콘텐츠/계정/오류/배포 DTO를 정확 버전으로 고정하고 immutable registry 소비를 검증한다. 실행 정책 H7은 별도다.",
+      "classification": "policy",
+      "classification_label": "제품 정책 결정 필요",
+      "external_or_user_gate": true,
+      "additional_dependencies": [
+        "vm"
+      ],
+      "reason": "독립 H2 콘텐츠/readonly/스니펫과 실제 API/BFF는 구현·검증했다. 다음 완료 단계는 미승인 H7 공개 배포 정책이다.",
+      "next_step": "site/content/DNS/account/error/readonly contracts0.1.0은 최초 immutable 게시·exact 소비했다. H7 뒤 deployment request/state DTO를 고정한다.",
       "sources": [
         "j-groupware/docs/implementation-progress.json",
         "j-web/docs/decisions.md",
         "j-web/docs/feature-specifications.md",
-        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md"
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
       ],
-      "implemented_in_this_batch": false,
+      "implemented_in_this_batch": true,
       "acceptance_complete": false,
-      "current_implementation": "not_started",
-      "current_verification": "not_run",
-      "implementation": "not_started",
-      "verification": "not_run",
-      "completion_boundary": "독립 소스 단계 가능; 전체 기능 인수 완료와 구별",
+      "current_implementation": "partial",
+      "current_verification": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending; site_content_DNS_account_error_readonly_DTO_published; deployment_request_state_contract_H7_unapproved_not_defined",
+      "implementation": "partial",
+      "verification": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending; site_content_DNS_account_error_readonly_DTO_published; deployment_request_state_contract_H7_unapproved_not_defined",
+      "completion_boundary": "H7 실제 공개 배포·수동 파일 교체/보관 정책 선행; preview/source 계약을 전체 배포 완료로 대체하지 않음",
       "reviewed_date": "2026-10-09"
     },
     {
@@ -1789,24 +1692,24 @@
     "운영 notification refresh 자격 소유자·key 회전·control-plane/customer 로컬 PG/private receiver 배치 계약"
   ],
   "next_independent_batches": [
-    "GW-63/64/65/66: 완전한 native bootstrap/installer 조합·Messenger/Mailpit storage preparation/cleanup; root/account/CA/TLS OS 시험은 격리 컨테이너만, 실제 systemd/VM/timer 인수는 별도",
-    "production notification 자격 갱신/토폴로지와 운영 allowlist 연결; 운영 자격 발급/갱신 및 timer 활성화 없이 소스·격리 검증만",
-    "TK-21/TK-30: 확정된 tenant 회원 배정 대상 검증·발생별 occurrence ID와 outbox 알림 연결; visitor/WSS는 T2 답변 뒤",
-    "기존 T2·E8·H7·정식 UI 질의 응답 뒤 해당 정책과 browser 인수; GW-35 권한별 손님 이름 조합은 완료"
+    "TK-41/TK-21/TK-30: 현재 관리/회원 DTO·tenant 배정 대상·occurrence별 outbox 계약과 실제 API를 구현; visitor/WSS producer는 T2 뒤",
+    "GW-63/64/65/66: 남은 OS 기반 bootstrap kit/제품 trusted binding·account 제거 재시도 소스; 실제 OS 변경은 격리 컨테이너 검증만",
+    "GW-51: 기존 G7 계약 상태/전이 DTO와 콘솔 PG/권한의 실제 변경 API 연결",
+    "GW-40: installer/manifest 입력·실패 경계 연결; 운영 알림 owner/renewal/topology는 임의 발급·timer로 대신하지 않음"
   ],
   "current_progress": {
-    "implemented": 109,
-    "partial": 32,
-    "not_started": 31,
+    "implemented": 113,
+    "partial": 35,
+    "not_started": 24,
     "total": 172,
-    "remaining": 63,
-    "web_source_commit": "13861dd835362992f6ba0ee8bd237e30db8ca0ba",
+    "remaining": 59,
+    "web_source_commit": "2a1753fa4dffa048deadfa261014c8cb24e316b2",
     "talk_source_commit": "41f84030119d8deaa7eff94079f95da1a4a7d23b",
-    "agent_source_commit": "b4e4310919edd2189c6f45e8768c7aa19dc29821",
+    "agent_source_commit": "90e2c46683040954b831edd60ce90475b36a1c4c",
     "console_source_commit": "998a48abe1e66f2aefd88d28fa6adda07627107c",
     "talk_bff_source_commit": "8525b5804fe6aa5ffff3d438612a1b0353c3af1d",
-    "bundle_source_commit": "b4e4310919edd2189c6f45e8768c7aa19dc29821",
-    "bootstrap_source_commit": "aa2a2f13e88fa1e6959ccb08c276434a8e7c831f",
+    "bundle_source_commit": "90e2c46683040954b831edd60ce90475b36a1c4c",
+    "bootstrap_source_commit": "d2239666535bc2c6b00bd5e1aa5d47d6a8779d07",
     "teardown_source_commit": "b4e4310919edd2189c6f45e8768c7aa19dc29821",
     "notification_worker_source_commit": "ea24dd34636bcfebbf89ec26d87c79831a577ece",
     "customer_auth_source_commit": "6cbfdc8b4ec6b104f9cf6cc0e96eb73d7229db35",
@@ -1817,7 +1720,8 @@
     "customer_auth_bff_source_commit": "4acce86650d3ccc8f0e8f5f6bb68558e4a455739",
     "customer_auth_bundle_gateway_source_commit": "b15b53bb32942eee832413729940af02c1950edf",
     "native_storage_source_commit": "b4e4310919edd2189c6f45e8768c7aa19dc29821",
-    "mail_capture_contracts_source_commit": "92809bc96ca75e1ccfd552f7247d989f6e8f28a2"
+    "mail_capture_contracts_source_commit": "92809bc96ca75e1ccfd552f7247d989f6e8f28a2",
+    "web_bff_source_commit": "6b33637c096414c6031067ba168616aeb0e35b83"
   },
   "completed_since_baseline": [
     {
@@ -2901,6 +2805,118 @@
       "current_verification": "immutable_loopback_private_registry_contracts0_1_0_publish_and_duplicate_rejection_pass; exact_BFF_server_dependency_lock_integrity_registry_install_and_cold_CA_contract_JS_byte_equality_pass; shared_management_schemas_consumed_by_server_and_actual_BFF_and_compiled_BFF_pass; operating_registry_deployment_formal_UI_customer_VM_and_whole_suite_acceptance_pending",
       "implementation": "implemented",
       "verification": "immutable_loopback_private_registry_contracts0_1_0_publish_and_duplicate_rejection_pass; exact_BFF_server_dependency_lock_integrity_registry_install_and_cold_CA_contract_JS_byte_equality_pass; shared_management_schemas_consumed_by_server_and_actual_BFF_and_compiled_BFF_pass; operating_registry_deployment_formal_UI_customer_VM_and_whole_suite_acceptance_pending"
+    },
+    {
+      "id": "WB-01",
+      "name": "사이트 목록·상태",
+      "service": "j-web",
+      "baseline_implementation": "not_started",
+      "baseline_verification": "not_run",
+      "classification": "ready",
+      "classification_label": "구현 가능",
+      "external_or_user_gate": false,
+      "additional_dependencies": [],
+      "reason": "신규 공개 API 및 실제 PG/호스팅·BFF 검증을 구현해 소스 미완료를 줄였다. fixture 추가만으로 완료 처리하지 않았다.",
+      "next_step": "독립 backend/API 소스·실제 격리 검증 완료. 정식 UI/고객 VM/제품군 인수는 별도이며 완료로 계산하지 않음.",
+      "sources": [
+        "j-groupware/docs/implementation-progress.json",
+        "j-web/docs/decisions.md",
+        "j-web/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
+      ],
+      "implemented_in_this_batch": true,
+      "acceptance_complete": false,
+      "current_implementation": "implemented",
+      "current_verification": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending",
+      "implementation": "implemented",
+      "verification": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending",
+      "completion_boundary": "해당 독립 backend 기능 source 구현 완료; 실제 운영 설치·UI/VM 전체 인수 미완료",
+      "reviewed_date": "2026-10-09"
+    },
+    {
+      "id": "WB-02",
+      "name": "DNS 안내",
+      "service": "j-web",
+      "baseline_implementation": "not_started",
+      "baseline_verification": "not_run",
+      "classification": "ready",
+      "classification_label": "구현 가능",
+      "external_or_user_gate": false,
+      "additional_dependencies": [],
+      "reason": "신규 공개 API 및 실제 PG/호스팅·BFF 검증을 구현해 소스 미완료를 줄였다. fixture 추가만으로 완료 처리하지 않았다.",
+      "next_step": "독립 backend/API 소스·실제 격리 검증 완료. 정식 UI/고객 VM/제품군 인수는 별도이며 완료로 계산하지 않음.",
+      "sources": [
+        "j-groupware/docs/implementation-progress.json",
+        "j-web/docs/decisions.md",
+        "j-web/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
+      ],
+      "implemented_in_this_batch": true,
+      "acceptance_complete": false,
+      "current_implementation": "implemented",
+      "current_verification": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending",
+      "implementation": "implemented",
+      "verification": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending",
+      "completion_boundary": "해당 독립 backend 기능 source 구현 완료; 실제 운영 설치·UI/VM 전체 인수 미완료",
+      "reviewed_date": "2026-10-09"
+    },
+    {
+      "id": "WB-10",
+      "name": "콘텐츠 입력",
+      "service": "j-web",
+      "baseline_implementation": "not_started",
+      "baseline_verification": "not_run",
+      "classification": "ready",
+      "classification_label": "구현 가능",
+      "external_or_user_gate": false,
+      "additional_dependencies": [],
+      "reason": "신규 공개 API 및 실제 PG/호스팅·BFF 검증을 구현해 소스 미완료를 줄였다. fixture 추가만으로 완료 처리하지 않았다.",
+      "next_step": "독립 backend/API 소스·실제 격리 검증 완료. 정식 UI/고객 VM/제품군 인수는 별도이며 완료로 계산하지 않음.",
+      "sources": [
+        "j-groupware/docs/implementation-progress.json",
+        "j-web/docs/decisions.md",
+        "j-web/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
+      ],
+      "implemented_in_this_batch": true,
+      "acceptance_complete": false,
+      "current_implementation": "implemented",
+      "current_verification": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending",
+      "implementation": "implemented",
+      "verification": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending",
+      "completion_boundary": "해당 독립 backend 기능 source 구현 완료; 실제 운영 설치·UI/VM 전체 인수 미완료",
+      "reviewed_date": "2026-10-09"
+    },
+    {
+      "id": "WB-11",
+      "name": "미리보기",
+      "service": "j-web",
+      "baseline_implementation": "not_started",
+      "baseline_verification": "not_run",
+      "classification": "ready",
+      "classification_label": "구현 가능",
+      "external_or_user_gate": false,
+      "additional_dependencies": [],
+      "reason": "신규 공개 API 및 실제 PG/호스팅·BFF 검증을 구현해 소스 미완료를 줄였다. fixture 추가만으로 완료 처리하지 않았다.",
+      "next_step": "독립 backend/API 소스·실제 격리 검증 완료. 정식 UI/고객 VM/제품군 인수는 별도이며 완료로 계산하지 않음.",
+      "sources": [
+        "j-groupware/docs/implementation-progress.json",
+        "j-web/docs/decisions.md",
+        "j-web/docs/feature-specifications.md",
+        "j-groupware/docs/cloud-native-storage-verification-2026-10-09.md",
+        "j-groupware/docs/cloud-web-bff-verification-2026-10-09.md"
+      ],
+      "implemented_in_this_batch": true,
+      "acceptance_complete": false,
+      "current_implementation": "implemented",
+      "current_verification": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending",
+      "implementation": "implemented",
+      "verification": "actual_Node22_18_Node24_19_Web_unit6_helper1_check_build_type_lint_format_exit0; actual_Web_member_PG_root_hosting_integration14_each_exit0_skip0; immutable_first_private_registry_contracts0_1_0_fresh_exact_consumer_pack_integrity1_each_exit0; actual_BFF_Web_relay5_each_exit0_with_session_CSRF_exchange_roles_tenant404_revision_conflict_inert_HTML_DNS_actual_disk_SFTP_public_bytes_preserved_and_owned_account_remove; actual_complete_BFF184_each_14files_exit0_skip0_with_Node_bin_PATH_pinned_final_log_and_exit_verified; H7_public_deployment_manual_file_replace_UI_browser_VM_whole_suite_acceptance_pending",
+      "completion_boundary": "해당 독립 backend 기능 source 구현 완료; 실제 운영 설치·UI/VM 전체 인수 미완료",
+      "reviewed_date": "2026-10-09"
     }
   ],
   "checkpoints": [
@@ -2910,6 +2926,15 @@
       "partial": 15,
       "not_started": 85,
       "ready": 14
+    },
+    {
+      "source_commit": "6b33637c096414c6031067ba168616aeb0e35b83",
+      "implemented": 113,
+      "partial": 35,
+      "not_started": 24,
+      "ready": 9,
+      "remaining": 59,
+      "whole_suite_verified": false
     }
   ],
   "ready_batch": {
@@ -2947,12 +2972,11 @@
     ],
     "reclassification_does_not_mean_complete": true
   },
-  "continueable_work_note": "남은63의 첫 다음 단계 재감사: 독립 소스 작업16, T2/E8/H7 정책 선행21, 기존 UI 기준 응답 선행17, 실제 고객 VM 인수9. ready16은 기능 완료16을 뜻하지 않는다. native control/CA·Messenger 조합과 Messenger/Mailpit storage/PG·SQLite·파일 복원은 격리 검증했지만 전체 bootstrap·나머지 운영 binding·OS account 제거·systemd/CA trust/timer·VM 인수는 남았다. 운영 notification 자격 갱신 주체와 control-plane→고객 로컬 PG/private receiver 토폴로지를 임의 결정하지 않는다.",
-  "verification_summary": "[20차 native/storage 증거](cloud-native-storage-verification-2026-10-09.md): Node22/24 전체 BFF179 각각13files/exit0/skip0, root storage/native5·agent core21·cold unpack19·groupware check77·mail check9unit+3deploy·mail registry1 각각exit0이다. 실제 파일 권한·정지/재시작 거절·PG custom dump restore·Mailpit SMTP/SQLite 동일 ID/본문 복원과 native control/factory/wrapper inert/거절 검증이다. 실제 systemd 설치·Messenger 공개 모듈 의미적 복원·운영 갱신/토폴로지·OS account 제거·timer·20GB/VM·방화벽·UI/전체 인수는 미실행이다. 첫 cold 허용경로 누락과 전체 BFF175pass/4skip/exit1, fixture 준비와 object-field-order 비교 실패의 로그를 보존한다. 이전 receiver startup 원인은 여전히 미확정이다.",
+  "continueable_work_note": "남은59의 첫 다음 단계: 독립 소스9·T2/E8/H7 정책24·UI17·실제 VM9. 독립4개 backend 기능을 새 API/PG/호스팅/BFF 코드와 실행으로 완료하고,3개는 preview/공개 계약을 구현하되 H7 공개 배포 관문 때문에 partial을 유지했다. 준비된 base/native 조합은 source 구현이며 OS 설치·신뢰·agent/timer 인수는 미실행이다.",
+  "verification_summary": "[21차 실제 증거](cloud-web-bff-verification-2026-10-09.md): Node22.18/24.19 전체 BFF184/14files 각각exit0/skip0, agent25·fresh unpack19·check80·root storage/native5, Web check6unit+1helper·실제 PG/owned hosting integration14/2files·registry1 각각exit0다. focused Web BFF5는 전체184에 포함하며 중복 합산하지 않는다. preflight 이전 state/lock 경로 ENOENT 증명 coordinator4도 각각exit0다. 실제 OS package/PG 서버 설치·systemd/CA trust/agent config/timer/VM·정식 UI/브라우저와 H7 공개 배포·T2 visitor/E8 outbox는 미실행이다. 이전 실패 로그를 유지하고 이전 receiver startup 실패 원인은 미확정이다.",
   "reviewed_date": "2026-10-09",
   "next_independent_batch": {
     "ids": [
-      "GW-37",
       "GW-40",
       "GW-51",
       "GW-63",
@@ -2961,24 +2985,14 @@
       "GW-66",
       "TK-21",
       "TK-30",
-      "TK-41",
-      "WB-01",
-      "WB-02",
-      "WB-10",
-      "WB-11",
-      "WB-13",
-      "WB-31"
+      "TK-41"
     ],
     "bounded_recommendation": [
-      "WB-31",
-      "WB-02",
-      "WB-10",
-      "WB-11",
-      "WB-13",
-      "WB-01",
-      "GW-37"
+      "TK-41",
+      "TK-21",
+      "TK-30"
     ],
-    "boundary": "H2 contracts/readonly 조회·검증·미리보기/snippet과 BFF 공개 계약까지만. H7 public-root 교체, T2 visitor 엔진, UI/VM 인수로 확장하지 않는다. 설치의 나머지 조합과 console/Talk 회원 계약도 독립 소스 미완료이며 환경 차단으로 숨기지 않는다."
+    "boundary": "준비된 기본 bootstrap/native 연결과 Web backend/API 소스 작업을 실제로 구현했다. WB-01/02/10/11은 독립 source 완료, WB-13/31·GW-37은 부분 구현이며 H7 실제 공개 배포 선행이다. 다음 독립 작업은 OS 기반/남은 binding·console 계약·Talk 회원 배정/occurrence이고 운영 변경·T2/E8/H7/UI·VM 인수로 확장하지 않는다."
   },
   "operating_notification_contract": [
     "기존 GET /auth/tenants/<tenant>/services는 실제 operator Bearer와 console serviceKey를 요구한다. supplier 파일은 mode600, access exp<=15분·만료5초전 거절이며 j-auth가 signature/issuer/audience/role/key를 검증한다.",
